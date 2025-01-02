@@ -1,0 +1,21 @@
+uuid: 11ca1aae-9622-41f6-9671-e071431308e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document_date
+    - node.type.grade_round
+id: node.grade_round.field_document_date
+field_name: field_document_date
+entity_type: node
+bundle: grade_round
+label: 'Document date'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1639574008
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

@@ -1,0 +1,69 @@
+diff --git a/src/EventSubscriber/AutologoutSubscriber.php b/src/EventSubscriber/AutologoutSubscriber.php
+index 82a4ea3..8de0c34 100644
+--- a/src/EventSubscriber/AutologoutSubscriber.php
++++ b/src/EventSubscriber/AutologoutSubscriber.php
+@@ -108,6 +108,10 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+ 
+     $uid = $this->currentUser->id();
+ 
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'uid' => $uid,
++    ]);
++
+     if ($uid == 0) {
+       $autologout_timeout = $this->requestStack->getCurrentRequest()->query->get('autologout_timeout');
+       $post = $this->requestStack->getCurrentRequest()->request->all();
+@@ -132,10 +136,23 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+       $parse_url = parse_url($referer, PHP_URL_QUERY);
+       // If http referer url has 'destination' and session is not set,
+       // then only redirect to user page if uid dosen't match.
++
++
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'referer' => $referer,
++        'parse_url' => $parse_url,
++        'auto_redirect' => $auto_redirect,
++      ]);
++
+       if ($parse_url !== NULL && (strpos($parse_url, 'destination') !== FALSE) && empty($auto_redirect)) {
+         parse_str($parse_url, $output);
+         $destination_uid = explode("/", $output['destination']);
+ 
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'output' => $output,
++          'destination_uid' => $destination_uid,
++        ]);
++
+         // If array contains language code, remove it.
+         $languagecode = $this->languageManager->getCurrentLanguage()->getId();
+         if ($destination_uid[1] === $languagecode) {
+@@ -143,14 +160,29 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+           $destination_uid = array_values($destination_uid);
+         }
+ 
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'output' => $output,
++          'destination_uid' => $destination_uid,
++        ]);
++
+         // If destination uid and actual uid does not match then,
+         // redirect to loggedin user page.
+         if (($destination_uid[1] == "user") && ($destination_uid[2] != $uid)) {
+           $auto_redirect = $session->set('auto_redirect', 1);
+           $login_url = Url::fromRoute('user.page', [], ['absolute' => TRUE])->toString();
+ 
++          \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++            'output' => $login_url,
++            'auto_redirect' => $auto_redirect,
++          ]);
++
+           // Redirect user to user page.
+           $response = new RedirectResponse($login_url);
++
++          \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++            'redirect_resp.' => (string) $response,
++          ]);
++
+           $event->setResponse($response);
+         }
+       }

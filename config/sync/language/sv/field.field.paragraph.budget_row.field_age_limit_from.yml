@@ -1,0 +1,4 @@
+label: 'Åldersgräns från'
+description: 'Den lägsta åldern för elevspecika rader. Lämna tom för ingen åldersgräns.'
+settings:
+  suffix: år

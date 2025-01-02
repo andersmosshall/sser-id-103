@@ -1,0 +1,21 @@
+uuid: 1db949ea-51ae-48ea-a85e-838f47dbb64d
+langcode: sv
+status: true
+dependencies:
+  module:
+    - masquerade
+  theme:
+    - ssr_base
+id: maskera
+theme: ssr_base
+region: content
+weight: 7
+provider: null
+plugin: masquerade
+settings:
+  id: masquerade
+  label: Maskera
+  label_display: visible
+  provider: masquerade
+  show_unmasquerade_link: false
+visibility: {  }

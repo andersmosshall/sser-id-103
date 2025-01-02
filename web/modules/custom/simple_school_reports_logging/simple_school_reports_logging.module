@@ -1,0 +1,158 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
+function ssr_entity_logging_skip(EntityInterface $entity): bool {
+  $bundles_to_skip = [
+    'node' => [
+      'di_student_group' => TRUE,
+      'grade_student_group' => TRUE,
+      'help_page' => TRUE,
+      'iup_goal' => TRUE,
+    ],
+    'user' => [
+      'any' => TRUE,
+    ],
+    'paragraph' => [
+      'any' => TRUE,
+    ],
+    'path_alias' => [
+      'any' => TRUE,
+    ],
+    'ssr_signing' => [
+      'any' => TRUE,
+    ],
+  ];
+
+  if (isset($bundles_to_skip[$entity->getEntityTypeId()][$entity->bundle()])) {
+    return TRUE;
+  }
+
+  if (isset($bundles_to_skip[$entity->getEntityTypeId()]['any'])) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function simple_school_reports_logging_entity_insert(EntityInterface $entity) {
+  $logger = \Drupal::logger('ssr_entity_change');
+  try {
+    if (ssr_entity_logging_skip($entity)) {
+      return;
+    }
+
+    $tokens = [
+      '@type' => $entity->getEntityTypeId(),
+      '@bundle' => $entity->bundle(),
+      '@id' => $entity->id() ?? 'no_id',
+      '@label' => $entity->label() ?? 'no_label',
+    ];
+
+    $logger->info('Entity created: @type:@bundle (id @id) - @label', $tokens);
+    if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'day_absence') {
+      do_ssr_request_log(TRUE);
+    }
+  }
+  catch (\Exception $e) {
+    $logger->error('Error while logging entity change: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function simple_school_reports_logging_entity_update(EntityInterface $entity) {
+  $logger = \Drupal::logger('ssr_entity_change');
+  try {
+    if (ssr_entity_logging_skip($entity)) {
+      return;
+    }
+
+    $tokens = [
+      '@type' => $entity->getEntityTypeId(),
+      '@bundle' => $entity->bundle(),
+      '@id' => $entity->id() ?? 'no_id',
+      '@label' => $entity->label() ?? 'no_label',
+    ];
+
+    $logger->info('Entity updated: @type:@bundle (id @id) - @label', $tokens);
+    if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'day_absence') {
+      do_ssr_request_log(TRUE);
+    }
+  }
+  catch (\Exception $e) {
+    $logger->error('Error while logging entity change: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function simple_school_reports_logging_entity_delete(EntityInterface $entity) {
+  $logger = \Drupal::logger('ssr_entity_change');
+  try {
+    if (ssr_entity_logging_skip($entity) || $entity->getEntityTypeId() === 'ssr_maillog') {
+      return;
+    }
+    $current_user = \Drupal::currentUser();
+    $data = !$current_user->isAnonymous() ? $entity->toArray() : 'hidden';
+    $tokens = [
+      '@type' => $entity->getEntityTypeId(),
+      '@bundle' => $entity->bundle(),
+      '@id' => $entity->id() ?? 'no_id',
+      '@label' => $entity->label() ?? 'no_label',
+      '@data' => json_encode($data),
+    ];
+
+    $logger->info('Entity deleted: @type:@bundle (id @id) - @data', $tokens);
+    if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'day_absence') {
+      do_ssr_request_log(TRUE);
+    }
+  }
+  catch (\Exception $e) {
+    $logger->error('Error while logging entity change: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function simple_school_reports_logging_user_login() {
+  do_ssr_request_log();
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function simple_school_reports_logging_user_logout() {
+  do_ssr_request_log();
+}
+
+function do_ssr_request_log(bool $kep_log = FALSE) {
+  $logger = \Drupal::logger('ssr_request_log');
+  try {
+    /** @var \Drupal\simple_school_reports_logging\Service\RequestLogServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_logging.request_log');
+    $log_message = $service->getRequestLogMessage(TRUE, $kep_log);
+    if (!$log_message) {
+      return;
+    }
+    $logger->info('ssr-request-log--' . $log_message);
+  }
+  catch (\Exception $e) {
+    $logger->error('Error while logging ssr_request_log: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}

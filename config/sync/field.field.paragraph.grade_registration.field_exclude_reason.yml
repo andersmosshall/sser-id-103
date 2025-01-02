@@ -1,0 +1,21 @@
+uuid: b5868506-ccd7-4d1b-97c1-dd55d1f2d78c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_exclude_reason
+    - paragraphs.paragraphs_type.grade_registration
+  module:
+    - options
+id: paragraph.grade_registration.field_exclude_reason
+field_name: field_exclude_reason
+entity_type: paragraph
+bundle: grade_registration
+label: 'Exclude reason'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

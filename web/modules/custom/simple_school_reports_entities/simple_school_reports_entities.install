@@ -1,0 +1,182 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+
+/**
+ * Install meeting entity type.
+ */
+function simple_school_reports_entities_update_10001() {
+  $database = \Drupal::database();
+
+  // Install ssr_meeting.
+  if(!$database->schema()->tableExists('ssr_meeting')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_meeting'));
+  }
+
+  // Install ssr_meeting_type.
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  $cl = $entity_update_manager->getChangeList();
+  if (!empty($cl['ssr_meeting_type']['entity_type']) && $cl['ssr_meeting_type']['entity_type'] === $entity_update_manager::DEFINITION_CREATED && ($ssr_meeting_type = \Drupal::entityTypeManager()->getDefinition('ssr_meeting_type'))) {
+    $entity_update_manager->installEntityType($ssr_meeting_type);
+  }
+}
+
+/**
+ * Install school week entity type.
+ */
+function simple_school_reports_entities_update_10002() {
+
+  // Install 'time_field' module.
+  \Drupal::service('module_installer')->install(['time_field']);
+
+
+  $database = \Drupal::database();
+  // Install school_week.
+  if(!$database->schema()->tableExists('school_week')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('school_week'));
+  }
+}
+
+/**
+ * Create base school week entities.
+ */
+function simple_school_reports_entities_update_10003() {
+
+  // Do this only for "Demoskolan".
+  $school_name = \Drupal\Core\Site\Settings::get('ssr_school_name');
+  if ($school_name !== 'Demoskolan') {
+    return;
+  }
+
+  $grade_school_weeks = [];
+  for ($grade = 0; $grade <= 9; $grade++) {
+    $grade_school_weeks[$grade] = [];
+    $school_week = \Drupal::entityTypeManager()
+      ->getStorage('school_week')
+      ->create([
+        'label' => 'Skolvecka - Årskurs ' . $grade,
+      ]);
+
+    for ($day_index = 1; $day_index <= 5; $day_index++) {
+      $length = 180;
+      $from = 26400 + 60*60; // 08:20
+      $to = 50400 + 60*60; // 15:00
+
+      if ($grade >= 1) {
+        $length = 210;
+        $from = 25200 + 60*60; // 08:00
+        $to = 45000 + 60*60; // 13:30
+      }
+      if ($grade >= 4) {
+        $length = 270;
+        $from = 25200 + 60*60; // 08:00
+        $to = 48600 + 60*60; // 14:30
+      }
+      if ($grade >= 7) {
+        $length = 300;
+        $from = 25200 + 60*60; // 08:00
+        $to = 52200 + 60*60; // 15:30
+      }
+
+      $school_week->set('length_' . $day_index, $length);
+      $school_week->set('from_' . $day_index, $from);
+      $school_week->set('to_' . $day_index, $to);
+    }
+
+    $school_week->save();
+    $grade_school_weeks[$grade] = $school_week->id();
+  }
+
+  \Drupal::state()->set('ssr_school_week_per_grade', $grade_school_weeks);
+}
+
+/**
+ * Install school week deviation entity type.
+ */
+function simple_school_reports_entities_update_10004() {
+  $database = \Drupal::database();
+  // Install school_week_deviation.
+  if(!$database->schema()->tableExists('school_week_deviation')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('school_week_deviation'));
+  }
+}
+
+/**
+ * Install school week deviation field.
+ */
+function simple_school_reports_entities_update_10005() {
+  // Moved to a post deploy script.
+}
+
+/**
+ * Install missing fields in school week deviation.
+ */
+function simple_school_reports_entities_update_10006() {
+  $fields = [];
+
+  $fields['from_date'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Deviation from'))
+    ->setRequired(TRUE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+  $fields['to_date'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Deviation to'))
+    ->setRequired(TRUE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+  $fields['grade'] = BaseFieldDefinition::create('list_integer')
+    ->setLabel(t('Grade'))
+    ->setDescription(t('The grades that this school week deviation applies to.'))
+    ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_week_deviation_grades')
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+  $fields['deviation_type'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Deviation type'))
+    ->setSetting('target_type', 'taxonomy_term')
+    ->setSetting('handler_settings', [
+      'target_bundles' => ['school_week_deviation_type' => 'school_week_deviation_type'],
+      'auto_create' => TRUE,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'school_week_deviation', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+
+/**
+ * Create base school week entities.
+ */
+function simple_school_reports_entities_update_10007() {
+  simple_school_reports_entities_update_10003();
+}
+
+/**
+ * Install ssr_student_leave_application type.
+ */
+function simple_school_reports_entities_update_10008() {
+  $database = \Drupal::database();
+
+  // Install ssr_student_leave_application.
+  if(!$database->schema()->tableExists('ssr_student_leave_application')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_student_leave_application'));
+  }
+}

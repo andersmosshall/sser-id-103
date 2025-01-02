@@ -1,0 +1,6 @@
+uuid: 8d57c6c8-e177-4d27-b846-0f74d90349a9
+langcode: en
+status: true
+dependencies: {  }
+id: student_di
+label: 'Development interview'

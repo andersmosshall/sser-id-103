@@ -1,0 +1,174 @@
+<?php
+
+use Drupal\simple_school_reports_entities\StudentLeaveApplicationInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\user\UserInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_leave_application_ssr_student_leave_application_access(StudentLeaveApplicationInterface $entity, $operation, AccountInterface $account) {
+  if ($operation !== 'handle') {
+    return AccessResult::neutral();
+  }
+
+  $cache = new CacheableMetadata();
+  $cache->addCacheableDependency($entity);
+  $cache->addCacheContexts(['user']);
+
+  $student = $entity->get('student')->entity;
+  if (!$student) {
+    return AccessResult::forbidden()->addCacheableDependency($cache);
+  }
+
+  $days = $entity->get('leave_days')->value;
+
+  /** @var \Drupal\simple_school_reports_leave_application\Service\LeaveApplicationServiceInterface $leave_application_service */
+  $leave_application_service = \Drupal::service('simple_school_reports_leave_application.leave_application_service');
+  $long_leave = $leave_application_service->getSetting('long_leave');
+  if ($days > $long_leave) {
+    return AccessResult::neutral()->addCacheableDependency($cache);
+  }
+
+  /** @var UserInterface $mentor */
+  foreach ($student->get('field_mentor')->referencedEntities() as $mentor) {
+    if  ($mentor->id() == $account->id()) {
+      return AccessResult::allowed()->addCacheableDependency($cache);
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_leave_application_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof StudentLeaveApplicationInterface) {
+    $cache = new CacheableMetadata();
+    $cache->addCacheableDependency($entity);
+    $cache->addCacheContexts(['user']);
+
+    $allow_handle = $entity->access('handle', \Drupal::currentUser(), TRUE);
+    $cache->addCacheableDependency($allow_handle);
+
+    if ($allow_handle->isAllowed()) {
+      $operations['handle'] = [
+        'title' => t('Handle'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_leave_application.handle', ['ssr_student_leave_application' => $entity->id()], ['query' => \Drupal::destination()->getAsArray()]),
+        'weight' => -99,
+      ];
+
+      $cache->applyTo($operations['handle']);
+    }
+
+    $operations['view'] = [
+      'title' => t('View'),
+      'url' => \Drupal\Core\Url::fromRoute('entity.ssr_student_leave_application.canonical', ['ssr_student_leave_application' => $entity->id()], ['query' => \Drupal::destination()->getAsArray()]),
+      'weight' => -98,
+    ];
+
+    $cache->applyTo($operations['view']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_leave_application_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'pending_leave_applications') {
+        $users = [];
+        /** @var \Drupal\user\UserStorageInterface $user_storage */
+        $user_storage = \Drupal::entityTypeManager()->getStorage('user');;
+        $uids = $user_storage
+          ->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('roles', ['teacher', 'principle'], 'IN')
+          ->sort('field_first_name')
+          ->sort('field_last_name')
+          ->execute();
+
+        if (!empty($uids)) {
+          /** @var UserInterface $user */
+          foreach ($user_storage->loadMultiple($uids) as $user) {
+            $users[$user->id()] = $user->getDisplayName();
+          }
+        }
+
+        if ($view->current_display === 'pending') {
+          $options = ['me' => t('Me (@name)', ['@name' => \Drupal::currentUser()->getDisplayName()])] + $users;
+
+          unset($form['id']['#size']);
+          $form['id']['#type'] = 'select';
+          $form['id']['#options'] = $options;
+          $form['id']['#empty_option'] = t('Select user');
+        }
+
+        if ($view->current_display === 'handled') {
+          $options = $users;
+          unset($form['handled_by']['#size']);
+          $form['handled_by']['#type'] = 'select';
+          $form['handled_by']['#options'] = $options;
+          $form['handled_by']['#empty_option'] = t('All');
+
+          unset($form['state_1']['#size']);
+          $form['state_1']['#type'] = 'select';
+          $form['state_1']['#options'] = [
+            'approved' => t('Approved'),
+            'rejected' => t('Rejected'),
+          ];
+          $form['state_1']['#empty_option'] = t('All');
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_leave_application_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'pending_leave_applications') {
+    $view->element['#cache']['contexts'][] = 'user';
+    $view->element['#cache']['tags'][] = 'user_list:student';
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_leave_application_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'pending_leave_applications' && $view->current_display === 'pending') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'ssr_student_leave_application_field_data.id') {
+          $uid = $condition['value'] ?? NULL;
+          if ($uid) {
+            if ($uid === 'me') {
+              $uid = \Drupal::currentUser()->id();
+            }
+            /** @var \Drupal\simple_school_reports_leave_application\Service\LeaveApplicationServiceInterface $leave_application_service */
+            $leave_application_service = \Drupal::service('simple_school_reports_leave_application.leave_application_service');
+            $application_ids = $leave_application_service->getStudentLeaveApplicationIdsToHandle($uid);
+            if (empty($application_ids)) {
+              $condition['operator'] = '=';
+              $condition['value'] = 0;
+            }
+            else {
+              $condition['operator'] = 'IN';
+              $condition['value'] = $application_ids;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

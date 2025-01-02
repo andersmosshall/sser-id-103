@@ -1,0 +1,30 @@
+uuid: 5e2f5c1b-7095-4094-86c7-a7ce1458cfe1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_module_enabled
+field_name: field_module_enabled
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'yes'
+      label: 'Yes'
+    -
+      value: 'no'
+      label: 'No'
+    -
+      value: partly
+      label: Partly
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

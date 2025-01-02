@@ -1,0 +1,21 @@
+uuid: 2e98c086-34f2-4582-9022-2048c8c5f436
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document_date
+    - node.type.iup
+id: node.iup.field_document_date
+field_name: field_document_date
+entity_type: node
+bundle: iup
+label: 'Date of agreement'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1661810400
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

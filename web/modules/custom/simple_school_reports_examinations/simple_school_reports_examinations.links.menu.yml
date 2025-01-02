@@ -1,0 +1,5 @@
+simple_school_reports_examinations.assessment_groups:
+  title: 'Assessment groups'
+  description: 'List and handle assessment groups'
+  parent: simple_school_reports_core.actions
+  route_name: view.assessment_groups.list

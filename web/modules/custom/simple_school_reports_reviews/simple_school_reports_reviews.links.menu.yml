@@ -1,0 +1,11 @@
+simple_school_reports_reviews.written_reviews_round_list:
+  title: 'Written reviews registration'
+  description: 'Register written reviews or create new written reviews rounds'
+  parent: simple_school_reports_core.actions
+  route_name: view.written_reviews_rounds.list
+
+simple_school_reports_reviews.standard_phrases:
+  title: 'Written reviews standard phrases'
+  parent: simple_school_reports_core.config
+  description: 'List standard phrases for written reviews'
+  route_name: view.standard_phrases.written_reviews

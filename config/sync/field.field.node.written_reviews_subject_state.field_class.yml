@@ -1,0 +1,26 @@
+uuid: 54387e49-af48-471a-93e5-b0dc1daf9323
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_class
+    - node.type.written_reviews_subject_state
+id: node.written_reviews_subject_state.field_class
+field_name: field_class
+entity_type: node
+bundle: written_reviews_subject_state
+label: Class
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:ssr_school_class'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

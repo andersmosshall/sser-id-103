@@ -1,0 +1,26 @@
+uuid: d49e4018-9b74-458f-b518-b4c87f4de205
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_class
+  module:
+    - user
+id: user.user.field_class
+field_name: field_class
+entity_type: user
+bundle: user
+label: Class
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: class_reference
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

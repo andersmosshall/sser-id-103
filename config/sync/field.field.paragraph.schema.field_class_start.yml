@@ -1,0 +1,21 @@
+uuid: c2787130-082e-47b6-b694-97abf9186264
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_class_start
+    - paragraphs.paragraphs_type.schema
+id: paragraph.schema.field_class_start
+field_name: field_class_start
+entity_type: paragraph
+bundle: schema
+label: 'Class start'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 946710000
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

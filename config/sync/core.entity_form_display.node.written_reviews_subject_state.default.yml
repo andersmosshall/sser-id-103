@@ -1,0 +1,30 @@
+uuid: 6d74b662-ddca-40e0-95bf-68e774ede1a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.written_reviews_subject_state.field_class
+    - field.field.node.written_reviews_subject_state.field_grade
+    - field.field.node.written_reviews_subject_state.field_school_subject
+    - field.field.node.written_reviews_subject_state.field_state
+    - field.field.node.written_reviews_subject_state.field_written_reviews
+    - node.type.written_reviews_subject_state
+id: node.written_reviews_subject_state.default
+targetEntityType: node
+bundle: written_reviews_subject_state
+mode: default
+content: {  }
+hidden:
+  created: true
+  field_class: true
+  field_grade: true
+  field_school_subject: true
+  field_state: true
+  field_written_reviews: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

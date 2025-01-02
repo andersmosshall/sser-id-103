@@ -1,0 +1,15 @@
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
+langcode: sv
+uuid: e201e4d3-bb1e-4ab4-9ba5-ac78d9996da7
+name: Demoskolan
+mail: anders@mosshall.se
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /start/resolve
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: sv
+mail_notification: noreply@ssr.loc

@@ -1,0 +1,403 @@
+<?php
+
+use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface;
+use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ */
+function simple_school_reports_consents_field_widget_single_element_paragraphs_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if (!empty($element['#paragraph_type']) && $element['#paragraph_type'] === 'consent_target_role') {
+    if (!empty($element['subform']['field_user_roles']['widget']['#options'])) {
+      $options = $element['subform']['field_user_roles']['widget']['#options'];
+      unset($options['anonymous']);
+      unset($options['authenticated']);
+      unset($options['student']);
+      $element['subform']['field_user_roles']['widget']['#options'] = $options;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_consents_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'consent') {
+      $operations['view'] = [
+        'title' => t('View'),
+        'url' => \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $entity->id()]),
+        'weight' => -99,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_consents_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'consent') {
+    /** @var \Drupal\Component\Uuid\UuidInterface $uuid_service */
+    $uuid_service = \Drupal::service('uuid');
+    $entity->set('title', $uuid_service->generate());
+  }
+}
+
+function simple_school_reports_consents_preprocess_page_title(&$variables) {
+  /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() === 'entity.node.canonical') {
+    if ($node = $route_match->getParameter('node')) {
+      if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'consent') {
+        $variables['title'] = $node->get('field_title')->value;
+      }
+    }
+  }
+}
+
+function simple_school_reports_consents_preprocess_html(&$variables) {
+  /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() === 'entity.node.canonical') {
+    if ($node = $route_match->getParameter('node')) {
+      if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'consent') {
+        $variables['head_title']['title'] = $node->get('field_title')->value;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_consents_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'consent_user') {
+        $options = [
+          ConsentsServiceServiceInterface::VIEWS_FILTER_NONE => t('No filter'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_FULLY_ACCEPTED => t('Fully accepted'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_SOME_ACCEPTED => t('Fully or partly accepted'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_SOME_REJECTED => t('Fully or partly rejected'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_FULL_REJECTED => t('Fully rejected'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_MISSING_ANSWERS => t('Missing answers'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_HANDLE_BY_STAFF => t('Has to be handled by school staff'),
+        ];
+
+        unset($form['filter']['#size']);
+        $form['filter']['#type'] = 'select';
+        $form['filter']['#options'] = $options;
+      }
+
+      if ($view->id() === 'consents_per_user' && $view->current_display === 'list') {
+        $options = [
+          ConsentsServiceServiceInterface::VIEWS_FILTER_NONE => t('No filter'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_FULLY_ACCEPTED => t('Fully accepted'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_SOME_ACCEPTED => t('Fully or partly accepted'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_SOME_REJECTED => t('Fully or partly rejected'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_FULL_REJECTED => t('Fully rejected'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_MISSING_ANSWERS => t('Missing answers'),
+          ConsentsServiceServiceInterface::VIEWS_FILTER_HANDLE_BY_STAFF => t('Has to be handled by school staff'),
+        ];
+
+        unset($form['filter']['#size']);
+        $form['filter']['#type'] = 'select';
+        $form['filter']['#options'] = $options;
+      }
+    }
+  }
+
+  if ($form_id === 'node_consent_edit_form') {
+    $consent = NULL;
+    $form_object = $form_state->getFormObject();
+    if ($form_object instanceof EntityFormInterface) {
+      if ($form_object->getEntity()?->bundle() === 'consent')
+      $consent = $form_object->getEntity();
+    }
+
+    if ($consent && !\Drupal::currentUser()->hasPermission('edit answered consents')) {
+      $consent_id = $consent->id();
+
+      /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+      $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+
+      if ($consent_service->getConsentCompletion($consent_id) > 0) {
+        $form['field_description']['widget'][0]['#access'] = FALSE;
+
+        $form['field_description']['info'] = [
+          '#markup' => $consent->get('field_description')->processed,
+        ];
+
+        $form['field_title']['widget'][0]['#disabled'] = TRUE;
+        $form['field_valid_until']['widget'][0]['#disabled'] = TRUE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_consents_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'consent_user') {
+    /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+    $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+
+    $consent_id = \Drupal::routeMatch()->getRawParameter('node');
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          if (!$consent_id) {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+            continue;
+          }
+          $uids = $consent_service->getTargetUids($consent_id, $condition['value']);
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'consents_per_user' && $view->current_display === 'list') {
+    /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+    $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          $uids = $consent_service->getExpectedUids($condition['value']);
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'consents_per_user' && $view->current_display === 'reminder') {
+    /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+    $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          $uids = $consent_service->getExpectedUids(ConsentsServiceServiceInterface::VIEWS_FILTER_TO_REMIND);
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'consents_on_user_tab') {
+    /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+    $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+
+    $uid = \Drupal::routeMatch()->getRawParameter('user');
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'node_field_data.nid' && array_key_exists('value', $condition)) {
+          if (!$uid) {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+            continue;
+          }
+
+          $nids = [];
+
+          if ($view->current_display === 'to_handle') {
+            $nids = $consent_service->getUnHandledConsentIds($uid);
+          }
+          elseif ($view->current_display === 'handled') {
+            $nids = $consent_service->getHandledConsentsIds($uid);
+          }
+
+          if (!empty($nids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $nids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_consents_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  $view->element['#cache']['contexts'][] = 'route';
+
+  if ($view->id() === 'consents_on_user_tab') {
+    $view->element['#cache']['tags'][] = 'ssr_consent_answer_list';
+    $view->element['#cache']['tags'][] = 'node_list:consent';
+  }
+
+  if ($view->id() === 'consent_user') {
+    $view->element['#cache']['tags'][] = 'ssr_consent_answer_list';
+    $view->element['#cache']['tags'][] = 'node_list:consent';
+    $view->element['#cache']['tags'][] = 'user_list';
+  }
+
+  if ($view->id() === 'consents_per_user') {
+    $view->element['#cache']['tags'][] = 'ssr_consent_answer_list';
+    $view->element['#cache']['tags'][] = 'node_list:consent';
+    $view->element['#cache']['tags'][] = 'user_list';
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_consents_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'entity.node.canonical') {
+    $node = $context['current_request']->get('node');
+
+    if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'consent') {
+      $local_actions['print_action'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Print out'),
+          'url' => \Drupal\Core\Url::fromUserInput('#'),
+          'localized_options' => [
+            'attributes' => [
+              'class' => [
+                'action--ssr-print',
+              ],
+            ],
+          ],
+        ],
+        '#weight' => 10,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function simple_school_reports_consents_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  $access = AccessResult::neutral();
+  if ($operation !== 'view' && $field_definition->getTargetEntityTypeId() === 'user' && !$account->hasPermission('school staff permissions')) {
+    if ($user = $items->getEntity()) {
+      /** @var \Drupal\simple_school_reports_consents\Service\ConsentsServiceServiceInterface $consent_service */
+      $consent_service = \Drupal::service('simple_school_reports_consents.consent_service');
+      if (!empty($consent_service->getUnHandledConsentIds($user->id()))) {
+        $lock_fields = ['field_telephone_number', 'mail'];
+        $access = in_array($field_definition->getName(), $lock_fields) ? AccessResult::forbidden() : AccessResult::neutral();
+      }
+      $access->addCacheTags(['user_list', 'consent_answer_list', 'node_list:consent']);
+    }
+
+  }
+  $access->cachePerPermissions();
+  return $access;
+}
+
+/**
+ * Implements hook_default_message_templates_alter().
+ */
+function simple_school_reports_consents_default_message_templates_alter(array &$default_templates) {
+  $login_url = \Drupal\Core\Url::fromRoute('user.login', [], ['absolute' => TRUE])->toString();
+  $school_name = \Drupal\Core\Site\Settings::get('ssr_school_name', '');
+  $default_templates['consent_reminder'] = [
+    'email' => [
+      'subject' => 'Samtycken för ' . $school_name,
+      'message' => 'Hej [M]!' . PHP_EOL . PHP_EOL . 'Du har ett eller flera samtycken att hantera på ' . $school_name . PHP_EOL . PHP_EOL . 'Logga in för att hantera: ' . PHP_EOL . $login_url,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_message_templates_config_form_alter().
+ */
+function simple_school_reports_consents_message_templates_config_form_alter(array &$form, FormStateInterface $form_state, array $templates) {
+  $category_name_map = [
+    'consent_reminder' => t('Remind of consents'),
+  ];
+
+  /** @var \Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface $replace_token_service */
+  $replace_token_service = \Drupal::service('simple_school_reports_core.replace_token_service');
+
+  $description = '';
+  $replace_tokens = $replace_token_service->getReplaceTokenDescriptions([
+    ReplaceTokenServiceInterface::RECIPIENT_REPLACE_TOKENS,
+    ReplaceTokenServiceInterface::CURRENT_USER_REPLACE_TOKENS,
+  ], TRUE);
+
+  if (!empty($replace_tokens)) {
+    $description_lines = ['<b>' . t('Replacement patterns') . ':</b>'];
+    foreach ($replace_tokens as $token => $description) {
+      $description_lines[] = $token . ' = ' . $description;
+    }
+    $description = implode('<br>', $description_lines);
+  }
+
+  $category_description_map = [
+    'consent_reminder' => $description,
+  ];
+
+  foreach ($templates as $category => $category_templates) {
+    if (empty($category_name_map[$category])) {
+      continue;
+    }
+
+    $form[$category] = [
+      '#type' => 'details',
+      '#title' => $category_name_map[$category],
+      '#tree' => TRUE,
+      '#open' => TRUE,
+    ];
+
+    foreach ($category_templates as $type => $values) {
+      if ($type === 'email') {
+        $form[$category]['email']['subject'] = [
+          '#type' => 'textfield',
+          '#title' => t('Subject'),
+          '#default_value' => isset($values['subject']) ? $values['subject'] : '',
+          '#required' => TRUE,
+        ];
+        $form[$category]['email']['message'] = [
+          '#type' => 'textarea',
+          '#title' => t('Message'),
+          '#default_value' => isset($values['message']) ? $values['message'] : '',
+          '#description' => !empty($category_description_map[$category]) ? $category_description_map[$category] : NULL,
+          '#required' => TRUE,
+        ];
+      }
+    }
+  }
+}
+
+

@@ -1,0 +1,22 @@
+uuid: 4906db70-bcdb-43b7-b1d0-6c0e95288471
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.grade_student_group
+id: node.grade_student_group.promote
+field_name: promote
+entity_type: node
+bundle: grade_student_group
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

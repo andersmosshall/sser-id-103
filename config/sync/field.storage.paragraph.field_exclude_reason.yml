@@ -1,0 +1,30 @@
+uuid: 1f7e747a-68a5-4ce4-8956-f3c2d454e6a8
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_exclude_reason
+field_name: field_exclude_reason
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: n_a
+      label: 'Student does not study the subject'
+    -
+      value: adapted_studies
+      label: 'Adapted studies'
+    -
+      value: pending
+      label: 'Grade will be set later'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

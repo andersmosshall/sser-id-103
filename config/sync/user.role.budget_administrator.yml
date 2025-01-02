@@ -1,0 +1,27 @@
+uuid: 804fc20b-e8f3-46c6-9e3c-aeca3fe1ce60
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.budget
+  module:
+    - file
+    - node
+    - simple_school_reports_core
+    - simple_school_reports_entities
+    - simple_school_reports_module_info
+id: budget_administrator
+label: Budget-administratör
+weight: 8
+is_admin: null
+permissions:
+  - 'administer budget'
+  - 'create budget content'
+  - 'delete any budget content'
+  - 'delete own budget content'
+  - 'delete own files'
+  - 'edit any budget content'
+  - 'edit own budget content'
+  - 'send bug report'
+  - 'view school week'
+  - 'view ssr_module_info price'

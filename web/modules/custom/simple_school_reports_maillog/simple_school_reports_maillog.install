@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_maillog_install() {
+  module_set_weight('simple_school_reports_maillog', 6);
+}
+
+/**
+ * Install new field.
+ */
+function simple_school_reports_maillog_update_10001() {
+  $recipient_email = \Drupal\Core\Field\BaseFieldDefinition::create('string')
+    ->setLabel(t('Recipient email'))
+    ->setSetting('max_length', 255)
+    ->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'string',
+    ])
+    ->setDisplayConfigurable('view', TRUE);
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('recipient_email', 'ssr_maillog', 'simple_school_reports_maillog', $recipient_email);
+}
+
+/**
+ * Populate new field.
+ */
+function simple_school_reports_maillog_update_10002() {
+  $maillog_items = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->loadByProperties(['status' => 1]);
+
+  foreach ($maillog_items as $item) {
+    if ($recipient_user = $item->get('recipient_user')->entity) {
+      /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+      $email_service = \Drupal::service('simple_school_reports_core.email_service');
+      if ($recipient_email = $email_service->getUserEmail($recipient_user)) {
+        $item->set('recipient_email', $recipient_email);
+        $item->save();
+      }
+    }
+  }
+}

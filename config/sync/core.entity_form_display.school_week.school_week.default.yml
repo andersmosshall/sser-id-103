@@ -1,0 +1,320 @@
+uuid: 56e5730f-2e52-4414-85c7-c75c4f72ec05
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.school_week_deviation.school_week_specific
+  module:
+    - field_group
+    - inline_entity_form
+    - simple_school_reports_entities
+    - time_field
+third_party_settings:
+  field_group:
+    group_mandag:
+      children:
+        - length_1
+        - from_1
+        - to_1
+      label: Måndag
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_tisdag:
+      children:
+        - length_2
+        - from_2
+        - to_2
+      label: Tisdag
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_onsdag:
+      children:
+        - length_3
+        - from_3
+        - to_3
+      label: Onsdag
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_torsdag:
+      children:
+        - length_4
+        - from_4
+        - to_4
+      label: Torsdag
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_fredag:
+      children:
+        - length_5
+        - from_5
+        - to_5
+      label: Fredag
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_lordag:
+      children:
+        - length_6
+        - from_6
+        - to_6
+      label: Lördag
+      region: content
+      parent_name: ''
+      weight: 5
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_sondag:
+      children:
+        - length_7
+        - from_7
+        - to_7
+      label: Söndag
+      region: content
+      parent_name: ''
+      weight: 6
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+id: school_week.school_week.default
+targetEntityType: school_week
+bundle: school_week
+mode: default
+content:
+  deviation:
+    type: inline_entity_form_complex
+    weight: 7
+    region: content
+    settings:
+      form_mode: school_week_specific
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+  from_1:
+    type: time_widget
+    weight: 5
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_2:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_3:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_4:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_5:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_6:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_7:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  length_1:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: min
+    third_party_settings: {  }
+  length_2:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  length_3:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  length_4:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  length_5:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  length_6:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  length_7:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  to_1:
+    type: time_widget
+    weight: 6
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_2:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_3:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_4:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_5:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_6:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_7:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  uid: true

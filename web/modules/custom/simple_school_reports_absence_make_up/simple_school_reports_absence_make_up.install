@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_absence_make_up_install() {
+  module_set_weight('simple_school_reports_absence_make_up', 10);
+}
+

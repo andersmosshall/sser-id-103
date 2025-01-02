@@ -1,0 +1,28 @@
+uuid: c0f5baa4-d12a-41d4-a182-aa45e7a698bb
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Clean up orphaned grade registrations'
+id: clean_up_orphaned_grade_registrations
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: clean_up_orphaned_grade_registrations
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */6 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

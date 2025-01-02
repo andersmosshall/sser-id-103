@@ -1,0 +1,27 @@
+uuid: 6fe9d855-ec78-4cb5-b6f0-17eed3eafc52
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_grade_sectioning
+field_name: field_grade_sectioning
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: separate
+      label: 'Show all grades separate'
+    -
+      value: merge
+      label: 'Merge all passed grade as pass'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

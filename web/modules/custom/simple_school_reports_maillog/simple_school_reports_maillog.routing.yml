@@ -1,0 +1,7 @@
+entity.ssr_maillog.settings:
+  path: 'admin/structure/ssr-maillog'
+  defaults:
+    _form: '\Drupal\simple_school_reports_maillog\Form\SsrMaillogSettingsForm'
+    _title: 'Maillog'
+  requirements:
+    _permission: 'administer maillog'

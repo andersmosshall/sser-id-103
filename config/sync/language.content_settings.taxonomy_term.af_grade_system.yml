@@ -1,0 +1,11 @@
+uuid: 95cc44f4-4cd6-4750-abb9-52a4ad00a09f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.af_grade_system
+id: taxonomy_term.af_grade_system
+target_entity_type_id: taxonomy_term
+target_bundle: af_grade_system
+default_langcode: site_default
+language_alterable: false

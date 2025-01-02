@@ -1,0 +1,10 @@
+uuid: 1396da87-ae5c-4354-9af4-c9250291989f
+langcode: en
+status: true
+dependencies: {  }
+id: list_template_field
+label: 'List template field'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

@@ -1,0 +1,65 @@
+uuid: a8c47499-c196-4ff3-8b77-20e26f368029
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.extra_adaptation.field_extra_adaptation
+    - field.field.paragraph.extra_adaptation.field_school_subjects
+    - paragraphs.paragraphs_type.extra_adaptation
+  module:
+    - field_group
+third_party_settings:
+  field_group:
+    group_skolamnen_for_denna_anpass:
+      children: {  }
+      label: 'Skolämnen för denna anpassning'
+      parent_name: ''
+      region: hidden
+      weight: 1
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
+    group_extra_adaptation_wrapper:
+      children:
+        - field_extra_adaptation
+        - field_school_subjects
+      label: Wrapper
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: fieldset
+      format_settings:
+        classes: extra-adaptation-view-wrapper
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+id: paragraph.extra_adaptation.default
+targetEntityType: paragraph
+bundle: extra_adaptation
+mode: default
+content:
+  field_extra_adaptation:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: name_only
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_school_subjects:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

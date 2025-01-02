@@ -1,0 +1,7 @@
+simple_school_reports_caregiver_login.start_page_caregiver:
+  path: '/start/caregiver'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_caregiver_login\Controller\StartPageController::caregiverStartPage'
+    _title: 'Start'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_caregiver_login\Controller\StartPageController::routeAccess'

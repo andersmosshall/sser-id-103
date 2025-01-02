@@ -1,0 +1,27 @@
+uuid: abd76e6f-c40f-4a5a-ab3e-fc6b168b6760
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - simple_school_reports_maillog
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+id: ssr_maillog.field_subject
+field_name: field_subject
+entity_type: ssr_maillog
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

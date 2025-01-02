@@ -1,0 +1,72 @@
+uuid: 2263e18a-eed4-477e-9f22-2ebcc1c53409
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.school_subject.field_block_parent
+    - field.field.taxonomy_term.school_subject.field_language_code
+    - field.field.taxonomy_term.school_subject.field_mandatory
+    - field.field.taxonomy_term.school_subject.field_subject_code
+    - field.field.taxonomy_term.school_subject.field_subject_specify
+    - taxonomy.vocabulary.school_subject
+id: taxonomy_term.school_subject.default
+targetEntityType: taxonomy_term
+bundle: school_subject
+mode: default
+content:
+  field_block_parent:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_language_code:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_mandatory:
+    type: boolean_checkbox
+    weight: 8
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_subject_code:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_subject_specify:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 7
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  path: true

@@ -1,0 +1,11 @@
+uuid: f750594a-3cbc-434e-b734-6fb175e17e3e
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: simple_school_reports_examinations_support_set_examination_results
+label: 'Handle examination results'
+type: user
+plugin: simple_school_reports_examinations_support_set_examination_results
+configuration: {  }

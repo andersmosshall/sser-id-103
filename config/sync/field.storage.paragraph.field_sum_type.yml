@@ -1,0 +1,31 @@
+uuid: dde0df98-75e6-4a51-885f-3a060a27466f
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - options
+    - paragraphs
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.field_sum_type
+field_name: field_sum_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: part
+      label: 'Part sum, sum all rows from last part sum'
+    -
+      value: total
+      label: 'Total sum, sum all rows (recomended to put last)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

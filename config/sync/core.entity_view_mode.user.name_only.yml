@@ -1,0 +1,11 @@
+uuid: 1bd6b6aa-40b1-48f9-bd1a-a84fcdaf2e53
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.name_only
+label: 'Name only'
+description: ''
+targetEntityType: user
+cache: true

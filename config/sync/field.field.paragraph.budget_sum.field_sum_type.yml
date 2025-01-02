@@ -1,0 +1,21 @@
+uuid: ffcfcdca-2864-4404-8bc9-20525c25a02e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_sum_type
+    - paragraphs.paragraphs_type.budget_sum
+  module:
+    - options
+id: paragraph.budget_sum.field_sum_type
+field_name: field_sum_type
+entity_type: paragraph
+bundle: budget_sum
+label: 'Type of sum'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

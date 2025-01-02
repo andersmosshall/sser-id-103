@@ -1,0 +1,75 @@
+services:
+  cache_context.current_day:
+    class: Drupal\simple_school_reports_core\Cache\Contexts\CurrentDayCacheContext
+    tags:
+      - { name: cache.context }
+
+  simple_school_reports_core.term_service:
+    class: Drupal\simple_school_reports_core\Service\TermService
+    arguments: ['@entity_type.manager']
+
+  simple_school_reports_core.school_subjects:
+    class: Drupal\simple_school_reports_core\Service\SchoolSubjectService
+    arguments: [ '@entity_type.manager', '@cache.default' ]
+
+  simple_school_reports_core.absence_statistics:
+    class: Drupal\simple_school_reports_core\Service\AbsenceStatisticsService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default' ]
+
+  simple_school_reports_core.email_service:
+    class: Drupal\simple_school_reports_core\Service\EmailService
+    arguments: [ '@database', '@entity_type.manager', '@request_stack', '@plugin.manager.mail', '@current_user', '@?email_factory', '@logger.factory' ]
+
+  simple_school_reports_core.replace_token_service:
+    class: Drupal\simple_school_reports_core\Service\ReplaceTokenService
+    arguments: [ '@entity_type.manager' ]
+
+  simple_school_reports_core.message_template_service:
+    class: Drupal\simple_school_reports_core\Service\MessageTemplateService
+    arguments: [ '@state', '@module_handler', '@simple_school_reports_core.replace_token_service' ]
+
+  simple_school_reports_core.start_page_content_service:
+    class: Drupal\simple_school_reports_core\Service\StartPageContentService
+    arguments: [ '@state', '@module_handler', '@simple_school_reports_core.replace_token_service', '@current_user' ]
+
+  simple_school_reports_core.file_template_service:
+    class: Drupal\simple_school_reports_core\Service\FileTemplateService
+    arguments: [ '@state', '@entity_type.manager','@file_system', '@uuid', '@module_handler' ]
+    tags:
+      - { name: event_subscriber }
+
+  simple_school_reports_core.pnum:
+    class: Drupal\simple_school_reports_core\Pnum
+
+  simple_school_reports_core.user_meta_data:
+    class: Drupal\simple_school_reports_core\Service\UserMetaDataService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default', '@datetime.time' ]
+
+  simple_school_reports_core.node_grants:
+    class: Drupal\simple_school_reports_core\Service\NodeGrantsService
+    arguments: [ '@simple_school_reports_core.user_meta_data' ]
+    tags:
+      - { name: node_access_grants }
+
+  simple_school_reports_core.node_clone:
+    class: Drupal\simple_school_reports_core\Service\NodeCloneService
+    arguments: [ '@entity_type.manager', '@current_user' ]
+
+  simple_school_reports_core:export_users_ssr:
+    class: Drupal\simple_school_reports_core\Service\SSRExportUsersService
+    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service' ]
+    tags:
+      - { name: event_subscriber }
+
+  simple_school_reports_core:export_users_csv:
+    class: Drupal\simple_school_reports_core\Service\CsvExportUsersService
+    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service' ]
+    tags:
+      - { name: event_subscriber }
+
+  simple_school_reports_core.login_redirect:
+    class: Drupal\simple_school_reports_core\EventSubscriber\LoginRedirectSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments: [ '@current_route_match', '@current_user' ]
+

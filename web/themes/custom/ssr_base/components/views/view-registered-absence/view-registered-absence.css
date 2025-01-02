@@ -1,0 +1,11 @@
+
+@media (min-width: 1340px) {
+  .layout-container .region.region-sidebar-first .views-field-field-student {
+    max-width: 190px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+
+

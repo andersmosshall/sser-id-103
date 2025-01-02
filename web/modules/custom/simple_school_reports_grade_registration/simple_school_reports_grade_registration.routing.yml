@@ -1,0 +1,15 @@
+simple_school_reports_grade_registration.generate_grade_catalog:
+  path: '/grade-registration/{node}/generate-grade-catalog'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_registration\Form\GenerateGradeCatalogForm'
+    _title: 'Generate grade catalog'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_grade_registration.generate_grade_single_doc:
+  path: '/grade-registration/{node}/user/{user}/generate-grade-document'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_registration\Form\GenerateGradeSingleDocForm'
+    _title: 'Generate grade document'
+  requirements:
+    _permission: 'school staff permissions'

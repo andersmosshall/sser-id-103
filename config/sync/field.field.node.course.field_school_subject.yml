@@ -1,0 +1,25 @@
+uuid: 1a2b2843-278b-45dc-a2c3-302176b6ae07
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_subject
+    - node.type.course
+id: node.course.field_school_subject
+field_name: field_school_subject
+entity_type: node
+bundle: course
+label: Subject
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_school_subject
+      display_name: all_school_subjects
+      arguments: {  }
+field_type: entity_reference

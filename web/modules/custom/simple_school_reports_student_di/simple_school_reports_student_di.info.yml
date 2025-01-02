@@ -1,0 +1,11 @@
+name: Simple School Reports Development Interview Student
+type: module
+description: Simple School Reports Development Interview Student
+core_version_requirement: ^9 || ^10
+package: 'Simple School Reports'
+version: 1.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+interface translation project: simple_school_reports_student_di
+interface translation server pattern: modules/custom/simple_school_reports_student_di/translations/%project-%version.%language.po

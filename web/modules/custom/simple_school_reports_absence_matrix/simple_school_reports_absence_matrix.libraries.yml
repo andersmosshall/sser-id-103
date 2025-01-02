@@ -1,0 +1,8 @@
+absence_matrix_view:
+  version: VERSION
+  js:
+    js/absence_matrix_view.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

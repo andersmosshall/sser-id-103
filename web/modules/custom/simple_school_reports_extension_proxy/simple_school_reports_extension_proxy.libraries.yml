@@ -1,0 +1,20 @@
+di_attending_select_widget:
+  version: VERSION
+  js:
+    js/di_attending_select_widget.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+attendance_statistics_block:
+  version: VERSION
+  css:
+    theme:
+      css/attendance_statistics_block.css: { }
+
+attendance_statistics_per_day_block:
+  version: VERSION
+  css:
+    theme:
+      css/attendance_statistics_per_day_block.css: { }

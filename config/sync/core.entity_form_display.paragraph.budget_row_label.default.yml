@@ -1,0 +1,23 @@
+uuid: d9f5ee4a-abb3-4d80-9a2e-3b555cb66757
+langcode: sv
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.budget_row_label.field_label
+    - paragraphs.paragraphs_type.budget_row_label
+id: paragraph.budget_row_label.default
+targetEntityType: paragraph
+bundle: budget_row_label
+mode: default
+content:
+  field_label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

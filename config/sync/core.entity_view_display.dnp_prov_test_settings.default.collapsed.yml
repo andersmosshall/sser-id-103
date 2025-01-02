@@ -1,0 +1,72 @@
+uuid: 170961be-0cb1-4657-a976-f7b66d826a01
+langcode: sv
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.dnp_prov_test_settings.collapsed
+    - simple_school_reports_dnp_support.dnp_prov_test_settings_type.default
+  module:
+    - field_group
+    - options
+third_party_settings:
+  field_group:
+    group_collapsed_test_settings:
+      children:
+        - test
+        - teachers
+        - students
+        - list_behavior
+      label: '[label]'
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
+id: dnp_prov_test_settings.default.collapsed
+targetEntityType: dnp_prov_test_settings
+bundle: default
+mode: collapsed
+content:
+  list_behavior:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  students:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  teachers:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  test:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  status: true
+  uid: true

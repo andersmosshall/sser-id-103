@@ -1,0 +1,14 @@
+.grade-round-form .field--name-field-document-date .form-items-inline .form-item:last-child {
+  display: none;
+}
+
+.grade-round-form .field--name-field-invalid-absence-from .form-items-inline .form-item:last-child {
+  display: none;
+}
+
+.grade-round-form .field--name-field-invalid-absence-to .form-items-inline .form-item:last-child {
+  display: none;
+}
+
+
+

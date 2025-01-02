@@ -1,0 +1,23 @@
+uuid: 8b56072c-5e9f-4939-994b-2308bd67e914
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_prefill
+    - node.type.iup_round
+  module:
+    - options
+id: node.iup_round.field_prefill
+field_name: field_prefill
+entity_type: node
+bundle: iup_round
+label: 'Prefill IUP'
+description: 'Set what data should be prefilled when new IUP is created'
+required: false
+translatable: false
+default_value:
+  -
+    value: iup_goal
+default_value_callback: ''
+settings: {  }
+field_type: list_string

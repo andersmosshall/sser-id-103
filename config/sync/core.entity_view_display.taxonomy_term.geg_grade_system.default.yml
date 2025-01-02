@@ -1,0 +1,34 @@
+uuid: 6e96c2c7-d58e-41fb-9f80-9346864a6985
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.geg_grade_system.field_merit
+    - taxonomy.vocabulary.geg_grade_system
+  module:
+    - text
+id: taxonomy_term.geg_grade_system.default
+targetEntityType: taxonomy_term
+bundle: geg_grade_system
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_merit:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

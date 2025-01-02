@@ -1,0 +1,11 @@
+uuid: 2e03d213-6e83-4728-80ba-6c66510dc0b6
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: extension_proxy_make_up_absence_time_reminder
+label: 'Make up time reminder'
+type: user
+plugin: extension_proxy_make_up_absence_time_reminder
+configuration: {  }

@@ -1,0 +1,63 @@
+uuid: b5db7bc2-2cd3-4f48-b962-1ab6d8759a85
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+id: dnp_prov_settings.dnp_prov_settings.default
+targetEntityType: dnp_prov_settings
+bundle: dnp_prov_settings
+mode: default
+content:
+  file_name_prefix:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  guaranteed_staff:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  include_staff_email:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  include_student_email:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  tests:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: collapsed
+      link: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  secrecy_marking: true
+  status: true
+  uid: true

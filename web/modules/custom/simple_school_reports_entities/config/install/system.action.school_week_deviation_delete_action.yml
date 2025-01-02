@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: school_week_deviation_delete_action
+label: 'Delete school week deviations'
+type: school_week_deviation
+plugin: entity:delete_action:school_week_deviation
+configuration: {  }

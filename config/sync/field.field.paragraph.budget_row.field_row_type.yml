@@ -1,0 +1,21 @@
+uuid: 46e0450d-1f1e-44d3-ba0e-2ba30343118e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_row_type
+    - paragraphs.paragraphs_type.budget_row
+  module:
+    - options
+id: paragraph.budget_row.field_row_type
+field_name: field_row_type
+entity_type: paragraph
+bundle: budget_row
+label: 'Type of row'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

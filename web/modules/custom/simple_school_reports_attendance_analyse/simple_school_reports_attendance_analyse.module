@@ -1,0 +1,52 @@
+<?php
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_attendance_analyse_school_week_insert(EntityInterface $entity) {
+  $grade = \Drupal::request()->query->get('school_week_grade_set', NULL);
+  if ($grade !== NULL) {
+    $school_week_state = \Drupal::state()->get('ssr_school_week_per_grade', []);
+    $school_week_state[$grade] = $entity->id();
+    Cache::invalidateTags(['ssr_school_week_per_grade']);
+    \Drupal::state()->set('ssr_school_week_per_grade', $school_week_state);
+    $entity->set('label', 'Skolvecka - Årskurs ' . $grade);
+  }
+
+  $class_id = \Drupal::request()->query->get('school_week_class_set', NULL);
+  if ($class_id !== NULL) {
+    $class = \Drupal::entityTypeManager()->getStorage('ssr_school_class')->load($class_id);
+    if ($class) {
+      $class->set('school_week', $entity);
+      $class->save();
+      Cache::invalidateTags(['ssr_school_week_per_class']);
+    }
+    $entity->set('label', 'Skolvecka - Klass ' . $grade);
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_attendance_analyse_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'deviations_for_school_week') {
+    $deviations_json = $view->args[0] ?? NULL;
+    $deviation_ids = $deviations_json ? json_decode($deviations_json, TRUE) : NULL;
+    if (empty($deviation_ids)) {
+      return;
+    }
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'school_week_deviation.id' && array_key_exists('value', $condition)) {
+          $condition['operator'] = 'IN';
+          $condition['value'] = $deviation_ids;
+        }
+      }
+    }
+  }
+}
+

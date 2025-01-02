@@ -1,0 +1,30 @@
+uuid: 5ba3c818-9051-4c4b-896c-0a9674f65b8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.written_review_school_efforts_preview
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: views_block__written_review_school_efforts
+theme: ssr_base
+region: content
+weight: -4
+provider: null
+plugin: 'views_block:written_review_school_efforts_preview-school_efforts'
+settings:
+  id: 'views_block:written_review_school_efforts_preview-school_efforts'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/written-reviews-round/*/user/*'

@@ -1,0 +1,11 @@
+uuid: 85f79128-0d39-4e6a-98eb-aabe091fd080
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_mail_students
+label: 'Mail students'
+type: user
+plugin: ssr_mail_students
+configuration: {  }

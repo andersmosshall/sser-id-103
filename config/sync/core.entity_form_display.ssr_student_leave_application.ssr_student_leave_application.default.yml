@@ -1,0 +1,65 @@
+uuid: b991ab7b-56cf-43f0-821f-75d627d18710
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_compensation_plan
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_handler_notes
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_reason
+  module:
+    - simple_school_reports_core
+    - simple_school_reports_entities
+    - text
+id: ssr_student_leave_application.ssr_student_leave_application.default
+targetEntityType: ssr_student_leave_application
+bundle: ssr_student_leave_application
+mode: default
+content:
+  field_compensation_plan:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_reason:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: ssr_date_time_timestamp
+    weight: 1
+    region: content
+    settings:
+      seconds_value: 0
+    third_party_settings: {  }
+  student:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  to:
+    type: ssr_date_time_timestamp
+    weight: 2
+    region: content
+    settings:
+      seconds_value: '59'
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_handler_notes: true
+  handled_by: true
+  label: true
+  langcode: true
+  status: true
+  uid: true

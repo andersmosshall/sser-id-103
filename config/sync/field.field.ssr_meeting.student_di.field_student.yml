@@ -1,0 +1,21 @@
+uuid: 6885278a-33df-44a3-9579-defb34e3b22c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_meeting.field_student
+    - simple_school_reports_entities.ssr_meeting_type.student_di
+id: ssr_meeting.student_di.field_student
+field_name: field_student
+entity_type: ssr_meeting
+bundle: student_di
+label: Student
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings: {  }
+field_type: entity_reference

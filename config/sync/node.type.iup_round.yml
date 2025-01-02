@@ -1,0 +1,17 @@
+uuid: fca038d5-4b0d-4487-ae8c-7b9613882fec
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'IUP round'
+type: iup_round
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

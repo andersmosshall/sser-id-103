@@ -1,0 +1,49 @@
+uuid: 6da69c37-909c-47b7-8a16-fc3512232c9d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.written_review.field_review
+    - field.field.paragraph.written_review.field_review_comment
+    - field.field.paragraph.written_review.field_student
+    - field.field.paragraph.written_review.field_written_reviews_round
+    - paragraphs.paragraphs_type.written_review
+  module:
+    - options
+    - text
+id: paragraph.written_review.default
+targetEntityType: paragraph
+bundle: written_review
+mode: default
+content:
+  field_review:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_review_comment:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_written_reviews_round:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

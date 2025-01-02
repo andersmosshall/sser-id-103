@@ -1,0 +1,13 @@
+uuid: 2b172c07-d612-47cf-8083-bd8910daebc7
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+_core:
+  default_config_hash: q9IqfDcfav2NXdUyXO48-NlE8t10NIHHq8Jpb-Pv08k
+id: dnp_provisioning_delete_action
+label: 'Delete dnp provisionings'
+type: dnp_provisioning
+plugin: 'entity:delete_action:dnp_provisioning'
+configuration: {  }

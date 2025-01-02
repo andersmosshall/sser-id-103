@@ -1,0 +1,145 @@
+# Swedish translation of simple_school_reports_module_info
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2017-11-10 11:14+0200\n"
+"PO-Revision-Date: 2017-11-10 11:14+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Module info"
+msgstr "Modulinformation"
+
+msgid "Module"
+msgstr "Modul"
+
+msgid "Module type"
+msgstr "Modultyp"
+
+msgid "Required modules"
+msgstr "Kräver modules"
+
+msgid "Recommended modules"
+msgstr "Rekommenderade moduler"
+
+msgid "Enabled"
+msgstr "Aktiverad"
+
+msgid "Price"
+msgstr "Pris"
+
+msgid "Annual fee"
+msgstr "Årsavgift"
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Help pages"
+msgstr "Hjälpsidor"
+
+msgid "Demonstration link"
+msgstr "Demonstrationslänk"
+
+msgid "See demonstration of features in this module here"
+msgstr "Se demonstration av funktioner i denna modul här"
+
+msgid "Direct navigate to module info"
+msgstr "Direktnavigera till modulinformation"
+
+msgid "Core module"
+msgstr "Kärnmodul"
+
+msgid "Mini module"
+msgstr "Minimodul"
+
+msgid "Make up time"
+msgstr "Bonustimme"
+
+msgid "Make up time"
+msgstr "Bonustimme"
+
+msgid "Budget"
+msgstr "Budget"
+
+msgid "Caregiver login"
+msgstr "Login för vårdnadshavare"
+
+msgid "Simple school report core"
+msgstr "Simple school report kärna"
+
+msgid "Review grade registration"
+msgstr "Betygsregistrering - omdömen"
+
+msgid "Grade registration"
+msgstr "Betygsregistrering"
+
+msgid "Grade statistics"
+msgstr "Betygsstatistik"
+
+msgid "IUP registration"
+msgstr "IUP-registrering"
+
+msgid "List templates"
+msgstr "Listmallar"
+
+msgid "Written reviews registration"
+msgstr "Registering av skriftliga omdömen"
+
+msgid "Special diet"
+msgstr "Specialkost"
+
+msgid "Consents"
+msgstr "Samtycken"
+
+msgid "Development interview for students"
+msgstr "Utvecklingssamtal för elever"
+
+msgid "Attendance analyse"
+msgstr "Närvaroanalys"
+
+msgid "Attendance analyse for a period"
+msgstr "Närvaroanalys för period"
+
+msgid "Leave applications"
+msgstr "Ledighetsansökningar"
+
+msgid "Email attachments"
+msgstr "E-postbilagor"
+
+msgid "Mail log"
+msgstr "Maillog"
+
+msgid "Absence matrix"
+msgstr "Frånvaromatris"
+
+msgid "Extra adaptations"
+msgstr "Extra anpassningar"
+
+msgid "Classes"
+msgstr "Klasser"
+
+msgid "Examination lists"
+msgstr "Examinationslistor"
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""

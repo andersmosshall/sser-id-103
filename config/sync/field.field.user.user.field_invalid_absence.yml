@@ -1,0 +1,24 @@
+uuid: 3d177884-099d-4ce1-ad6d-7e5157d01ce4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_invalid_absence
+  module:
+    - user
+id: user.user.field_invalid_absence
+field_name: field_invalid_absence
+entity_type: user
+bundle: user
+label: 'Invalid absence'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ' min'
+field_type: integer

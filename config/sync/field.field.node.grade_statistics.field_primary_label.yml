@@ -1,0 +1,19 @@
+uuid: c9752035-0a8e-4585-919b-0a61468e8e4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_primary_label
+    - node.type.grade_statistics
+id: node.grade_statistics.field_primary_label
+field_name: field_primary_label
+entity_type: node
+bundle: grade_statistics
+label: 'Primary label'
+description: 'Primay label for graphs/tables, leave empty to use selected primary grade round name as label'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

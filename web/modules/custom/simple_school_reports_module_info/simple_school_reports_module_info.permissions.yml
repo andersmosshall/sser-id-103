@@ -1,0 +1,13 @@
+administer ssr_module_info:
+  title: 'Administer module infos'
+  restrict access: true
+view ssr_module_info:
+  title: 'View module info'
+edit ssr_module_info:
+  title: 'Edit module info'
+delete ssr_module_info:
+  title: 'Delete module info'
+create ssr_module_info:
+  title: 'Create module info'
+view ssr_module_info price:
+  title: 'View module info price or fees'

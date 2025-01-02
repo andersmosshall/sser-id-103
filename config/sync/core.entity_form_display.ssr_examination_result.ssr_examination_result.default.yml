@@ -1,0 +1,20 @@
+uuid: 7362f564-70bd-46ed-9f94-e14b07111965
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+id: ssr_examination_result.ssr_examination_result.default
+targetEntityType: ssr_examination_result
+bundle: ssr_examination_result
+mode: default
+content: {  }
+hidden:
+  created: true
+  examination: true
+  label: true
+  langcode: true
+  state: true
+  status: true
+  student: true
+  uid: true

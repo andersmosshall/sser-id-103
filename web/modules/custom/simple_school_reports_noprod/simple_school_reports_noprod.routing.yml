@@ -1,0 +1,7 @@
+simple_school_reports_noprod.anonymize:
+  path: '/anonymize'
+  defaults:
+    _form: '\Drupal\simple_school_reports_noprod\Form\AnonymizeUserForm'
+    _title: 'Anonymize'
+  requirements:
+    _permission: 'administer modules'

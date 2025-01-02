@@ -1,0 +1,222 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_grade_registration\GradeRoundFormAlter;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\simple_school_reports_grade_registration\StudentGroupIEFormAlter;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_grade_registration_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $forms_to_alter = ['node_grade_round_edit_form', 'node_grade_round_form'];
+  if (in_array($form_id, $forms_to_alter)) {
+    $form['#after_build'][] = [GradeRoundFormAlter::class, 'basicInfoHandlerAfterBuild'];
+    StudentGroupIEFormAlter::parentFormAlter($form, $form_state);
+    GradeRoundFormAlter::setDefaultDates($form, $form_state);
+
+    if ($form_id === 'node_grade_round_form') {
+      GradeRoundFormAlter::newGradeRoundFormAlter($form, $form_state);
+    }
+    else {
+      if (empty($form['actions']['submit']['#submit'])) {
+        $form['actions']['submit']['#submit'] = [];
+      }
+      $form['actions']['submit']['#submit'][] = [GradeRoundFormAlter::class, 'handleRedirect'];
+    }
+  }
+
+  if ($form_id === 'node_grade_subject_edit_form') {
+    \Drupal\simple_school_reports_grade_registration\GradeSubjectFormAlter::formAlter($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function simple_school_reports_grade_registration_node_delete(EntityInterface $entity) {
+  if ($entity->bundle() === 'grade_round') {
+    // Delete all student groups when grade round is deleted.
+    /** @var EntityInterface $student_group */
+    foreach ($entity->get('field_student_groups')->referencedEntities() as $student_group) {
+       $student_group->delete();
+    }
+  }
+
+  if ($entity->bundle() === 'grade_student_group') {
+    // Delete all grade subjects when grade student group is deleted, the
+    // grades paragraphs will be pruned by cron later.
+    /** @var EntityInterface $grade_subject */
+    foreach ($entity->get('field_grade_subject')->referencedEntities() as $grade_subject) {
+      $grade_subject->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_grade_registration_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
+  if (isset($entity_form['#bundle']) && $entity_form['#bundle'] === 'grade_student_group') {
+    $entity_form['#attached']['library'][] = 'simple_school_reports_grade_registration/student_group';
+    StudentGroupIEFormAlter::basicInfoHandler($entity_form, $form_state);
+    StudentGroupIEFormAlter::gradeSubjectHandler($entity_form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_grade_registration_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'grade_round') {
+      $anonymized = $entity->get('field_anonymized')->value;
+      if (!$anonymized) {
+        $locked = $entity->get('field_locked')->value;
+        $operations['grade_registration'] = [
+          'title' => t('Register grade'),
+          'url' => \Drupal\Core\Url::fromRoute('view.grade_registration_subject_list.grade_registration_subject_list', ['node' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => $locked ? -98 : -99,
+        ];
+
+        if ($entity->access('update')) {
+          $operations['generate_docs'] = [
+            'title' => t('Generate documents'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_grade_registration.generate_grade_catalog', ['node' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => $locked ? -99 : -98,
+          ];
+        }
+      }
+    }
+  }
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'grade_subject') {
+      $cache = new \Drupal\Core\Cache\CacheableMetadata();
+      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+      $operations = [];
+      $grade_round_node = \Drupal::request()->get('node');
+
+      if (is_numeric($grade_round_node)) {
+        $grade_round_node = $node_storage->load($grade_round_node);
+      }
+
+      if ($grade_round_node instanceof \Drupal\node\NodeInterface && $grade_round_node->bundle() === 'grade_round') {
+        $grade_student_group_nid = current($node_storage->getQuery()->accessCheck(TRUE)->condition('field_grade_subject', $entity->id(), 'IN')->execute());
+        if ($grade_student_group_nid) {
+          if ($entity->access('update')) {
+            $cache->addCacheableDependency($entity);
+            $cache->addCacheContexts(['user']);
+            $operations['grade_registration'] = [
+              'title' => t('Register grade'),
+              'url' => \Drupal\Core\Url::fromRoute('entity.node.edit_form', ['node' => $entity->id()], ['query' => ['grade_round' => $grade_round_node->id(), 'grade_student_group' => $grade_student_group_nid, 'destination' => \Drupal::service('path.current')->getPath()]]),
+              'weight' => -99,
+            ];
+            $cache->applyTo($operations['grade_registration']);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_grade_registration_paragraph_presave(\Drupal\paragraphs\ParagraphInterface $entity) {
+  if ($entity->bundle() === 'grade_registration') {
+    $node = $entity->getParentEntity();
+    if ($node) {
+      /** @var \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger */
+      $logger_service = \Drupal::service('logger.factory');
+
+      /** @var \Drupal\Core\Logger\LoggerChannelInterface $logger */
+      $logger = $logger_service->get('content');
+
+      $node_link = $node->toLink($node->label())->toString();
+      $insert = $entity->isNew();
+      $context = ['@type' => $entity->bundle(), '%title' => json_encode($entity->toArray()), 'link' => $node_link];
+
+
+
+      if ($insert) {
+        $logger->notice('@type: added %title.', $context);
+      }
+      else {
+        $logger->notice('@type: updated %title.', $context);
+      }
+
+    }
+
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_grade_registration_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'view.grade_registration_subject_list.grade_registration_subject_list') {
+    $nid = $context['current_request']->get('node');
+    if ($nid) {
+      $cache->addCacheTags(['node:' . $nid]);
+      $cache->addCacheContexts(['user']);
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = \Drupal\Core\Access\AccessResult::allowedIf(\Drupal::currentUser()->hasPermission('administer simple school reports settings'));
+      $local_actions['ssr_iup_file_gen'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Generate documents'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_grade_registration.generate_grade_catalog', ['node' => $nid], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_grade_registration_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->bundle() === 'grade_student_group') {
+    /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+    $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
+    $options_map = $school_subject_service->getSchoolSubjectOptionList(TRUE);
+
+    $node_storage = \Drupal::entityTypeManager()
+      ->getStorage('node');
+
+    $nids = array_column($entity->get('field_grade_subject')->getValue(), 'target_id');
+    foreach ($nids as $nid) {
+      $node = $node_storage->load($nid);
+      if (!$node) {
+        continue;
+      }
+      // Recalculate label.
+      $label = $entity->label() . ' - ';
+      if ($subject = $node->get('field_school_subject')->entity) {
+        $label .= $options_map[$subject->id()] ?? $subject->label();
+      }
+      $node->set('title', $label);
+      $node->save();
+    }
+  }
+
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_grade_registration_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'grade_registration_rounds') {
+    $view->element['#cache']['contexts'][] = 'user:permissions';
+  }
+  if ($view->id() === 'grade_registration_subject_list') {
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+}

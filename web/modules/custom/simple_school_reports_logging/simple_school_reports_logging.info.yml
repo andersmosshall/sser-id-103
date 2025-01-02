@@ -1,0 +1,6 @@
+name: Simple School Reports Logging
+type: module
+description: Simple School Reports Logging
+core_version_requirement: ^9 || ^10
+package: 'Simple School Reports'
+version: 1.0.0

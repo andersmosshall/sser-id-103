@@ -1,0 +1,27 @@
+uuid: 54367c84-16c8-4251-bf0c-9cf7dfb856a1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_absence_type
+field_name: field_absence_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: reported
+      label: 'Reported absence'
+    -
+      value: leave
+      label: 'Leave absence'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

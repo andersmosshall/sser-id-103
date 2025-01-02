@@ -1,0 +1,32 @@
+global:
+  version: VERSION
+  css:
+    base:
+      components/_global/style.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+page:
+  version: VERSION
+  css:
+    component:
+      components/page/page/page.css: {}
+
+node-iup:
+  version: VERSION
+  css:
+    component:
+      components/node/iup/node-iup.css: {}
+
+view-registered-absence:
+  version: VERSION
+  css:
+    component:
+      components/views/view-registered-absence/view-registered-absence.css: {}
+
+footer:
+  version: VERSION
+  css:
+    component:
+      components/footer/footer.css: {}

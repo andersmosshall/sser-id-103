@@ -1,0 +1,14 @@
+uuid: 19685956-2193-4806-ae3a-ea2d366811f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.budget_administrator
+  module:
+    - user
+id: user_remove_role_action.budget_administrator
+label: 'Remove the Budget administrator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: budget_administrator

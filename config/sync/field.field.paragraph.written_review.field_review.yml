@@ -1,0 +1,21 @@
+uuid: 96b1bced-bebd-4e56-b161-d3a591dfa9a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_review
+    - paragraphs.paragraphs_type.written_review
+  module:
+    - options
+id: paragraph.written_review.field_review
+field_name: field_review
+entity_type: paragraph
+bundle: written_review
+label: Review
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

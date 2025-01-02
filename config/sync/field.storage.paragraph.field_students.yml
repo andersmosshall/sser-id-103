@@ -1,0 +1,24 @@
+uuid: d30a5271-3115-46ff-9cc5-e869f88c536e
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - paragraphs
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.field_students
+field_name: field_students
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

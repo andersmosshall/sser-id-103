@@ -1,0 +1,55 @@
+uuid: c73c6002-a47d-4a11-870e-7f8f94f70bef
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.written_reviews_round.field_document_date
+    - field.field.node.written_reviews_round.field_locked
+    - field.field.node.written_reviews_round.field_term_type
+    - field.field.node.written_reviews_round.field_written_reviews_subject
+    - node.type.written_reviews_round
+  module:
+    - simple_school_reports_core
+id: node.written_reviews_round.default
+targetEntityType: node
+bundle: written_reviews_round
+mode: default
+content:
+  field_document_date:
+    type: ssr_date_timestamp
+    weight: 26
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+    third_party_settings: {  }
+  field_locked:
+    type: boolean_checkbox
+    weight: 28
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_term_type:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_written_reviews_subject: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

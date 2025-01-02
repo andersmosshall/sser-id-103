@@ -1,0 +1,15 @@
+uuid: c843cf79-8d02-4d56-b62a-9bb5322f5a1b
+langcode: sv
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: j-rE9LRcHAh5WPmOIg9glR7GKLw1CkvVnJvKNe376vM
+id: daily_schedule
+label: 'Daily Schedule'
+enabled: true
+keep: 60
+period: 86400
+cron: null
+source_id: default_db
+destination_id: private_files
+settings_profile_id: null

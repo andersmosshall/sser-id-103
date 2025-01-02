@@ -1,0 +1,29 @@
+uuid: 91aaa1ec-46b0-43c3-81a2-eba0317ea84d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_written_reviews_round
+    - node.type.written_reviews
+    - node.type.written_reviews_round
+id: node.written_reviews.field_written_reviews_round
+field_name: field_written_reviews_round
+entity_type: node
+bundle: written_reviews
+label: 'Written reviews round'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      written_reviews_round: written_reviews_round
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

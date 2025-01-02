@@ -1,0 +1,5 @@
+simple_school_reports_grade_registration.list_grade_rounds_active:
+  title: 'List'
+  route_name: view.grade_registration_rounds.active
+  base_route: view.grade_registration_rounds.active
+  weight: 10

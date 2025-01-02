@@ -1,0 +1,23 @@
+uuid: 4172ce83-91cd-408c-90a7-dd90c5a24bde
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_system_id
+    - node.type.help_page
+id: node.help_page.field_system_id
+field_name: field_system_id
+entity_type: node
+bundle: help_page
+label: 'System id'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

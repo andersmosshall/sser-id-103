@@ -1,0 +1,11 @@
+uuid: 25aea797-6e82-4d29-af78-c8098e0208a3
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_assign_to_class
+label: 'Assign to class'
+type: user
+plugin: ssr_assign_to_class
+configuration: {  }

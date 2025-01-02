@@ -1,0 +1,28 @@
+alias ssr_copy_config_split="if [ -f \".settings/local/config_split.config_split.local.yml\" ]; then \
+  cp .settings/local/config_split.config_split.local.yml config/sync/config_split.config_split.local.yml; \
+fi"
+
+alias ssr_copy_system_site="if [ -f \".settings/local/system.site.yml\" ]; then \
+  cp .settings/local/system.site.yml config/sync/system.site.yml; \
+fi"
+
+alias ssr_copy_system_theme="if [ -f \".settings/local/system.theme.global.yml\" ]; then \
+  cp .settings/local/system.theme.global.yml config/sync/system.theme.global.yml; \
+fi"
+
+alias ssr_deploy_local="git pull &&
+ chmod +w web/sites/default/ &&
+ chmod +w web/sites/default/settings.local.php  &&
+ cp .settings/local/settings.local.php web/sites/default/settings.local.php &&
+ ssr_copy_config_split &&
+ ssr_copy_system_site &&
+ ssr_copy_system_theme &&
+ lando composer install &&
+ lando drush cr &&
+ lando drush deploy &&
+ lando drush deploy &&
+ lando drush locale-check &&
+ lando drush locale-update &&
+ lando drush cr &&
+ lando drush php-eval 'if (function_exists(\"simple_school_reports_module_info_deploy\")) { simple_school_reports_module_info_deploy(); }'"
+

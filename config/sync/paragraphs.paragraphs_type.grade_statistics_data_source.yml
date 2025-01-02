@@ -1,0 +1,10 @@
+uuid: 022199fb-aeb4-48fb-8bbd-f880333133d1
+langcode: en
+status: true
+dependencies: {  }
+id: grade_statistics_data_source
+label: 'Grade statistics data source'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

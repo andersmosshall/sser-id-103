@@ -1,0 +1,7 @@
+views_custom_permissions.settings:
+  path: '/admin/config/system/views-custom-permissions'
+  defaults:
+    _form: '\Drupal\views_custom_permissions\Form\AddPermissionsForm'
+    _title: 'Views Custom Permissions'
+  requirements:
+    _permission: 'Views Custom Permissions'

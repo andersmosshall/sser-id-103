@@ -1,0 +1,20 @@
+uuid: ce497ab9-dd1b-44b3-98a3-89eb7b2e2461
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+  theme:
+    - ssr_base
+id: ssrfooterblock
+theme: ssr_base
+region: page_bottom
+weight: 4
+provider: null
+plugin: ssr_footer_block
+settings:
+  id: ssr_footer_block
+  label: 'SSR footer block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility: {  }

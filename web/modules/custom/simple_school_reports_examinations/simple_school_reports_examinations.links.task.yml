@@ -1,0 +1,5 @@
+simple_school_reports_examinations.examination_list_student_tab:
+  base_route: entity.user.canonical
+  weight: 65
+  route_name: simple_school_reports_examinations.examination_list_student_tab
+  title: 'Examinations'

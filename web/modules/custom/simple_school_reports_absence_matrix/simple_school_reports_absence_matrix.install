@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * update functions for the simple_school_reports_absence_matrix module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_absence_matrix_install() {
+  module_set_weight('simple_school_reports_absence_matrix', 10);
+}

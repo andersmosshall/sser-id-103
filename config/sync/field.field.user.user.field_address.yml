@@ -1,0 +1,31 @@
+uuid: d5cf1c24-69c7-42c3-a4b7-d5ed9b8e8350
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_address
+    - paragraphs.paragraphs_type.address
+  module:
+    - entity_reference_revisions
+    - user
+id: user.user.field_address
+field_name: field_address
+entity_type: user
+bundle: user
+label: Address
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      address: address
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 2
+        enabled: true
+field_type: entity_reference_revisions

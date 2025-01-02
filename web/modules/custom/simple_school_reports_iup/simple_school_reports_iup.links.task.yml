@@ -1,0 +1,5 @@
+simple_school_reports_iup.iup_student_tab:
+  base_route: entity.user.canonical
+  weight: 60
+  route_name: simple_school_reports_iup.iup_student_tab
+  title: 'IUP'

@@ -1,0 +1,47 @@
+.standard-phrase-select--wrapper {
+  display: block;
+  width: 100%;
+}
+
+.standard-phrase-select--wrapper .button {
+  width: -webkit-fill-available;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.standard-phrase-select--wrapper .select--wrapper .form-type--standard-phrase-select {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 61rem) {
+  .standard-phrase-select--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .standard-phrase-select--wrapper .button {
+    width: auto;
+    margin-right: 12px;
+  }
+
+  .standard-phrase-select--wrapper .select--wrapper .form-type--standard-phrase-select {
+    margin-top: 0;
+  }
+}
+
+.standard-phrase-select--wrapper .button:before {
+  margin-left: -0.25em;
+  padding-right: 0.25em;
+  content: "^";
+  font-weight: 900;
+}
+
+.standard-phrase-select--wrapper .select--wrapper,
+.standard-phrase-select--wrapper .select--wrapper .form-element--type-select {
+  width: 100%;
+}
+
+

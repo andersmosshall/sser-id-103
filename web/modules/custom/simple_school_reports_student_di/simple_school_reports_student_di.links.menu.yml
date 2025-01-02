@@ -1,0 +1,5 @@
+simple_school_reports_student_di.student_development_interview_rounds_list:
+  title: 'Student development interview'
+  description: 'Create new student development interview rounds and add create meetings'
+  parent: simple_school_reports_core.actions
+  route_name: view.student_development_interview_rounds.list

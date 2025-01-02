@@ -1,0 +1,11 @@
+uuid: 9fa2151c-1370-47b8-af4f-30334f5b9a21
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_export_users
+label: 'Export users'
+type: user
+plugin: ssr_export_users
+configuration: {  }

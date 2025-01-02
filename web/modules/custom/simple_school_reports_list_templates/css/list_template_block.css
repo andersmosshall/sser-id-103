@@ -1,0 +1,114 @@
+.list-template-block tr {
+  vertical-align: top;
+}
+
+.list-template-block table {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.list-template-block table td,
+.list-template-block table th {
+  height: 2rem;
+}
+
+.list-template-block .views-field-uid-1 {
+  display: none;
+}
+
+.list-template-block .views-field-uid {
+  padding-right: 0;
+}
+
+.list-template-block .views-field-field-caregivers > div:not(:last-child),
+.list-template-block .views-field-field-caregivers-1 .profile:not(:last-child),
+.list-template-block .views-field-field-caregivers-2 .profile:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.list-template-block .views-field-field-caregivers-1 .user-readable-name,
+.list-template-block .views-field-field-caregivers-2 .user-readable-name {
+  font-style: italic;
+}
+
+.list-template-block .views-field-rendered-entity .user-readable-name {
+  display: none;
+}
+
+.list-template-block .paragraph--type--address.paragraph--view-mode--preview {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
+.list-template-block .field--name-field-street-address {
+  flex: 0 0 100%;
+  white-space: nowrap;
+}
+
+.list-template-block .field--name-field-zip-code {
+  flex: 0 1 auto;
+  margin-right: 0.5em;
+}
+
+.list-template-block .field--name-field-city {
+  flex: 0 1 auto;
+}
+
+.list-template-block .views-field-uid,
+.list-template-block .views-field-field-gender,
+.list-template-block .views-field-field-gender,
+.list-template-block .views-field-field-gender,
+.list-template-block .views-field-field-gender,
+.list-template-block .views-field-field-gender,
+.list-template-block .views-field-field-caregivers,
+.list-template-block .views-field-field-caregivers-1,
+.list-template-block .views-field-field-caregivers-2,
+.list-template-block .views-field-name {
+  width: 10px;
+  max-width: 20%;
+  white-space: nowrap;
+}
+
+.list-template-block table.no-custom tr th:last-child,
+.list-template-block table.no-custom tr td:last-child {
+  width: 100%;
+  max-width: 100%;
+}
+
+.list-template-block tr td .item-list ul li:last-child,
+.list-template-block tr td .item-list ol li:last-child {
+  margin-bottom: 0;
+}
+
+/* Print */
+@media print {
+  .list-template-block table {
+    font-size: unset;
+    line-height: unset;
+  }
+
+  /*.list-template-block table {*/
+  /*  font-size: 8px;*/
+  /*  line-height: 12px;*/
+  /*}*/
+
+  /*.list-template-block .views-field-uid {*/
+  /*  transform: scale(0.5);*/
+  /*}*/
+
+  /*.list-template-block table {*/
+  /*  transform: ;*/
+  /*}*/
+
+  .list-template-block table {
+    max-width: 100% !important;
+  }
+  .list-template-block tbody tr:nth-child(even) {
+    background-color: #f3f3f3 !important;
+  }
+}
+

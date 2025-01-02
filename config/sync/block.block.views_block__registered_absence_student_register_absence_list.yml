@@ -1,0 +1,30 @@
+uuid: ed8c142a-e7e1-45d7-b19e-6b9335d0caf1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.registered_absence
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: views_block__registered_absence_student_register_absence_list
+theme: ssr_base
+region: content
+weight: -9
+provider: null
+plugin: 'views_block:registered_absence-student_register_absence_list'
+settings:
+  id: 'views_block:registered_absence-student_register_absence_list'
+  label: 'Latest registered absence'
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: 'Latest registered absence'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/latest-reports'

@@ -1,0 +1,28 @@
+uuid: 5993cf5d-d8b5-4eeb-bfb6-5dd88bb5e7b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+title: 'Clean up orphaned examinations'
+id: clean_up_examinations
+weight: 0
+module: simple_school_reports_examinations_support
+callback: clean_up_examinations
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */6 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

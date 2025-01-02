@@ -1,0 +1,5 @@
+label: 'Påminn lärare'
+description: 'Om vald kommer lärare få epost med en lista of alla bokade möten för innevarande dag. Påminnelsen skickas ca 06:00 varje morgon för lärare som har möten den dagen.'
+settings:
+  on_label: Ja
+  off_label: Nej

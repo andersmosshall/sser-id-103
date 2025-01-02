@@ -1,0 +1,11 @@
+uuid: f5e87421-7f5e-4e0f-809e-f2f6d508a868
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: simple_school_reports_core_bulk_update_mentor
+label: 'Bulk update mentor'
+type: user
+plugin: simple_school_reports_core_bulk_update_mentor
+configuration: {  }

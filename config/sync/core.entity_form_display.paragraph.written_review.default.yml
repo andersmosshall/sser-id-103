@@ -1,0 +1,54 @@
+uuid: 75e69feb-d852-4a36-b043-3381b514ea95
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.written_review.field_review
+    - field.field.paragraph.written_review.field_review_comment
+    - field.field.paragraph.written_review.field_student
+    - field.field.paragraph.written_review.field_written_reviews_round
+    - paragraphs.paragraphs_type.written_review
+  module:
+    - text
+id: paragraph.written_review.default
+targetEntityType: paragraph
+bundle: written_review
+mode: default
+content:
+  field_review:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_review_comment:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 1
+      placeholder: ''
+    third_party_settings: {  }
+  field_student:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_written_reviews_round:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

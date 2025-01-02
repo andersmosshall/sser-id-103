@@ -1,0 +1,6 @@
+settings:
+  allowed_values:
+    -
+      label: 'Visa en graf/tabell per ämne'
+    -
+      label: 'Slå ihop valda ämnen till en graf/tabell'

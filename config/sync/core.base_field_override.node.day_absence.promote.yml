@@ -1,0 +1,22 @@
+uuid: 5a0694d6-80ab-46a6-bc2f-a4f4ff66f1d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.day_absence
+id: node.day_absence.promote
+field_name: promote
+entity_type: node
+bundle: day_absence
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

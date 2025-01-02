@@ -1,0 +1,29 @@
+uuid: 247355ea-ef2a-415b-856f-0b13ac118ac1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.registered_absence
+  module:
+    - system
+    - views
+  theme:
+    - claro
+id: views_block__registered_absence_today
+theme: claro
+region: content
+weight: -1
+provider: null
+plugin: 'views_block:registered_absence-today'
+settings:
+  id: 'views_block:registered_absence-today'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/people

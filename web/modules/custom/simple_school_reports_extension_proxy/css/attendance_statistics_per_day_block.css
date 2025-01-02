@@ -1,0 +1,19 @@
+.attendance-statistics-per-day-block .attendance-day-stats {
+  font-size: 0.75rem;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 75%;
+  text-wrap: nowrap;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--ok {
+  background: #2cc036bf;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--warning {
+  background: #f9ab35;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--danger {
+  background: #d72222bf
+}

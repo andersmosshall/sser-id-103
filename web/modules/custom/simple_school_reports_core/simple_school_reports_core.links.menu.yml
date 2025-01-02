@@ -1,0 +1,151 @@
+simple_school_reports_core.start_page_resolver:
+  title: 'Start'
+  weight: -100
+  parent: system.admin
+  route_name: simple_school_reports_core.start_page_resolver
+
+simple_school_reports_core.start_page_school_staff:
+  title: 'Start - school staff'
+  description: 'Go to school staff start page'
+  weight: 100
+  parent: simple_school_reports_core.start_page_resolver
+  route_name: simple_school_reports_core.start_page_default
+
+simple_school_reports_core.logout:
+  title: 'Log out'
+  weight: 9999
+  parent: system.admin
+  route_name: user.logout
+
+students.page:
+  title: 'Students'
+  weight: 100
+  parent: system.admin
+  route_name: view.students.students
+
+students.page.list:
+  title: 'List'
+  weight: 100
+  parent: students.page
+  route_name: view.students.students
+
+students.absence:
+  title: 'Absence'
+  weight: 110
+  parent: students.page
+  route_name: view.registered_absence.upcoming
+
+students.page.contact:
+  title: 'Contact'
+  weight: 120
+  parent: students.page
+  route_name: view.students.contact_info
+
+students.page.caregivers:
+  title: 'Caregivers'
+  weight: 130
+  parent: students.page
+  route_name: view.caregivers.caregivers
+
+courses.page.my_courses:
+  title: 'Courses'
+  weight: 101
+  parent: system.admin
+  route_name: view.courses.my_courses
+
+courses.page.all_courses:
+  title: 'All Courses'
+  weight: 100
+  parent: courses.page.my_courses
+  route_name: view.courses.all_courses
+
+simple_school_reports_core.config:
+  title: 'Administration'
+  weight: 102
+  parent: system.admin
+  route_name: simple_school_reports_core.admin
+
+simple_school_reports_core.panic_confirm:
+    title: 'Panic!'
+    description: 'Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you shut it down for investigation.'
+    parent: simple_school_reports_core.config
+    route_name: simple_school_reports_core.panic_confirm
+
+simple_school_reports_core.config_terms:
+  title: 'Terms'
+  parent: simple_school_reports_core.config
+  description: 'Add new term or change existing terms.'
+  route_name: view.terms.terms
+
+simple_school_reports_core.config_school_subject:
+  title: 'School subjects'
+  parent: simple_school_reports_core.config
+  description: 'List school subjects and add new language subjects.'
+  route_name: view.school_subjects.school_subjects
+
+simple_school_reports_core.config_message_templates:
+  title: 'Message templates config'
+  parent: simple_school_reports_core.config
+  description: 'Define messages that will be sent out from the simple school reports system.'
+  route_name: simple_school_reports_core.config_message_templates
+
+simple_school_reports_core.config_start_page_content:
+  title: 'Start page content config'
+  parent: simple_school_reports_core.config
+  description: 'Define content to be shown on start page after login.'
+  route_name: simple_school_reports_core.config_start_page_content
+
+simple_school_reports_core.config_file_templates:
+  title: 'File templates config'
+  parent: simple_school_reports_core.config
+  description: 'Define file that will be used when generating in the simple school reports system.'
+  route_name: simple_school_reports_core.config_file_templates
+
+simple_school_reports_core.statistics:
+  title: 'Statistics'
+  weight: 103
+  parent: system.admin
+  route_name: simple_school_reports_core.statistics
+
+simple_school_reports_core.weekly_summary:
+  title: 'Weekly summary'
+  description: 'Summarize absence per week'
+  weight: 100
+  parent: simple_school_reports_core.statistics
+  route_name: simple_school_reports_core.weekly_summary
+
+simple_school_reports_core.test_mail:
+  title: 'Test mail'
+  description: 'Test sending mails with replace tokens.'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_core.test_mail
+
+simple_school_reports_core.test_signing:
+  title: 'Test signing'
+  description: 'Test signing.'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_core.test_signing
+
+simple_school_reports_core.sanity_check:
+  title: 'Sanity check'
+  description: 'Sanity check site configuration and settings to see if everything is in order.'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_core.sanity_check
+
+simple_school_reports_core.actions:
+  title: 'Actions'
+  weight: 104
+  parent: system.admin
+  route_name: simple_school_reports_core.actions
+
+simple_school_reports_core.sync_module_info:
+  title: 'Sync module info'
+  description: 'Sync module info'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_module_info.sync_module_info
+
+simple_school_reports_core.module_info:
+  title: 'Module info'
+  description: 'Module info'
+  parent: simple_school_reports_core.actions
+  route_name: view.module_info.list

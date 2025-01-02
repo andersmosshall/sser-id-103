@@ -1,0 +1,21 @@
+uuid: bd8b712e-945c-46b4-816b-2d4dfef12092
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_trial
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_trial
+field_name: field_trial
+entity_type: paragraph
+bundle: grade_registration
+label: Trial
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

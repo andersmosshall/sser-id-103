@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_module_info
+id: ssr_module_info_delete_action
+label: 'Delete module infos'
+type: ssr_module_info
+plugin: entity:delete_action:ssr_module_info
+configuration: {  }

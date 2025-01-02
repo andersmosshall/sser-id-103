@@ -1,0 +1,17 @@
+uuid: 01415f2c-dfe1-487e-8273-fe6c154c0b5f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'IUP goal'
+type: iup_goal
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

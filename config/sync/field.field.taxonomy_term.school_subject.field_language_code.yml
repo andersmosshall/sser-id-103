@@ -1,0 +1,21 @@
+uuid: eb44ff08-df83-469b-a71c-1af82017cf4f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_language_code
+    - taxonomy.vocabulary.school_subject
+  module:
+    - options
+id: taxonomy_term.school_subject.field_language_code
+field_name: field_language_code
+entity_type: taxonomy_term
+bundle: school_subject
+label: 'Language code'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

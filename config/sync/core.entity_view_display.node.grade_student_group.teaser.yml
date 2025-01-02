@@ -1,0 +1,35 @@
+uuid: 872c003e-1b19-45c8-a5f7-3e93d6106de7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.grade_student_group.field_class
+    - field.field.node.grade_student_group.field_document_type
+    - field.field.node.grade_student_group.field_grade
+    - field.field.node.grade_student_group.field_grade_subject
+    - field.field.node.grade_student_group.field_grade_system
+    - field.field.node.grade_student_group.field_principle
+    - field.field.node.grade_student_group.field_student
+    - node.type.grade_student_group
+  module:
+    - user
+id: node.grade_student_group.teaser
+targetEntityType: node
+bundle: grade_student_group
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_class: true
+  field_document_type: true
+  field_grade: true
+  field_grade_subject: true
+  field_grade_system: true
+  field_principle: true
+  field_student: true
+  langcode: true

@@ -1,0 +1,6 @@
+simple_school_reports_consents.user_consents_page:
+  base_route: entity.user.canonical
+  weight: 90
+  route_name: simple_school_reports_consents.user_consents_page
+  title: 'Consents'
+

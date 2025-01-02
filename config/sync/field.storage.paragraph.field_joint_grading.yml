@@ -1,0 +1,24 @@
+uuid: 20976def-2fa0-4f53-ae6e-f0008a1b4249
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - paragraphs
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.field_joint_grading
+field_name: field_joint_grading
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,25 @@
+uuid: e180db16-94ca-48ec-a7e8-434e0074f305
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student
+    - node.type.written_reviews
+id: node.written_reviews.field_student
+field_name: field_student
+entity_type: node
+bundle: written_reviews
+label: Student
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: student_reference
+      display_name: all_students
+      arguments: {  }
+field_type: entity_reference

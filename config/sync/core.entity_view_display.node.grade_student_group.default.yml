@@ -1,0 +1,78 @@
+uuid: 2bc9c2f2-320d-4062-9b9a-bd43a7fc0ebe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_student_group.field_class
+    - field.field.node.grade_student_group.field_document_type
+    - field.field.node.grade_student_group.field_grade
+    - field.field.node.grade_student_group.field_grade_subject
+    - field.field.node.grade_student_group.field_grade_system
+    - field.field.node.grade_student_group.field_principle
+    - field.field.node.grade_student_group.field_student
+    - node.type.grade_student_group
+  module:
+    - options
+    - user
+id: node.grade_student_group.default
+targetEntityType: node
+bundle: grade_student_group
+mode: default
+content:
+  field_class:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_document_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_grade:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_grade_subject:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_grade_system:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_principle:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  links: true

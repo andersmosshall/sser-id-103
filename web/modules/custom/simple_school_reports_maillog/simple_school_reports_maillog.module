@@ -1,0 +1,145 @@
+<?php
+
+/**
+ * @file
+ * Provides a maillog entity type.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_maillog_theme() {
+  return [
+    'ssr_maillog' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for maillog templates.
+ *
+ * Default template: ssr-maillog.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the maillog information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_maillog(array &$variables) {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+function simple_school_reports_maillog_mail_types() {
+  return [
+    SsrMaillogInterface::MAILLOG_TYPE_COURSE_ATTENDANCE => t('Course attendance'),
+    SsrMaillogInterface::MAILLOG_TYPE_CAREGIVER => t('Message caregiver'),
+    SsrMaillogInterface::MAILLOG_TYPE_TEST => t('Test'),
+    SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE => t('Infra structure'),
+    SsrMaillogInterface::MAILLOG_TYPE_MAIL_MENTOR => t('Mail mentor'),
+    SsrMaillogInterface::MAILLOG_TYPE_MAIL_USER => t('Mail user'),
+    SsrMaillogInterface::MAILLOG_TYPE_MEETING_REMINDER => t('Meeting reminder'),
+    SsrMaillogInterface::MAILLOG_TYPE_OTHER => t('Other'),
+    SsrMaillogInterface::MAILLOG_TYPE_LEAVE_APPLICATION => t('Leave application'),
+  ];
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function simple_school_reports_maillog_mail_alter(&$message) {
+  try {
+    if (empty($message['send'])) {
+      return;
+    }
+
+    /** @var \Drupal\simple_school_reports_maillog\SsrMaillogInterface $maillog */
+    $maillog = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->create([
+      'label' => 'Maillog',
+      'status' => TRUE,
+    ]);
+    $recipient_user = NULL;
+    if (!empty($message['params']['account'])) {
+      $recipient_user = $message['params']['account'];
+    }
+    elseif (!empty($message['to'])) {
+      /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+      $email_service = \Drupal::service('simple_school_reports_core.email_service');
+      $recipient_user = $email_service->getUserByEmail($message['to']);
+    }
+    if ($recipient_user) {
+      $maillog->set('recipient_user', $recipient_user);
+    }
+
+    if (!empty($message['to'])) {
+      $maillog->set('recipient_email', $message['to']);
+    }
+
+    $maillog->set('field_subject', $message['subject'] ?? 'Okänt ämne');
+    $body = $message['body'] ?? 'Inget innehåll';
+    if (is_array($body)) {
+      $body = implode(PHP_EOL, $body);
+    }
+    $maillog->set('field_body',  [
+      'value' => $body ?? 'Inget innehåll',
+      'format' => 'plain_text_ck',
+    ]);
+    $maillog->set('mail_type', SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE);
+    $maillog->set('created', time());
+    $maillog->set('changed', time());
+    $maillog->save();
+
+    if (!empty($message['from'])) {
+      $recipient = $message['from'];
+    }
+    if ($recipient_user instanceof \Drupal\Core\Session\AccountInterface) {
+      $recipient = $recipient_user->getEmail();
+    }
+    $is_dev = !str_contains(\Drupal::request()->getHost(), 'simpleschoolreports.se') || str_ends_with($recipient, '@example.com');
+    if ($is_dev) {
+      $message['send'] = FALSE;
+    }
+  }
+  catch (\Exception $e) {
+    // Ignore.
+  }
+}
+
+function ssr_views_permission_maillog_active() {
+  $account = \Drupal::currentUser();
+  $has_access = $account->id() == 1
+    ? TRUE
+    : $account->hasPermission('view maillog') && \Drupal::moduleHandler()->moduleExists('simple_school_reports_maillog_mini');
+  $access = AccessResult::allowedIf($has_access);
+  $access->cachePerPermissions();
+  return $access;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_maillog_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'ssr_maillog') {
+        $form['mail_type']['#type'] = 'select';
+        $options = [
+          '' => t('All')
+        ];
+        $options = array_merge($options, simple_school_reports_maillog_mail_types());
+        $form['mail_type']['#options'] = $options;
+        unset($form['mail_type']['#size']);
+      }
+    }
+  }
+}

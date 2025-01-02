@@ -1,0 +1,7 @@
+simple_school_reports_consents.consent_add:
+  route_name: node.add
+  title: 'Add consent'
+  route_parameters:
+    node_type: 'consent'
+  appears_on:
+    - view.consents.list

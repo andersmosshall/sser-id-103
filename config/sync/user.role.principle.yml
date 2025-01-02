@@ -1,0 +1,91 @@
+uuid: f44c9084-cc92-436f-a5db-f887baddfb46
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+    - filter.format.wordsupported_format
+    - node.type.consent
+    - node.type.course
+    - node.type.course_attendance_report
+    - node.type.day_absence
+    - node.type.iup_goal
+    - node.type.list_template
+    - taxonomy.vocabulary.extra_adaptations
+    - taxonomy.vocabulary.school_week_deviation_type
+    - taxonomy.vocabulary.special_diet
+  module:
+    - create_user_permission
+    - file
+    - filter
+    - node
+    - simple_school_reports_class_support
+    - simple_school_reports_core
+    - simple_school_reports_dnp_support
+    - simple_school_reports_entities
+    - simple_school_reports_examinations_support
+    - simple_school_reports_module_info
+    - taxonomy
+    - views_custom_permissions
+id: principle
+label: Rektor
+weight: 6
+is_admin: null
+permissions:
+  - 'Views Custom Permissions'
+  - 'access user profiles'
+  - 'administer users'
+  - 'create consent content'
+  - 'create course content'
+  - 'create course_attendance_report content'
+  - 'create dnp_prov_settings'
+  - 'create dnp_prov_test_settings'
+  - 'create dnp_provisioning'
+  - 'create iup_goal content'
+  - 'create list_template content'
+  - 'create school week'
+  - 'create school_week_deviation'
+  - 'create ssr_assessment_group'
+  - 'create ssr_school_class'
+  - 'create terms in extra_adaptations'
+  - 'create terms in school_week_deviation_type'
+  - 'create terms in special_diet'
+  - 'create users'
+  - 'delete any consent content'
+  - 'delete any day_absence content'
+  - 'delete any student di meeting'
+  - 'delete dnp_prov_settings'
+  - 'delete dnp_prov_test_settings'
+  - 'delete dnp_provisioning'
+  - 'delete own day_absence content'
+  - 'delete own files'
+  - 'delete school week'
+  - 'delete school_week_deviation'
+  - 'delete ssr_assessment_group'
+  - 'delete ssr_school_class'
+  - 'delete term revisions in extra_adaptations'
+  - 'delete terms in extra_adaptations'
+  - 'delete user entity'
+  - 'edit any consent content'
+  - 'edit dnp_prov_settings'
+  - 'edit dnp_prov_test_settings'
+  - 'edit school week'
+  - 'edit school_week_deviation'
+  - 'edit ssr_school_class'
+  - 'edit terms in extra_adaptations'
+  - 'handle all ssr_student_leave_application'
+  - 'handle long ssr_student_leave_application'
+  - 'mail caregivers'
+  - 'school staff permissions'
+  - 'send bug report'
+  - 'use text format full_html'
+  - 'use text format wordsupported_format'
+  - 'view dnp_prov_settings'
+  - 'view dnp_prov_test_settings'
+  - 'view dnp_provisioning'
+  - 'view protected personal data'
+  - 'view school week'
+  - 'view ssr_assessment_group'
+  - 'view ssr_module_info price'
+  - 'view ssr_student_leave_application'
+  - 'view user email addresses'

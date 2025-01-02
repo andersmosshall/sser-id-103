@@ -1,0 +1,6 @@
+services:
+  simple_school_reports_help.sync_help_pages_service:
+    class: Drupal\simple_school_reports_help\Service\SyncHelpPagesService
+    arguments: ['@database', '@entity_type.manager', '@state', '@module_handler']
+    tags:
+      - { name: event_subscriber }

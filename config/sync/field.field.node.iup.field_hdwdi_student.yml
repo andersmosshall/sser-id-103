@@ -1,0 +1,27 @@
+uuid: 7b5dfbc3-f10c-42b5-9713-845b4c566fd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hdwdi_student
+    - node.type.iup
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: node.iup.field_hdwdi_student
+field_name: field_hdwdi_student
+entity_type: node
+bundle: iup
+label: 'Eleven kan...'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

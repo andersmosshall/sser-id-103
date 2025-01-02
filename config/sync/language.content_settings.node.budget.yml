@@ -1,0 +1,11 @@
+uuid: b4392477-101c-4e34-bb31-5d722c0a94cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.budget
+id: node.budget
+target_entity_type_id: node
+target_bundle: budget
+default_langcode: site_default
+language_alterable: false

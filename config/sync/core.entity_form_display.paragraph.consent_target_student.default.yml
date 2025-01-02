@@ -1,0 +1,21 @@
+uuid: cb0e52cb-5ef5-44b1-9bce-135626ad682a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.consent_target_student.field_students
+    - paragraphs.paragraphs_type.consent_target_student
+id: paragraph.consent_target_student.default
+targetEntityType: paragraph
+bundle: consent_target_student
+mode: default
+content:
+  field_students:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

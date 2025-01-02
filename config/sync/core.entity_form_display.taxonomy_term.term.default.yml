@@ -1,0 +1,50 @@
+uuid: 109b98b4-3c76-40e1-8e5b-f750cb5e9a5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.term.field_term_end
+    - field.field.taxonomy_term.term.field_term_start
+    - taxonomy.vocabulary.term
+  module:
+    - simple_school_reports_core
+id: taxonomy_term.term.default
+targetEntityType: taxonomy_term
+bundle: term
+mode: default
+content:
+  field_term_end:
+    type: ssr_date_timestamp
+    weight: 2
+    region: content
+    settings:
+      end_of_day: '1'
+      placeholder: ''
+    third_party_settings: {  }
+  field_term_start:
+    type: ssr_date_timestamp
+    weight: 1
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  path: true

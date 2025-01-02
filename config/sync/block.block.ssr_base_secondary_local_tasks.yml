@@ -1,0 +1,22 @@
+uuid: 74692743-8d9a-441f-8d7c-aaf1e500cfba
+langcode: sv
+status: true
+dependencies:
+  theme:
+    - ssr_base
+_core:
+  default_config_hash: D_hUB_AW2IvKbVo3lVG-B2KfTsX6xJ-CxfOcRYUnL3E
+id: ssr_base_secondary_local_tasks
+theme: ssr_base
+region: pre_content
+weight: -4
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Secondary tabs'
+  label_display: '0'
+  provider: core
+  primary: false
+  secondary: true
+visibility: {  }

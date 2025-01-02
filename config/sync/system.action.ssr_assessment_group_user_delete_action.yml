@@ -1,0 +1,13 @@
+uuid: ef00153e-6710-42bf-969b-c8b999f3afe0
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+_core:
+  default_config_hash: i_LhJRVqKFU5Wgm7BRld4eBcBL3ZZcS9YY7Qb5Npw5M
+id: ssr_assessment_group_user_delete_action
+label: 'Delete assessment group users'
+type: ssr_assessment_group_user
+plugin: 'entity:delete_action:ssr_assessment_group_user'
+configuration: {  }

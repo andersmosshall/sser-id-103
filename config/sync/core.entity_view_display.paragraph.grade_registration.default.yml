@@ -1,0 +1,152 @@
+uuid: 24555d0f-5718-422e-ad36-c9b7de3db525
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.grade_registration.field_comment
+    - field.field.paragraph.grade_registration.field_created
+    - field.field.paragraph.grade_registration.field_exclude_reason
+    - field.field.paragraph.grade_registration.field_final_grade
+    - field.field.paragraph.grade_registration.field_gender
+    - field.field.paragraph.grade_registration.field_grade
+    - field.field.paragraph.grade_registration.field_grade_round
+    - field.field.paragraph.grade_registration.field_joint_grading
+    - field.field.paragraph.grade_registration.field_registered_by
+    - field.field.paragraph.grade_registration.field_school_subject
+    - field.field.paragraph.grade_registration.field_student
+    - field.field.paragraph.grade_registration.field_teacher
+    - field.field.paragraph.grade_registration.field_trial
+    - field.field.paragraph.grade_registration.field_update_reason
+    - paragraphs.paragraphs_type.grade_registration
+  module:
+    - options
+id: paragraph.grade_registration.default
+targetEntityType: paragraph
+bundle: grade_registration
+mode: default
+content:
+  field_comment:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_created:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_exclude_reason:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_final_grade:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_gender:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_grade:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_grade_round:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_joint_grading:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_registered_by:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_school_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_teacher:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_trial:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_update_reason:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 13
+    region: content
+hidden: {  }

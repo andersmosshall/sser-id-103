@@ -1,0 +1,49 @@
+uuid: bd8d9b4b-cd39-4f2b-b312-35dd93c35e99
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_list_template_field
+    - node.type.list_template
+    - paragraphs.paragraphs_type.list_template_field
+  module:
+    - entity_reference_revisions
+id: node.list_template.field_list_template_field
+field_name: field_list_template_field
+entity_type: node
+bundle: list_template
+label: Fields
+description: 'Student name field will always be shown. Select other fields for the list template.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      list_template_field: list_template_field
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 9
+        enabled: false
+      grade_registration:
+        weight: 10
+        enabled: false
+      grade_statistics_data_source:
+        weight: 11
+        enabled: false
+      list_template_field:
+        weight: 8
+        enabled: true
+      schema:
+        weight: 12
+        enabled: false
+      student_course_attendance:
+        weight: 13
+        enabled: false
+      written_review:
+        weight: 14
+        enabled: false
+field_type: entity_reference_revisions

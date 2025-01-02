@@ -1,0 +1,14 @@
+uuid: 42e08a74-e5c9-46d3-8e17-3b60c75d2162
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.caregiver
+  module:
+    - user
+id: user_add_role_action.caregiver
+label: 'Add the Caregiver role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: caregiver

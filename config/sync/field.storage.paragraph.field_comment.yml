@@ -1,0 +1,27 @@
+uuid: e951be48-6536-42ad-9dc8-6d312127379e
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - paragraphs
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+id: paragraph.field_comment
+field_name: field_comment
+entity_type: paragraph
+type: string
+settings:
+  max_length: 1024
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,79 @@
+<?php
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function ssr_base_views_pre_render(\Drupal\views\ViewExecutable $view) {
+  if ($view->id() === 'registered_absence') {
+    $view->element['#attached']['library'][] = 'ssr_base/view-registered-absence';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ssr_base_preprocess_menu_local_action(&$variables) {
+  if (!empty($variables['link']['#options']['#no_primary']) && !empty($variables['link']['#options']['attributes']['class'])) {
+    if (($key = array_search('button--primary', $variables['link']['#options']['attributes']['class'])) !== false) {
+      unset($variables['link']['#options']['attributes']['class'][$key]);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ssr_base_preprocess_toolbar(&$variables) {
+  $toolbar_color = \Drupal\Core\Site\Settings::get('ssr_toolbar_color');
+  if ($toolbar_color && !empty($variables['toolbar_attributes']) && $variables['toolbar_attributes'] instanceof \Drupal\Core\Template\Attribute) {
+    $variables['toolbar_attributes']->setAttribute('style', 'background-color: ' . $toolbar_color);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ssr_base_preprocess_field(&$variables) {
+  if (!empty($variables['field_type']) && $variables['field_type'] === 'text_long') {
+    $format = !empty($variables['element'][0]['#format'])
+      ? $variables['element'][0]['#format']
+      : NULL;
+
+    if ($format && in_array($format, ['wordsupported_format', 'plain_text_ck'])) {
+      $variables['attributes']['class'][] = 'format--' . str_replace('_', '-', $format);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ssr_base_preprocess_table(&$variables) {
+  $foo = 'bar';
+
+  if (empty($variables['attributes']['class']) || !in_array('dblog-event', $variables['attributes']['class'])) {
+    return;
+  }
+
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+
+  if (!$module_handler->moduleExists('simple_school_reports_logging')) {
+    return;
+  }
+
+  if (empty($variables['rows'][5]['cells'][1]['content'])) {
+    return;
+  }
+
+  $message = (string) $variables['rows'][5]['cells'][1]['content'];
+  if (str_starts_with($message, 'ssr-request-log--')) {
+    $message = str_replace('ssr-request-log--', '', $message);
+    /** @var \Drupal\simple_school_reports_logging\Service\RequestLogServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_logging.request_log');
+    $message = $service->decompressRequestLogMessage($message);
+    $variables['rows'][5]['cells'][1]['content'] = $message;
+    $variables['attributes']['class'][] = 'request-log-table';
+  }
+
+}

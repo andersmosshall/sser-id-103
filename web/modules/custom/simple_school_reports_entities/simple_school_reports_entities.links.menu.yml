@@ -1,0 +1,62 @@
+entity.ssr_signing.settings:
+  title: 'Signing'
+  description: 'Configure a Signing entity type.'
+  route_name:  entity.ssr_signing.settings
+  parent: system.admin_structure
+entity.ssr_signing.collection:
+  title: 'Signings'
+  description: 'List of signings.'
+  route_name: entity.ssr_signing.collection
+  parent: system.admin_content
+
+entity.ssr_consent_answer.settings:
+  title: 'Consent answer'
+  description: 'Configure a Consent answer entity type.'
+  route_name:  entity.ssr_consent_answer.settings
+  parent: system.admin_structure
+entity.ssr_consent_answer.collection:
+  title: 'Consent answers'
+  description: 'List of consent answers.'
+  route_name: entity.ssr_consent_answer.collection
+  parent: system.admin_content
+
+entity.ssr_meeting_type.collection:
+  title: 'Meeting types'
+  description: 'Manage and CRUD actions on Meeting type.'
+  parent: system.admin_structure
+  route_name: entity.ssr_meeting_type.collection
+
+entity.school_week.settings:
+  title: 'School Week'
+  description: 'Configure a School Week entity type.'
+  route_name:  entity.school_week.settings
+  parent: system.admin_structure
+entity.school_week.collection:
+  title: 'School Weeks'
+  description: 'List of school weeks.'
+  route_name: entity.school_week.collection
+  parent: system.admin_content
+
+entity.school_week_deviation.settings:
+  title: 'School week deviation'
+  description: 'Configure a School week deviation entity type.'
+  route_name:  entity.school_week_deviation.settings
+  parent: system.admin_structure
+
+entity.school_week_deviation.collection:
+  title: 'School week deviations'
+  description: 'List of school week deviations.'
+  route_name: entity.school_week_deviation.collection
+  parent: system.admin_content
+
+entity.ssr_student_leave_application.settings:
+  title: 'Student leave application'
+  description: 'Configure a Student leave application entity type.'
+  route_name:  entity.ssr_student_leave_application.settings
+  parent: system.admin_structure
+
+entity.ssr_student_leave_application.collection:
+  title: 'Student leave applications'
+  description: 'List of student leave applications.'
+  route_name: entity.ssr_student_leave_application.collection
+  parent: system.admin_content

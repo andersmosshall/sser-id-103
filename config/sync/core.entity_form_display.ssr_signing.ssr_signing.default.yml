@@ -1,0 +1,22 @@
+uuid: e2c34982-c457-47af-91be-ea4eae8a364e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_signing.ssr_signing.field_hidden_data
+    - field.field.ssr_signing.ssr_signing.field_sign_template
+  module:
+    - simple_school_reports_entities
+id: ssr_signing.ssr_signing.default
+targetEntityType: ssr_signing
+bundle: ssr_signing
+mode: default
+content: {  }
+hidden:
+  created: true
+  field_hidden_data: true
+  field_sign_template: true
+  label: true
+  sign_type: true
+  status: true
+  uid: true

@@ -1,0 +1,257 @@
+/* @file
+ * This file is where base setup & all the partials are imported.
+ */
+
+body {
+  color: #4d4d4d;
+}
+
+html .improvedselect {
+  background: #f3f4f9;
+}
+
+html .improvedselect .improvedselect-text-wrapper {
+  border: none;
+}
+
+html .is-horizontal .tabs__link {
+  height: 100%;
+}
+
+.layout-node-form.ssr-base--layout-node-form {
+  display: block !important;
+  width: 100%;
+}
+
+@media screen and (min-width: 61rem) {
+  .layout-node-form.ssr-base--layout-node-form  .layout-region--node-main, .layout-node-form.ssr-base--layout-node-form .layout-region--node-footer {
+    display: block;
+    width: 100%;
+    padding-right: 0;
+  }
+}
+
+@media screen and (min-width: 61rem) {
+  html .layout-node-form.ssr-base--layout-node-form .layout-region--node-secondary {
+    display: block;
+    width: 100%;
+  }
+}
+
+.entity-meta.accordion {
+  display: none;
+}
+
+.handle-consent-form .node--type-consent > h2 {
+  display: none;
+}
+
+body .button--action::before {
+  content: unset;
+}
+
+body .button--add::before {
+  content: '+';
+}
+
+body .button--back::before {
+  content: '<';
+}
+
+/*body .node__content {*/
+/*  padding-top: 24px;*/
+/*}*/
+
+.block-ssr-local-actions-block {
+  margin-bottom: 24px;
+}
+
+.text-decoration--line-through {
+  text-decoration: line-through;
+}
+
+
+.field-state--not-started {
+  color: #d72222bf;
+}
+.field-state--started {
+  color: #c35d00;
+}
+.field-state--done {
+  color: #2cc036bf;
+}
+
+.dropbutton__item.dropbutton-action a {
+  white-space: nowrap;
+}
+
+.view.view-grade-registration-subject-list tr > td,
+.view.view-grade-registration-subject-list tr > th,
+.view.view-written-reviews-subject-list tr > td,
+.view.view-written-reviews-subject-list tr > th {
+  width: 85%;
+}
+
+.block-grade-age-statistics .claro-details {
+  width: 100%;
+  max-width: 400px;
+}
+
+.block-grade-age-statistics .details-wrapper {
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.block-grade-age-statistics .grade-wrapper {
+  padding-right: 24px;
+  margin-bottom: 24px;
+}
+
+.block-grade-age-statistics .age-wrapper {
+  margin-bottom: 24px;
+}
+
+.block-grade-age-statistics h6 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+
+.block-simple-school-reports-extension-proxy .current-help-pages--wrapper {
+  padding-bottom: 32px;
+}
+
+.view-help-pages .view-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+  align-content: flex-start;
+  width: 100%;
+}
+
+.view-help-pages .views-row {
+  width: 100%;
+  border: 1px solid #929497;
+  padding: 16px;
+  margin: 16px 8px;
+  border-radius: 8px;
+}
+
+.ck.ck-content p {
+  margin-bottom: 0;
+}
+
+.field--type-text-long.format--plain-text-ck p {
+  margin-bottom: 0;
+}
+
+.field--type-text-long.format--wordsupported-format p {
+  margin-bottom: 0;
+}
+
+.field--type-text-long.format--plain-text-ck {
+  margin-bottom: 1em;
+}
+
+.field--type-text-long.format--wordsupported-format {
+  margin-bottom: 1em;
+}
+
+.current-date {
+  background-color: #003ecc15;
+}
+
+.absence-matrix-info--absence-list li {
+  white-space: nowrap;
+}
+
+td.views-field-absence-matrix-info {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-1 {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-2 {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-3 {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-4 {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-5 {
+  vertical-align: bottom;
+}
+
+td.views-field-absence-matrix-info-6 {
+  vertical-align: bottom;
+}
+
+@media screen and (min-width: 61rem) {
+  .view-help-pages .views-row {
+    flex: 0 1 45%;
+    max-width: 45%;
+    width: 45%;
+  }
+}
+
+.view-help-pages .views-row h2 {
+  margin-top: 0;
+}
+
+.view-help-pages .views-row h2 a {
+  color: #4d4d4d !important;
+  text-decoration: none !important;
+  pointer-events: none !important;
+}
+
+.views-field-draggableviews .draggableviews-weight {
+  min-width: 60px;
+}
+
+.field--name-field-target-group,
+.field--name-field-module,
+.field--name-field-module-enabled {
+  margin-bottom: 12px;
+}
+
+.field--name-field-target-group .field__items,
+.field--name-field-module .field__items {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: center;
+  flex-wrap: wrap;
+  margin: 0 -4px;
+}
+
+.field--name-field-target-group .field__items .field__item,
+.field--name-field-module .field__items .field__item {
+  border: 1px solid #929497;
+  padding: 4px 8px;
+  margin: 4px;
+  border-radius: 12px;
+  font-size: 12px;
+  max-height: 12px;
+  line-height: 12px;
+  background-color: #efefef;
+}
+
+.toolbar .toolbar-icon.toolbar-handle:before {
+  filter: grayscale(1);
+}
+
+.request-log-table tr:nth-child(6) td:nth-child(2) {
+  white-space: pre-line;
+}

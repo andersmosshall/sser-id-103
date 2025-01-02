@@ -1,0 +1,56 @@
+uuid: 960d61d3-fb92-43ae-9b0e-3d6d1726b637
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_subject.field_default_grade_round
+    - field.field.node.grade_subject.field_grade_registration
+    - field.field.node.grade_subject.field_school_subject
+    - field.field.node.grade_subject.field_state
+    - field.field.node.grade_subject.field_teacher
+    - node.type.grade_subject
+id: node.grade_subject.default
+targetEntityType: node
+bundle: grade_subject
+mode: default
+content:
+  field_default_grade_round:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_school_subject:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_teacher:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_grade_registration: true
+  field_state: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

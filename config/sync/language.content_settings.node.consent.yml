@@ -1,0 +1,11 @@
+uuid: 918ca5a1-95bd-4307-b5fa-7be80eb72faf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.consent
+id: node.consent
+target_entity_type_id: node
+target_bundle: consent
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,28 @@
+uuid: c42010c4-708d-4173-9c44-bb6371638678
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - field_permissions
+    - simple_school_reports_entities
+third_party_settings:
+  field_permissions:
+    permission_type: public
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+id: ssr_signing.field_hidden_data
+field_name: field_hidden_data
+entity_type: ssr_signing
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

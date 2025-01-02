@@ -1,0 +1,48 @@
+.field--name-ssr-demo-link {
+  margin-bottom: 24px;
+}
+
+.ssr-meeting-info--help-clips-wrapper .field--name-help-pages.field__items {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+  align-content: flex-start;
+  width: 100%;
+}
+
+.ssr-meeting-info--help-clips-wrapper .field--name-help-pages.field__items > .field__item {
+  width: 100%;
+  border: 1px solid #929497;
+  padding: 16px;
+  margin: 16px 8px;
+  border-radius: 8px;
+}
+
+@media screen and (min-width: 61rem) {
+  .ssr-meeting-info--help-clips-wrapper .field--name-help-pages.field__items > .field__item {
+    flex: 0 1 45%;
+    max-width: 45%;
+    width: 45%;
+  }
+}
+
+.ssr-meeting-info--help-clips-wrapper .field--name-help-pages.field__items > .field__item h2 {
+  margin-top: 0;
+}
+
+.ssr-meeting-info--help-clips-wrapper .field--name-help-pages.field__items > .field__item h2 a {
+  color: #4d4d4d !important;
+  text-decoration: none !important;
+  pointer-events: none !important;
+}
+
+
+.view-id-module_info .views-row {
+  border-bottom: 1px solid #d3d4d9;
+}
+
+.view-id-module_info .views-row > article {
+  padding: 24px 0;
+}

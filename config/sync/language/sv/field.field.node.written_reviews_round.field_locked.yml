@@ -1,0 +1,5 @@
+label: Låst
+description: 'Om låst kan inga skrivtliga omdömen registreras.'
+settings:
+  on_label: Låst
+  off_label: Olåst

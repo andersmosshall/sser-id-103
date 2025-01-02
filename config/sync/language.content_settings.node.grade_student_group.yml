@@ -1,0 +1,11 @@
+uuid: 2df63ee5-9227-4ae6-9f87-a2d38eac0efa
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.grade_student_group
+id: node.grade_student_group
+target_entity_type_id: node
+target_bundle: grade_student_group
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,25 @@
+uuid: 334670bd-0a57-455f-91cd-61b623595d22
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_invalid_absence_original
+    - paragraphs.paragraphs_type.student_course_attendance
+id: paragraph.student_course_attendance.field_invalid_absence_original
+field_name: field_invalid_absence_original
+entity_type: paragraph
+bundle: student_course_attendance
+label: 'Invalid absence original'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: 0
+  max: 14400
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,16 @@
+uuid: 08c04568-67c0-4daf-b4f7-820cb8d10893
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user_pattern
+label: 'User pattern'
+type: 'canonical_entities:user'
+pattern: '/[user:field_first_name]-[user:field_last_name]-[user:uid]'
+selection_criteria: {  }
+selection_logic: and
+weight: 0
+relationships:
+  'user:langcode:language':
+    label: Language

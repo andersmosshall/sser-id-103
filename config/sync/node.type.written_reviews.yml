@@ -1,0 +1,17 @@
+uuid: c5f8e519-fbff-484b-8da4-5c6b86f1d7d3
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Written reviews'
+type: written_reviews
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

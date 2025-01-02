@@ -1,0 +1,29 @@
+uuid: 95fff630-d282-43b3-9490-65fb23a1cfd9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_grade_round
+    - node.type.grade_round
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_grade_round
+field_name: field_grade_round
+entity_type: paragraph
+bundle: grade_registration
+label: 'Grade round'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      grade_round: grade_round
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

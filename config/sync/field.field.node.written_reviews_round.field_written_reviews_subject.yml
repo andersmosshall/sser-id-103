@@ -1,0 +1,29 @@
+uuid: 8ca61d19-2058-4b69-b355-802cf8269a1a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_written_reviews_subject
+    - node.type.written_reviews_round
+    - node.type.written_reviews_subject_state
+id: node.written_reviews_round.field_written_reviews_subject
+field_name: field_written_reviews_subject
+entity_type: node
+bundle: written_reviews_round
+label: 'Written reviews subject'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      written_reviews_subject_state: written_reviews_subject_state
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

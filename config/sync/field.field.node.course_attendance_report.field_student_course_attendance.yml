@@ -1,0 +1,37 @@
+uuid: f3ee5001-4694-453d-93f4-938d3403d0ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student_course_attendance
+    - node.type.course_attendance_report
+    - paragraphs.paragraphs_type.student_course_attendance
+  module:
+    - entity_reference_revisions
+id: node.course_attendance_report.field_student_course_attendance
+field_name: field_student_course_attendance
+entity_type: node
+bundle: course_attendance_report
+label: 'Student course attendance'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      student_course_attendance: student_course_attendance
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 5
+        enabled: false
+      schema:
+        weight: 6
+        enabled: false
+      student_course_attendance:
+        weight: 4
+        enabled: true
+field_type: entity_reference_revisions

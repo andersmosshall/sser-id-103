@@ -1,0 +1,11 @@
+uuid: c7889ade-9534-459c-aa72-8891a067f962
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.caregiver
+label: Vårdnadshavare
+description: ''
+targetEntityType: user
+cache: true

@@ -1,0 +1,20 @@
+uuid: 8ef3ee8e-a2c9-4e51-a275-8f0b1bb9ae78
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.dnp_provisioning.field_src
+  module:
+    - simple_school_reports_dnp_support
+id: dnp_provisioning.dnp_provisioning.field_src
+field_name: field_src
+entity_type: dnp_provisioning
+bundle: dnp_provisioning
+label: 'Source data'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

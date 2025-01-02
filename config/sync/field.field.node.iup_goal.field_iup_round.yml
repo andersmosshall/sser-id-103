@@ -1,0 +1,29 @@
+uuid: be62292c-f312-4426-9d4e-fd79f4d656f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_iup_round
+    - node.type.iup_goal
+    - node.type.iup_round
+id: node.iup_goal.field_iup_round
+field_name: field_iup_round
+entity_type: node
+bundle: iup_goal
+label: 'IUP round'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      iup_round: iup_round
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

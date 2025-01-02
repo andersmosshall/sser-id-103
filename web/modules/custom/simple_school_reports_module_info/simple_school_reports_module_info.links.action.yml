@@ -1,0 +1,5 @@
+ssr_module_info.add_form:
+  title: 'Add module info'
+  route_name: entity.ssr_module_info.add_form
+  appears_on:
+    - entity.ssr_module_info.collection

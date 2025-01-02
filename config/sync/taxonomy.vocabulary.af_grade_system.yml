@@ -1,0 +1,9 @@
+uuid: 03cc6a8b-497f-475a-9a2c-525e1b3438d9
+langcode: en
+status: true
+dependencies: {  }
+name: 'AF grade system'
+vid: af_grade_system
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,27 @@
+uuid: 15197600-a5bd-4616-a26a-005cf0c0960c
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_update_reason
+field_name: field_update_reason
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: change
+      label: Change
+    -
+      value: correction
+      label: Correction
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

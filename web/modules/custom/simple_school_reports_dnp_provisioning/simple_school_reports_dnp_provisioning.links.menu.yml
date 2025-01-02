@@ -1,0 +1,26 @@
+simple_school_reports_dnp_provisioning.resources:
+  title: 'DNP'
+  description: 'Resources for digital national tests'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_dnp_provisioning.resources
+
+simple_school_reports_dnp_provisioning.settings:
+  title: 'DNP provisioning settings'
+  description: 'Settings for DNP provisioning exports'
+  weight: 100
+  parent: simple_school_reports_dnp_provisioning.resources
+  route_name: view.dnp_settings_for_provisioning.list
+
+simple_school_reports_dnp_provisioning.provisioning_list:
+  title: 'DNP provisioning'
+  description: 'List and create DNP provisionings'
+  weight: 110
+  parent: simple_school_reports_dnp_provisioning.resources
+  route_name: view.dnp_provisioning.list
+
+simple_school_reports_dnp_provisioning.federated_usernames:
+  title: 'DNP federated usernames'
+  description: 'List federated usernames for DNP'
+  weight: 120
+  parent: simple_school_reports_dnp_provisioning.resources
+  route_name: view.dnp_federation_usernames.student_dnp_usernames

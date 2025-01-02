@@ -1,0 +1,35 @@
+uuid: e7c98c30-0f96-4d50-a9bd-85cad9d7b47b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.iup_goal.field_iup_goal
+    - field.field.node.iup_goal.field_iup_round
+    - field.field.node.iup_goal.field_school_subject
+    - field.field.node.iup_goal.field_state
+    - field.field.node.iup_goal.field_student
+    - field.field.node.iup_goal.field_teacher
+    - field.field.node.iup_goal.field_teacher_comment
+    - node.type.iup_goal
+  module:
+    - user
+id: node.iup_goal.teaser
+targetEntityType: node
+bundle: iup_goal
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_iup_goal: true
+  field_iup_round: true
+  field_school_subject: true
+  field_state: true
+  field_student: true
+  field_teacher: true
+  field_teacher_comment: true
+  langcode: true

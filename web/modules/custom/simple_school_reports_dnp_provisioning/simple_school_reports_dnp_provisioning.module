@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Digital National Test Provisioning module.
+ */
+
+use Drupal\simple_school_reports_dnp_support\DnpProvisioningConstantsInterface;
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_dnp_provisioning_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'simple_school_reports_dnp_provisioning.create') {
+    $cache->addCacheContexts(['user:permissions']);
+    $cache->addCacheTags(['dnp_prov_settings_list']);
+    /** @var \Drupal\simple_school_reports_dnp_provisioning\Service\DnpProvisioningServiceInterface $provisioning_service */
+    $provisioning_service = \Drupal::service('simple_school_reports_dnp_provisioning.dnp_provisioning_service');
+    $provisioning_settings = $provisioning_service->getDnpProvisioningSettings();
+
+    $query = ['destination' => \Drupal::service('path.current')->getPath()];
+
+    if (!$provisioning_settings) {
+      $access = \Drupal\Core\Access\AccessResult::allowedIf(\Drupal::currentUser()->hasPermission('create dnp_prov_settings'));
+      $local_actions['create_dnp_prov_settings'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Add DNP provisioning settings'),
+          'url' => \Drupal\Core\Url::fromRoute('entity.dnp_prov_settings.add_form', [], ['query' => $query]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+    }
+    else {
+      $access_update = $provisioning_settings->access('update', NULL, TRUE);
+      $local_actions['update_dnp_prov_settings'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Edit DNP provisioning settings'),
+          'url' => \Drupal\Core\Url::fromRoute('entity.dnp_prov_settings.edit_form', ['dnp_prov_settings' => $provisioning_settings->id()], ['query' => $query]),
+        ],
+        '#access' => $access_update,
+        '#weight' => 10,
+      ];
+
+      $access_delete = $provisioning_settings->access('delete', NULL, TRUE);
+      $local_actions['delete_dnp_prov_settings'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Delete DNP provisioning settings'),
+          'url' => \Drupal\Core\Url::fromRoute('entity.dnp_prov_settings.delete_form', ['dnp_prov_settings' => $provisioning_settings->id()], ['query' => $query]),
+        ],
+        '#access' => $access_delete,
+        '#weight' => 20,
+      ];
+
+    }
+  }
+
+  $federated_username_routes = [
+    'view.dnp_federation_usernames.student_dnp_usernames',
+    'view.dnp_federation_usernames.staff_dnp_usernames',
+    'view.dnp_federation_usernames.staff_eduid_usernames',
+  ];
+  if (in_array($context['route_name'], $federated_username_routes)) {
+    $local_actions['print_action'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => t('Print out'),
+        'url' => \Drupal\Core\Url::fromUserInput('#'),
+        'localized_options' => [
+          'attributes' => [
+            'class' => [
+              'action--ssr-print',
+            ],
+          ],
+        ],
+      ],
+      '#weight' => 10,
+    ];
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_dnp_provisioning_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'dnp_provisioning') {
+    $query = ['destination' => \Drupal::service('path.current')->getPath()];
+    $operations['view'] = [
+      'title' => t('View'),
+      'url' => \Drupal\Core\Url::fromRoute('entity.dnp_provisioning.canonical', ['dnp_provisioning' => $entity->id()], ['query' => $query]),
+      'weight' => -99,
+    ];
+
+    $set_synced_url = \Drupal\Core\Url::fromRoute('simple_school_reports_dnp_provisioning.set_synced', ['dnp_provisioning' => $entity->id()], ['query' => $query]);
+    if ($set_synced_url->access()) {
+      $operations['set_synced'] = [
+        'title' => t('Mark as synced'),
+        'url' => $set_synced_url,
+        'weight' => -98,
+      ];
+    }
+
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_dnp_provisioning_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'dnp_federation_usernames' && !empty($form['dnp_provisioning'])) {
+        $dnp_provisioning_options = [];
+        $dnp_provisioning_options[-1] = t('Not specified');
+
+        $dnp_provisioning_ids = \Drupal::entityTypeManager()->getStorage('dnp_provisioning')
+          ->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('status', 1)
+          ->sort('created', 'DESC')
+          ->execute();
+
+        if (!empty($dnp_provisioning_ids)) {
+          $dnp_provisionings = \Drupal::entityTypeManager()->getStorage('dnp_provisioning')
+            ->loadMultiple($dnp_provisioning_ids);
+          foreach ($dnp_provisionings as $dnp_provisioning) {
+            $dnp_provisioning_options[$dnp_provisioning->id()] = $dnp_provisioning->label();
+          }
+        }
+
+        $form['dnp_provisioning']['#type'] = 'select';
+        $form['dnp_provisioning']['#options'] = $dnp_provisioning_options;
+        unset($form['dnp_provisioning']['#size']);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_dnp_provisioning_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'dnp_federation_usernames') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid') {
+          $provisioning_id = $condition['value'] ?? '-1';
+          if ($provisioning_id === '-1') {
+            continue;
+          }
+          $uids = [];
+          $condition['operator'] = 'IN';
+          /** @var \Drupal\simple_school_reports_dnp_support\DnpProvisioningInterface $dnp_provisioning */
+          $dnp_provisioning = \Drupal::entityTypeManager()->getStorage('dnp_provisioning')->load($provisioning_id);
+          if ($dnp_provisioning) {
+            $student_uids = $dnp_provisioning->getUids(DnpProvisioningConstantsInterface::DNP_STUDENTS_SHEET);
+            $staff_uids = $dnp_provisioning->getUids(DnpProvisioningConstantsInterface::DNP_STAFF_SHEET);
+            $uids = array_merge($student_uids, $staff_uids);
+          }
+
+          if (empty($uids)) {
+            $uids = [-1];
+          }
+          $condition['value'] = $uids;
+        }
+      }
+    }
+
+  }
+}

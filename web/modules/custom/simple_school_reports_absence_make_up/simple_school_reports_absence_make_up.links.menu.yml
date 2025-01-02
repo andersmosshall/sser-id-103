@@ -1,0 +1,5 @@
+simple_school_reports_absence_make_up.make_up_time_reminder:
+  title: 'Make up time reminder'
+  description: 'List and filter students to send out make up time reminder'
+  parent: simple_school_reports_core.actions
+  route_name: view.make_up_time_reminder.make_up_time_reminder

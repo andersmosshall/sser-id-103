@@ -1,0 +1,147 @@
+uuid: 02aba3f0-672b-432c-a648-372db5afe577
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.user.caregiver_ief
+    - field.field.user.user.field_adapted_studies
+    - field.field.user.user.field_address
+    - field.field.user.user.field_allow_login
+    - field.field.user.user.field_birth_date
+    - field.field.user.user.field_birth_date_source
+    - field.field.user.user.field_caregivers
+    - field.field.user.user.field_class
+    - field.field.user.user.field_dnp_username
+    - field.field.user.user.field_eduid_username
+    - field.field.user.user.field_extra_adaptations
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_gender
+    - field.field.user.user.field_grade
+    - field.field.user.user.field_invalid_absence
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_last_password_reset
+    - field.field.user.user.field_make_up_time_reminded
+    - field.field.user.user.field_mentor
+    - field.field.user.user.field_middle_name
+    - field.field.user.user.field_notes
+    - field.field.user.user.field_password_expiration
+    - field.field.user.user.field_pending_expire_sent
+    - field.field.user.user.field_protected_personal_data
+    - field.field.user.user.field_special_diet
+    - field.field.user.user.field_ssn
+    - field.field.user.user.field_telephone_number
+  module:
+    - paragraphs
+    - simple_school_reports_core
+    - telephone
+    - user
+id: user.user.caregiver_ief
+targetEntityType: user
+bundle: user
+mode: caregiver_ief
+content:
+  field_address:
+    type: entity_reference_paragraphs
+    weight: 9
+    region: content
+    settings:
+      title: Adress
+      title_plural: Adresser
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: address
+    third_party_settings: {  }
+  field_allow_login:
+    type: boolean_checkbox
+    weight: 0
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_birth_date:
+    type: ssr_date_timestamp
+    weight: 8
+    region: content
+    settings:
+      end_of_day: false
+      noon: false
+      placeholder: ''
+    third_party_settings: {  }
+  field_birth_date_source:
+    type: options_buttons
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_first_name:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_gender:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_last_name:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_middle_name:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_protected_personal_data:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_ssn:
+    type: string_personal_number
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_telephone_number:
+    type: telephone_default
+    weight: 10
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  account: true
+  field_adapted_studies: true
+  field_caregivers: true
+  field_class: true
+  field_dnp_username: true
+  field_eduid_username: true
+  field_extra_adaptations: true
+  field_grade: true
+  field_invalid_absence: true
+  field_last_password_reset: true
+  field_make_up_time_reminded: true
+  field_mentor: true
+  field_notes: true
+  field_password_expiration: true
+  field_pending_expire_sent: true
+  field_special_diet: true
+  langcode: true
+  language: true
+  path: true

@@ -1,0 +1,11 @@
+name: Simple School Reports List Templates
+type: module
+description: Simple School Reports List Templates
+core_version_requirement: ^9 || ^10
+package: 'Simple School Reports'
+version: 1.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+interface translation project: simple_school_reports_list_templates
+interface translation server pattern: modules/custom/simple_school_reports_list_templates/translations/%project-%version.%language.po

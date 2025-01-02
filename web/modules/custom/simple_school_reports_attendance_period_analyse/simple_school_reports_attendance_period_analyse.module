@@ -1,0 +1,211 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_attendance_period_analyse_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'absence_period_analyse') {
+        if (!empty($form['from'])) {
+          unset($form['from']['#size']);
+          $form['from']['#type'] = 'date';
+          $form['from']['#required'] = TRUE;
+        }
+
+        if (!empty($form['to'])) {
+          unset($form['to']['#size']);
+          $form['to']['#type'] = 'date';
+          $form['to']['#required'] = TRUE;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_post_execute().
+ */
+function simple_school_reports_attendance_period_analyse_views_post_execute(ViewExecutable $view) {
+
+  if ($view->id() !== 'absence_period_analyse') {
+    return;
+  }
+
+  if ($view->total_rows < 2000) {
+
+    /** @var \Drupal\mysql\Driver\Database\mysql\Select $count_query */
+    $count_query = clone $view->build_info['count_query'];
+    $results = $count_query->execute();
+
+    $uids = [];
+
+    foreach ($results as $result) {
+      if (isset($result->uid)) {
+        $uids[] = $result->uid;
+      }
+    }
+
+    $from = $view->exposed_raw_input['from'];
+    $to = $view->exposed_raw_input['to'];
+
+    if ($from && $to) {
+      try {
+        $from = new DateTime($from . ' 00:00:00');
+        $to = new DateTime($to . ' 23:59:59');
+      }
+      catch (\Exception $e) {
+        $from = NULL;
+        $to = NULL;
+      }
+    }
+
+
+    if (!$from || !$to) {
+      $data = [];
+    }
+    else {
+      /** @var \Drupal\simple_school_reports_attendance_period_analyse\Service\AttendancePeriodAnalyseServiceInterface $absence_period_service */
+      $absence_period_service = \Drupal::service('simple_school_reports_attendance_period_analyse.attendance_period_analyse_service');
+      $data = $absence_period_service->getAttendancePeriodData($uids, $from, $to);
+    }
+
+    $statistics_block = [
+      '#type' => 'container',
+      '#weight' => -100,
+    ];
+
+    $statistics_block['title'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h2',
+      '#value' => t('Absence statistics summary'),
+    ];
+
+    if (empty($data) || empty($data['all']['count_students'])) {
+      $statistics_block['no_data'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => Markup::create('<p>' . t('No data available for the selected period and student group. It may be because the period is invalid or there is no school week set.') . '</p>'),
+      ];
+    }
+    else {
+      if (!empty($data['other_grades'])) {
+        $statistics_block['other_grades'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => Markup::create('<p><em>' . t('Note! Due to the date filter there are students categorised to other grades than their current grade.') .' </em></p>'),
+        ];
+      }
+
+      $statistics_block['all_group'] = [
+        '#type' => 'container',
+      ];
+
+      $statistics_block['all_group']['student_count'] = [
+        '#markup' => '<p><b class="label">' . t('Number of students') . ':</b> ' . number_format($data['all']['count_students'], 0, ',', ' ') . '</p>',
+      ];
+
+      $statistics_block['all_group']['table'] = simple_school_reports_attendance_period_make_absence_table($data['all']);
+
+
+      if (!empty($data['grade'])) {
+        $grade_build = [];
+
+        $grades_labels = simple_school_reports_core_allowed_user_grade();
+
+
+        foreach ($data['grade'] as $grade => $grade_data) {
+          $grade_label = $grades_labels[$grade] ?? $grade;
+
+          $statistics_block[$grade] = [
+            '#type' => 'details',
+            '#open' => FALSE,
+            '#title' => t('Grade @grade', ['@grade' => $grade_label]),
+          ];
+
+          $grade_build = [
+            '#type' => 'container'
+          ];
+
+          $grade_build['student_count'] = [
+            '#markup' => '<p><b class="label">' . t('Number of students') . ':</b> ' . number_format($grade_data['count_students'], 0, ',', ' ') . '</p>',
+          ];
+
+          $lesson_times = [];
+          if (!empty($grade_data['school_lengths']['grade'])) {
+            $lesson_times[] = $grade_data['school_lengths']['grade'];
+          }
+          if (!empty($grade_data['school_lengths']['adapted_studies'])) {
+            foreach ($grade_data['school_lengths']['adapted_studies'] as $lesson_time) {
+              $lesson_times[] = $lesson_time;
+            }
+          }
+
+          $grade_build['lesson_time'] = [
+            '#markup' => '<p><b class="label">' . t('Lesson time') . ':</b><br/>' . implode('<br/>', $lesson_times)  . '</p>',
+          ];
+
+          $grade_build['table'] = simple_school_reports_attendance_period_make_absence_table($grade_data);
+
+          $statistics_block[$grade]['data'] = $grade_build;
+        }
+
+        if (count($data['grade']) === 1 && isset($grade)) {
+          $statistics_block['all_group'] = $grade_build;
+          unset($statistics_block[$grade]);
+        }
+      }
+
+    }
+
+    $view->element['ssr_statistics'] = $statistics_block;
+  }
+}
+
+function simple_school_reports_attendance_period_make_absence_table($data): array {
+  $build = [];
+
+  $build['table'] = [
+    '#type' => 'table',
+    '#header' => [
+      t('Absence'),
+      t('Valid absence'),
+      t('Invalid absence'),
+      t('Total absence'),
+    ],
+    '#rows' => [],
+  ];
+
+  $limits = $data['valid_absence_limits'];
+  $limits = array_reverse(array_keys($limits));
+
+  foreach ($limits as $index => $limit) {
+    $from = $limit;
+    $to = isset($limits[$index + 1])
+      ? $limits[$index + 1] - 1
+      : 100;
+
+    $build['table']['#rows'][] = [
+      $from . ' - ' . $to . '%',
+      number_format($data['valid_absence_limits'][$limit], 0, ',', ' '),
+      number_format($data['invalid_absence_limits'][$limit], 0, ',', ' '),
+      number_format($data['total_absence_limits'][$limit], 0, ',', ' '),
+    ];
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_attendance_period_analyse_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'absence_period_analyse') {
+    $view->element['#cache']['tags'][] = 'absence_percentage_limits';
+  }
+}

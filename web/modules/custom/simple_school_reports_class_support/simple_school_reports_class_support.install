@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Install school week field on class.
+ */
+function simple_school_reports_class_support_update_10001() {
+  $fields = [];
+
+  $fields['school_week'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('School week'))
+    ->setSetting('target_type', 'school_week')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_school_class', 'simple_school_reports_class_support', $storage_definition);
+  }
+}

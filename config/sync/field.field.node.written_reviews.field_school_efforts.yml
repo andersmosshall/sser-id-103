@@ -1,0 +1,27 @@
+uuid: b7f87aef-9e7a-49ec-847f-1807cab05c84
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_efforts
+    - node.type.written_reviews
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - wordsupported_format
+id: node.written_reviews.field_school_efforts
+field_name: field_school_efforts
+entity_type: node
+bundle: written_reviews
+label: 'Skolans insatser'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

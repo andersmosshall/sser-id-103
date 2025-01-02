@@ -1,0 +1,21 @@
+uuid: bf0497f6-73a3-49cd-86b9-a8a21faa2634
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade
+    - node.type.grade_student_group
+  module:
+    - options
+id: node.grade_student_group.field_grade
+field_name: field_grade
+entity_type: node
+bundle: grade_student_group
+label: 'Grade in generated document'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

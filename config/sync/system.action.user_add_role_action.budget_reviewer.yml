@@ -1,0 +1,14 @@
+uuid: 600e4cf5-7794-415d-bbf2-25778c9b9633
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.budget_reviewer
+  module:
+    - user
+id: user_add_role_action.budget_reviewer
+label: 'Add the Budget reviewer role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: budget_reviewer

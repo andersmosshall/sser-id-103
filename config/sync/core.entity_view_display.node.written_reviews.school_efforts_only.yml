@@ -1,0 +1,34 @@
+uuid: e2c5400d-a468-4f30-ac21-37c0d838633e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.school_efforts_only
+    - field.field.node.written_reviews.field_class
+    - field.field.node.written_reviews.field_grade
+    - field.field.node.written_reviews.field_school_efforts
+    - field.field.node.written_reviews.field_student
+    - field.field.node.written_reviews.field_written_reviews_round
+    - node.type.written_reviews
+  module:
+    - text
+    - user
+id: node.written_reviews.school_efforts_only
+targetEntityType: node
+bundle: written_reviews
+mode: school_efforts_only
+content:
+  field_school_efforts:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_class: true
+  field_grade: true
+  field_student: true
+  field_written_reviews_round: true
+  langcode: true
+  links: true

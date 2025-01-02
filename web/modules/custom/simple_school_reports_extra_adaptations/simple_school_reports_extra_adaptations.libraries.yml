@@ -1,0 +1,20 @@
+extra_adaptations_form:
+  version: VERSION
+  js:
+    js/extra_adaptations_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+extra_adaptations_paragraph_form:
+  version: VERSION
+  js:
+    js/extra_adaptations_paragraph_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+
+

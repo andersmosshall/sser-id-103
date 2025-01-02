@@ -1,0 +1,21 @@
+uuid: 180b7561-66cf-4c7c-ac7c-c4aafb0f2a23
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_student
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_student
+field_name: field_student
+entity_type: paragraph
+bundle: grade_registration
+label: Student
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings: {  }
+field_type: entity_reference

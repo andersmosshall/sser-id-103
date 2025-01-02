@@ -1,0 +1,20 @@
+uuid: 61fbc145-c952-4780-a34b-f98d18674b8b
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_core
+  theme:
+    - ssr_base
+id: ssrprimaryadminactions
+theme: ssr_base
+region: content
+weight: -19
+provider: null
+plugin: ssr_local_actions_block
+settings:
+  id: ssr_local_actions_block
+  label: 'SSR - Primary admin actions'
+  label_display: '0'
+  provider: simple_school_reports_core
+visibility: {  }

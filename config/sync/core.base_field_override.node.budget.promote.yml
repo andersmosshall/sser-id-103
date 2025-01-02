@@ -1,0 +1,22 @@
+uuid: 3327dc46-a9f0-4b0e-8791-882342fb2312
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.budget
+id: node.budget.promote
+field_name: promote
+entity_type: node
+bundle: budget
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

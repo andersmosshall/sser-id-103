@@ -1,0 +1,5 @@
+label: Mentorselever
+description: 'Visa endast mina mentorselever i denna lista'
+settings:
+  on_label: Ja
+  off_label: Nej

@@ -1,0 +1,33 @@
+uuid: d28f78c4-babc-4557-a2ca-7c62ed97c9dd
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_review
+field_name: field_review
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: na
+      label: 'No assessment'
+    -
+      value: ik
+      label: 'Insufficient knowledge'
+    -
+      value: ak
+      label: 'Acceptable knowledge'
+    -
+      value: mak
+      label: 'More then acceptable knowledge'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,6 @@
+services:
+  simple_school_reports_post_check.post_check:
+    class: Drupal\simple_school_reports_post_check\EventSubscriber\PostCheckEventSubscriber
+    arguments: [ '@tempstore.private', '@datetime.time', '@logger.factory', '@entity_type.manager', '@messenger', '@simple_school_reports_core.email_service', '@current_user']
+    tags:
+      - { name: event_subscriber }

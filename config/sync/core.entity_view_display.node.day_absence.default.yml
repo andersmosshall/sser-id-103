@@ -1,0 +1,74 @@
+uuid: 473d21ad-4fed-4e6b-9b5c-9e69978af9a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.day_absence.field_absence_from
+    - field.field.node.day_absence.field_absence_to
+    - field.field.node.day_absence.field_absence_type
+    - field.field.node.day_absence.field_student
+    - node.type.day_absence
+  module:
+    - options
+    - user
+id: node.day_absence.default
+targetEntityType: node
+bundle: day_absence
+mode: default
+content:
+  field_absence_from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_absence_to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_absence_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  links: true

@@ -1,0 +1,22 @@
+uuid: bd8801be-101f-43cc-95d3-7293660963a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.written_reviews_round
+id: node.written_reviews_round.promote
+field_name: promote
+entity_type: node
+bundle: written_reviews_round
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

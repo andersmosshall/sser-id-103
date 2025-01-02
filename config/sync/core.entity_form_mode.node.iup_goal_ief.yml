@@ -1,0 +1,11 @@
+uuid: cd5cde2b-c60b-42ee-ba36-5504e0996b81
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.iup_goal_ief
+label: 'IUP goal ief'
+description: ''
+targetEntityType: node
+cache: true

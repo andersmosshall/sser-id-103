@@ -1,0 +1,427 @@
+uuid: 163bfacf-b452-4fba-83ef-ae383da5cf21
+langcode: sv
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_attendance_type
+    - field.storage.paragraph.field_invalid_absence
+    - field.storage.paragraph.field_student
+    - node.type.course_attendance_report
+    - paragraphs.paragraphs_type.student_course_attendance
+  module:
+    - options
+    - paragraphs
+    - user
+id: attendance_report_student_list
+label: 'Attendance report student list'
+module: views
+description: ''
+tag: ''
+base_table: paragraphs_item_field_data
+base_field: id
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Attendance report student list'
+      fields:
+        field_student:
+          id: field_student
+          table: paragraph__field_student
+          field: field_student
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Elev
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_attendance_type:
+          id: field_attendance_type
+          table: paragraph__field_attendance_type
+          field: field_attendance_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Frånvarotyp
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_invalid_absence:
+          id: field_invalid_absence
+          table: paragraph__field_invalid_absence
+          field: field_invalid_absence
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Ogiltig frånvaro'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Nästa ›'
+            previous: '‹ Föregående'
+            first: '« Första'
+            last: 'Sista »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Antal per sida'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- Alla -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+          pagination_heading_level: h4
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Tillämpa
+          reset_button: false
+          reset_button_label: Återställ
+          exposed_sorts_label: 'Sortera på'
+          expose_sort_order: true
+          sort_asc_label: Ökande
+          sort_desc_label: Nedåtgående
+      access:
+        type: perm
+        options:
+          perm: 'school staff permissions'
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
+      sorts:
+        field_grade_value:
+          id: field_grade_value
+          table: user__field_grade
+          field: field_grade_value
+          relationship: field_student
+          group_type: group
+          admin_label: ''
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        field_first_name_value:
+          id: field_first_name_value
+          table: user__field_first_name
+          field: field_first_name_value
+          relationship: field_student
+          group_type: group
+          admin_label: ''
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        field_last_name_value:
+          id: field_last_name_value
+          table: user__field_last_name
+          field: field_last_name_value
+          relationship: field_student
+          group_type: group
+          admin_label: ''
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+      arguments:
+        parent_id:
+          id: parent_id
+          table: paragraphs_item_field_data
+          field: parent_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: paragraph
+          entity_field: parent_id
+          plugin_id: string
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: Alla
+          title_enable: false
+          title: ''
+          default_argument_type: node
+          default_argument_options: {  }
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: true
+          validate:
+            type: 'entity:node'
+            fail: 'not found'
+          validate_options:
+            bundles:
+              course_attendance_report: course_attendance_report
+            access: true
+            operation: view
+            multiple: 0
+          glossary: false
+          limit: 0
+          case: none
+          path_case: none
+          transform_dash: false
+          break_phrase: false
+      filters:
+        status:
+          id: status
+          table: paragraphs_item_field_data
+          field: status
+          entity_type: paragraph
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: paragraphs_item_field_data
+          field: type
+          entity_type: paragraph
+          entity_field: type
+          plugin_id: bundle
+          value:
+            student_course_attendance: student_course_attendance
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+      style:
+        type: table
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_tags: {  }
+      relationships:
+        field_student:
+          id: field_student
+          table: paragraph__field_student
+          field: field_student
+          relationship: none
+          group_type: group
+          admin_label: 'field_student: User'
+          plugin_id: standard
+          required: false
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:field.storage.paragraph.field_attendance_type'
+        - 'config:field.storage.paragraph.field_invalid_absence'
+        - 'config:field.storage.paragraph.field_student'
+  attendance_report_student_list:
+    id: attendance_report_student_list
+    display_title: 'Attendance report student list'
+    display_plugin: block
+    position: 1
+    display_options:
+      display_description: ''
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:field.storage.paragraph.field_attendance_type'
+        - 'config:field.storage.paragraph.field_invalid_absence'
+        - 'config:field.storage.paragraph.field_student'

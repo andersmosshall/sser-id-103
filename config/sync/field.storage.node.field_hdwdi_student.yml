@@ -1,0 +1,27 @@
+uuid: 638317e9-8de1-4285-9903-2d84969c0c2b
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - node
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+id: node.field_hdwdi_student
+field_name: field_hdwdi_student
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

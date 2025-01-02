@@ -1,0 +1,19 @@
+uuid: eb69fdab-5328-4944-9f58-36ac38eefc6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_valid_until
+    - node.type.consent
+id: node.consent.field_valid_until
+field_name: field_valid_until
+entity_type: node
+bundle: consent
+label: 'Valid until'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

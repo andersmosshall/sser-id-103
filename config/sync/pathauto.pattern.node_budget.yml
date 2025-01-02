@@ -1,0 +1,22 @@
+uuid: 561151aa-9bf4-4d42-8cc0-2b61001a4698
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_budget
+label: 'Node Budget'
+type: 'canonical_entities:node'
+pattern: '/budget/[node:title]'
+selection_criteria:
+  20f807ae-d5a3-49aa-8787-d917e8de62bd:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 20f807ae-d5a3-49aa-8787-d917e8de62bd
+    context_mapping:
+      node: node
+    bundles:
+      budget: budget
+selection_logic: and
+weight: -5
+relationships: {  }

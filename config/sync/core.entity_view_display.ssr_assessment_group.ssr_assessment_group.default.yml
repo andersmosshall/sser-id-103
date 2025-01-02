@@ -1,0 +1,43 @@
+uuid: f9b88053-8bbf-40d1-b48d-268f60cb2587
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+id: ssr_assessment_group.ssr_assessment_group.default
+targetEntityType: ssr_assessment_group
+bundle: ssr_assessment_group
+mode: default
+content:
+  main_teacher:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  school_class:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  other_teachers: true
+  status: true
+  students: true
+  uid: true

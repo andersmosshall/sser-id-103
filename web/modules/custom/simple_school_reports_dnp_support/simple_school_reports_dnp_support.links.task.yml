@@ -1,0 +1,72 @@
+entity.dnp_provisioning.settings:
+  title: 'Settings'
+  route_name: entity.dnp_provisioning.settings
+  base_route: entity.dnp_provisioning.settings
+entity.dnp_provisioning.view:
+  title: 'View'
+  route_name: entity.dnp_provisioning.canonical
+  base_route: entity.dnp_provisioning.canonical
+entity.dnp_provisioning.edit_form:
+  title: 'Edit'
+  route_name: entity.dnp_provisioning.edit_form
+  base_route: entity.dnp_provisioning.canonical
+entity.dnp_provisioning.delete_form:
+  title: 'Delete'
+  route_name: entity.dnp_provisioning.delete_form
+  base_route: entity.dnp_provisioning.canonical
+  weight: 10
+entity.dnp_provisioning.collection:
+  title: 'Dnp Provisionings'
+  route_name: entity.dnp_provisioning.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.dnp_prov_settings.settings:
+  title: 'Settings'
+  route_name: entity.dnp_prov_settings.settings
+  base_route: entity.dnp_prov_settings.settings
+entity.dnp_prov_settings.view:
+  title: 'View'
+  route_name: entity.dnp_prov_settings.canonical
+  base_route: entity.dnp_prov_settings.canonical
+entity.dnp_prov_settings.edit_form:
+  title: 'Edit'
+  route_name: entity.dnp_prov_settings.edit_form
+  base_route: entity.dnp_prov_settings.canonical
+entity.dnp_prov_settings.delete_form:
+  title: 'Delete'
+  route_name: entity.dnp_prov_settings.delete_form
+  base_route: entity.dnp_prov_settings.canonical
+  weight: 10
+entity.dnp_prov_settings.collection:
+  title: 'Dnp Provisioning Settingss'
+  route_name: entity.dnp_prov_settings.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.dnp_prov_test_settings.view:
+  title: 'View'
+  route_name: entity.dnp_prov_test_settings.canonical
+  base_route: entity.dnp_prov_test_settings.canonical
+entity.dnp_prov_test_settings.edit_form:
+  title: 'Edit'
+  route_name: entity.dnp_prov_test_settings.edit_form
+  base_route: entity.dnp_prov_test_settings.canonical
+entity.dnp_prov_test_settings.delete_form:
+  title: 'Delete'
+  route_name: entity.dnp_prov_test_settings.delete_form
+  base_route: entity.dnp_prov_test_settings.canonical
+  weight: 10
+entity.dnp_prov_test_settings.collection:
+  title: 'Dnp Provisioning Test Settingss'
+  route_name: entity.dnp_prov_test_settings.collection
+  base_route: system.admin_content
+  weight: 10
+entity.dnp_prov_test_settings_type.edit_form:
+  title: 'Edit'
+  route_name: entity.dnp_prov_test_settings_type.edit_form
+  base_route: entity.dnp_prov_test_settings_type.edit_form
+entity.dnp_prov_test_settings_type.collection:
+  title: 'List'
+  route_name: entity.dnp_prov_test_settings_type.collection
+  base_route: entity.dnp_prov_test_settings_type.collection

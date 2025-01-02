@@ -1,0 +1,24 @@
+uuid: a8a8cadc-8108-4e12-8402-14780ad8572f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_allow_login
+  module:
+    - user
+id: user.user.field_allow_login
+field_name: field_allow_login
+entity_type: user
+bundle: user
+label: 'Allow login'
+description: 'Only relevant for caregivers and if the caregiver login module is active, otherwise ignored.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

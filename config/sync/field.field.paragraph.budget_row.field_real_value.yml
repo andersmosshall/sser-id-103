@@ -1,0 +1,23 @@
+uuid: ac43783c-71f4-458a-82b8-816e9965d51a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_real_value
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_real_value
+field_name: field_real_value
+entity_type: paragraph
+bundle: budget_row
+label: 'Real value'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0.0
+  max: null
+  prefix: ''
+  suffix: kr
+field_type: decimal

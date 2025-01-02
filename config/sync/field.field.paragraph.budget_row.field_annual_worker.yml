@@ -1,0 +1,23 @@
+uuid: 5db859ad-298e-4782-b698-c92137af5e2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_annual_worker
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_annual_worker
+field_name: field_annual_worker
+entity_type: paragraph
+bundle: budget_row
+label: 'Number of annual worker'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0.0
+  max: 1000.0
+  prefix: ''
+  suffix: årsarbetare/elev
+field_type: decimal

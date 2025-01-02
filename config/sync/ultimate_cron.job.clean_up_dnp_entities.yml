@@ -1,0 +1,28 @@
+uuid: 2ac0e9ee-6116-4920-b772-094c9fdf2740
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+title: 'Clean up dnp entities'
+id: clean_up_dnp_entities
+weight: 0
+module: simple_school_reports_dnp_support
+callback: clean_up_dnp_entities
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */6 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

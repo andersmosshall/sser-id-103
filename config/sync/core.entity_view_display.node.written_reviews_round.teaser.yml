@@ -1,0 +1,29 @@
+uuid: 826ffe88-70b7-4884-947a-522687e16a9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.written_reviews_round.field_document_date
+    - field.field.node.written_reviews_round.field_locked
+    - field.field.node.written_reviews_round.field_term_type
+    - field.field.node.written_reviews_round.field_written_reviews_subject
+    - node.type.written_reviews_round
+  module:
+    - user
+id: node.written_reviews_round.teaser
+targetEntityType: node
+bundle: written_reviews_round
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_document_date: true
+  field_locked: true
+  field_term_type: true
+  field_written_reviews_subject: true
+  langcode: true

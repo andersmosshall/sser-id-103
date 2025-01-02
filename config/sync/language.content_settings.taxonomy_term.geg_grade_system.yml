@@ -1,0 +1,11 @@
+uuid: f064a6fa-20eb-40b3-9f2f-a93c48c2656c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.geg_grade_system
+id: taxonomy_term.geg_grade_system
+target_entity_type_id: taxonomy_term
+target_bundle: geg_grade_system
+default_langcode: site_default
+language_alterable: false

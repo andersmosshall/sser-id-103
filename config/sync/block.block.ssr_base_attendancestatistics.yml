@@ -1,0 +1,25 @@
+uuid: cd0d5be8-7908-40f9-8487-a68a3a5ac61e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: ssr_base_attendancestatistics
+theme: ssr_base
+region: content
+weight: -14
+provider: null
+plugin: attendance_statistics
+settings:
+  id: attendance_statistics
+  label: 'Attendance statistics'
+  label_display: visible
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/statistics'

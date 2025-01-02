@@ -1,0 +1,7 @@
+name: 'Simple School Reports Digital National Test Support'
+type: module
+description: 'Simple School Reports Digital National Test Support'
+package: Simple School Reports
+core_version_requirement: ^10 || ^11
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core

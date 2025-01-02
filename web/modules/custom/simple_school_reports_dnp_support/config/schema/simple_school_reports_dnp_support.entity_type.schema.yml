@@ -1,0 +1,12 @@
+simple_school_reports_dnp_support.dnp_prov_test_settings_type.*:
+  type: config_entity
+  label: 'Dnp Provisioning Test Settings type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string

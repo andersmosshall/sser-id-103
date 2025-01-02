@@ -1,0 +1,37 @@
+uuid: cdb3d6e3-f6db-4e62-9420-aad0fbc378fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.consent_user
+  module:
+    - node
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__consent_user_list_per_consent
+theme: ssr_base
+region: content
+weight: -3
+provider: null
+plugin: 'views_block:consent_user-list_per_consent'
+settings:
+  id: 'views_block:consent_user-list_per_consent'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/node/*/*'
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      consent: consent

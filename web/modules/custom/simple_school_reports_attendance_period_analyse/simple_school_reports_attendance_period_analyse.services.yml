@@ -1,0 +1,11 @@
+services:
+  simple_school_reports_attendance_period_analyse.attendance_period_analyse_service:
+    class: Drupal\simple_school_reports_attendance_period_analyse\Service\AttendancePeriodAnalyseService
+    arguments: [ '@state', '@cache.default', '@simple_school_reports_attendance_analyse.attendance_analyse_service', '@simple_school_reports_core.user_meta_data', '@entity_type.manager']
+
+  simple_school_reports_attendance_period_analyse.attendance_period_analyse_subscriber:
+    class: Drupal\simple_school_reports_attendance_period_analyse\EventSubscriber\AbsencePeriodAnalyseEventSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments: [ '@current_route_match', '@simple_school_reports_core.term_service' ]
+

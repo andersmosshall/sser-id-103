@@ -1,0 +1,20 @@
+uuid: 050e9ed4-6c57-414c-85b5-73c90b577a73
+langcode: sv
+status: true
+dependencies:
+  theme:
+    - ssr_base
+_core:
+  default_config_hash: gfXKmThltk6eewwrjAEaxVPxzPEVHV1UfNjjOUQ5A7g
+id: ssr_base_page_title
+theme: ssr_base
+region: header
+weight: -14
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

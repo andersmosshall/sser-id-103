@@ -1,0 +1,36 @@
+administer dnp_provisioning:
+  title: 'Administer dnp provisionings'
+  restrict access: true
+view dnp_provisioning:
+  title: 'View dnp provisioning'
+edit dnp_provisioning:
+  title: 'Edit dnp provisioning'
+delete dnp_provisioning:
+  title: 'Delete dnp provisioning'
+create dnp_provisioning:
+  title: 'Create dnp provisioning'
+
+administer dnp_prov_settings:
+  title: 'Administer dnp provisioning settingss'
+  restrict access: true
+view dnp_prov_settings:
+  title: 'View dnp provisioning settings'
+edit dnp_prov_settings:
+  title: 'Edit dnp provisioning settings'
+delete dnp_prov_settings:
+  title: 'Delete dnp provisioning settings'
+create dnp_prov_settings:
+  title: 'Create dnp provisioning settings'
+
+administer dnp_prov_test_settings types:
+  title: 'Administer dnp provisioning test settings types'
+  description: 'Maintain the types of dnp prov test settings entity.'
+  restrict access: true
+view dnp_prov_test_settings:
+  title: 'View dnp provisioning test settings'
+edit dnp_prov_test_settings:
+  title: 'Edit dnp provisioning test settings'
+delete dnp_prov_test_settings:
+  title: 'Delete dnp provisioning test settings'
+create dnp_prov_test_settings:
+  title: 'Create dnp provisioning test settings'

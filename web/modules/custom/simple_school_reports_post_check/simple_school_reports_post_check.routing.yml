@@ -1,0 +1,7 @@
+simple_school_reports_post_check.set_callstack_enabled:
+  path: 'admin/set-callstack-enabled'
+  defaults:
+    _form: '\Drupal\simple_school_reports_post_check\Form\SetCallstackForm'
+    _title: 'Set callstack setting'
+  requirements:
+    _permission: 'administer modules'

@@ -1,0 +1,6 @@
+settings:
+  allowed_values:
+    -
+      label: 'Separera pojkar och flickor'
+    -
+      label: 'Sammanväg pojkar och flickor'

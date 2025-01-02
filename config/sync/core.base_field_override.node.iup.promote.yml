@@ -1,0 +1,22 @@
+uuid: f7da04ae-9b7d-4eb4-a30a-877e15b374ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.iup
+id: node.iup.promote
+field_name: promote
+entity_type: node
+bundle: iup
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,15 @@
+entity.ssr_school_class.settings:
+  path: 'admin/structure/ssr-school-class'
+  defaults:
+    _form: '\Drupal\simple_school_reports_class_support\Form\SchoolClassSettingsForm'
+    _title: 'School class'
+  requirements:
+    _permission: 'administer ssr_school_class'
+
+simple_school_reports_class_support.ssr_assign_to_class:
+  path: '/student/assign-to-class'
+  defaults:
+    _form: '\Drupal\simple_school_reports_class_support\Form\AssignToClassForm'
+    _title: 'School class'
+  requirements:
+    _permission: 'school staff permissions'

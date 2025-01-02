@@ -1,0 +1,6 @@
+services:
+  simple_school_reports_pmo_export:export_users_pmo:
+    class: Drupal\simple_school_reports_pmo_export\Service\PMOExportUsersService
+    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service' ]
+    tags:
+      - { name: event_subscriber }

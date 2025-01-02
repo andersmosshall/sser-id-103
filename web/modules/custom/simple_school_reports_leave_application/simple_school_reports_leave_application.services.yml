@@ -1,0 +1,10 @@
+services:
+  simple_school_reports_leave_application.leave_application_service:
+    class: Drupal\simple_school_reports_leave_application\Service\LeaveApplicationService
+    arguments: [ '@state', '@entity_type.manager', '@current_user', '@simple_school_reports_core.user_meta_data']
+
+  simple_school_reports_leave_application.notification_messages_subscriber:
+    class: Drupal\simple_school_reports_leave_application\EventSubscriber\NotificationMessagesSubscriber
+    arguments: [ '@simple_school_reports_leave_application.leave_application_service' ]
+    tags:
+      - { name: event_subscriber }

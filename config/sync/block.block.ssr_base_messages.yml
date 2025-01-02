@@ -1,0 +1,22 @@
+uuid: 21c36eb1-b828-4925-ad3a-886612bfcc6b
+langcode: sv
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ssr_base
+_core:
+  default_config_hash: iIy-YIc9d9s1isAtTIKWDBKd6kd2r6LxoYz_-hkLJco
+id: ssr_base_messages
+theme: ssr_base
+region: highlighted
+weight: -17
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

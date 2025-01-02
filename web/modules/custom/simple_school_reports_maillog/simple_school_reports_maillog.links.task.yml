@@ -1,0 +1,22 @@
+entity.ssr_maillog.settings:
+  title: 'Settings'
+  route_name: entity.ssr_maillog.settings
+  base_route: entity.ssr_maillog.settings
+entity.ssr_maillog.view:
+  title: 'View'
+  route_name: entity.ssr_maillog.canonical
+  base_route: entity.ssr_maillog.canonical
+entity.ssr_maillog.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_maillog.edit_form
+  base_route: entity.ssr_maillog.canonical
+entity.ssr_maillog.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_maillog.delete_form
+  base_route: entity.ssr_maillog.canonical
+  weight: 10
+entity.ssr_maillog.collection:
+  title: 'Maillogs'
+  route_name: entity.ssr_maillog.collection
+  base_route: system.admin_content
+  weight: 10

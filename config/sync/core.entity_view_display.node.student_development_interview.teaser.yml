@@ -1,0 +1,31 @@
+uuid: ae2cdb1c-a54c-429a-9f77-442756c82da1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.student_development_interview.field_caregiver_reminder_setting
+    - field.field.node.student_development_interview.field_locked
+    - field.field.node.student_development_interview.field_locked_caregivers
+    - field.field.node.student_development_interview.field_remind_teacher
+    - field.field.node.student_development_interview.field_student_groups
+    - node.type.student_development_interview
+  module:
+    - user
+id: node.student_development_interview.teaser
+targetEntityType: node
+bundle: student_development_interview
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_caregiver_reminder_setting: true
+  field_locked: true
+  field_locked_caregivers: true
+  field_remind_teacher: true
+  field_student_groups: true
+  langcode: true

@@ -1,0 +1,5 @@
+simple_school_reports_core.adapted_studies:
+  base_route: view.students.students
+  weight: 30
+  route_name: view.students.adapted_studies
+  title: 'Adapted studies'

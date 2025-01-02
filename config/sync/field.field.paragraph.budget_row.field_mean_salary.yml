@@ -1,0 +1,23 @@
+uuid: d20faf62-9039-45fd-9860-00defed903be
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mean_salary
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_mean_salary
+field_name: field_mean_salary
+entity_type: paragraph
+bundle: budget_row
+label: 'Mean salary'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0.0
+  max: null
+  prefix: ''
+  suffix: kr
+field_type: decimal

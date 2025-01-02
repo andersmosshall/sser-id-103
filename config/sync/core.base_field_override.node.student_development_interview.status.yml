@@ -1,0 +1,22 @@
+uuid: eeb1f2b3-3b9d-49c5-a28e-4f18686eec23
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.student_development_interview
+id: node.student_development_interview.status
+field_name: status
+entity_type: node
+bundle: student_development_interview
+label: Active
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

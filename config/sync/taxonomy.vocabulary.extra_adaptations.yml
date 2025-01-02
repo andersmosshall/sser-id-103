@@ -1,0 +1,9 @@
+uuid: 6ef2e3e0-7538-4f34-a44a-299f01ebf85d
+langcode: en
+status: true
+dependencies: {  }
+name: 'Extra adaptations'
+vid: extra_adaptations
+description: null
+weight: 0
+new_revision: false

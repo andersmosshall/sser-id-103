@@ -1,0 +1,6 @@
+simple_school_reports_extension_proxy.special_diet:
+  title: 'Special diet'
+  description: 'List special diet and which students has those special diets'
+  weight: 130
+  parent: simple_school_reports_core.statistics
+  route_name: view.special_diet.special_diet

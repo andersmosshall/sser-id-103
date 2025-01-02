@@ -1,0 +1,27 @@
+.input-copy-element {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  background: white;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  box-shadow: 0 -2px 2px rgba(0,0,0,0.25);
+}
+
+.input-copy-element .input-copy-element--label {
+  padding: 16px;
+}
+
+.input-copy-element .input-copy-element--trigger {
+  padding: 16px;
+}
+
+.input-copy-element .input-copy-element--trigger .button {
+  margin: 0;
+  min-width: 85px;
+}

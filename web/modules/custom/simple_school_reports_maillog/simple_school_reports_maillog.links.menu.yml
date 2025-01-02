@@ -1,0 +1,16 @@
+entity.ssr_maillog.settings:
+  title: 'Maillog'
+  description: 'Configure a Maillog entity type.'
+  route_name:  entity.ssr_maillog.settings
+  parent: system.admin_structure
+entity.ssr_maillog.collection:
+  title: 'Maillogs'
+  description: 'List of maillogs.'
+  route_name: entity.ssr_maillog.collection
+  parent: system.admin_content
+simple_school_reports_maillog.logg:
+  title: 'Maillog'
+  description: 'List mail sent by the system last 3 months'
+  weight: 130
+  parent: simple_school_reports_core.statistics
+  route_name: view.ssr_maillog.list

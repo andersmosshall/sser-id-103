@@ -1,0 +1,17 @@
+uuid: 099f4216-a8b0-4369-8fb2-81c37e4e49c6
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Development interview with  students'
+type: student_development_interview
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

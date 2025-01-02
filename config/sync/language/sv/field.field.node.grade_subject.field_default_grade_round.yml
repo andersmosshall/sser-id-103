@@ -1,0 +1,2 @@
+label: 'Använd betyg från betygstermin'
+description: 'Om angivet så kommer betyg importeras från denna betygstermin som standardbetyg när lärare ska lägga till betyg.'
