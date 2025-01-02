@@ -10,7 +10,7 @@ alias ssr_copy_system_theme="if [ -f \".settings/local/system.theme.global.yml\"
   cp .settings/local/system.theme.global.yml config/sync/system.theme.global.yml; \
 fi"
 
-alias ssr_deploy_local="git pull &&
+alias ssr_deploy_dev="git pull &&
  chmod +w web/sites/default/ &&
  chmod +w web/sites/default/settings.local.php  &&
  cp .settings/local/settings.local.php web/sites/default/settings.local.php &&
