@@ -88,12 +88,8 @@ function calculate_dnp_username(UserInterface $user): string {
     throw new \InvalidArgumentException('User must have an ID.');
   }
 
-  $database_options = \Drupal::database()->getConnectionOptions();
-  $table_prefix = $database_options['prefix'] ?? '';
-  // Ssr index is the number in the table prefix, e.g. filter out numbers
-  // from table prefix.
-  $ssr_index = preg_replace('/[^0-9]/', '', $table_prefix);
-  if ($ssr_index === '') {
+  $ssr_id = Settings::get('ssr_id', '');
+  if ($ssr_id === '') {
     throw new \RuntimeException('Failed to calculate DNP user name.');
   }
 
@@ -118,7 +114,7 @@ function calculate_dnp_username(UserInterface $user): string {
 
   $user_id_fragment = format_with_leading_zeros($user->id(), 6);
 
-  return $school_name . '-' . $user_fragment . '-' . $ssr_index . $user_id_fragment;
+  return $school_name . '-' . $user_fragment . '-' . $ssr_id . $user_id_fragment;
 }
 
 function simple_school_reports_dnp_support_allowed_tests(): array {
