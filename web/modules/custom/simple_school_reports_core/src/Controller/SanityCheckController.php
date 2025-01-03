@@ -34,6 +34,7 @@ class SanityCheckController extends ControllerBase {
       'ssr_school_organiser',
       'ssr_school_unit_code',
       'ssr_school_municipality',
+      'ssr_id',
     ];
     foreach ($value_safe_settings as $setting) {
       $rows[] = [$setting, Settings::get($setting)];
