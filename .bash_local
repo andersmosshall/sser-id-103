@@ -26,3 +26,10 @@ alias ssr_deploy_dev="git pull &&
  lando drush cr &&
  lando drush php-eval 'if (function_exists(\"simple_school_reports_module_info_deploy\")) { simple_school_reports_module_info_deploy(); }'"
 
+### LOCAL SECRET PROJECT STUFF
+### In this file alias for "ssr_fetch_all" && "ssr_update_all" is places that is aware of all ssr projects and their git locations.
+### Example:
+### alias
+if [ -f ~/Projects/ssr/private/.ssr_private_bash_local ]; then
+    . ~/Projects/ssr/private/.ssr_private_bash_local
+fi
