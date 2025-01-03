@@ -91,6 +91,7 @@ $settings['ssr_school_name'] = 'Demoskolan';
 $settings['ssr_school_organiser'] = 'Demoskolan AB';
 $settings['ssr_school_unit_code'] = '12345678';
 $settings['ssr_school_municipality'] = 'Örnsköldsvik';
+$settings['ssr_id'] = 0;
 
 $settings['ssr_catalog_id'] = [
   'BL' => 1,
