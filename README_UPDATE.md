@@ -26,3 +26,4 @@
 10. Commit and push update.
 11. On dev machine run ssr_update_all
 12. On server run ssr_deploy_all
+13. Test ssr update 1.
