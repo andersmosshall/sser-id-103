@@ -29,7 +29,58 @@ alias ssr_deploy_dev="git pull &&
 ### LOCAL SECRET PROJECT STUFF
 ### In this file alias for "ssr_fetch_all" && "ssr_update_all" is places that is aware of all ssr projects and their git locations.
 ### Example:
-### alias
+: <<'END_COMMENT'
+alias ssr_fetch_all="cd ~/Projects/ssr &&
+  if [ ! -d \"ssr-sites\" ]; then \
+    mkdir ssr-sites; \
+    echo \"Created ssr-sites folder\"; \
+  fi
+  cd ssr-sites &&
+
+  ### Verify stage.
+  if [ ! -d \"stage\" ]; then \
+    mkdir stage; \
+    git clone [git stage site url] stage; \
+    cd stage; \
+    git checkout main; \
+    echo \"Add ssr-base remote\"; \
+    git remote add ssr-base [git ssr base url]; \
+    cd ..;
+  fi
+  cd stage &&
+  git pull &&
+  echo \"Fetched stage\";
+
+  ### Go back to ssr root.
+  cd ~/Projects/ssr;
+"
+
+alias ssr_update_local="git pull;
+  git fetch ssr-base main;
+  git merge ssr-base/main --no-commit --no-ff;
+  ### Ignore .gitignore changes.
+  git checkout .gitignore;
+  git add . &&
+  git commit -m \"Auto merged ssr-base\" &&
+  git push &&
+  echo \"Updated\";
+"
+
+### Make sure everything is up to date and then update all sites.
+ssr_update_all() {
+  ssr_fetch_all
+  echo "Go to ssr sites"
+  cd ~/Projects/ssr/ssr-sites || return
+
+  # Update stage
+  cd stage || return
+  ssr_update_local
+
+  # Go back to ssr root
+  cd ~/Projects/ssr || return
+}
+END_COMMENT
+
 if [ -f ~/Projects/ssr/private/.ssr_private_bash_local ]; then
     . ~/Projects/ssr/private/.ssr_private_bash_local
 fi
