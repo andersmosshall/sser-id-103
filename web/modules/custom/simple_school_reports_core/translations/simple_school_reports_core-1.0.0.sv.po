@@ -2814,11 +2814,11 @@ msgstr "Panik!"
 msgid "Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you want to shut it down for investigation."
 msgstr "Stäng ner webbplatsen till underhållsläge. Gör detta endast om du har skäl att tro att systemet har komprometterats och du vill stänga ner det för undersökning."
 
-msgid ""
-msgstr ""
+msgid "This combination of roles is not allowed."
+msgstr "Denna kombination av roller är inte tillåten."
 
-msgid ""
-msgstr ""
+msgid "User with role student cannot have any other role."
+msgstr "Användare med rollen elev får inte ha någon annan roll."
 
 msgid ""
 msgstr ""

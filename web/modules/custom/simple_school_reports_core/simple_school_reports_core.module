@@ -648,6 +648,8 @@ function simple_school_reports_core_entity_type_alter(array &$entity_types) {
       $sub_entity_type->setFormClass($machine_name, $default_handler_class);
     }
   }
+
+  $entity_types['user']->addConstraint('SsrRolesConstraint');
 }
 
 

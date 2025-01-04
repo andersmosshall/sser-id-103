@@ -3,6 +3,21 @@
 use Drupal\simple_school_reports_grade_stats\Plugin\Block\GradeStatisticsBlock;
 use Drupal\simple_school_reports_list_templates\Plugin\Block\ListBlock;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_extension_proxy\UserRolesFormAlter;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_extension_proxy_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $forms_to_alter = [
+    'user_register_form',
+    'user_form',
+  ];
+  if (in_array($form_id, $forms_to_alter)) {
+    UserRolesFormAlter::userFormAlter($form, $form_state);
+  }
+}
 
 /**
  * Implements hook_views_data_alter().
