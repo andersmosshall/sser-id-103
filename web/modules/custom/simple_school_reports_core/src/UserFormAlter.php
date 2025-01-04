@@ -37,6 +37,15 @@ class UserFormAlter {
       $account = $form_object->getEntity();
     }
 
+    // Do not set password for new users.
+    if (!$account || $account->isNew()) {
+      $form['account']['pass']['#required'] = FALSE;
+      $form['account']['pass']['#access'] = FALSE;
+      $form['field_protected_personal_data']['#access'] = FALSE;
+      $form['#ssr_new_user'] = TRUE;
+      $form['#entity_builders'][] = [self::class, 'generateUserPassword'];
+    }
+
     if (!empty($form['#form_mode'])) {
       if ($form['#form_mode'] === 'register' || $form['#form_mode'] === 'default') {
         $student_fields = ['field_grade', 'field_caregivers', 'field_mentor', 'field_adapted_studies', 'field_class'];
@@ -92,6 +101,10 @@ class UserFormAlter {
 
     if (!empty($form['account']['password_policy_status'])) {
       $form['account']['password_policy_status']['#weight'] = $password_policy_status_weight;
+      // Make sure attached is set to not break ajax.
+      if (empty($form['account']['password_policy_status']['#attached'])) {
+        $form['account']['password_policy_status']['#attached'] = [];
+      }
       $form['#attached']['library'][] = 'simple_school_reports_core/password_policy';
     }
 
@@ -112,12 +125,36 @@ class UserFormAlter {
     return $form;
   }
 
+  public static function generatePassword($length = 32) {
+    // Define character pools
+    $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $numbers = '0123456789';
+    $specialChars = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+
+    // Ensure the password contains at least one character from each pool
+    $password = $lowercase[random_int(0, strlen($lowercase) - 1)] .
+      $uppercase[random_int(0, strlen($uppercase) - 1)] .
+      $numbers[random_int(0, strlen($numbers) - 1)] .
+      $specialChars[random_int(0, strlen($specialChars) - 1)];
+
+    // Combine all pools
+    $allChars = $lowercase . $uppercase . $numbers . $specialChars;
+
+    // Fill the rest of the password length with random characters from the combined pool
+    for ($i = 4; $i < $length; $i++) {
+      $password .= $allChars[random_int(0, strlen($allChars) - 1)];
+    }
+
+    // Shuffle the password to ensure randomness
+    return str_shuffle($password);
+  }
+
   public static function addGuards(&$form, $account = NULL, $use_field_to_set = FALSE) {
     if (!empty($form['#form_mode'])) {
       if ($form['#form_mode'] === 'student' || $form['#form_mode'] === 'caregiver' || $form['#form_mode'] === 'caregiver_ief') {
         if ($account->isNew() && !empty($form['account']['pass'])) {
-          $uuid_service = \Drupal::service('uuid');
-          $default_pass = $uuid_service->generate();
+          $default_pass = self::generatePassword();
           $form['account']['pass']['#default_value'] = ['pass1' => $default_pass, 'pass2' => $default_pass];
         }
       }
@@ -300,6 +337,17 @@ class UserFormAlter {
     // Activate automatically on add.
     if ($user->isNew()) {
       $user->set('status', 1);
+    }
+  }
+
+  public static function generateUserPassword($entity_type, UserInterface $user, &$form, FormStateInterface $form_state) {
+    if ($user->isNew()) {
+      $password = $form_state->getValue('pass');
+      if (!$password) {
+        $password = self::generatePassword();
+        $user->setPassword($password);
+        $form_state->setValue('pass', $password);
+      }
     }
   }
 
