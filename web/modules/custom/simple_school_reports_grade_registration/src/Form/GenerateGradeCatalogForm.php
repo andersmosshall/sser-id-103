@@ -568,6 +568,11 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       $joint_grading_uids[$joint_grading_uid] = $joint_grading_uid;
     }
 
+    // Put the teacher as first in the list in case of joint grading.
+    if (!empty($joint_grading_uids)) {
+      $joint_grading_uids = array_merge([$teacher_uid], array_values($joint_grading_uids));
+    }
+
     if ($exclude_reason === NULL && !$skip_sign) {
       $context['results']['sign'][$teacher_uid][$student_group_nid][$subject_id][$student_uid]['grade'] = $student_grade_name;
       $context['results']['sign'][$teacher_uid][$student_group_nid][$subject_id][$student_uid]['comment'] = $grade_comment;
@@ -1054,6 +1059,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       }
 
       $joint_teacher_map = [];
+      $joint_teacher_map_short = [];
 
       $student_uids = [];
       $ordered_student_uids = $references['ordered_student_uids'];
@@ -1063,9 +1069,14 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
           if (!empty($student_grades[$ordered_student_uid]['joint_grading'])) {
             foreach ($student_grades[$ordered_student_uid]['joint_grading'] as $joint_teacher_uid) {
               $joint_teacher_map[$joint_teacher_uid] = '??? (' . $joint_teacher_uid . ')';
+              $joint_teacher_map_short[$joint_teacher_uid] = '??? (' . $joint_teacher_uid . ')';
+              /** @var \Drupal\user\Entity\User|null $joint_teacher */
               $joint_teacher = \Drupal::entityTypeManager()->getStorage('user')->load($joint_teacher_uid);
               if ($joint_teacher) {
                 $joint_teacher_map[$joint_teacher_uid] = $joint_teacher->getDisplayName();
+                $joint_teacher_map_short[$joint_teacher_uid] = ($joint_teacher->get('field_first_name')->value ?? '?');
+                // Use only first letter of last name.
+                $joint_teacher_map_short[$joint_teacher_uid] .= ' ' . mb_substr($joint_teacher->get('field_last_name')->value ?? '?', 0, 1);
               }
             }
           }
@@ -1097,13 +1108,17 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
           $sign_comment = NULL;
           if (!empty($student_grades[$student_uid]['joint_grading'])) {
-            $joint_teacher_names = [];
+            $joint_teacher_names_short = [];
             foreach ($student_grades[$student_uid]['joint_grading'] as $joint_teacher_uid) {
               $joint_teacher_name = $joint_teacher_map[$joint_teacher_uid] ?? '??? (' . $joint_teacher_uid . ')';
-              $joint_teacher_names[] = $joint_teacher_name;
-              $grading_teachers[$joint_teacher_uid] = $joint_teacher_name;
+              $joint_teacher_name_short = $joint_teacher_map_short[$joint_teacher_uid] ?? $joint_teacher_name;
+              $joint_teacher_names_short[] = $joint_teacher_name_short;
+
+              if (!isset($grading_teachers[$joint_teacher_uid])) {
+                $grading_teachers[$joint_teacher_uid] = $joint_teacher_name;
+              }
             }
-            $sign_comment = 'Samb. ' .  implode(', ', $joint_teacher_names);
+            $sign_comment = 'Samb. ' .  implode(', ', $joint_teacher_names_short);
           }
 
           $search_replace_map['!k' . $row_id . '!'] = $sign_comment ?? '';
