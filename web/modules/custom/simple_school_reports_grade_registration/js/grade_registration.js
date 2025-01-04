@@ -7,6 +7,13 @@
 
     let value = $element.val();
 
+    if (!value && $element.attr('disabled')) {
+      // Special treatment for disabled elements.
+      if ($element.is('select')) {
+        value = $element.find('option:selected').val();
+      }
+    }
+
     if ($element.is('input[type="radio"]')) {
       if (!$element.prop('checked')) {
         return null;
