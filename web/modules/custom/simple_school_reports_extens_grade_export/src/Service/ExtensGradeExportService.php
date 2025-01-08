@@ -142,14 +142,13 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
 
       // Add grade.
       foreach ($extent_subject_codes as $extent_subject_code) {
-        $catalog_id = $this->getGradeCatalogId($extent_subject_code, $references);
+        $catalog_id = $this->getGradeCatalogId($extent_subject_code);
         if (!empty($catalog_data[$student_uid][$catalog_id])) {
           $has_grades = TRUE;
         }
         $grade = $catalog_id && !empty($catalog_data[$student_uid][$catalog_id]) ? $catalog_data[$student_uid][$catalog_id] : '2';
         $student_row .= $this->makeRowPart($grade, 1);
       }
-      $aaa = $student->getDisplayName();
       if (!$has_grades) {
         continue;
       }
@@ -164,7 +163,7 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
         'ML',
       ];
       foreach ($language_items as $language_item) {
-        $catalog_id = $this->getSubjectCodeCatalogId($language_item, $references);
+        $catalog_id = $this->getSubjectCodeCatalogId($language_item);
         $language = $catalog_id && !empty($catalog_data[$student_uid][$catalog_id]) ? $catalog_data[$student_uid][$catalog_id] : '';
         $student_row .= $this->makeRowPart($language, 3);
       }
@@ -224,12 +223,12 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
 
   }
 
-  protected function getGradeCatalogId(string $extent_subject_code, array $references): ?int {
+  protected function getGradeCatalogId(string $extent_subject_code): ?int {
     $ssr_catalog_id = Settings::get('ssr_catalog_id', []);
     return $ssr_catalog_id[$extent_subject_code] ?? NULL;
   }
 
-  protected function getSubjectCodeCatalogId(string $extent_subject_code, array $references): ?int {
+  protected function getSubjectCodeCatalogId(string $extent_subject_code): ?int {
     $ssr_catalog_id = Settings::get('ssr_catalog_id', []);
     return $ssr_catalog_id[$extent_subject_code . '_COM'] ?? NULL;
   }
