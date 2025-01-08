@@ -6,6 +6,7 @@ use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\Pnum;
 use Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GradeRoundFormAlter;
+use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -51,18 +53,21 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
    */
   protected $pnum;
 
+  protected bool $useExtentExport;
+
   protected $calculatedData;
 
   const LETTER_INDEX = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', ];
 
 
 
-  public function __construct(FileTemplateServiceInterface $file_template_service, EntityTypeManagerInterface $entity_type_manager, Connection $connection,  UuidInterface $uuid, Pnum $pnum) {
+  public function __construct(FileTemplateServiceInterface $file_template_service, EntityTypeManagerInterface $entity_type_manager, Connection $connection,  UuidInterface $uuid, Pnum $pnum, ModuleHandlerInterface $module_handler) {
     $this->fileTemplateService = $file_template_service;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->uuid = $uuid;
     $this->pnum = $pnum;
+    $this->useExtentExport = $module_handler->moduleExists('simple_school_reports_extens_grade_export');
   }
 
   /**
@@ -75,6 +80,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       $container->get('database'),
       $container->get('uuid'),
       $container->get('simple_school_reports_core.pnum'),
+      $container->get('module_handler')
     );
   }
 
@@ -172,6 +178,45 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         '#description' => $this->t('Lock this round for future registrations, can be unlocked by editing the round later.'),
         '#default_value' => FALSE,
       ];
+    }
+
+    if ($this->getFormId() === 'generate_grade_catalog_form') {
+      if ($this->useExtentExport) {
+        $extens_export_grades = [6, 7, 8, 9];
+
+        $grade_options = simple_school_reports_core_allowed_user_grade();
+        $extens_export_grade_options = [];
+        $extens_default_value = [];
+
+        foreach ($grade_options as $grade_option => $label) {
+          if (in_array($grade_option, $extens_export_grades)) {
+            $extens_export_grade_options[$grade_option] = $label;
+            if ($grade_option === 9) {
+              $extens_default_value[] = $grade_option;
+            }
+          }
+        }
+
+        $form['extend_export_wrapper'] = [
+          '#type' => 'details',
+          '#title' => $this->t('Extens export (MGBETYG)'),
+          '#open' => TRUE,
+        ];
+        $form['extend_export_wrapper']['extens_export_grades'] = [
+          '#type' => 'checkboxes',
+          '#title' => $this->t('Grades to include in export file'),
+          '#description' => $this->t('Students in the selected grades will be included in the extent export file regardless of in what student group they are in.'),
+          '#options' => $extens_export_grade_options,
+          '#default_value' => $extens_default_value,
+        ];
+
+        $form['extend_export_wrapper']['extens_include_contact_details'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Include student contact details'),
+          '#description' => $this->t('NOTE: Contact details for students with prootected personal data will not be included.'),
+          '#default_value' => TRUE,
+        ];
+      }
     }
 
     $form['#title'] = t('Generate grade catalog') . ' - ' . $node->label();
@@ -363,8 +408,6 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       $file->delete();
     }
 
-
-
     $calculated_data = $this->getCalculatedData($form_state);
 
     $students = $calculated_data['students'];
@@ -411,7 +454,16 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         'grade_options' => array_keys($grade_options),
         'base_destination' => $this->uuid->generate(),
         'grade_round_name' => $grade_round->label(),
+        'extens_export_grades' => $form_state->getValue('extens_export_grades', []),
+        'extens_include_contact_details' => !!$form_state->getValue('extens_include_contact_details', FALSE),
       ];
+
+      $external_services = [];
+      if ($this->getFormId() === 'generate_grade_catalog_form') {
+        if ($this->useExtentExport) {
+          $external_services[] = 'simple_school_reports_extens_grade_export.export_service';
+        }
+      }
 
       if (is_numeric($invalid_absence_from) && is_numeric($invalid_absence_to) && $invalid_absence_to > $invalid_absence_from) {
         $attendance_report_nids = $this->entityTypeManager
@@ -436,12 +488,20 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
       foreach ($student_groups_data as $student_group_nid => $data) {
         $batch['operations'][] = [[self::class, 'generateStudentGroupCatalog'], [$student_group_nid, $references]];
+
+        foreach ($external_services as $external_service) {
+          $batch['operations'][] = [[self::class, 'handleExternalGroupExport'], [$external_service, $student_group_nid, $references]];
+        }
       }
 
       foreach ($teachers as $teacher_uid => $data) {
         foreach ($data['groups'] as $student_group_nid => $g_data) {
           $batch['operations'][] = [[self::class, 'generateTeacherSignDoc'], [$teacher_uid, $student_group_nid, $references]];
         }
+      }
+
+      foreach ($external_services as $external_service) {
+        $batch['operations'][] = [[self::class, 'handleBeforeFinnishExport'], [$external_service, $references]];
       }
 
       if ($form_state->getValue('lock', FALSE)) {
@@ -765,6 +825,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       }
 
       $search_replace_map['!sg!'] = '';
+      $context['results']['ssr_student_doc_grade_value'][$student_uid] = NULL;
       $student_grade = $student_group_node->get('field_grade')->value
         ? (int) $student_group_node->get('field_grade')->value
         : NULL;
@@ -778,11 +839,13 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
           }
           if ($student_grade > 0) {
             $search_replace_map['!sg!'] = 'Årskurs ' . $student_grade;
+            $context['results']['ssr_student_doc_grade_value'][$student_uid] = $student_grade;
           }
         }
       }
 
       $student_class = $use_classes ? $student_group_node->get('field_class')->entity : NULL;
+      $context['results']['ssr_student_doc_class_value'][$student_uid] = $student_class?->label() ?? NULL;
       if ($student_class) {
         $search_replace_map['!sgl!'] = 'Årskurs/Klass';
         $search_replace_map['!sg!'] = !empty($search_replace_map['!sg!'])
@@ -1018,6 +1081,18 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     }
   }
 
+  public static function handleExternalGroupExport($service, $student_group_nid, $references, &$context) {
+    try {
+      $service = \Drupal::service($service);
+      if ($service instanceof GroupGradeExportInterface) {
+        $service->handleExport($student_group_nid, $references, $context);
+      }
+    }
+    catch (\Exception $e) {
+      // Ignore errors.
+    }
+  }
+
   public static function generateTeacherSignDoc($teacher_uid, $student_group_nid, $references, &$context) {
     if (empty($context['results']['sign'][$teacher_uid][$student_group_nid])) {
       return;
@@ -1150,6 +1225,18 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
           self::makeSureMetaDataInContext($references, $context);
         }
       }
+    }
+  }
+
+  public static function handleBeforeFinnishExport($service, $references, &$context) {
+    try {
+      $service = \Drupal::service($service);
+      if ($service instanceof GroupGradeExportInterface) {
+        $service->beforeFinishExport($references, $context);
+      }
+    }
+    catch (\Exception $e) {
+      // Ignore errors.
     }
   }
 

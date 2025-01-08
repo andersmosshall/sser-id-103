@@ -48,13 +48,9 @@ final class DnpProvisioningAccessControlHandler extends EntityAccessControlHandl
    */
   protected function checkFieldAccess($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
     if ($field_definition->getName() === 'field_src') {
-      // TEMP!!!
-      return AccessResult::forbidden();
       return AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission());
     }
     if ($field_definition->getName() === 'settings') {
-      // TEMP!!!
-      return AccessResult::forbidden();
       return AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission());
     }
     return parent::checkFieldAccess($operation, $field_definition, $account, $items);

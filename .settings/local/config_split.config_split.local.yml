@@ -32,6 +32,7 @@ module:
   simple_school_reports_class: 10
   simple_school_reports_extra_adaptations: 10
   simple_school_reports_examinations: 10
+  simple_school_reports_extens_grade_export: 10
 theme: {  }
 blacklist: {  }
 graylist: {  }
