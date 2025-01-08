@@ -31,9 +31,11 @@ class SanityCheckController extends ControllerBase {
     $value_safe_settings = [
       'ssr_bug_report_email',
       'ssr_school_name',
+      'ssr_school_name_short',
       'ssr_school_organiser',
       'ssr_school_unit_code',
       'ssr_school_municipality',
+      'ssr_school_municipality_code',
       'ssr_id',
     ];
     foreach ($value_safe_settings as $setting) {

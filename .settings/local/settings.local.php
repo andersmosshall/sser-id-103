@@ -88,9 +88,11 @@ $config['config_split.config_split.local']['status'] = TRUE;
 $settings['state_cache'] = TRUE;
 
 $settings['ssr_school_name'] = 'Demoskolan';
+$settings['ssr_school_name_short'] = 'Dem';
 $settings['ssr_school_organiser'] = 'Demoskolan AB';
 $settings['ssr_school_unit_code'] = '12345678';
 $settings['ssr_school_municipality'] = 'Örnsköldsvik';
+$settings['ssr_school_municipality_code'] = '2284';
 $settings['ssr_id'] = 0;
 
 $settings['ssr_catalog_id'] = [
