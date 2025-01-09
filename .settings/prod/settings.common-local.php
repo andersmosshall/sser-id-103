@@ -48,3 +48,5 @@ $settings['ssr_excluded_catalog_label'] = [
   'M1_COM' => '2',
   'M2_COM' => '2',
 ];
+
+$settings['ssr_max_grade_student_group_size'] = 32;
