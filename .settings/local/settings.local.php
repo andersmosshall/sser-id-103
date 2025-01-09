@@ -37,7 +37,6 @@ $databases['default']['default'] = array (
 
 $settings['trusted_host_patterns'] = array(
   '^ssr.loc$',
-  '^msr-d9.loc$',
   '^ssr-debug.loc$',
 );
 
@@ -46,7 +45,7 @@ $settings['trusted_host_patterns'] = array(
 // "Drush command terminated abnormally due to an unrecoverable error"
 if ( (!array_key_exists('HTTPS', $_SERVER)) && (PHP_SAPI !== 'cli') ) {
   header('HTTP/1.1 301 Moved Permanently');
-  header('Location: https://msr-d9.loc'. $_SERVER['REQUEST_URI']);
+  header('Location: https://ssr.loc'. $_SERVER['REQUEST_URI']);
   exit();
 }
 
