@@ -3,6 +3,7 @@ git pull &&
 chmod +w web/sites/default/ &&
 rm web/sites/default/settings.local.php -f &&
 cp .settings/prod/settings.local.php web/sites/default/settings.local.php &&
+cp .settings/prod/settings.common-local.php web/sites/default/settings.common-local.php &&
 chmod -w web/sites/default/settings.local.php &&
 composer install &&
 drush cr &&
