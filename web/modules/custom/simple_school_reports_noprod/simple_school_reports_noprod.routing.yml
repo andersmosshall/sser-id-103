@@ -5,3 +5,11 @@ simple_school_reports_noprod.anonymize:
     _title: 'Anonymize'
   requirements:
     _permission: 'administer modules'
+
+simple_school_reports_noprod.replace_table_helper:
+  path: '/replace-table-helper'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_noprod\Controller\NoprodController::replaceTableHelper'
+    _title: 'Replace table header'
+  requirements:
+    _permission: 'administer modules'
