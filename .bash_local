@@ -14,6 +14,7 @@ alias ssr_deploy_dev="git pull &&
  chmod +w web/sites/default/ &&
  chmod +w web/sites/default/settings.local.php  &&
  cp .settings/local/settings.local.php web/sites/default/settings.local.php &&
+ cp .settings/prod/settings.common-local.php web/sites/default/settings.common-local.php &&
  ssr_copy_config_split &&
  ssr_copy_system_site &&
  ssr_copy_system_theme &&
