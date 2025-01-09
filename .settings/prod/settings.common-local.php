@@ -36,9 +36,11 @@ $settings['ssr_catalog_id'] = [
   'SVA' => 22,
   'TK' => 23,
 
+  // Not supported anymore as a grade subject.
+//  'NO' => 24,
+//  'SO' => 25,
+
   // Outside catalog for now.
-  'NO' => 24,
-  'SO' => 25,
   'TN' => 26,
 ];
 
