@@ -213,7 +213,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         $form['extend_export_wrapper']['extens_include_contact_details'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Include student contact details'),
-          '#description' => $this->t('NOTE: Contact details for students with prootected personal data will not be included.'),
+          '#description' => $this->t('NOTE: Contact details for students with protected personal data will not be included.'),
           '#default_value' => TRUE,
         ];
       }

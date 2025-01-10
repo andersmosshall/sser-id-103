@@ -2820,20 +2820,20 @@ msgstr "Denna kombination av roller är inte tillåten."
 msgid "User with role student cannot have any other role."
 msgstr "Användare med rollen elev får inte ha någon annan roll."
 
-msgid ""
-msgstr ""
+msgid "NOTE: Contact details for students with protected personal data will not be included."
+msgstr "OBSERVERA: Kontaktuppgifter för elever med skyddade personuppgifter kommer inte att inkluderas."
 
-msgid ""
-msgstr ""
+msgid "Include student contact details"
+msgstr "Inkludera elevens kontaktuppgifter"
 
-msgid ""
-msgstr ""
+msgid "Students in the selected grades will be included in the extent export file regardless of in what student group they are in."
+msgstr "Elever i de valda årskurserna kommer att inkluderas i extens-exportfilen oavsett i vilken elevgrupp de är i."
 
-msgid ""
-msgstr ""
+msgid "Grades to include in export file"
+msgstr "Årskurser att inkludera i exportfil"
 
-msgid ""
-msgstr ""
+msgid "Extens export (MGBETYG)"
+msgstr "Extens-export (MGBETYG)"
 
 msgid ""
 msgstr ""
