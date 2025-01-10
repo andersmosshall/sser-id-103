@@ -21,8 +21,8 @@ class NoprodController extends ControllerBase {
     $headers = [];
 
     $rows = [];
-    $max_rows = 32;
-    $max_cols = 24;
+    $max_rows = \Drupal::request()->query->get('max_rows', 32);
+    $max_cols = \Drupal::request()->query->get('max_rows', 24);
 
     for ($row_id = 1; $row_id <= $max_rows; $row_id++) {
       $cells = [];
