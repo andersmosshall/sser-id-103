@@ -135,6 +135,16 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
     ];
 
     $map[] = [
+      'module' => 'simple_school_reports_extens_grade_export',
+      'label' => 'Extensexport (MGBETYG)',
+      'required_modules' => ['simple_school_reports_grade_registration'],
+      'recommended_modules' => [],
+      'price' => '[[MINI_MODULE_PRICE]]',
+      'annual_fee' => NULL,
+      'description' => '<p>I modulen Extensexport (MGBETYG) kan man i samband med export av betyg välja elevgrupper som ska inkluderas i en export för betygssystemet Extens (MGBETYG). Man kan välja om elevers kontaktuppgifter ska inkluderas i exportfilen till Extens.</p>',
+    ];
+
+    $map[] = [
       'module' => 'simple_school_reports_geg_grade_registration',
       'label' => 'Betygsregistrering - omdömen',
       'required_modules' => ['simple_school_reports_grade_registration'],
@@ -436,6 +446,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'simple_school_reports_examinations' => $this->t('Examination lists'),
 
       // Mini modules.
+      'simple_school_reports_extens_grade_export' => $this->t('Extens export (MGBETYG)'),
       'simple_school_reports_special_diet' => $this->t('Special diet'),
       'simple_school_reports_maillog_mini' => $this->t('Mail log'),
       'simple_school_reports_email_attachments' => $this->t('Email attachments'),
@@ -468,6 +479,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
 
     return match ($module_name) {
       'simple_school_reports_core' => 'core',
+      'simple_school_reports_extens_grade_export',
       'simple_school_reports_special_diet',
       'simple_school_reports_maillog_mini',
       'simple_school_reports_email_attachments',

@@ -126,8 +126,8 @@ msgstr "Klasser"
 msgid "Examination lists"
 msgstr "Examinationslistor"
 
-msgid ""
-msgstr ""
+msgid "Extens export (MGBETYG)"
+msgstr "Extensexport (MGBETYG)"
 
 msgid ""
 msgstr ""
