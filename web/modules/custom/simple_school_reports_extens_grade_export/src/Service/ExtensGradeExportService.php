@@ -233,7 +233,10 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
     return $ssr_catalog_id[$extent_subject_code . '_COM'] ?? NULL;
   }
 
-  protected function makeRowPart(string $value, int $length, string $pad_type = 'right'): string {
+  protected function makeRowPart(string|null $value, int $length, string $pad_type = 'right'): string {
+    if (!$value) {
+      $value = '';
+    }
     $value = mb_substr($value, 0, $length);
     $value = mb_str_pad($value, $length, ' ', $pad_type === 'left' ? STR_PAD_LEFT : STR_PAD_RIGHT);
     return $value;
