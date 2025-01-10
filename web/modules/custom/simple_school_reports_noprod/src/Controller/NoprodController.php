@@ -22,7 +22,7 @@ class NoprodController extends ControllerBase {
 
     $rows = [];
     $max_rows = 32;
-    $max_cols = 23;
+    $max_cols = 24;
 
     for ($row_id = 1; $row_id <= $max_rows; $row_id++) {
       $cells = [];
