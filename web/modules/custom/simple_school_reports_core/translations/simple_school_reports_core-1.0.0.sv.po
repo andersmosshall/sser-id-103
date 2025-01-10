@@ -2826,8 +2826,8 @@ msgstr "OBSERVERA: Kontaktuppgifter för elever med skyddade personuppgifter kom
 msgid "Include student contact details"
 msgstr "Inkludera elevens kontaktuppgifter"
 
-msgid "Students in the selected grades will be included in the extent export file regardless of in what student group they are in."
-msgstr "Elever i de valda årskurserna kommer att inkluderas i extens-exportfilen oavsett i vilken elevgrupp de är i."
+msgid "The grade refers to the grade that has been set in the corresponding student groups. Only students in these student groups will be included in the export."
+msgstr "Årskursen avser den årskurs som har ställts in i motsvarande elevgrupper. Endast elever i dessa elevgrupper kommer att inkluderas i exporten."
 
 msgid "Grades to include in export file"
 msgstr "Årskurser att inkludera i exportfil"

@@ -205,7 +205,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         $form['extend_export_wrapper']['extens_export_grades'] = [
           '#type' => 'checkboxes',
           '#title' => $this->t('Grades to include in export file'),
-          '#description' => $this->t('Students in the selected grades will be included in the extent export file regardless of in what student group they are in.'),
+          '#description' => $this->t('The grade refers to the grade that has been set in the corresponding student groups. Only students in these student groups will be included in the export.'),
           '#options' => $extens_export_grade_options,
           '#default_value' => $extens_default_value,
         ];
