@@ -202,7 +202,7 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
 
       // Added zip code.
       $zip_code = $address_paragraph?->get('field_zip_code')->value ?? '';
-      $student_row .= $this->makeRowPart($zip_code, 5);
+      $student_row .= $this->makeRowPart(str_replace(' ', '', $zip_code), 5);
 
       // Add city.
       $city = $address_paragraph?->get('field_city')->value ?? '';
@@ -237,6 +237,7 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
     if (!$value) {
       $value = '';
     }
+    $value = trim($value);
     $value = mb_substr($value, 0, $length);
     $value = mb_str_pad($value, $length, ' ', $pad_type === 'left' ? STR_PAD_LEFT : STR_PAD_RIGHT);
     return $value;
