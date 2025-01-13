@@ -18,3 +18,9 @@ attendance_statistics_per_day_block:
   css:
     theme:
       css/attendance_statistics_per_day_block.css: { }
+  js:
+    js/attendance_statistics_per_day_block.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

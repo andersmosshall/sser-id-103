@@ -9,14 +9,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
-use Drupal\simple_school_reports_extension_proxy\LessonHandlingTrait;
 
 /**
  *
  */
 class SchoolWeekService implements SchoolWeekServiceInterface {
-
-  use LessonHandlingTrait;
 
   protected array $lookup = [];
 

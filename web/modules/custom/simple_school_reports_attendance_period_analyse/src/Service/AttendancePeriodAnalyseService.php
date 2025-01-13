@@ -8,14 +8,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_attendance_analyse\Service\AttendanceAnalyseServiceInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
-use Drupal\simple_school_reports_extension_proxy\LessonHandlingTrait;
 
 /**
  *
  */
 class AttendancePeriodAnalyseService implements AttendancePeriodAnalyseServiceInterface {
-
-  use LessonHandlingTrait;
 
   protected array $lookup = [];
 

@@ -21,10 +21,11 @@ interface SchoolWeekInterface extends ContentEntityInterface, EntityOwnerInterfa
 
   /**
    * @param \DateTimeInterface|null $date_time
+   * @param bool $include_base_lessons
    *
    * @return array
    */
-  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL): array;
+  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_base_lessons = TRUE): array;
 
   /**
    * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
