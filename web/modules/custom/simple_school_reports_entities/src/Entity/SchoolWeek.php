@@ -11,7 +11,6 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
-use Drupal\simple_school_reports_extension_proxy\LessonHandlingTrait;
 use Drupal\time_field\Time;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\views\Views;
@@ -67,7 +66,6 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
   use EntityChangedTrait;
   use EntityOwnerTrait;
   use StringTranslationTrait;
-  use LessonHandlingTrait;
 
   protected array $lookup = [];
 
@@ -127,7 +125,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL): array {
+  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_base_lessons = TRUE): array {
     if (!$date_time) {
       $date_time = new \DateTime();
     }
@@ -157,7 +155,6 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
         'from' => NULL,
         'to' => NULL,
         'lessons' => [],
-        'breaks' => $this->calculateBreaks($day_start, $day_end, []),
       ];
       return $this->lookup[$cid];
     }
@@ -198,22 +195,20 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       $to = $base_time->getTimestamp() + $to;
     }
 
-    $lessons = $this->makeLessons($from, $to, $length);
-    $breaks =  $this->calculateBreaks($day_start, $day_end, $lessons);
+    $lessons = $include_base_lessons ? $this->makeLessons($from, $to, $length) : [];
 
     $info = [
       'length' => $length,
       'from' => $from,
       'to' => $to,
       'lessons' => $lessons,
-      'breaks' => $breaks,
     ];
 
     $this->lookup[$cid] = $info;
     return $info;
   }
 
-  protected function makeLessons(int $from, int $to, int &$length): array {
+  protected function makeLessons(int $from, int $to, int $length): array {
     if ($length === 0) {
       return [];
     }
@@ -232,10 +227,18 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       $lessons[] = [
         'from' => $lesson_start,
         'to' => $lesson_end,
+        'type' => 'dynamic',
+        'subject' => 'n/a',
+        'length' => $lesson_end - $lesson_start,
+        'attended' => $lesson_end - $lesson_start,
+        'reported_absence' => 0,
+        'leave_absence' => 0,
+        'valid_absence' => 0,
+        'invalid_absence' => 0,
       ];
     }
 
-    return $this->verifyLessonLength($lessons, $length);
+    return $lessons;
   }
 
   /**

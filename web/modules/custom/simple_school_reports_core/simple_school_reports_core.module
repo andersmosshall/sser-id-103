@@ -266,6 +266,7 @@ function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInter
  */
 function simple_school_reports_core_taxonomy_term_presave(EntityInterface $entity) {
   if ($entity->bundle() === 'school_subject') {
+    SchoolSubjectHelper::$subjectShortNameMap = NULL;
     if ($subject_code = $entity->get('field_subject_code')->value) {
       if ($language_code = $entity->get('field_language_code')->value) {
         $subject_options = SchoolSubjectHelper::getSupportedLanguageSubjectCodes();

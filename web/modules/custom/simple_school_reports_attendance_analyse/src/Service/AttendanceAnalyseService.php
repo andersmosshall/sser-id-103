@@ -6,19 +6,15 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
-use Drupal\simple_school_reports_extension_proxy\LessonHandlingTrait;
-use Drupal\user\UserInterface;
 
 /**
  *
  */
 class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
-
-  use LessonHandlingTrait;
 
   protected array $lookup = [];
 
@@ -82,78 +78,149 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
     return $this->getAttendanceStatisticsAll($from, $to)[$uid] ?? $this->getAttendanceStatisticsDefault();
   }
 
-  protected function getStudentSchema(\DateTime $day, array $school_day_info, array $course_lessons): array {
-    if (empty($course_lessons)) {
-      return [
-        $school_day_info['lessons'],
-        $school_day_info['breaks'],
-        $school_day_info['length'],
-      ];
+  protected function getStudentLessons(\DateTime $day, array $school_day_info, array $other_lessons): array {
+    if (empty($other_lessons)) {
+      return $school_day_info['lessons'];
     }
 
     $cid_parts = [
       'student_schema',
       $day->format('Y-m-d'),
       json_encode($school_day_info),
-      json_encode($course_lessons),
+      json_encode($other_lessons),
     ];
     $cid = sha1(implode(':', $cid_parts));
 
     if (isset($this->lookup[$cid])) {
       return $this->lookup[$cid];
     }
-    $day_clone = clone $day;
-    $day_clone->setTime(0,0,0);
-    $day_from = $day_clone->getTimestamp();
-    $day_to = $day_from + 86399;
 
-    $school_day_lessons = $this->optimizeLessons($school_day_info['lessons']);
-    $course_lessons = $this->optimizeLessons($course_lessons);
-    $course_lessons_length = $this->calculateLessonTotalLength($course_lessons);
+    $final_lessons = [];
+    $lessons = array_merge($school_day_info['lessons'], $other_lessons);
 
-    if ($course_lessons_length >= $school_day_info['length'] || empty($school_day_lessons)) {
-      $breaks = $this->calculateBreaks($day_from, $day_to, $course_lessons);
-      $schema = [
-        $course_lessons,
-        $breaks,
-        $course_lessons_length,
-      ];
-      $this->lookup[$cid] = $schema;
-      return $schema;
-    }
+    $target_length = $school_day_info['length'];
+    $reported_length = 0;
 
+    $reported_lessons = [];
+    $secondary_lessons = [];
+    $dynamic_lessons = [];
 
-    $length_diff = $school_day_info['length'] - $course_lessons_length;
-
-    $lesson_length_adjust = $length_diff / count($school_day_lessons);
-
-    foreach ($school_day_lessons as &$school_day_lesson) {
-      $school_day_lesson['to'] -= $lesson_length_adjust;
-
-      if ($school_day_lesson['to'] < $school_day_lesson['from']) {
-        $school_day_lesson['to'] = $school_day_lesson['from'];
+    foreach ($lessons as $key => $lesson) {
+      if (empty($lesson['from']) || empty($lesson['to']) || empty($lesson['length']) || $lesson['to'] <= $lesson['from'] || empty($lesson['type'])) {
+        unset($lessons[$key]);
+        continue;
       }
 
-      $school_day_lesson['length'] = $school_day_lesson['to'] - $school_day_lesson['from'];
+      $type = $lesson['type'];
+      if ($type === 'reported') {
+        $reported_length += $lesson['length'];
+        $reported_lessons[] = $lesson;
+      }
+      elseif ($type === 'dynamic') {
+        $dynamic_lessons[] = $lesson;
+      }
+      else {
+        $secondary_lessons[] = $lesson;
+      }
     }
 
-    $school_day_lessons = array_filter($school_day_lessons, function ($lesson) {
-      return $lesson['length'] > 0;
+    if ($reported_length >= $target_length) {
+      $final_lessons = $reported_lessons;
+    }
+    else {
+      $final_lessons = $reported_lessons;
+      // Remove secondary lessons that are fully overlapping or overlapping by
+      // part with reported lessons.
+      foreach ($secondary_lessons as $key => $lesson) {
+        foreach ($reported_lessons as $reported_lesson) {
+          if ($lesson['to'] <= $reported_lesson['from'] || $lesson['from'] >= $reported_lesson['to']) {
+            $final_lessons[] = $lesson;
+            continue;
+          }
+          unset($secondary_lessons[$key]);
+        }
+      }
+
+      $current_length = 0;
+      foreach ($final_lessons as $lesson) {
+        $current_length += $lesson['length'];
+        if ($current_length >= $target_length) {
+          break;
+        }
+      }
+      if ($current_length < $target_length && !empty($dynamic_lessons)) {
+        // Adjust the dynamic lessons to fill the gap.
+        $target_dynamic_length = floor(($target_length - $current_length) / count($dynamic_lessons));
+        foreach ($dynamic_lessons as $lesson) {
+          $lesson['length'] = $target_dynamic_length;
+          $lesson['to'] = $lesson['from'] + $target_dynamic_length;
+          $lesson['attended'] = $target_dynamic_length;
+          $final_lessons[] = $lesson;
+        }
+      }
+    }
+
+    // Sort final lessons list by start time.
+    usort($final_lessons, function ($a, $b) {
+      return $a['from'] <=> $b['from'];
     });
 
-    $school_day_length = $school_day_info['length'];
-    $lessons = array_merge($course_lessons, $school_day_lessons);
-    $lessons = $this->optimizeLessons($lessons);
-    $lessons = $this->verifyLessonLength($lessons, $school_day_length);
-    $breaks = $this->calculateBreaks($day_from, $day_to, $lessons);
+    $this->lookup[$cid] = array_values($final_lessons);
+    return $this->lookup[$cid];
+  }
 
-    $schema = [
-      $lessons,
-      $breaks,
-      $school_day_length,
-    ];
-    $this->lookup[$cid] = $schema;
-    return $schema;
+  protected function optimizeAbsenceData(array $original_absence_data): array {
+    $leave_absences = [];
+    $reported_absences = [];
+
+    $key_points = [];
+    foreach ($original_absence_data as $absence) {
+      $key_points[] = $absence['from'];
+      $key_points[] = $absence['to'];
+      if ($absence['type'] === 'leave') {
+        $leave_absences[] = $absence;
+      }
+      else {
+        $reported_absences[] = $absence;
+      }
+    }
+
+    sort($key_points);
+
+    $absence_parts = [];
+
+    foreach ($key_points as $index => $k_from) {
+      if (!isset($key_points[$index + 1])) {
+        continue;
+      }
+      $k_to = $key_points[$index + 1];
+
+      // Check for leave absence that has higher prio.
+      foreach ($leave_absences as $absence_day) {
+        if ($k_from >= $absence_day['from'] && $k_to <= $absence_day['to']) {
+          $absence_parts[] = [
+            'from' => $k_from,
+            'to' => $k_to,
+            'type' => 'leave',
+          ];
+          continue 2;
+        }
+      }
+
+      // Check for reported absence.
+      foreach ($reported_absences as $absence_day) {
+        if ($k_from >= $absence_day['from'] && $k_to <= $absence_day['to']) {
+          $absence_parts[] = [
+            'from' => $k_from,
+            'to' => $k_to,
+            'type' => 'reported',
+          ];
+          continue 2;
+        }
+      }
+    }
+
+    return $absence_parts;
   }
 
   public function getAttendanceStatisticsAll(\DateTime $from, \DateTime $to): array {
@@ -178,14 +245,9 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       return [];
     }
 
-    $base_key_points = [];
-
     $days = [];
     $day = clone $from;
     while ($day <= $to) {
-      $base_key_points[] = $day->getTimestamp();
-      $base_key_points[] = $day->getTimestamp() + 86399;
-
       $days[$day->format('Y-m-d')] = clone $day;
       $day->modify('+1 day');
       $day->setTime(0,0,0);
@@ -212,13 +274,35 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       $ad_to = $result->field_absence_to_value;
       $ad_type = $result->field_absence_type_value;
 
-      $absence_day_data[$ad_uid][$ad_type . '_absence'][] = [
+      if ($ad_from === $ad_to) {
+        continue;
+      }
+
+      if ($ad_from > $ad_to) {
+        $temp = $ad_from;
+        $ad_from = $ad_to;
+        $ad_to = $temp;
+      }
+
+      $ad_from_date_string = (new \DateTime())->setTimestamp($ad_from)->format('Y-m-d');
+      $ad_to_date_string = (new \DateTime())->setTimestamp($ad_to)->format('Y-m-d');
+
+      if ($ad_from_date_string !== $ad_to_date_string) {
+        $absence_day_data[$ad_uid]['multi'][] = [
+          'from' => $ad_from,
+          'to' => $ad_to,
+          'type' => $ad_type,
+        ];
+        continue;
+      }
+
+      $absence_day_data[$ad_uid][$ad_from_date_string][] = [
         'from' => $ad_from,
         'to' => $ad_to,
+        'type' => $ad_type,
       ];
     }
 
-    $course_attendance_data = [];
     $course_lessons = [];
     $query = $this->connection->select('paragraph__field_invalid_absence', 'ia');
     $query->innerJoin('paragraph__field_student', 's', 's.entity_id = ia.entity_id');
@@ -234,7 +318,8 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       ->fields('s', ['field_student_target_id'])
       ->fields('ia',['field_invalid_absence_value'])
       ->fields('cs', ['field_class_start_value'])
-      ->fields('ce', ['field_class_end_value']);
+      ->fields('ce', ['field_class_end_value'])
+      ->fields('sub', ['field_subject_target_id']);
     $results = $query->execute();
 
     foreach ($results as $result) {
@@ -242,28 +327,56 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       $ad_from = $result->field_class_start_value;
       $ad_to = $result->field_class_end_value;
       $ad_type = $result->field_attendance_type_value;
-      $ad_invalid_absence = $result->field_invalid_absence_value;
+      $ad_invalid_absence = ($result->field_invalid_absence_value ?? 0) * 60;
+      $subject_id = $result->field_subject_target_id;
 
-      $day = (new \DateTime())->setTimestamp($ad_from)->format('Y-m-d');
-      $course_lessons[$ad_uid][$day][] = [
-        'from' => $ad_from,
-        'to' => $ad_to,
-      ];
-
-      if ($ad_type === 'invalid_absence' || $ad_type === 'valid_absence') {
-        $course_attendance_data[$ad_uid][$ad_type][] = [
-          'from' => $ad_from,
-          'to' => $ad_to,
-        ];
+      if ($ad_from === $ad_to) {
         continue;
       }
 
-      if ($ad_invalid_absence > 0) {
-        $course_attendance_data[$ad_uid]['invalid_absence'][] = [
-          'from' => $ad_from,
-          'to' => $ad_from + $ad_invalid_absence * 60,
-        ];
+      if ($ad_from > $ad_to) {
+        $temp = $ad_from;
+        $ad_from = $ad_to;
+        $ad_to = $temp;
       }
+
+      $subject_short_name = SchoolSubjectHelper::getSubjectShortName($subject_id);
+
+      // Special treatment for CBT (Bonustimme).
+      if ($subject_short_name === 'CBT') {
+        if ($ad_type !== 'attending' || $ad_invalid_absence >= 0) {
+          continue;
+        }
+        $attended = abs($ad_invalid_absence);
+        $ad_to = $ad_from + $attended;
+        $ad_invalid_absence = 0;
+      }
+
+      $day = (new \DateTime())->setTimestamp($ad_from)->format('Y-m-d');
+      $course_lesson_length = abs($ad_to - $ad_from);
+
+      $course_lesson_attending = 0;
+      $course_lesson_invalid_absence = $ad_type === 'invalid_absence' ? $course_lesson_length : 0;
+      $course_lesson_valid_absence = $ad_type === 'valid_absence' ? $course_lesson_length : 0;
+
+      if ($ad_type === 'attending') {
+        $course_lesson_valid_absence = 0;
+        $course_lesson_invalid_absence = $ad_invalid_absence;
+        $course_lesson_attending = max(0, $course_lesson_length - $course_lesson_invalid_absence);
+      }
+
+      $course_lessons[$ad_uid][$day][] = [
+        'from' => $ad_from,
+        'to' => $ad_to,
+        'type' => 'reported',
+        'subject' => $subject_short_name,
+        'length' => $course_lesson_length,
+        'attended' => $course_lesson_attending,
+        'reported_absence' => 0,
+        'leave_absence' => 0,
+        'valid_absence' => $course_lesson_valid_absence,
+        'invalid_absence' => $course_lesson_invalid_absence,
+      ];
     }
 
     $uids = $this->entityTypeManager->getStorage('user')->getQuery()
@@ -281,133 +394,125 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
 
       $data[$uid]['adapted_studies'] = $this->isAdaptedStudies($school_week);
 
-      $key_points = $base_key_points;
       $lessons_data = [];
 
       foreach ($days as $day_string => $day) {
-        $school_day_info = $school_week->getSchoolDayInfo($day);
+        $include_base_lessons = TRUE;
+        $school_day_info = $school_week->getSchoolDayInfo($day, $include_base_lessons);
 
         $student_course_lessons = !empty($course_lessons[$uid][$day_string]) ? $course_lessons[$uid][$day_string] : [];
 
-        [$lessons, $breaks, $school_day_length] = $this->getStudentSchema($day, $school_day_info, $student_course_lessons);
-
-        $lessons_data[$day_string] = [
-          'lessons' => $lessons,
-          'breaks' => $breaks,
-          'length' => $school_day_length,
-        ];
-
-        foreach ($lessons as $lesson) {
-          $key_points[] = $lesson['from'];
-          $key_points[] = $lesson['to'];
-        }
+        $lessons = $this->getStudentLessons($day, $school_day_info, $student_course_lessons);
+        $lessons_data[$day_string] = $lessons;
       }
 
-      if (!empty($absence_day_data[$uid])) {
-        foreach ($absence_day_data[$uid] as $absence_day_types) {
-          foreach ($absence_day_types as $absence_day) {
-            $ad_from = $absence_day['from'];
-            $ad_to = $absence_day['to'];
-
-            $key_points[] = $ad_from;
-            $key_points[] = $ad_to;
-          }
-        }
-      }
-
-      if (!empty($course_attendance_data[$uid])) {
-        foreach ($course_attendance_data[$uid] as $course_attendance_types) {
-          foreach ($course_attendance_types as $course_attendance) {
-            $ad_from = $course_attendance['from'];
-            $ad_to = $course_attendance['to'];
-
-            $key_points[] = $ad_from;
-            $key_points[] = $ad_to;
-          }
-        }
-      }
-
-      $key_points = array_unique($key_points);
-      sort($key_points);
-
-      foreach ($key_points as $index => $k_from) {
-        if (!isset($key_points[$index + 1])) {
-          continue;
-        }
-        $k_to = $key_points[$index + 1];
-
-        $from_object = (new \DateTime())->setTimestamp($k_from);
-        $day_index = $from_object->format('N');
-        $day_string = $from_object->format('Y-m-d');
-
-        if (empty($lessons_data[$day_string]['lessons'])) {
-          continue;
-        }
-
-        foreach ($lessons_data[$day_string]['breaks'] as $break) {
-          if ($k_from >= $break['from'] && $k_to <= $break['to']) {
-            continue 2;
-          }
-        }
-
-        $length = $k_to - $k_from;
-
+      foreach ($lessons_data as $day_string => $lessons) {
         if (empty($data[$uid]['per_day'][$day_string])) {
           $data[$uid]['per_day'][$day_string] = $this->getAttendanceStatisticsDefault(TRUE);
         }
 
-        // Check for leave absence.
-        if (!empty($absence_day_data[$uid]['leave_absence'])) {
-          foreach ($absence_day_data[$uid]['leave_absence'] as $absence_day) {
-            if ($k_from >= $absence_day['from'] && $k_to <= $absence_day['to']) {
-              $data[$uid]['leave_absence'] += $length;
-              $data[$uid]['leave_absence_' . $day_index] += $length;
-              $data[$uid]['per_day'][$day_string]['leave_absence'] += $length;
-              continue 2;
+        $day_object = $days[$day_string];
+        $day_index = $day_object->format('N');
+
+        // Calculate statistics.
+        $absence = array_merge($absence_day_data[$uid][$day_string] ?? [], $absence_day_data[$uid]['multi'] ?? []);
+        $absence = $this->optimizeAbsenceData($absence);
+
+        foreach ($lessons as $lesson) {
+          $length = $lesson['length'];
+
+          $lesson_from = $lesson['from'];
+          $lesson_to = $lesson['to'];
+
+          $attended = &$lesson['attended'];
+          $reported_absence = &$lesson['reported_absence'];
+          $leave_absence = &$lesson['leave_absence'];
+          $valid_absence = &$lesson['valid_absence'];
+          $invalid_absence = &$lesson['invalid_absence'];
+
+          foreach ($absence as $absence_day) {
+            $absence_from = $absence_day['from'];
+            $absence_to = $absence_day['to'];
+
+            // Ignore absence that outside of lesson time.
+            if ($lesson_from >= $absence_to || $lesson_to <= $absence_from) {
+              continue;
+            }
+
+            // If absence is fully covering the lesson.
+            if ($absence_from <= $lesson_from && $absence_to >= $lesson_to) {
+              if ($absence_day['type'] === 'leave') {
+                $leave_absence += $length;
+              }
+              else {
+                $reported_absence += $length;
+              }
+
+              $attended = 0;
+              $reported_absence = $absence_day['type'] !== 'leave' ? $length : 0;
+              $leave_absence = $absence_day['type'] === 'leave' ? $length : 0;
+              $valid_absence = 0;
+              $invalid_absence = 0;
+              break;
+            }
+
+            $overlap_from = max($lesson_from, $absence_from);
+            $overlap_to = min($lesson_to, $absence_to);
+            $overlap_length = $overlap_to - $overlap_from;
+
+            if ($absence_day['type'] === 'leave') {
+              $leave_absence += $overlap_length;
+            }
+            else {
+              $reported_absence += $overlap_length;
+            }
+
+            $attended -= $overlap_length;
+            $diff = 0;
+            if ($attended < 0) {
+              $diff = abs($attended);
+              $attended = 0;
+            }
+
+            if ($invalid_absence >= 0) {
+              $reduce = min($diff, $invalid_absence);
+              $invalid_absence -= $reduce;
+              $diff -= $reduce;
+            }
+
+            if ($diff > 0 && $valid_absence > 0) {
+              $reduce = min($diff, $valid_absence);
+              $valid_absence -= $reduce;
+            }
+
+            if ($attended === 0 && $invalid_absence === 0 && $valid_absence === 0) {
+              break;
             }
           }
-        }
 
-        // Check for reported absence.
-        if (!empty($absence_day_data[$uid]['reported_absence'])) {
-          foreach ($absence_day_data[$uid]['reported_absence'] as $absence_day) {
-            if ($k_from >= $absence_day['from'] && $k_to <= $absence_day['to']) {
-              $data[$uid]['reported_absence'] += $length;
-              $data[$uid]['reported_absence_' . $day_index] += $length;
-              $data[$uid]['per_day'][$day_string]['reported_absence'] += $length;
-              continue 2;
-            }
-          }
-        }
+          $data[$uid]['per_day'][$day_string]['lessons'][] = $lesson;
 
-        // Check for valid absence.
-        if (!empty($course_attendance_data[$uid]['valid_absence'])) {
-          foreach ($course_attendance_data[$uid]['valid_absence'] as $valid_absence) {
-            if ($k_from >= $valid_absence['from'] && $k_to <= $valid_absence['to']) {
-              $data[$uid]['valid_absence'] += $length;
-              $data[$uid]['valid_absence_' . $day_index] += $length;
-              $data[$uid]['per_day'][$day_string]['valid_absence'] += $length;
-              continue 2;
-            }
-          }
-        }
+          // Fill the parts.
+          $data[$uid]['attended'] += $attended;
+          $data[$uid]['attended_' . $day_index] += $attended;
+          $data[$uid]['per_day'][$day_string]['attended'] += $attended;
 
-        // Check for invalid absence.
-        if (!empty($course_attendance_data[$uid]['invalid_absence'])) {
-          foreach ($course_attendance_data[$uid]['invalid_absence'] as $invalid_absence) {
-            if ($k_from >= $invalid_absence['from'] && $k_to <= $invalid_absence['to']) {
-              $data[$uid]['invalid_absence'] += $length;
-              $data[$uid]['invalid_absence_' . $day_index] += $length;
-              $data[$uid]['per_day'][$day_string]['invalid_absence'] += $length;
-              continue 2;
-            }
-          }
-        }
+          $data[$uid]['reported_absence'] += $reported_absence;
+          $data[$uid]['reported_absence_' . $day_index] += $reported_absence;
+          $data[$uid]['per_day'][$day_string]['reported_absence'] += $reported_absence;
 
-        // Fallback to attended.
-        $data[$uid]['attended'] += $length;
-        $data[$uid]['attended_' . $day_index] += $length;
-        $data[$uid]['per_day'][$day_string]['attended'] += $length;
+          $data[$uid]['leave_absence'] += $leave_absence;
+          $data[$uid]['leave_absence_' . $day_index] += $leave_absence;
+          $data[$uid]['per_day'][$day_string]['leave_absence'] += $leave_absence;
+
+          $data[$uid]['valid_absence'] += $valid_absence;
+          $data[$uid]['valid_absence_' . $day_index] += $valid_absence;
+          $data[$uid]['per_day'][$day_string]['valid_absence'] += $valid_absence;
+
+          $data[$uid]['invalid_absence'] += $invalid_absence;
+          $data[$uid]['invalid_absence_' . $day_index] += $invalid_absence;
+          $data[$uid]['per_day'][$day_string]['invalid_absence'] += $invalid_absence;
+        }
       }
 
       // Calculate totals.
@@ -459,6 +564,7 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
 
     if ($day_item) {
       unset($data['per_day']);
+      $data['lessons'] = [];
       return $data;
     }
 

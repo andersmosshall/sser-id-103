@@ -194,18 +194,19 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
 
         $rows[$row_key] = [
           'week' => $week_value,
-          1 => '',
-          2 => '',
-          3 => '',
-          4 => '',
-          5 => '',
-          6 => '',
-          7 => '',
+          1 => [],
+          2 => [],
+          3 => [],
+          4 => [],
+          5 => [],
+          6 => [],
+          7 => [],
         ];
       }
 
       $day_stat_classes = 'attendance-day-stats';
       $day_stat_value = '';
+      $day_lessons = [];
 
       $data = $per_day_data[$current_day->format('Y-m-d')] ?? [];
 
@@ -240,13 +241,110 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
           '@invalid_absence' => $invalid_absence_percent,
         ]);
         $day_stat_value = str_replace(' %', ' %<br>', $day_stat_value);
+
+        $day_lessons = [];
+
+        if (!empty($data['lessons'])) {
+          foreach ($data['lessons'] as $lesson_key => $lesson) {
+            $lesson_length = $lesson['length'] ?? 0;
+            if ($lesson_length <= 0) {
+              continue;
+            }
+
+            if (empty($lesson['from']) || empty($lesson['to'])) {
+              continue;
+            }
+
+            if (($lesson['type'] ?? '?') !== 'reported') {
+              continue;
+            }
+
+            $name = $lesson['subject'] ?? 'n/a';
+
+            if ($name === 'CBT') {
+              $name = 'BT';
+            }
+
+            // If name included ':' use only the last part of the name.
+            if (str_contains($name, ':')) {
+              $name = explode(':', $name);
+              $name = array_pop($name);
+            }
+
+            $from_time = (new \DateTime())->setTimestamp($lesson['from'])->format('H:i');
+            $to_time = (new \DateTime())->setTimestamp($lesson['to'])->format('H:i');
+
+            $title = $name . ' (' . $from_time . ' - ' . $to_time . ')';
+
+            $attended = $lesson['attended'] ?? 0;
+            $valid_absence = ($lesson['valid_absence'] ?? 0) + ($lesson['leave_absence'] ?? 0) + ($lesson['reported_absence'] ?? 0);
+            $invalid_absence = $lesson['invalid_absence'] ?? 0;
+
+            // TEMP!!!
+            if ($name === 'n/a') {
+              // Randomize the attendance.
+              $attended = rand(0, $lesson_length);
+              $valid_absence = rand(0, $lesson_length - $attended);
+              $invalid_absence = $lesson_length - $attended - $valid_absence;
+            }
+
+            if ($attended + $valid_absence + $invalid_absence !== $lesson_length) {
+              $lesson_length = $attended + $valid_absence + $invalid_absence;
+            }
+
+            $attended_percent = round(($attended / $lesson_length) * 100, 1);
+            $valid_absence_percent = round(($valid_absence / $lesson_length) * 100, 1);
+            $invalid_absence_percent = round(($invalid_absence / $lesson_length) * 100, 1);
+
+            $title .= ' - ' . $this->t('A: @attended % VA: @valid_absence % IA: @invalid_absence %', [
+              '@attended' => $attended_percent,
+              '@valid_absence' => $valid_absence_percent,
+              '@invalid_absence' => $invalid_absence_percent,
+            ]);
+
+            $day_lessons[$lesson_key]['wrapper'] = [
+              '#type' => 'container',
+              '#attributes' => [
+                'class' => ['attendance-day-lesson-wrapper'],
+                'title' => $title,
+              ],
+            ];
+
+            $day_lessons[$lesson_key]['wrapper']['svg_target'] = [
+              '#type' => 'container',
+              '#attributes' => [
+                'class' => ['attendance-day-lesson-svg'],
+              ],
+            ];
+
+            $day_lessons[$lesson_key]['wrapper']['stat'] = [
+              '#type' => 'container',
+              '#attributes' => [
+                'class' => ['attendance-day-lesson-stat'],
+                'data-attended' => $attended_percent,
+                'data-valid-absence' => $valid_absence_percent,
+                'data-invalid-absence' => $invalid_absence_percent,
+              ],
+              'value' => [
+                '#markup' => $name,
+              ],
+            ];
+          }
+        }
       }
 
-      $rows[$row_key][$day] = [
-        'data' => [
-          '#markup' => '<div class="' . $day_stat_classes . '">' . $day_stat_value . '</div>',
-        ],
+      $rows[$row_key][$day]['data']['day_stats'] = [
+        '#markup' => '<div class="' . $day_stat_classes . '">' . $day_stat_value . '</div>',
       ];
+      if (!empty($day_lessons)) {
+        $rows[$row_key][$day]['data']['lessons_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['attendance-day-lessons'],
+          ],
+        ];
+        $rows[$row_key][$day]['data']['lessons_wrapper']['lessons'] = $day_lessons;
+      }
 
       $current_day->modify('+1 day');
       $safe_break++;
