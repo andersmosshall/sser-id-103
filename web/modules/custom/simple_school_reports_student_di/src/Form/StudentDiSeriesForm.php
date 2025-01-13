@@ -50,7 +50,8 @@ class StudentDiSeriesForm extends FormBase {
     }
     // Check for a route-based cancel link.
     if (!$url) {
-      $url = \Drupal\Core\Url::fromRoute('view.student_development_interview_meetings.list');
+      $node = $this->getRouteMatch()->getRawParameter('node') ?? '-1';
+      $url = \Drupal\Core\Url::fromRoute('view.student_development_interview_meetings.list', ['node' => $node]);
     }
 
     return [
