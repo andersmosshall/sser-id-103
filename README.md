@@ -26,7 +26,6 @@
 17. Do git push
 17. Tack a backup [school]-init-[date] of the database and force add them to git.
 17. Store database data from web/sites/default/settings.php to bitwarden (only need in prod)
-18. Store db access in last pass, copy it locally to web/sites/default/settings.php do not push that to git!
 19. Verify that help pages has been imported.
 20. Do a rebuild permissions just in case.
 21. Check grade terms and sort them.

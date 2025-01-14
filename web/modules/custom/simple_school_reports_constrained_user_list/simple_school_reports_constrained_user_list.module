@@ -27,3 +27,13 @@ function simple_school_reports_constrained_user_list_entity_field_access($operat
 
   return \Drupal\Core\Access\AccessResult::neutral();
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_constrained_user_list_user_presave(\Drupal\user\UserInterface $user) {
+  if ($user->get('field_birth_date_source')->isEmpty()) {
+    $user->set('field_birth_date_source', 'ssn');
+    simple_school_reports_core_user_presave($user);
+  }
+}
