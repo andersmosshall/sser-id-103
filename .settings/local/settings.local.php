@@ -23,7 +23,7 @@ $databases['default']['default'] = array (
   'database' => 'drupal9',
   'username' => 'drupal9',
   'password' => 'drupal9',
-  'prefix' => 'msr_d1_',
+  'prefix' => 'ss5_',
   'host' => 'database',
   'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
@@ -36,8 +36,8 @@ $databases['default']['default'] = array (
 );
 
 $settings['trusted_host_patterns'] = array(
-  '^ssr.loc$',
-  '^ssr-debug.loc$',
+  '^sser.loc$',
+  '^sser-debug.loc$',
 );
 
 // Force HTTPS
@@ -45,7 +45,7 @@ $settings['trusted_host_patterns'] = array(
 // "Drush command terminated abnormally due to an unrecoverable error"
 if ( (!array_key_exists('HTTPS', $_SERVER)) && (PHP_SAPI !== 'cli') ) {
   header('HTTP/1.1 301 Moved Permanently');
-  header('Location: https://ssr.loc'. $_SERVER['REQUEST_URI']);
+  header('Location: https://sser.loc'. $_SERVER['REQUEST_URI']);
   exit();
 }
 
@@ -90,13 +90,13 @@ $config['config_split.config_split.local']['status'] = TRUE;
  */
 $settings['state_cache'] = TRUE;
 
-$settings['ssr_school_name'] = 'Demoskolan';
-$settings['ssr_school_name_short'] = 'Dem';
-$settings['ssr_school_organiser'] = 'Demoskolan AB';
-$settings['ssr_school_unit_code'] = '12345678';
+$settings['ssr_school_name'] = 'Selektivskolan';
+$settings['ssr_school_name_short'] = 'Sel';
+$settings['ssr_school_organiser'] = 'Selektivskolan AB';
+$settings['ssr_school_unit_code'] = '12345679';
 $settings['ssr_school_municipality'] = 'Örnsköldsvik';
 $settings['ssr_school_municipality_code'] = '2284';
-$settings['ssr_id'] = 0;
+$settings['ssr_id'] = 5;
 
 $settings['ssr_max_grade_student_group_size'] = 32;
 

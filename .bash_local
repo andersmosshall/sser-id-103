@@ -1,24 +1,24 @@
-alias ssr_copy_config_split="if [ -f \".settings/local/config_split.config_split.local.yml\" ]; then \
+alias sser_copy_config_split="if [ -f \".settings/local/config_split.config_split.local.yml\" ]; then \
   cp .settings/local/config_split.config_split.local.yml config/sync/config_split.config_split.local.yml; \
 fi"
 
-alias ssr_copy_system_site="if [ -f \".settings/local/system.site.yml\" ]; then \
+alias sser_copy_system_site="if [ -f \".settings/local/system.site.yml\" ]; then \
   cp .settings/local/system.site.yml config/sync/system.site.yml; \
 fi"
 
-alias ssr_copy_system_theme="if [ -f \".settings/local/system.theme.global.yml\" ]; then \
+alias sser_copy_system_theme="if [ -f \".settings/local/system.theme.global.yml\" ]; then \
   cp .settings/local/system.theme.global.yml config/sync/system.theme.global.yml; \
 fi"
 
-alias ssr_deploy_dev="git pull &&
+alias sser_deploy_dev="git pull &&
  chmod +w web/sites/default/ &&
  rm web/sites/default/settings.local.php -f &&
  rm web/sites/default/settings.common-local.php -f &&
  cp .settings/local/settings.local.php web/sites/default/settings.local.php &&
  cp .settings/prod/settings.common-local.php web/sites/default/settings.common-local.php &&
- ssr_copy_config_split &&
- ssr_copy_system_site &&
- ssr_copy_system_theme &&
+ sser_copy_config_split &&
+ sser_copy_system_site &&
+ sser_copy_system_theme &&
  lando composer install &&
  lando drush cr &&
  lando drush deploy &&
@@ -29,15 +29,15 @@ alias ssr_deploy_dev="git pull &&
  lando drush php-eval 'if (function_exists(\"simple_school_reports_module_info_deploy\")) { simple_school_reports_module_info_deploy(); }'"
 
 ### LOCAL SECRET PROJECT STUFF
-### In this file alias for "ssr_fetch_all" && "ssr_update_all" is places that is aware of all ssr projects and their git locations.
+### In this file alias for "sser_fetch_all" && "sser_update_all" is places that is aware of all sser projects and their git locations.
 ### Example:
 : <<'END_COMMENT'
-alias ssr_fetch_all="cd ~/Projects/ssr &&
-  if [ ! -d \"ssr-sites\" ]; then \
-    mkdir ssr-sites; \
-    echo \"Created ssr-sites folder\"; \
+alias sser_fetch_all="cd ~/Projects/sser &&
+  if [ ! -d \"sser-sites\" ]; then \
+    mkdir sser-sites; \
+    echo \"Created sser-sites folder\"; \
   fi
-  cd ssr-sites &&
+  cd sser-sites &&
 
   ### Verify stage.
   if [ ! -d \"stage\" ]; then \
@@ -45,44 +45,44 @@ alias ssr_fetch_all="cd ~/Projects/ssr &&
     git clone [git stage site url] stage; \
     cd stage; \
     git checkout main; \
-    echo \"Add ssr-base remote\"; \
-    git remote add ssr-base [git ssr base url]; \
+    echo \"Add sser-base remote\"; \
+    git remote add sser-base [git sser base url]; \
     cd ..;
   fi
   cd stage &&
   git pull &&
   echo \"Fetched stage\";
 
-  ### Go back to ssr root.
-  cd ~/Projects/ssr;
+  ### Go back to sser root.
+  cd ~/Projects/sser;
 "
 
-alias ssr_update_local="git pull;
-  git fetch ssr-base main;
-  git merge ssr-base/main --no-commit --no-ff;
+alias sser_update_local="git pull;
+  git fetch sser-base main;
+  git merge sser-base/main --no-commit --no-ff;
   ### Ignore .gitignore changes.
   git checkout .gitignore;
   git add . &&
-  git commit -m \"Auto merged ssr-base\" &&
+  git commit -m \"Auto merged sser-base\" &&
   git push &&
   echo \"Updated\";
 "
 
 ### Make sure everything is up to date and then update all sites.
-ssr_update_all() {
-  ssr_fetch_all
-  echo "Go to ssr sites"
-  cd ~/Projects/ssr/ssr-sites || return
+sser_update_all() {
+  sser_fetch_all
+  echo "Go to sser sites"
+  cd ~/Projects/sser/sser-sites || return
 
   # Update stage
   cd stage || return
-  ssr_update_local
+  sser_update_local
 
-  # Go back to ssr root
-  cd ~/Projects/ssr || return
+  # Go back to sser root
+  cd ~/Projects/sser || return
 }
 END_COMMENT
 
-if [ -f ~/Projects/ssr/private/.ssr_private_bash_local ]; then
-    . ~/Projects/ssr/private/.ssr_private_bash_local
+if [ -f ~/Projects/sser/private/.sser_private_bash_local ]; then
+    . ~/Projects/sser/private/.sser_private_bash_local
 fi

@@ -1,4 +1,4 @@
-name: ssr-drupal9
+name: sser-drupal9
 recipe: drupal9
 
 config:
@@ -8,7 +8,7 @@ config:
 
 proxy:
   appserver:
-    - ssr.loc
+    - sser.loc
 
 services:
   appserver:
@@ -17,15 +17,15 @@ services:
       php: .lando/php.ini
     overrides:
       environment:
-        PHP_IDE_CONFIG: "serverName=ssr.loc"
+        PHP_IDE_CONFIG: "serverName=sser.loc"
         ENV: "lando"
-        DRUSH_OPTIONS_URI: "https://ssr.loc"
+        DRUSH_OPTIONS_URI: "https://sser.loc"
         XDEBUG_MODE: "debug"
         XDEBUG_TRIGGER: 1
 
   database:
     type: mysql
-    portforward: 32791
+    portforward: 32793
     creds:
       user: drupal9
       password: drupal9

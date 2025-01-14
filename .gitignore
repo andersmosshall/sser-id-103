@@ -54,6 +54,7 @@ web/sites/*/files
 # Ignore local/private stuff
 private
 ssr-sites
+sser-sites
 
 # Local lando overrides
 .lando.local.yml
