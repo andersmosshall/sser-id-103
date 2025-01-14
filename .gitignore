@@ -1,0 +1,71 @@
+#Mac
+.DS_Store
+# Linux
+
+!.gitattributes
+!.gitignore
+!.gitkeep
+*.sql
+*.sql.gz
+*.dmp
+# NetBeans
+nbproject/
+
+# Jetbrains
+.idea/
+
+# VS-code
+*.code-workspace
+.vscode
+
+# Compass
+.sass-cache
+
+# Drupal 9
+/web/.gitattributes
+/web/*.txt
+/web/*.php
+/web/*.json
+/web/*.config
+/web/*.gitignore
+/web/*.lock
+web/core/
+web/modules/contrib
+web/themes/contrib
+web/sites/
+
+/node_modules
+web/vendor
+vendor
+vendor-bin
+#web
+tmp
+web/.csslintrc
+web/.editorconfig
+web/.eslintignore
+web/.eslintrc
+web/.htaccess
+/sql
+/sites
+
+# Ignore Drupal's file directory
+web/sites/*/files
+
+# Ignore local/private stuff
+private
+ssr-sites
+
+# Local lando overrides
+.lando.local.yml
+.local.lando.yml
+.env.local
+.lando.yml
+
+console/
+
+/config/sync/config_split.config_split.local.yml
+/config/sync/system.site.yml
+/config/sync/system.theme.global.yml
+
+/.encryption_key/*.key
+/cgi-bin
