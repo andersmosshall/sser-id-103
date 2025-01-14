@@ -25,6 +25,10 @@ function simple_school_reports_constrained_user_list_entity_field_access($operat
     return \Drupal\Core\Access\AccessResult::forbidden();
   }
 
+  if ($operation !== 'view' && $field_definition->getName() === 'field_birth_date') {
+    return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+
   return \Drupal\Core\Access\AccessResult::neutral();
 }
 
