@@ -26,13 +26,10 @@ $databases['default']['default'] = array (
   'prefix' => 'ss5_',
   'host' => 'database',
   'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'isolation_level' => 'READ COMMITTED',
   'driver' => 'mysql',
-  'charset' => 'utf8mb4',
-  'collation' => 'utf8mb4_swedish_ci',
-  'init_commands' => [
-    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
-  ],
+  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
+  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
 
 $settings['trusted_host_patterns'] = array(
