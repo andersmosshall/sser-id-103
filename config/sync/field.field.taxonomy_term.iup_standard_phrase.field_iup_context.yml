@@ -1,0 +1,21 @@
+uuid: 1c32ee16-bb09-4f0c-8cbf-59ed4a32f0e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_iup_context
+    - taxonomy.vocabulary.iup_standard_phrase
+  module:
+    - options
+id: taxonomy_term.iup_standard_phrase.field_iup_context
+field_name: field_iup_context
+entity_type: taxonomy_term
+bundle: iup_standard_phrase
+label: 'IUP Context'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

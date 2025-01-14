@@ -1,0 +1,18 @@
+uuid: 71920479-ba07-43b2-ba9a-cd810ab85f9d
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_include_merit
+field_name: field_include_merit
+entity_type: paragraph
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

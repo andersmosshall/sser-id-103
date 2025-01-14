@@ -1,0 +1,10 @@
+services:
+  simple_school_reports_consents.consent_service:
+    class: Drupal\simple_school_reports_consents\Service\ConsentsService
+    arguments: ['@database', '@entity_type.manager', '@cache.default', '@current_user', '@module_handler', '@simple_school_reports_core.email_service']
+
+  simple_school_reports_consents.notification_messages_subscriber:
+    class: Drupal\simple_school_reports_consents\EventSubscriber\NotificationMessagesSubscriber
+    arguments: ['@simple_school_reports_consents.consent_service']
+    tags:
+      - { name: event_subscriber }

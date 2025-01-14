@@ -1,0 +1,22 @@
+uuid: b57f0767-fadf-4636-b551-d5eab8270913
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: school_subject
+label: 'School subject'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/subject/[term:name]'
+selection_criteria:
+  cf1d1dfe-a92e-4af5-89dc-24d65d0d17e3:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: cf1d1dfe-a92e-4af5-89dc-24d65d0d17e3
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      school_subject: school_subject
+selection_logic: and
+weight: -5
+relationships: {  }

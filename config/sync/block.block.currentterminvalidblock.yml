@@ -1,0 +1,25 @@
+uuid: b39e839b-41f0-4efa-8dac-ba98d0998e0e
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_core
+    - system
+  theme:
+    - ssr_base
+id: currentterminvalidblock
+theme: ssr_base
+region: highlighted
+weight: -16
+provider: null
+plugin: current_term_invalid_block
+settings:
+  id: current_term_invalid_block
+  label: 'Current term invalid block'
+  label_display: '0'
+  provider: simple_school_reports_core
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /admin/config-simple-school-reports/terms

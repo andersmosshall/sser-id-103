@@ -1,0 +1,13 @@
+uuid: 3e4e12cc-5f6f-408f-8d72-17cc863c81f9
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+_core:
+  default_config_hash: JyFosFr5kp2T0xL1pNpQCc4HAkZlYHH_JfBrsEjZGhY
+id: ssr_examination_delete_action
+label: 'Delete examinations'
+type: ssr_examination
+plugin: 'entity:delete_action:ssr_examination'
+configuration: {  }

@@ -1,0 +1,11 @@
+uuid: 9d32ac99-150a-401f-a577-e85ef7d65012
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+id: dnp_prov_test_settings.collapsed
+label: Collapsed
+description: ''
+targetEntityType: dnp_prov_test_settings
+cache: true

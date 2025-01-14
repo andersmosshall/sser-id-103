@@ -1,0 +1,22 @@
+uuid: 18b5d720-71d0-431c-8f41-5d26e003da91
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_written_reviews_round
+label: 'Node Written reviews round'
+type: 'canonical_entities:node'
+pattern: '/written-reviews-round/[node:title]'
+selection_criteria:
+  e8cba459-c1ae-4877-8fd3-0b201edd9d9e:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: e8cba459-c1ae-4877-8fd3-0b201edd9d9e
+    context_mapping:
+      node: node
+    bundles:
+      written_reviews_round: written_reviews_round
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -1,0 +1,9 @@
+uuid: f4c34027-3710-4fdd-b0b6-21e1acd60e5e
+langcode: en
+status: true
+dependencies: {  }
+name: 'Special diet'
+vid: special_diet
+description: null
+weight: 0
+new_revision: false

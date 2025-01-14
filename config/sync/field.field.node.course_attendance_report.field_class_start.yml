@@ -1,0 +1,21 @@
+uuid: ec31b82d-60e1-457b-a68e-a1336a194b09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_class_start
+    - node.type.course_attendance_report
+id: node.course_attendance_report.field_class_start
+field_name: field_class_start
+entity_type: node
+bundle: course_attendance_report
+label: 'Class start'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1638305648
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

@@ -1,0 +1,13 @@
+uuid: 5802b627-e52e-4ff1-b8c3-932edac29b20
+langcode: sv
+status: true
+dependencies:
+  module:
+    - user
+_core:
+  default_config_hash: SPsUXsR3Rc8d1y3gewzaAKWa1ncea_ywXX3f7LTn7k0
+id: user_unblock_user_action
+label: 'Återaktivera vald(a) användare'
+type: user
+plugin: user_unblock_user_action
+configuration: {  }

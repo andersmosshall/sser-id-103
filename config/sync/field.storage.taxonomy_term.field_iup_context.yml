@@ -1,0 +1,36 @@
+uuid: 9ba584b6-9d1f-4208-be4a-1ce5117552e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_iup_context
+field_name: field_iup_context
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: field_hdig
+      label: 'How did it go?'
+    -
+      value: field_waw
+      label: 'Where are we?'
+    -
+      value: field_hdwdi_school
+      label: 'Howdo we do it? - School will...'
+    -
+      value: field_hdwdi_student
+      label: 'Howdo we do it? - Student may...'
+    -
+      value: field_hdwdi_caregiver
+      label: 'Howdo we do it? - Caregivers may...'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

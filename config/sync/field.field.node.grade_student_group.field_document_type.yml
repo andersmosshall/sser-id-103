@@ -1,0 +1,23 @@
+uuid: 7fe7ec77-4401-4b3a-9d32-ebd1902306a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document_type
+    - node.type.grade_student_group
+  module:
+    - options
+id: node.grade_student_group.field_document_type
+field_name: field_document_type
+entity_type: node
+bundle: grade_student_group
+label: 'Document type'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: term
+default_value_callback: ''
+settings: {  }
+field_type: list_string

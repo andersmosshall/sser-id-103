@@ -1,0 +1,23 @@
+uuid: 5a813605-2371-40b9-9823-48ad810a7c58
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade_system
+    - node.type.grade_student_group
+  module:
+    - options
+id: node.grade_student_group.field_grade_system
+field_name: field_grade_system
+entity_type: node
+bundle: grade_student_group
+label: 'Grade system'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: af_grade_system
+default_value_callback: ''
+settings: {  }
+field_type: list_string

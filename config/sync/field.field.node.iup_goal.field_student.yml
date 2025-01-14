@@ -1,0 +1,25 @@
+uuid: 1d79286e-4db1-47df-b1f8-3d3a5d0f8916
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student
+    - node.type.iup_goal
+id: node.iup_goal.field_student
+field_name: field_student
+entity_type: node
+bundle: iup_goal
+label: Student
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: student_reference
+      display_name: all_students
+      arguments: {  }
+field_type: entity_reference

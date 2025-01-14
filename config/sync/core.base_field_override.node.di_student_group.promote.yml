@@ -1,0 +1,22 @@
+uuid: 993d29cf-c59f-4366-a202-1e69a99e313a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.di_student_group
+id: node.di_student_group.promote
+field_name: promote
+entity_type: node
+bundle: di_student_group
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

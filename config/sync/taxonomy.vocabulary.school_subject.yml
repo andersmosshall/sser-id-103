@@ -1,0 +1,9 @@
+uuid: 7fd69770-ea80-4ce3-8415-8a4ef1b2b7ec
+langcode: en
+status: true
+dependencies: {  }
+name: 'School subject'
+vid: school_subject
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,115 @@
+uuid: 266bfc8c-dda6-49b7-8bcc-28307c783219
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_round.field_anonymized
+    - field.field.node.grade_round.field_document_date
+    - field.field.node.grade_round.field_invalid_absence_from
+    - field.field.node.grade_round.field_invalid_absence_to
+    - field.field.node.grade_round.field_locked
+    - field.field.node.grade_round.field_student_groups
+    - field.field.node.grade_round.field_term_type
+    - node.type.grade_round
+  module:
+    - field_group
+    - inline_entity_form
+    - simple_school_reports_core
+third_party_settings:
+  field_group:
+    group_grundlaggande_info:
+      children:
+        - title
+        - field_document_date
+        - field_term_type
+        - field_invalid_absence_from
+        - field_invalid_absence_to
+        - field_locked
+      label: 'Grundläggande info'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+id: node.grade_round.default
+targetEntityType: node
+bundle: grade_round
+mode: default
+content:
+  field_document_date:
+    type: ssr_date_timestamp
+    weight: 2
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+    third_party_settings: {  }
+  field_invalid_absence_from:
+    type: ssr_date_timestamp
+    weight: 4
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+    third_party_settings: {  }
+  field_invalid_absence_to:
+    type: ssr_date_timestamp
+    weight: 5
+    region: content
+    settings:
+      end_of_day: '1'
+      placeholder: ''
+    third_party_settings: {  }
+  field_locked:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_student_groups:
+    type: inline_entity_form_complex
+    weight: 7
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Elevgrupp
+      label_plural: Elevgrupper
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  field_term_type:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_anonymized: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

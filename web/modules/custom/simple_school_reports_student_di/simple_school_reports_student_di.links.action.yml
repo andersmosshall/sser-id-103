@@ -1,0 +1,7 @@
+simple_school_reports_student_di.student_development_interview_rounds_create:
+  route_name: node.add
+  title: 'Add development interview round'
+  route_parameters:
+    node_type: 'student_development_interview'
+  appears_on:
+    - view.student_development_interview_rounds.list

@@ -1,0 +1,6 @@
+views_custom_permissions.settings:
+  title: Views Custom Permissions
+  description: 'Config Views Custom Permissions Settings'
+  parent: system.admin_config_system
+  route_name: views_custom_permissions.settings
+  weight: 10

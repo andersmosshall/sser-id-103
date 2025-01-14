@@ -1,0 +1,5 @@
+label: 'Tillåt login'
+description: 'Endast relevant för vårdnadshavare och om vårdnadshavare login modulen är aktiv, annars ignoreras denna flagga.'
+settings:
+  on_label: Ja
+  off_label: Nej

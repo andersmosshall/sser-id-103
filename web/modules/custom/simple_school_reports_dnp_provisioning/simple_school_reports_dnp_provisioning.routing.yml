@@ -1,0 +1,51 @@
+simple_school_reports_dnp_provisioning.resources:
+  path: '/dnp'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Digital national tests'
+  requirements:
+    _permission: 'view dnp_provisioning'
+
+simple_school_reports_dnp_provisioning.create:
+  path: '/dnp/provisioning/create'
+  defaults:
+    _form: '\Drupal\simple_school_reports_dnp_provisioning\Form\CreateProvisioningForm'
+    _title: 'Create DNP provisioning'
+  requirements:
+    _permission: 'view dnp_provisioning'
+
+simple_school_reports_dnp_provisioning.table_tab:
+  path: '/dnp/provisioning/{dnp_provisioning}/tab/{sheet}'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_dnp_provisioning\Controller\DnpProvisioningController::buildTableTab'
+    _title: 'Digital national test'
+  requirements:
+    _permission: 'view dnp_provisioning'
+  options:
+    parameters:
+      dnp_provisioning:
+        type: 'entity:dnp_provisioning'
+
+simple_school_reports_dnp_provisioning.download_xlsx:
+  path: '/dnp/provisioning/{dnp_provisioning}/download-xlsx'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_dnp_provisioning\Controller\DnpProvisioningController::downloadXlsx'
+    _title: 'Download DNP Provisioning'
+  requirements:
+    _permission: 'view dnp_provisioning'
+  options:
+    parameters:
+      dnp_provisioning:
+        type: 'entity:dnp_provisioning'
+
+simple_school_reports_dnp_provisioning.set_synced:
+  path: '/dnp/provisioning/{dnp_provisioning}/set-synced'
+  defaults:
+    _form: '\Drupal\simple_school_reports_dnp_provisioning\Form\SetDnpProvisioningSyncedForm'
+    _title: 'DNP Provisioning - set synced'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_dnp_provisioning\Form\SetDnpProvisioningSyncedForm::access'
+  options:
+    parameters:
+      dnp_provisioning:
+        type: 'entity:dnp_provisioning'

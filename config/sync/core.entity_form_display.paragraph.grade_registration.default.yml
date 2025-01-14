@@ -1,0 +1,144 @@
+uuid: 2dbefe38-5596-4ad4-aa4d-fea618ec3779
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.grade_registration.field_comment
+    - field.field.paragraph.grade_registration.field_created
+    - field.field.paragraph.grade_registration.field_exclude_reason
+    - field.field.paragraph.grade_registration.field_final_grade
+    - field.field.paragraph.grade_registration.field_gender
+    - field.field.paragraph.grade_registration.field_grade
+    - field.field.paragraph.grade_registration.field_grade_round
+    - field.field.paragraph.grade_registration.field_joint_grading
+    - field.field.paragraph.grade_registration.field_registered_by
+    - field.field.paragraph.grade_registration.field_school_subject
+    - field.field.paragraph.grade_registration.field_student
+    - field.field.paragraph.grade_registration.field_teacher
+    - field.field.paragraph.grade_registration.field_trial
+    - field.field.paragraph.grade_registration.field_update_reason
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.default
+targetEntityType: paragraph
+bundle: grade_registration
+mode: default
+content:
+  field_comment:
+    type: string_textfield
+    weight: 6
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_created:
+    type: datetime_timestamp
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_exclude_reason:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_final_grade:
+    type: boolean_checkbox
+    weight: 11
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_gender:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_grade:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_grade_round:
+    type: entity_reference_autocomplete
+    weight: 8
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_joint_grading:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_registered_by:
+    type: entity_reference_autocomplete
+    weight: 10
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_school_subject:
+    type: entity_reference_autocomplete
+    weight: 9
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_student:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_teacher:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_trial:
+    type: boolean_checkbox
+    weight: 12
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_update_reason:
+    type: options_select
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

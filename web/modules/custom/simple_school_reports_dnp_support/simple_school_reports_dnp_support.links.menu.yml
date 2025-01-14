@@ -1,0 +1,35 @@
+entity.dnp_provisioning.settings:
+  title: 'DNP Provisioning'
+  description: 'Configure a DNP Provisioning entity type.'
+  route_name:  entity.dnp_provisioning.settings
+  parent: system.admin_structure
+
+entity.dnp_provisioning.collection:
+  title: 'DNP Provisionings'
+  description: 'List of DNP provisionings.'
+  route_name: entity.dnp_provisioning.collection
+  parent: system.admin_content
+
+entity.dnp_prov_settings.settings:
+  title: 'DNP Provisioning Settings'
+  description: 'Configure a DNP Provisioning Settings entity type.'
+  route_name:  entity.dnp_prov_settings.settings
+  parent: system.admin_structure
+
+entity.dnp_prov_settings.collection:
+  title: 'DNP Provisioning Settings'
+  description: 'List of DNP provisioning settings.'
+  route_name: entity.dnp_prov_settings.collection
+  parent: system.admin_content
+
+entity.dnp_prov_test_settings_type.collection:
+  title: 'DNP Provisioning Test Settings types'
+  description: 'Manage and CRUD actions on DNP Provisioning Test Settings type.'
+  parent: system.admin_structure
+  route_name: entity.dnp_prov_test_settings_type.collection
+
+entity.dnp_prov_test_settings.collection:
+  title: 'DNP Provisioning Test Settingss'
+  description: 'List of DNP provisioning test settingss.'
+  route_name: entity.dnp_prov_test_settings.collection
+  parent: system.admin_content

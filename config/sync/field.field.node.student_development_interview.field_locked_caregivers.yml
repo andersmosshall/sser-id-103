@@ -1,0 +1,23 @@
+uuid: b08cdef3-78f3-4390-b979-a8585efbf792
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locked_caregivers
+    - node.type.student_development_interview
+id: node.student_development_interview.field_locked_caregivers
+field_name: field_locked_caregivers
+entity_type: node
+bundle: student_development_interview
+label: 'Locked for caregivers'
+description: 'If locked, caregivers can not book any meetings. NOTE: even if unlocked the overall development interview setting also have to be unlocked in order for caregivers to book meetings.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Locked
+  off_label: Unlocked
+field_type: boolean

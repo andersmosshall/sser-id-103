@@ -1,0 +1,27 @@
+uuid: 3450d815-c108-4cf6-90d0-454789429b8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_iup_goal
+    - node.type.iup_goal
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: node.iup_goal.field_iup_goal
+field_name: field_iup_goal
+entity_type: node
+bundle: iup_goal
+label: IUP-mål
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

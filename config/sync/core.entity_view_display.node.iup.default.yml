@@ -1,0 +1,188 @@
+uuid: c0ccf928-b7db-4e00-9928-31125424acd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.iup.field_class
+    - field.field.node.iup.field_document_date
+    - field.field.node.iup.field_grade
+    - field.field.node.iup.field_hdig
+    - field.field.node.iup.field_hdwdi_caregiver
+    - field.field.node.iup.field_hdwdi_school
+    - field.field.node.iup.field_hdwdi_student
+    - field.field.node.iup.field_iup_goal_list
+    - field.field.node.iup.field_iup_round
+    - field.field.node.iup.field_state
+    - field.field.node.iup.field_student
+    - field.field.node.iup.field_waw
+    - node.type.iup
+  module:
+    - field_group
+    - options
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_hdig:
+      children:
+        - field_hdig
+      label: 'Hur gick det?'
+      parent_name: ''
+      region: content
+      weight: 6
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        description: ''
+    group_waw:
+      children:
+        - field_waw
+      label: 'Var är vi?'
+      parent_name: ''
+      region: content
+      weight: 7
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        description: ''
+    group_wawg:
+      children:
+        - field_iup_goal_list
+      label: 'Vart ska vi?'
+      parent_name: ''
+      region: content
+      weight: 8
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        description: ''
+    group_hdwdi:
+      children:
+        - field_hdwdi_school
+        - field_hdwdi_student
+        - field_hdwdi_caregiver
+      label: 'Hur gör vi?'
+      parent_name: ''
+      region: content
+      weight: 9
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        description: ''
+id: node.iup.default
+targetEntityType: node
+bundle: iup
+mode: default
+content:
+  field_class:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_document_date:
+    type: timestamp
+    label: above
+    settings:
+      date_format: html_date
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_grade:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_hdig:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_hdwdi_caregiver:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_hdwdi_school:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_hdwdi_student:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_iup_goal_list:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_iup_round:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_waw:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  langcode: true
+  links: true

@@ -1,0 +1,13 @@
+uuid: bc2a486c-0be1-40f0-ae47-9f6fdf7e2d47
+langcode: sv
+status: false
+dependencies:
+  module:
+    - user
+_core:
+  default_config_hash: mQIF_foYjmnVSr9MpcD4CTaJE_FpO1AyDd_DskztGhM
+id: user.full
+label: Användarkonto
+description: ''
+targetEntityType: user
+cache: true

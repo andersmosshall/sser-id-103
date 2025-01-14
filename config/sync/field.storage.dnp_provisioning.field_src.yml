@@ -1,0 +1,25 @@
+uuid: 4aff125e-18ab-402a-a7ee-606e61a436be
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - simple_school_reports_dnp_support
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+id: dnp_provisioning.field_src
+field_name: field_src
+entity_type: dnp_provisioning
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

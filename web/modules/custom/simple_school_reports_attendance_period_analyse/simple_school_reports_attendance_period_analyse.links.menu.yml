@@ -1,0 +1,12 @@
+simple_school_reports_attendance_period_analyse.attendance_period_analyse_settings:
+  title: 'Attendance period analyse settings'
+  parent: simple_school_reports_core.config
+  description: 'Administer attendance period analyse settings'
+  route_name: simple_school_reports_attendance_period_analyse.attendance_period_analyse_settings
+
+simple_school_reports_attendance_period_analyse.attendance_period_analyse:
+  title: 'Attendance period summary'
+  description: 'Summarize attendance statistics for a period'
+  weight: 101
+  parent: simple_school_reports_core.statistics
+  route_name: view.absence_period_analyse.statistics

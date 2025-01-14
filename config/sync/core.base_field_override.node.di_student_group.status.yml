@@ -1,0 +1,22 @@
+uuid: 832415b9-04b9-4072-babd-587245d49820
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.di_student_group
+id: node.di_student_group.status
+field_name: status
+entity_type: node
+bundle: di_student_group
+label: Active
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

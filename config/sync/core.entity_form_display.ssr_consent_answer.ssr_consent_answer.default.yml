@@ -1,0 +1,41 @@
+uuid: 8ce0a46a-4954-457a-9e81-9e48e030ccca
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: ssr_consent_answer.ssr_consent_answer.default
+targetEntityType: ssr_consent_answer
+bundle: ssr_consent_answer
+mode: default
+content:
+  answer:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  handler_uid:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  status: true

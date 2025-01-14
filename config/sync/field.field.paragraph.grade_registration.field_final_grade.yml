@@ -1,0 +1,21 @@
+uuid: 5c02f37a-7c3d-4ed7-aa85-d5c12c3c18b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_final_grade
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_final_grade
+field_name: field_final_grade
+entity_type: paragraph
+bundle: grade_registration
+label: 'Final grade'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

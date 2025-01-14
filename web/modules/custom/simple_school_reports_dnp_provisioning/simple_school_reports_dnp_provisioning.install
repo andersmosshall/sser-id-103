@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Simple School Reports Digital National Test Provisioning module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_dnp_provisioning_install() {
+  module_set_weight('simple_school_reports_grade_registration', 10);
+}

@@ -1,0 +1,11 @@
+services:
+  simple_school_reports_student_di.meetings_service:
+    class: Drupal\simple_school_reports_student_di\Service\StudentDiMeetingsService
+    arguments: [ '@database', '@cache.default', '@simple_school_reports_core.email_service' ]
+
+
+  simple_school_reports_student_di.notification_messages_subscriber:
+    class: Drupal\simple_school_reports_student_di\EventSubscriber\NotificationMessagesSubscriber
+    arguments: ['@simple_school_reports_student_di.meetings_service', '@simple_school_reports_core.user_meta_data']
+    tags:
+      - { name: event_subscriber }

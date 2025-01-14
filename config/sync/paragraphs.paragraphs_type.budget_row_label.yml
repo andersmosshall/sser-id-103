@@ -1,0 +1,10 @@
+uuid: 2d31edac-87a4-4d16-8b58-4ba338240c15
+langcode: en
+status: true
+dependencies: {  }
+id: budget_row_label
+label: Label
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

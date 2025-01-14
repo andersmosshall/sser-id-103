@@ -1,0 +1,19 @@
+uuid: 00e8ea58-6c34-4ff2-97a9-55872631ef11
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - simple_school_reports_core
+    - simple_school_reports_entities
+    - simple_school_reports_module_info
+id: budget_reviewer
+label: Budget-granskare
+weight: 7
+is_admin: null
+permissions:
+  - 'budget review'
+  - 'delete own files'
+  - 'send bug report'
+  - 'view school week'
+  - 'view ssr_module_info price'

@@ -1,0 +1,29 @@
+uuid: e8bf9370-d61f-4b2e-b94e-119870ad4fdc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.grade_statistics_data_source.field_grade_stats_compare_source
+    - field.field.paragraph.grade_statistics_data_source.field_grade_stats_primary_source
+    - field.field.paragraph.grade_statistics_data_source.field_include_eligibility
+    - field.field.paragraph.grade_statistics_data_source.field_include_merit
+    - field.field.paragraph.grade_statistics_data_source.field_label
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.default
+targetEntityType: paragraph
+bundle: grade_statistics_data_source
+mode: default
+content:
+  field_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_grade_stats_compare_source: true
+  field_grade_stats_primary_source: true
+  field_include_eligibility: true
+  field_include_merit: true

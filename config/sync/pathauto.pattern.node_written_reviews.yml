@@ -1,0 +1,23 @@
+uuid: fe0d36ab-d672-4203-8dba-091d3f3c0425
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_written_reviews
+label: 'Node Written reviews'
+type: 'canonical_entities:node'
+pattern: '/written-reviews/[node:nid]'
+selection_criteria:
+  37097906-2c8f-4251-a5cc-ff6ca9608b29:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 37097906-2c8f-4251-a5cc-ff6ca9608b29
+    context_mapping:
+      node: node
+    bundles:
+      written_reviews: written_reviews
+      written_reviews_subject_state: written_reviews_subject_state
+selection_logic: and
+weight: -5
+relationships: {  }

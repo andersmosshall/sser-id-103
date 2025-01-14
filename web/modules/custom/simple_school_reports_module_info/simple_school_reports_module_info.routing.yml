@@ -1,0 +1,15 @@
+entity.ssr_module_info.settings:
+  path: 'admin/structure/ssr-module-info'
+  defaults:
+    _form: '\Drupal\simple_school_reports_module_info\Form\ModuleInfoSettingsForm'
+    _title: 'Module info'
+  requirements:
+    _permission: 'administer ssr_module_info'
+
+simple_school_reports_module_info.sync_module_info:
+  path: '/sync-module-info'
+  defaults:
+    _form: '\Drupal\simple_school_reports_module_info\Form\SyncModuleInfoForm'
+    _title: 'Sync module info'
+  requirements:
+    _permission: 'administer modules'

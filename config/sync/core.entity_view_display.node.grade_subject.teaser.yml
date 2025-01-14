@@ -1,0 +1,31 @@
+uuid: 88f1dd7e-ca8e-4ac5-be8a-6e4e074411ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.grade_subject.field_default_grade_round
+    - field.field.node.grade_subject.field_grade_registration
+    - field.field.node.grade_subject.field_school_subject
+    - field.field.node.grade_subject.field_state
+    - field.field.node.grade_subject.field_teacher
+    - node.type.grade_subject
+  module:
+    - user
+id: node.grade_subject.teaser
+targetEntityType: node
+bundle: grade_subject
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_default_grade_round: true
+  field_grade_registration: true
+  field_school_subject: true
+  field_state: true
+  field_teacher: true
+  langcode: true

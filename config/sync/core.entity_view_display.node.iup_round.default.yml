@@ -1,0 +1,40 @@
+uuid: bf948c04-a757-42c4-a264-082bc69b93e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.iup_round.field_document_date
+    - field.field.node.iup_round.field_locked
+    - field.field.node.iup_round.field_prefill
+    - field.field.node.iup_round.field_term_type
+    - node.type.iup_round
+  module:
+    - options
+    - user
+id: node.iup_round.default
+targetEntityType: node
+bundle: iup_round
+mode: default
+content:
+  field_locked:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_term_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_document_date: true
+  field_prefill: true
+  langcode: true
+  links: true

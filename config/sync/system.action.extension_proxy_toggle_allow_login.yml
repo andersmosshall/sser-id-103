@@ -1,0 +1,11 @@
+uuid: 9a0a6a22-69fa-45e9-8bf3-da815e2ad630
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: extension_proxy_toggle_allow_login
+label: 'Activate/Deactivate allow login'
+type: user
+plugin: extension_proxy_toggle_allow_login
+configuration: {  }

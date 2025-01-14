@@ -1,0 +1,11 @@
+uuid: fc0ada2f-f5b8-46d8-89df-addf3b675c74
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.day_absence
+id: node.day_absence
+target_entity_type_id: node
+target_bundle: day_absence
+default_langcode: site_default
+language_alterable: false

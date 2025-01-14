@@ -1,0 +1,29 @@
+uuid: 5e21b92e-aab2-439c-a50d-71fd7dce80ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.day_absence.field_absence_from
+    - field.field.node.day_absence.field_absence_to
+    - field.field.node.day_absence.field_absence_type
+    - field.field.node.day_absence.field_student
+    - node.type.day_absence
+  module:
+    - user
+id: node.day_absence.teaser
+targetEntityType: node
+bundle: day_absence
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_absence_from: true
+  field_absence_to: true
+  field_absence_type: true
+  field_student: true
+  langcode: true

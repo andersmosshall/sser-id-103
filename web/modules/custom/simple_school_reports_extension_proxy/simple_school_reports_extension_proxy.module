@@ -1,0 +1,1334 @@
+<?php
+
+use Drupal\simple_school_reports_grade_stats\Plugin\Block\GradeStatisticsBlock;
+use Drupal\simple_school_reports_list_templates\Plugin\Block\ListBlock;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_extension_proxy\UserRolesFormAlter;
+use Drupal\simple_school_reports_extension_proxy\ViewsFormAlter;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_extension_proxy_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $forms_to_alter = [
+    'user_register_form',
+    'user_form',
+  ];
+  if (in_array($form_id, $forms_to_alter)) {
+    UserRolesFormAlter::userFormAlter($form, $form_state);
+  }
+
+  if (str_starts_with($form_id, 'views_form_')) {
+    ViewsFormAlter::userFormAlter($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_extension_proxy_views_data_alter(array &$data) {
+  if (!empty($data['node_field_data']['nid'])) {
+    // Copy nid data to grade_round_progress.
+    $data['node_field_data']['grade_round_progress'] = $data['node_field_data']['nid'];
+    // Override title and override views field.
+    $data['node_field_data']['grade_round_progress']['title'] = t('Grade round progress');
+    $data['node_field_data']['grade_round_progress']['help'] =  t('Show progress of grade round.');
+    $data['node_field_data']['grade_round_progress']['field'] = [
+      'id' => 'grade_round_progress',
+    ];
+
+    // Copy nid data to consent_progress.
+    $data['node_field_data']['consent_progress'] = $data['node_field_data']['nid'];
+    // Override title and override views field.
+    $data['node_field_data']['consent_progress']['title'] = t('Consent progress');
+    $data['node_field_data']['consent_progress']['help'] =  t('Show progress of consent.');
+    $data['node_field_data']['consent_progress']['field'] = [
+      'id' => 'consent_progress',
+    ];
+
+    // Copy nid data to written_reviews_round_progress.
+    $data['node_field_data']['written_reviews_round_progress'] = $data['node_field_data']['nid'];
+    // Override title and override views field.
+    $data['node_field_data']['written_reviews_round_progress']['title'] = t('Written review round progress');
+    $data['node_field_data']['written_reviews_round_progress']['help'] =  t('Show progress of written reviews round.');
+    $data['node_field_data']['written_reviews_round_progress']['field'] = [
+      'id' => 'written_reviews_round_progress',
+    ];
+
+    // Copy nid data to user_tab_consents_list.
+    $data['node_field_data']['user_tab_consents_list'] = $data['node_field_data']['nid'];
+    // Override title and override views field.
+    $data['node_field_data']['user_tab_consents_list']['title'] = t('User consent list on tab');
+    $data['node_field_data']['user_tab_consents_list']['help'] =  t('List all consents a user is expected to handle, grouped by the target id. Only to use on user tab.');
+    $data['node_field_data']['user_tab_consents_list']['field'] = [
+      'id' => 'user_tab_consents_list',
+    ];
+  }
+
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to iup_state.
+    $data['users_field_data']['iup_state'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['iup_state']['title'] = t('IUP state');
+    $data['users_field_data']['iup_state']['help'] =  t('Show state of current iup round for given user.');
+    $data['users_field_data']['iup_state']['field'] = [
+      'id' => 'iup_state',
+    ];
+
+    // Copy uid data to user_consent_link.
+    $data['users_field_data']['user_consent_link'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['user_consent_link']['title'] = t('User consent link');
+    $data['users_field_data']['user_consent_link']['help'] =  t('Does only work if there is a consent node in the route.');
+    $data['users_field_data']['user_consent_link']['field'] = [
+      'id' => 'user_consent_link',
+    ];
+
+    // Copy uid data to user_consent_answer_list.
+    $data['users_field_data']['user_consent_answer_list'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['user_consent_answer_list']['title'] = t('User consent answer list by target uid');
+    $data['users_field_data']['user_consent_answer_list']['help'] =  t('Does only work if there is a consent node in the route.');
+    $data['users_field_data']['user_consent_answer_list']['field'] = [
+      'id' => 'user_consent_answer_list',
+    ];
+
+    // Copy uid data to user_consents_list.
+    $data['users_field_data']['user_consents_list'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['user_consents_list']['title'] = t('User consent list');
+    $data['users_field_data']['user_consents_list']['help'] =  t('List all consents a user is expected to handle, grouped by the target id.');
+    $data['users_field_data']['user_consents_list']['field'] = [
+      'id' => 'user_consents_list',
+    ];
+
+    // Copy uid data to absence_matrix_info.
+    $data['users_field_data']['absence_matrix_info'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['absence_matrix_info']['title'] = t('Absence matrix item');
+    $data['users_field_data']['absence_matrix_info']['help'] =  t('Show absence and fast adding of new day absences');
+    $data['users_field_data']['absence_matrix_info']['field'] = [
+      'id' => 'absence_matrix_info',
+    ];
+
+    // Copy uid data to attendance_period_report_student.
+    $data['users_field_data']['attendance_period_report_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['attendance_period_report_student']['title'] = t('Attendance period report student');
+    $data['users_field_data']['attendance_period_report_student']['help'] =  t('Show attendance period statistics in percent.');
+    $data['users_field_data']['attendance_period_report_student']['field'] = [
+      'id' => 'attendance_period_report_student',
+    ];
+  }
+
+  if (!empty($data['ssr_meeting_field_data']['id'])) {
+    // Copy uid data to iup_state.
+    $data['ssr_meeting_field_data']['student_di_book_unbook'] = $data['ssr_meeting_field_data']['id'];
+    // Override title and override views field.
+    $data['ssr_meeting_field_data']['student_di_book_unbook']['title'] = t('Student DI book/unbook');
+    $data['ssr_meeting_field_data']['student_di_book_unbook']['help'] =  t('Student DI book/unbook - only works if there is a student user in current route.');
+    $data['ssr_meeting_field_data']['student_di_book_unbook']['field'] = [
+      'id' => 'student_di_book_unbook',
+    ];
+  }
+
+  if (!empty($data['school_week_deviation']['id'])) {
+    // Copy id data to school_week_deviation.
+    $data['school_week_deviation']['school_week_deviation_comment'] = $data['school_week_deviation']['id'];
+    // Override title and override views field.
+    $data['school_week_deviation']['school_week_deviation_comment']['title'] = t('School week deviation comment');
+    $data['school_week_deviation']['school_week_deviation_comment']['help'] =  t('School week deviation comment');
+    $data['school_week_deviation']['school_week_deviation_comment']['field'] = [
+      'id' => 'school_week_deviation_comment',
+    ];
+  }
+}
+
+function clean_up_orphaned_grade_registrations() {
+  try {
+    /** @var \Drupal\Core\Database\Connection $connection */
+    $connection = \Drupal::service('database');
+
+    $pids_to_remove = [];
+    $subquery = $connection->select('node__field_grade_registration', 'gr')
+      ->fields('gr', ['field_grade_registration_target_id'])
+      ->where('[gr].[field_grade_registration_target_id] = [p].[id]');
+    $results = $connection->select('paragraphs_item', 'p')
+      ->condition('p.type', 'grade_registration')
+      ->notExists($subquery)
+      ->fields('p', ['id'])
+      ->execute();
+
+    foreach ($results as $result) {
+      $pids_to_remove[$result->id] = $result->id;
+    }
+    $pids_to_remove = array_values($pids_to_remove);
+
+    if (!empty($pids_to_remove)) {
+      $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+      $paragraphs = $paragraph_storage->loadMultiple(array_slice($pids_to_remove, 0, 50));
+      $paragraph_storage->delete($paragraphs);
+    }
+  }
+  catch (\Exception $e) {
+    // Ignore
+    return;
+  }
+}
+
+
+function clean_up_orphaned_written_reviews_data() {
+  try {
+    /** @var \Drupal\Core\Database\Connection $connection */
+    $connection = \Drupal::service('database');
+
+    $min_age = Drupal::time()->getRequestTime() - 600;
+
+    $nids_to_remove = [];
+    $subquery = $connection->select('node__field_written_reviews_subject', 'rs')
+      ->fields('rs', ['field_written_reviews_subject_target_id'])
+      ->where('[rs].[field_written_reviews_subject_target_id] = [n].[nid]');
+    $results = $connection->select('node_field_data', 'n')
+      ->condition('n.type', 'written_reviews_subject_state')
+      ->condition('n.created' , $min_age, '<')
+      ->notExists($subquery)
+      ->fields('n', ['nid'])
+      ->execute();
+
+    foreach ($results as $result) {
+      $nids_to_remove[$result->nid] = $result->nid;
+    }
+    $nids_to_remove = array_values($nids_to_remove);
+
+    if (!empty($nids_to_remove)) {
+      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+      $nodes = $node_storage->loadMultiple(array_slice($nids_to_remove, 0, 50));
+      $node_storage->delete($nodes);
+    }
+  }
+  catch (\Exception $e) {
+    // Ignore
+    return;
+  }
+}
+
+function clean_up_orphaned_iup_data() {
+  try {
+    /** @var \Drupal\Core\Database\Connection $connection */
+    $connection = \Drupal::service('database');
+    /** @var \Drupal\node\NodeStorageInterface $node_storage */
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $iup_round_nids = $node_storage
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'iup_round')
+      ->execute();
+
+    if (!empty($iup_round_nids)) {
+      $iup_nids_to_remove = $node_storage
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', 'iup')
+        ->condition('field_iup_round', $iup_round_nids, 'NOT IN')
+        ->execute();
+
+      if (!empty($iup_nids_to_remove)) {
+        $nodes = $node_storage->loadMultiple(array_slice($iup_nids_to_remove, 0, 40));
+        $node_storage->delete($nodes);
+      }
+    }
+
+    $iup_goal_nids_to_remove = [];
+    $subquery = $connection->select('node__field_iup_goal_list', 'gl')
+      ->fields('gl', ['field_iup_goal_list_target_id'])
+      ->where('[gl].[field_iup_goal_list_target_id] = [n].[nid]');
+    $results = $connection->select('node_field_data', 'n')
+      ->condition('n.type', 'iup_goal')
+      ->notExists($subquery)
+      ->fields('n', ['nid'])
+      ->execute();
+
+    foreach ($results as $result) {
+      $iup_goal_nids_to_remove[$result->nid] = $result->nid;
+    }
+    $iup_goal_nids_to_remove = array_values($iup_goal_nids_to_remove);
+    if (!empty($iup_goal_nids_to_remove)) {
+      $nodes = $node_storage->loadMultiple(array_slice($iup_goal_nids_to_remove, 0, 40));
+      $node_storage->delete($nodes);
+    }
+  }
+  catch (\Exception $e) {
+    // Ignore
+    return;
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function simple_school_reports_extension_proxy_entity_extra_field_info() {
+  $fields['node']['iup']['form']['field_hdig_sp'] = [
+    'label' => t('How did it go? - Standard phrases'),
+    'description' => '',
+    'weight' => -10,
+  ];
+  $fields['node']['iup']['form']['field_waw_sp'] = [
+    'label' => t('Where are we? - Standard phrases'),
+    'description' => '',
+    'weight' => -10,
+  ];
+  $fields['node']['iup']['form']['field_hdwdi_school_sp'] = [
+    'label' => t('How do we do it? (School) - Standard phrases'),
+    'description' => '',
+    'weight' => -10,
+  ];
+  $fields['node']['iup']['form']['field_hdwdi_student_sp'] = [
+    'label' => t('How do we do it? (Student) - Standard phrases'),
+    'description' => '',
+    'weight' => -10,
+  ];
+  $fields['node']['iup']['form']['field_hdwdi_caregiver_sp'] = [
+    'label' => t('How do we do it? (Caregiver) - Standard phrases'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['node']['iup_goal']['form']['preview_iup_goal'] = [
+    'label' => t('Preview IUP goal'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['node']['grade_statistics']['display']['present'] = [
+    'label' => t('Graphs/Tables'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['node']['list_template']['display']['list_table'] = [
+    'label' => t('List table'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['node']['budget']['display']['budget_table'] = [
+    'label' => t('Budget table'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['user']['user']['display']['readable_user_name'] = [
+    'label' => t('User name'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['user']['user']['display']['valid_email'] = [
+    'label' => t('Email'),
+    'description' => '',
+    'weight' => -10,
+  ];
+
+  $fields['paragraph']['budget_row']['display']['row_info'] = [
+    'label' => t('Row info'),
+    'description' => '',
+    'weight' => 100,
+  ];
+
+  $fields['ssr_meeting']['student_di']['display']['iup_round'] = [
+    'label' => t('IUP'),
+    'weight' => 100,
+  ];
+
+  $fields['ssr_meeting']['student_di']['display']['written_reviews_round'] = [
+    'label' => t('Written reviews'),
+    'weight' => 200,
+  ];
+
+  $fields['school_week']['school_week']['display']['table'] = [
+    'label' => t('School week table'),
+    'weight' => 200,
+  ];
+
+  return $fields;
+}
+
+function _simple_school_reports_extension_proxy_supported_grade_systems() {
+  $options = [
+    'af_grade_system' => 'A-F',
+    'geg_grade_system' => 'G-EG',
+  ];
+
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  if (!$module_handler->moduleExists('simple_school_reports_geg_grade_registration')) {
+    unset($options['geg_grade_system']);
+  }
+
+  return $options;
+}
+
+function clean_up_public_dir() {
+  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+  $file_system = \Drupal::service('file_system');
+
+  /** @var \Drupal\Core\Database\Connection $connection */
+  $connection = \Drupal::service('database');
+  $results = $connection->select('file_managed', 'f')
+    ->fields('f', ['uri'])
+    ->execute();
+
+  $stored_uirs = [];
+  foreach ($results as $result) {
+    $stored_uirs[] = $result->uri;
+  }
+
+
+  try {
+    $folder = 'ssr_generated';
+    $files = $file_system->scanDirectory('public://' . $folder, '/.*/');
+  }
+  catch (\Exception $e) {
+    $files = [];
+  }
+
+  $uris = [];
+  foreach ($files as $file) {
+    $uris[] = $file->uri;
+  }
+
+  $to_delete = array_diff($uris, $stored_uirs);
+  foreach ($to_delete as $item) {
+    $item = $file_system->realpath($item);
+    $file_system->delete($item);
+  }
+  $source_dir = $file_system->realpath('public://' . $folder . DIRECTORY_SEPARATOR);
+  if (is_dir($source_dir)) {
+    _clean_up_empty_dir($source_dir);
+  }
+
+  try {
+    $folder = 'ssr_tmp';
+    $files = $file_system->scanDirectory('public://' . $folder, '/.*/');
+  }
+  catch (\Exception $e) {
+    $files = [];
+  }
+  $has_new = FALSE;
+  $limit = \Drupal::time()->getRequestTime() - 650;
+  foreach ($files as $file) {
+    $item = $file_system->realpath($file->uri);
+    $file_time = filemtime($item);
+    if ($file_time < $limit) {
+      $file_system->delete($item);
+    }
+    else {
+      $has_new = TRUE;
+    }
+  }
+  if (!$has_new) {
+    $tmp_dir = $file_system->realpath('public://ssr_tmp' . DIRECTORY_SEPARATOR);
+    if (is_dir($tmp_dir)) {
+      $file_system->deleteRecursive($tmp_dir);
+    }
+  }
+}
+
+function _clean_up_empty_dir($path) {
+  $empty = TRUE;
+  foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
+    $empty &= is_dir($file) && _clean_up_empty_dir($file);
+  }
+  return $empty && rmdir($path);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_extension_proxy_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity instanceof \Drupal\user\UserInterface) {
+    $cache = new \Drupal\Core\Cache\CacheableMetadata();
+    $cache->addCacheContexts(['user.permissions']);
+
+    if ($display->getComponent('readable_user_name')) {
+      $build['readable_user_name'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['user-readable-name'],
+        ],
+        'name' => [
+          '#markup' => strip_tags($entity->getDisplayName()),
+        ],
+      ];
+    }
+    else {
+      $build['readable_user_name'] = [];
+    }
+
+    /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+    $email_service = \Drupal::service('simple_school_reports_core.email_service');
+
+    $protected_data_value = $entity->get('field_protected_personal_data')->value ?? NULL;
+    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
+    $show_email = !$has_protected_data || \Drupal::currentUser()->hasPermission('view protected personal data');
+
+    $email = $show_email ? $email_service->getUserEmail($entity) : NULL;
+    if ($email && $display->getComponent('valid_email')) {
+      $build['valid_email'] = [
+        '#markup' => '<div class="field field--label-above field-email"><div class="field__label">' . t('Email') . '</div><div class="field__item">' . strip_tags($email) . '</div></div>',
+      ];
+    }
+    else {
+      $build['valid_email'] = [];
+    }
+
+    $cache->applyTo($build);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_extension_proxy_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() === 'grade_statistics') {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    if (!$module_handler->moduleExists('simple_school_reports_grade_stats')) {
+      $build['present'] = [
+        '#markup' => t('This block is broken or missing. You may be missing content or you might need to enable the original module.'),
+      ];
+    }
+    else {
+      /** @var \Drupal\Core\Block\BlockManagerInterface $block_manager */
+      $block_manager = Drupal::service('plugin.manager.block');
+      $block = $block_manager->createInstance('grade_statistics_block');
+      if ($block instanceof GradeStatisticsBlock && $block->access(\Drupal::currentUser())) {
+        $build['present'] = $block->build($entity);
+      }
+      else {
+        $build['present'] = [];
+      }
+    }
+  }
+
+  if ($entity->bundle() === 'list_template') {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    if (!$module_handler->moduleExists('simple_school_reports_list_templates')) {
+      $build['present'] = [
+        '#markup' => t('This block is broken or missing. You may be missing content or you might need to enable the original module.'),
+      ];
+    }
+    else {
+      /** @var \Drupal\Core\Block\BlockManagerInterface $block_manager */
+      $block_manager = Drupal::service('plugin.manager.block');
+      $block = $block_manager->createInstance('ssr_list_templates_list_block');
+      if ($block instanceof ListBlock && $block->access(\Drupal::currentUser())) {
+        $build['present'] = $block->build($entity);
+      }
+      else {
+        $build['present'] = [];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function simple_school_reports_extension_proxy_entity_predelete(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'user') {
+    /** @var UserInterface $entity */
+    try {
+      // Get ids grade paragraphs to set gender for.
+      $ids = \Drupal::entityTypeManager()->getStorage('paragraph')->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', 'grade_registration')
+        ->condition('field_student', $entity->id())
+        ->execute();
+
+      // Add items to queue to set gender field for statistics.
+      if (!empty($ids)) {
+        $queue = \Drupal::service('queue')->get('modify_entity_queue');
+        $queue->createQueue();
+        foreach ($ids as $id) {
+          $fields_to_modify = [
+            'field_comment' => '',
+            'field_teacher' => NULL,
+            'field_gender' => $entity->get('field_gender')->value,
+          ];
+          $queue->createItem(['entity_type' => 'paragraph', 'entity_id' => $id, 'fields' => $fields_to_modify]);
+        }
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::messenger()->addError(t('Something went wrong when deleting @name. Try again.', ['@name' => $entity->getDisplayName()]));
+      throw $e;
+    }
+  }
+}
+
+function clean_up_student_nodes() {
+
+  /** @var \Drupal\Core\Database\Connection $connection */
+  $connection = \Drupal::service('database');
+
+  $bundles_to_clean_up = ['day_absence', 'written_reviews', 'iup', 'iup_goal'];
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [s].[field_student_target_id]');
+  $results = $connection->select('node__field_student', 's')
+    ->condition('s.bundle', $bundles_to_clean_up, 'IN')
+    ->notExists($subquery)
+    ->fields('s', ['entity_id'])
+    ->range(0, 50)
+    ->execute();
+
+  $nids = [];
+
+  foreach ($results as $result) {
+    $nids[] = $result->entity_id;
+  }
+
+  if (!empty($nids)) {
+    /** @var \Drupal\node\NodeStorage $node_storage */
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nodes = $node_storage->loadMultiple($nids);
+    $node_storage->delete($nodes);
+  }
+
+  $bundles_to_clean_up = ['student_course_attendance',];
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [s].[field_student_target_id]');
+  $results = $connection->select('paragraph__field_student', 's')
+    ->condition('s.bundle', $bundles_to_clean_up, 'IN')
+    ->notExists($subquery)
+    ->fields('s', ['entity_id'])
+    ->range(0, 50)
+    ->execute();
+
+  $pids = [];
+
+  foreach ($results as $result) {
+    $pids[] = $result->entity_id;
+  }
+
+  if (!empty($pids)) {
+    /** @var \Drupal\node\NodeStorage $node_storage */
+    $pargraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+    $pgs = $pargraph_storage->loadMultiple($pids);
+    $pargraph_storage->delete($pgs);
+  }
+
+  // Check for empty course_attendance_report nodes.
+  $bundles_to_clean_up = ['course_attendance_report',];
+  $subquery = $connection->select('paragraphs_item_field_data', 'p')
+    ->fields('p', ['id'])
+    ->where('[p].[id] = [a].[field_student_course_attendance_target_id]');
+  $results = $connection->select('node__field_student_course_attendance', 'a')
+    ->condition('a.bundle', $bundles_to_clean_up, 'IN')
+    ->notExists($subquery)
+    ->fields('a', ['entity_id'])
+    ->range(0, 100)
+    ->execute();
+
+  $nids = [];
+
+  foreach ($results as $result) {
+    $nids[$result->entity_id] = $result->entity_id;
+  }
+
+  if (!empty($nids)) {
+    // Analyse course attendance.
+    /** @var \Drupal\node\NodeStorage $node_storage */
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nodes = $node_storage->loadMultiple(array_slice(array_values($nids), 0 , 10));
+    /** @var \Drupal\node\NodeInterface $node */
+    foreach ($nodes as $node) {
+      // Just to be sure
+      if ($node->bundle() === 'course_attendance_report') {
+        $attendance_items = $node->get('field_student_course_attendance')->referencedEntities();
+        if (empty($attendance_items)) {
+          $node->delete();
+        }
+        else {
+          //
+          $node->set('field_student_course_attendance', array_values($attendance_items));
+          $node->save();
+        }
+      }
+    }
+  }
+
+  // Clean up courses from deactivated students.
+  /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+  $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+  $active_uids = array_keys($user_meta_data->getUserWeights());
+  $all_uids = array_keys($user_meta_data->getUserWeights(FALSE));
+
+  $deactivated_uids = array_diff($all_uids, $active_uids);
+
+  if (!empty($deactivated_uids)) {
+    /** @var \Drupal\node\NodeStorage $node_storage */
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $nids = $node_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'course')
+      ->condition('field_student', $deactivated_uids, 'IN')
+      ->range(0, 25)
+      ->execute();
+
+    if (!empty($nids)) {
+      /** @var \Drupal\node\NodeInterface $node */
+      foreach ($node_storage->loadMultiple($nids) as $node) {
+        $students = array_column($node->get('field_student')->getValue(), 'target_id');
+        $new_students = [];
+        $do_save =  FALSE;
+
+        foreach ($students as $student) {
+          if (!in_array($student, $deactivated_uids)) {
+            $new_students[] = ['target_id' => $student];
+          }
+          else {
+            $do_save = TRUE;
+          }
+        }
+
+        if ($do_save) {
+          $node->set('field_student', $new_students);
+          $node->save();
+        }
+      }
+    }
+  }
+}
+
+function clean_up_old_maillog_items() {
+  $time_limit = new DateTime();
+  $time_limit->sub(new \DateInterval('P3M'));
+
+  $maillog_storage = \Drupal::entityTypeManager()
+    ->getStorage('ssr_maillog');
+
+  $maillog_ids = $maillog_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('created', $time_limit->getTimestamp(), '<=')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($maillog_ids)) {
+     $maillog_items = $maillog_storage->loadMultiple($maillog_ids);
+     $maillog_storage->delete($maillog_items);
+  }
+
+}
+
+function clean_up_custom_entities() {
+  // For now we put the backup last run modification here.
+  $now = new \DateTime();
+  $hour = $now->format('H');
+  if ($hour >= 9 && $hour <= 13) {
+    $bkp_last_run_state = \Drupal::state()->get('backup_migrate.schedule.last_run', []);
+    // Set last run to today at 05:00:00 to make sure backup is run at 5 every
+    // day. It may diverge otherwise.
+    $forced_time = strtotime('today 05:00:00');
+
+    if (empty($bkp_last_run_state['daily_schedule']) || $bkp_last_run_state['daily_schedule'] != $forced_time) {
+      $bkp_last_run_state['daily_schedule'] = $forced_time;
+      \Drupal::state()->set('backup_migrate.schedule.last_run', $bkp_last_run_state);
+    }
+  }
+
+  /** @var \Drupal\Core\Database\Connection $connection */
+  $connection = \Drupal::service('database');
+
+  // Clean up consent answers for removed users.
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [a].[uid]');
+  $results = $connection->select('ssr_consent_answer', 'a')
+    ->notExists($subquery)
+    ->fields('a', ['id'])
+    ->range(0, 50)
+    ->execute();
+
+  $ids = [];
+  foreach ($results as $result) {
+    $ids[] = $result->id;
+  }
+
+  if (!empty($ids)) {
+    $consent_answers_storage = \Drupal::entityTypeManager()->getStorage('ssr_consent_answer');
+    $entities = $consent_answers_storage->loadMultiple($ids);
+    $consent_answers_storage->delete($entities);
+  }
+
+  // Clean up meetings older than 24 hours.
+  $now = new \DateTime();
+  $meeting_storage = \Drupal::entityTypeManager()->getStorage('ssr_meeting');
+  $meeting_ids = $meeting_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('to', $now->getTimestamp() - 86400, '<')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($meeting_ids)) {
+    $meetings = $meeting_storage->loadMultiple($meeting_ids);
+    $meeting_storage->delete($meetings);
+  }
+
+  // Clean up orphaned meetings.
+  $subquery = $connection->select('node_field_data', 'n')
+    ->fields('n', ['nid'])
+    ->where('[n].[nid] = [m].[node_parent]');
+
+  $results = $connection->select('ssr_meeting_field_data', 'm')
+    ->notExists($subquery)
+    ->fields('m', ['id'])
+    ->range(0, 50)
+    ->execute();
+
+  $ids = [];
+  foreach ($results as $result) {
+    $ids[] = $result->id;
+  }
+
+  if (!empty($ids)) {
+    $entities = $meeting_storage->loadMultiple($ids);
+    $meeting_storage->delete($entities);
+  }
+
+  // Clean up orphaned school weeks.
+  $grade_school_weeks = \Drupal::state()->get('ssr_school_week_per_grade', []);
+  $safe_school_weeks_ids = array_values($grade_school_weeks);
+
+  $subquery_user = $connection->select('user__field_adapted_studies', 'as')
+    ->fields('as', ['field_adapted_studies_target_id'])
+    ->where('[as].[field_adapted_studies_target_id] = [sw].[id]');
+
+  $subquery_class = $connection->select('ssr_school_class_field_data', 'c')
+    ->fields('c', ['school_week'])
+    ->where('[c].[school_week] = [sw].[id]');
+
+  $query = $connection->select('school_week', 'sw')
+    ->notExists($subquery_user)
+    ->notExists($subquery_class)
+    ->fields('sw', ['id'])
+    ->range(0, 50);
+
+  if (!empty($safe_school_weeks_ids)) {
+    $query->condition('sw.id', $safe_school_weeks_ids, 'NOT IN');
+  }
+
+  $results = $query->execute();
+  $ids = [];
+  foreach ($results as $result) {
+    $ids[] = $result->id;
+  }
+
+  if (!empty($ids)) {
+    $school_week_storage = \Drupal::entityTypeManager()->getStorage('school_week');
+    $entities = $school_week_storage->loadMultiple($ids);
+    $school_week_storage->delete($entities);
+  }
+
+  // Clean up orphaned school week deviations.
+  /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
+  $school_week_service = \Drupal::service('simple_school_reports_entities.school_week_service');
+  $ids_in_use = $school_week_service->getDeviationIdsInUse();
+  if (!empty($ids_in_use)) {
+    $school_week_deviation_storage = \Drupal::entityTypeManager()->getStorage('school_week_deviation');
+    $school_week_deviation_ids = $school_week_deviation_storage
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('id', $ids_in_use, 'NOT IN')
+      ->range(0, 50)
+      ->execute();
+
+    if (!empty($school_week_deviation_ids)) {
+      $school_week_deviations = $school_week_deviation_storage->loadMultiple($school_week_deviation_ids);
+      $school_week_deviation_storage->delete($school_week_deviations);
+    }
+  }
+
+  // Clean up leave applications for removed students.
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [sl].[student]');
+  $results = $connection->select('ssr_student_leave_application_field_data', 'sl')
+    ->notExists($subquery)
+    ->fields('sl', ['id'])
+    ->range(0, 50)
+    ->execute();
+
+  $ids = [];
+  foreach ($results as $result) {
+    $ids[] = $result->id;
+  }
+
+  if (!empty($ids)) {
+    $student_leave_application_storage = \Drupal::entityTypeManager()->getStorage('ssr_student_leave_application');
+    $entities = $student_leave_application_storage->loadMultiple($ids);
+    $student_leave_application_storage->delete($entities);
+  }
+
+}
+
+function ssr_meeting_reminder_meeting() {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  if (!$module_handler->moduleExists('simple_school_reports_student_di')) {
+    return;
+  }
+
+  $from_min = (new \DateTime())->add(new \DateInterval('PT15M'))->getTimestamp();
+  $from_max = (new \DateTime())->add(new \DateInterval('PT169H'))->getTimestamp();
+
+  $upcoming_meeting_ids = Drupal::entityTypeManager()->getStorage('ssr_meeting')
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('from', $from_min, '>=')
+    ->condition('from', $from_max, '<=')
+    ->condition('bundle', 'student_di')
+    ->condition('field_student', '', 'IS NOT NULL')
+    ->sort('from', 'ASC')
+    ->execute();
+
+  if (!empty($upcoming_meeting_ids)) {
+    // Add queue.
+    $queue = \Drupal::service('queue')->get('student_di_meeting_reminder');
+    $queue->createQueue();
+    foreach ($upcoming_meeting_ids as $upcoming_meeting_id) {
+      $queue->createItem($upcoming_meeting_id);
+    }
+  }
+
+}
+
+function ssr_meeting_reminder_teachers() {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  if (!$module_handler->moduleExists('simple_school_reports_student_di')) {
+    return;
+  }
+
+  $from_min = (new \DateTime())->setTime(0,0,0)->getTimestamp();
+  $from_max = (new \DateTime())->setTime(23,59,59)->getTimestamp();
+
+  $query = \Drupal::database()->select('ssr_meeting__field_teachers', 't');
+  $query->innerJoin('ssr_meeting_field_data', 'm', 'm.id = t.entity_id');
+  $query->innerJoin('ssr_meeting__field_student', 's', 's.entity_id = t.entity_id');
+  $results = $query->condition('s.field_student_target_id', '', 'IS NOT NULL')
+    ->condition('m.from', $from_min, '>=')
+    ->condition('m.from', $from_max, '<=')
+    ->condition('m.bundle', 'student_di')
+    ->fields('t', ['field_teachers_target_id'])
+    ->fields('m', ['id'])
+    ->orderBy('m.from', 'ASC')
+    ->execute();
+
+  $meetings_map = [];
+  foreach ($results as $result) {
+    $meetings_map[$result->field_teachers_target_id][] = $result->id;
+  }
+
+  if (!empty($meetings_map)) {
+    // Add queue.
+    $queue = \Drupal::service('queue')->get('student_di_meeting_reminder_teacher');
+    $queue->createQueue();
+
+    foreach ($meetings_map as $teacher_id => $meetings) {
+      $queue->createItem([
+        'teacher_id' => $teacher_id,
+        'meetings' => array_unique($meetings),
+      ]);
+    }
+  }
+}
+
+function simple_school_reports_proxy_list_template_field_types() {
+  $options = [
+    'gender' => t('Gender'),
+    'birth_data' => t('Birth data'),
+    'caregivers' => t('Caregivers'),
+    'caregiver_address' => t('Caregiver address'),
+    'caregiver_contact' => t('Caregiver contact'),
+    'student_address' => t('Student address'),
+    'special_diet' => t('Special diet'),
+    'student_contact' => t('Student contact'),
+    'custom' => t('Custom column'),
+  ];
+
+  if (!\Drupal::moduleHandler()->moduleExists('simple_school_reports_special_diet')) {
+    unset($options['special_diet']);
+  }
+
+  return $options;
+}
+
+function simple_school_reports_proxy_budget_row_types() {
+  $module_handler = \Drupal::service('module_handler');
+  if ($module_handler->moduleExists('simple_school_reports_budget')) {
+    /** @var \Drupal\simple_school_reports_budget\Service\BudgetServiceInterface $budget_service */
+    $budget_service = \Drupal::service('simple_school_reports_budget.budget_service');
+    return $budget_service->getRowTypeDefinitions(TRUE);
+  }
+
+  return [];
+}
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_extension_proxy_theme() {
+  return [
+    'ssr_footer' => [
+      'variables' => [
+        'help_link' => NULL,
+        'bug_report_link' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function simple_school_reports_extension_proxy_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  $access = AccessResult::neutral();
+  if ($field_definition->getTargetEntityTypeId() === 'user' && $field_definition->getName() === 'field_special_diet') {
+    if (!\Drupal::moduleHandler()->moduleExists('simple_school_reports_special_diet')) {
+      $access = AccessResult::forbidden();
+    }
+    /** @var \Drupal\user\UserInterface $user */
+    elseif ($user = $items?->getEntity()) {
+      if (!$user->access('update')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+
+    $access->cachePerUser();
+  }
+
+  if ($field_definition->getTargetEntityTypeId() === 'user' && $field_definition->getName() === 'field_adapted_studies') {
+    if (!\Drupal::moduleHandler()->moduleExists('simple_school_reports_attendance_analyse')) {
+      $access = AccessResult::forbidden();
+    }
+    /** @var \Drupal\user\UserInterface $user */
+    elseif ($user = $items?->getEntity()) {
+      if (!$user->access('update')) {
+        $access = AccessResult::forbidden();
+      }
+      elseif ($operation !== 'view' && !$account->hasPermission('school staff permissions')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+    $access->cachePerUser();
+  }
+
+  if ($field_definition->getTargetEntityTypeId() === 'node' && $field_definition->getTargetBundle() === 'student_development_interview') {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+
+    if ($field_definition->getName() === 'field_locked_caregivers' || $field_definition->getName() === 'field_caregiver_reminder_setting') {
+      if (!$module_handler->moduleExists('simple_school_reports_caregiver_login')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+
+    if ($field_definition->getName() === 'field_locked_caregivers') {
+      if (!$module_handler->moduleExists('simple_school_reports_caregiver_login')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+  }
+
+  if ($field_definition->getTargetEntityTypeId() === 'node' && $field_definition->getTargetBundle() === 'di_student_group') {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+
+    if ($field_definition->getName() === 'field_iup_round') {
+      if (!$module_handler->moduleExists('simple_school_reports_iup')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+
+    if ($field_definition->getName() === 'field_written_reviews_round') {
+      if (!$module_handler->moduleExists('simple_school_reports_reviews')) {
+        $access = AccessResult::forbidden();
+      }
+    }
+  }
+
+  return $access;
+}
+
+function ssr_views_permission_has_special_diet_module() {
+  $account = \Drupal::currentUser();
+  $access = AccessResult::allowedIf($account->hasPermission('school staff permissions') && \Drupal::moduleHandler()->moduleExists('simple_school_reports_special_diet'));
+  $access->cachePerPermissions();
+  return $access;
+}
+
+function ssr_views_access_to_student_di_tab() {
+  $account = \Drupal::currentUser();
+  $user = \Drupal::routeMatch()->getParameter('user');
+
+  if (!$user || !$user instanceof \Drupal\user\UserInterface) {
+    $access = \Drupal\Core\Access\AccessResult::forbidden()->addCacheContexts(['route']);
+  }
+  else {
+    $access = \Drupal\simple_school_reports_student_di\Controller\StudentDIController::accessStudentDITab($user, $account);
+  }
+
+  return $access;
+}
+
+function ssr_views_access_to_caregivers_my_meetings_block() {
+  $account = \Drupal::currentUser();
+
+  if (in_array('caregiver', $account->getRoles())) {
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+    $attending = $user_meta_data->getCaregiverStudents($account->id());
+    $attending[] = $account->id();
+
+    $meeting_exists = \Drupal::entityTypeManager()->getStorage('ssr_meeting')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('bundle', 'student_di')
+      ->condition('attending', $attending, 'IN')
+      ->range(0, 1)
+      ->execute();
+
+    return \Drupal\Core\Access\AccessResult::allowedIf(!empty($meeting_exists))->cachePerUser();
+
+  }
+
+  return \Drupal\Core\Access\AccessResult::forbidden()->cachePerUser();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_extension_proxy_ssr_meeting_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($display->getComponent('iup_round') || $display->getComponent('written_reviews_round')) {
+    if (!$entity instanceof \Drupal\simple_school_reports_entities\SsrMeetingInterface || $entity->bundle() !== 'student_di') {
+      return;
+    }
+
+    $student_uid = $entity->get('field_student')->target_id;
+    if (!$student_uid) {
+      return;
+    }
+
+    $module_handler = \Drupal::moduleHandler();
+    if (!$module_handler->moduleExists('simple_school_reports_student_di')) {
+      return;
+    }
+
+    /** @var \Drupal\simple_school_reports_student_di\Service\StudentDiMeetingsServiceInterface $meeting_service */
+    $meeting_service = \Drupal::service('simple_school_reports_student_di.meetings_service');
+    $meeting_data = $meeting_service->getMeetingData($entity->id());
+
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    /** @var \Drupal\node\NodeInterface|null $group */
+    $group = $meeting_data['group_id'] ? $node_storage->load($meeting_data['group_id']) : NULL;
+    if (!$group) {
+      return;
+    }
+
+    $cache = new \Drupal\Core\Cache\CacheableMetadata();
+    $cache->addCacheableDependency($group);
+    $cache->addCacheContexts(['route', 'user.permissions']);
+
+    $is_school_personal = \Drupal::currentUser()->hasPermission('school staff permissions');
+
+    if ($display->getComponent('iup_round') && $module_handler->moduleExists('simple_school_reports_iup')) {
+      if ($iup_round_id = $group->get('field_iup_round')->target_id) {
+        $iup = NULL;
+        $iup_nid = current($node_storage
+          ->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('type', 'iup')
+          ->condition('field_student', $student_uid)
+          ->condition('field_iup_round', $iup_round_id)
+          ->execute()
+        );
+
+        if ($iup_nid) {
+          $iup = $node_storage->load($iup_nid);
+          $iup_round = $node_storage->load($iup_round_id);
+        }
+
+        $url = NULL;
+        $url_title = t('IUP');
+        if ($iup) {
+          $cache->addCacheableDependency($iup);
+          $url_title = $iup->label();
+          if ($iup->get('field_state')->value === 'done' && $iup_round && !$iup_round->get('field_locked')->value) {
+            $url = \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $iup->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]);
+          }
+        }
+
+        if (!$url && $is_school_personal) {
+          $cache->addCacheTags(['node_list:iup']);
+          $url = \Drupal\Core\Url::fromRoute('simple_school_reports_iup.student_router', ['round_nid' => $iup_round_id, 'student_uid' => $student_uid], ['query' => ['post_save_destination' => \Drupal::service('path.current')->getPath()]]);
+        }
+
+        if ($url) {
+          $build['iup_round'] = [
+            '#theme' => 'field',
+            '#title' => t('IUP'),
+            '#label_display' => 'above',
+            '#view_mode' => 'default',
+            '#field_name' => 'iup_round',
+            '#field_type' => 'text',
+            '#field_translatable' => FALSE,
+            '#entity_type' => $entity->getEntityTypeId(),
+            '#bundle' => $entity->bundle(),
+            '#object' => $entity,
+            '#is_multiple' => FALSE,
+            '#items' => [],
+            0 => [
+              '#type' => 'link',
+              '#title' => $url_title,
+              '#url' => $url,
+            ],
+          ];
+        }
+        else {
+          $build['iup_round'] = [];
+        }
+
+        $cache->applyTo($build['iup_round']);
+      }
+    }
+
+    if ($display->getComponent('written_reviews_round') && $module_handler->moduleExists('simple_school_reports_reviews')) {
+      if ($written_reviews_round_id = $group->get('field_written_reviews_round')->target_id) {
+        $written_reviews = NULL;
+
+        /** @var \Drupal\simple_school_reports_reviews\Service\WrittenReviewsRoundProgressServiceInterface $written_reviews_service */
+        $written_reviews_service = \Drupal::service('simple_school_reports_reviews.written_reviews_round_progress_service');
+        $written_reviews_nid = $written_reviews_service->getWrittenReviewsNid($written_reviews_round_id, $student_uid);
+
+        if ($written_reviews_nid) {
+          $written_reviews = $node_storage->load($written_reviews_nid);
+          $written_reviews_round = $node_storage->load($written_reviews_round_id);
+        }
+
+        $url = NULL;
+        $url_title = t('Written reviews');
+        if ($written_reviews) {
+          $cache->addCacheableDependency($written_reviews);
+          $url_title = $written_reviews->label();
+          if ($written_reviews_round && !$written_reviews_round->get('field_locked')->value) {
+            $url = \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $written_reviews->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]);
+          }
+        }
+
+        if (!$url && $is_school_personal) {
+          $cache->addCacheTags(['node_list:iup']);
+          $url = \Drupal\Core\Url::fromRoute('simple_school_reports_reviews.student_router', ['round_nid' => $written_reviews_round_id, 'student_uid' => $student_uid], ['query' => ['post_save_destination' => \Drupal::service('path.current')->getPath()]]);
+        }
+
+        if ($url) {
+          $build['written_reviews_round'] = [
+            '#theme' => 'field',
+            '#title' => t('Written reviews'),
+            '#label_display' => 'above',
+            '#view_mode' => 'default',
+            '#field_name' => 'written_reviews_round',
+            '#field_type' => 'text',
+            '#field_translatable' => FALSE,
+            '#entity_type' => $entity->getEntityTypeId(),
+            '#bundle' => $entity->bundle(),
+            '#object' => $entity,
+            '#is_multiple' => FALSE,
+            '#items' => [],
+            0 => [
+              '#type' => 'link',
+              '#title' => $url_title,
+              '#url' => $url,
+            ],
+          ];
+        }
+        else {
+          $build['written_reviews_round'] = [];
+        }
+
+        $cache->applyTo($build['written_reviews_round']);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_extension_proxy_school_week_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($display->getComponent('table')) {
+    /** @var \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week */
+    $school_week = $entity;
+
+    /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
+    $school_week_service = \Drupal::service('simple_school_reports_entities.school_week_service');
+    $reference = $school_week_service->getSchoolWeekReference($entity->id());
+
+    if ($reference['type'] === 'user') {
+      // Get the school week with parent set.
+      $school_week = $school_week_service->getSchoolWeek($reference['id']);
+    }
+
+    $build['table'] = [
+      '#type' => 'container',
+      'table' => $school_week->toTable(),
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_extension_proxy_school_week_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+
+  if (!$module_handler->moduleExists('simple_school_reports_attendance_analyse')) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
+}
+
+function simple_school_reports_extension_proxy_iup_prefill_options() {
+  $options = [
+    'iup_goal' => t('Previous IUP goals with feedback'),
+    'invalid_absence' => t('Invalid absence'),
+  ];
+
+  if (\Drupal::moduleHandler()->moduleExists('simple_school_reports_grade_stats')) {
+    $grade_options = simple_school_reports_core_allowed_user_grade();
+    unset($grade_options[-99]);
+    unset($grade_options[99]);
+
+    foreach ($grade_options as $grade => $label) {
+      if ($grade >= 6 && $grade <= 9) {
+        $options['merit_' . $grade] = t('Merit points for students in grade @grade', ['@grade' => $grade]);
+      }
+    }
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('simple_school_reports_extra_adaptations')) {
+    $options['extra_adaptations'] = t('Extra adaptations');
+  }
+
+  return $options;
+}

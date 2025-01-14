@@ -1,0 +1,10 @@
+entity.ssr_maillog.edit_form:
+  route_name: entity.ssr_maillog.edit_form
+  group: ssr_maillog
+  title: Edit
+
+entity.ssr_maillog.delete_form:
+  route_name: entity.ssr_maillog.delete_form
+  group: ssr_maillog
+  title: Delete
+  weight: 10

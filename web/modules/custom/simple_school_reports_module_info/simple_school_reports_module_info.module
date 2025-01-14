@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Module Info module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_module_info_theme(): array {
+  return [
+    'ssr_module_info' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for module info templates.
+ *
+ * Default template: ssr-module-info.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the module info information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_module_info(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+function simple_school_reports_module_info_get_modules() {
+  /** @var \Drupal\simple_school_reports_module_info\Service\ModuleInfoServiceInterface $module_info_service */
+  $module_info_service = \Drupal::service('simple_school_reports_module_info.module_info_service');
+  return $module_info_service->getModules();
+}
+
+function simple_school_reports_module_info_get_module_types(): array {
+  return [
+    'core' => t('Core module'),
+    'module' => t('Module'),
+    'mini_module' => t('Mini module'),
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_module_info_ssr_module_info_view(array &$build, \Drupal\simple_school_reports_module_info\ModuleInfoInterface $module_info, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  $build['#attached']['library'][] = 'simple_school_reports_module_info/module_info';
+
+  $module_name = $module_info->get('module')->value;
+
+  if ($module_name) {
+    array_unshift($build, [
+      '#markup' => '<div id="' . $module_name . '"></div>',
+    ]);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function simple_school_reports_module_info_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\views\Entity\View $view */
+  if ($view = $form_state->get('view')) {
+    if ($view->id() === 'module_info' && $view->current_display === 'list') {
+      if (!empty($form['module_type'])) {
+        unset($form['module_type']['#size']);
+        $form['module_type']['#empty_option'] = t('- Any -');
+        $form['module_type']['#type'] = 'select';
+        $form['module_type']['#options'] = simple_school_reports_module_info_get_module_types();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function simple_school_reports_module_info_views_data() {
+  $data['views']['module_info_links_area'] = [
+    'title' => 'Module info links',
+    'help' => 'Provides a list of module info links to be used in module info entities views.',
+    'area' => [
+      'id' => 'module_info_links_area',
+    ],
+  ];
+
+  return $data;
+}
+
+/**
+ * Implements hook_deploy().
+ */
+function simple_school_reports_module_info_deploy() {
+  /** @var \Drupal\simple_school_reports_module_info\Service\ModuleInfoServiceInterface $module_info_service */
+  $module_info_service = \Drupal::service('simple_school_reports_module_info.module_info_service');
+  $result = $module_info_service->syncModuleInfo();
+  if ($result) {
+    \Drupal::logger('simple_school_reports_module_info')->notice('Module info is in sync.');
+  }
+  else {
+    \Drupal::logger('simple_school_reports_module_info')->error('Module info sync failed.');
+  }
+}

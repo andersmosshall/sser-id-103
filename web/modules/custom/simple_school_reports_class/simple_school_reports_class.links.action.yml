@@ -1,0 +1,5 @@
+ssr_school_class.add_form:
+  title: 'Add class'
+  route_name: entity.ssr_school_class.add_form
+  appears_on:
+    - view.classes_list.list

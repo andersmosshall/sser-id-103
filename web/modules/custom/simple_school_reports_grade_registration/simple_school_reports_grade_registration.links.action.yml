@@ -1,0 +1,7 @@
+simple_school_reports_core.grade_round_create:
+  route_name: node.add
+  title: 'Add grade registration round'
+  route_parameters:
+    node_type: 'grade_round'
+  appears_on:
+    - view.grade_registration_rounds.active

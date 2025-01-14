@@ -1,0 +1,35 @@
+uuid: c1f462b3-7485-4a02-8e0d-9a424fa77b87
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.grade_round.field_anonymized
+    - field.field.node.grade_round.field_document_date
+    - field.field.node.grade_round.field_invalid_absence_from
+    - field.field.node.grade_round.field_invalid_absence_to
+    - field.field.node.grade_round.field_locked
+    - field.field.node.grade_round.field_student_groups
+    - field.field.node.grade_round.field_term_type
+    - node.type.grade_round
+  module:
+    - user
+id: node.grade_round.teaser
+targetEntityType: node
+bundle: grade_round
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_anonymized: true
+  field_document_date: true
+  field_invalid_absence_from: true
+  field_invalid_absence_to: true
+  field_locked: true
+  field_student_groups: true
+  field_term_type: true
+  langcode: true

@@ -1,0 +1,8 @@
+settings:
+  allowed_values:
+    -
+      label: Närvarande
+    -
+      label: 'Giltig frånvaro'
+    -
+      label: 'Ogiltig frånvaro'

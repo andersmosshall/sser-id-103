@@ -1,0 +1,20 @@
+uuid: d49e7962-2b39-447c-a1ad-79fae8ca4573
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_eduid_username
+  module:
+    - user
+id: user.user.field_eduid_username
+field_name: field_eduid_username
+entity_type: user
+bundle: user
+label: 'EduID username'
+description: 'Username for EduId federation username if it is used for DNP.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

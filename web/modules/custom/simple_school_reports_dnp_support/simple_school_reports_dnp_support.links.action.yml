@@ -1,0 +1,23 @@
+dnp_provisioning.add_form:
+  title: 'Add dnp provisioning'
+  route_name: entity.dnp_provisioning.add_form
+  appears_on:
+    - entity.dnp_provisioning.collection
+
+dnp_prov_settings.add_form:
+  title: 'Add DNP provisioning settings'
+  route_name: entity.dnp_prov_settings.add_form
+  appears_on:
+    - entity.dnp_prov_settings.collection
+
+dnp_prov_test_settings.type_add:
+  title: 'Add dnp provisioning test settings type'
+  route_name: entity.dnp_prov_test_settings_type.add_form
+  appears_on:
+    - entity.dnp_prov_test_settings_type.collection
+
+dnp_prov_test_settings.add_page:
+  title: 'Add dnp provisioning test settings'
+  route_name: entity.dnp_prov_test_settings.add_page
+  appears_on:
+    - entity.dnp_prov_test_settings.collection

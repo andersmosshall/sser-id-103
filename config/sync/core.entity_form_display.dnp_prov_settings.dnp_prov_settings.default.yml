@@ -1,0 +1,91 @@
+uuid: 1fd4d984-d3d2-485d-b1ad-3a5df93d4db3
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_group
+    - inline_entity_form
+    - simple_school_reports_dnp_support
+third_party_settings:
+  field_group:
+    group_grundlaggande_info:
+      children:
+        - file_name_prefix
+        - include_staff_email
+        - include_student_email
+        - guaranteed_staff
+      label: 'Grundläggande info'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+id: dnp_prov_settings.dnp_prov_settings.default
+targetEntityType: dnp_prov_settings
+bundle: dnp_prov_settings
+mode: default
+content:
+  file_name_prefix:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  guaranteed_staff:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  include_staff_email:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  include_student_email:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  tests:
+    type: inline_entity_form_complex
+    weight: 1
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Provinställning
+      label_plural: Provinställningar
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  langcode: true
+  secrecy_marking: true
+  status: true
+  uid: true

@@ -1,0 +1,52 @@
+uuid: 4a3dc53b-2702-4cde-b696-bc82655f694e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.schema.field_class_start
+    - field.field.paragraph.schema.field_day
+    - field.field.paragraph.schema.field_duration
+    - paragraphs.paragraphs_type.schema
+  module:
+    - options
+id: paragraph.schema.default
+targetEntityType: paragraph
+bundle: schema
+mode: default
+content:
+  field_class_start:
+    type: timestamp
+    label: above
+    settings:
+      date_format: html_time_short
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_day:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_duration:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

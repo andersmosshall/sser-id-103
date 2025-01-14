@@ -1,0 +1,41 @@
+ssr_signing.add_form:
+  title: 'Add signing'
+  route_name: entity.ssr_signing.add_form
+  appears_on:
+    - entity.ssr_signing.collection
+
+ssr_consent_answer.add_form:
+  title: 'Add consent answer'
+  route_name: entity.ssr_consent_answer.add_form
+  appears_on:
+    - entity.ssr_consent_answer.collection
+
+ssr_meeting.type_add:
+  title: 'Add meeting type'
+  route_name: entity.ssr_meeting_type.add_form
+  appears_on:
+    - entity.ssr_meeting_type.collection
+
+ssr_meeting.add_page:
+  title: 'Add meeting'
+  route_name: entity.ssr_meeting.add_page
+  appears_on:
+    - entity.ssr_meeting.collection
+
+school_week.add_form:
+  title: 'Add school week'
+  route_name: entity.school_week.add_form
+  appears_on:
+    - entity.school_week.collection
+
+school_week_deviation.add_form:
+  title: 'Add school week deviation'
+  route_name: entity.school_week_deviation.add_form
+  appears_on:
+    - entity.school_week_deviation.collection
+
+ssr_student_leave_application.add_form:
+  title: 'Add student leave application'
+  route_name: entity.ssr_student_leave_application.add_form
+  appears_on:
+    - entity.ssr_student_leave_application.collection

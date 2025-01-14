@@ -1,0 +1,23 @@
+uuid: c8c25fb3-6071-43e8-8326-70fbbdcfd694
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.budget.field_budget_row
+    - node.type.budget
+  module:
+    - user
+id: node.budget.default
+targetEntityType: node
+bundle: budget
+mode: default
+content:
+  budget_table:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_budget_row: true
+  langcode: true
+  links: true

@@ -1,0 +1,23 @@
+uuid: b7b3c766-5fbe-4c5f-92fc-df8429bf190f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gender_options
+    - node.type.grade_statistics
+  module:
+    - options
+id: node.grade_statistics.field_gender_options
+field_name: field_gender_options
+entity_type: node
+bundle: grade_statistics
+label: 'Gender options'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: merge
+default_value_callback: ''
+settings: {  }
+field_type: list_string

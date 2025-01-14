@@ -1,0 +1,35 @@
+uuid: c3485d81-38ac-4723-89fa-6bdd2d28a3d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_mentor
+  module:
+    - user
+id: user.user.field_mentor
+field_name: field_mentor
+entity_type: user
+bundle: user
+label: Mentor
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: field_first_name
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        teacher: teacher
+        administrator: administrator
+        student: '0'
+        caregiver: '0'
+    include_anonymous: false
+field_type: entity_reference

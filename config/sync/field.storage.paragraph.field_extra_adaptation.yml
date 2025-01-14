@@ -1,0 +1,20 @@
+uuid: 36dc175f-df00-460f-9f93-a3f21a5e81ab
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - taxonomy
+id: paragraph.field_extra_adaptation
+field_name: field_extra_adaptation
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

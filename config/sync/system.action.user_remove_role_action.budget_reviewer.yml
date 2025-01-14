@@ -1,0 +1,14 @@
+uuid: a9377649-c628-4dcf-80d6-473b49930771
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.budget_reviewer
+  module:
+    - user
+id: user_remove_role_action.budget_reviewer
+label: 'Remove the Budget reviewer role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: budget_reviewer

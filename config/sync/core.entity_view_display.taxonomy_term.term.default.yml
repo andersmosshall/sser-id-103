@@ -1,0 +1,54 @@
+uuid: 96fff967-0d28-4c4c-8d68-a3bdab2624d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.term.field_term_end
+    - field.field.taxonomy_term.term.field_term_start
+    - taxonomy.vocabulary.term
+id: taxonomy_term.term.default
+targetEntityType: taxonomy_term
+bundle: term
+mode: default
+content:
+  field_term_end:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_term_start:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  description: true
+  langcode: true

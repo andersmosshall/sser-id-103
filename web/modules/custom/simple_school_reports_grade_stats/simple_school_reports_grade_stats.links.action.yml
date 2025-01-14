@@ -1,0 +1,7 @@
+simple_school_reports_grade_stats.grade_statistics_create:
+  route_name: node.add
+  title: 'Add grade statistics'
+  route_parameters:
+    node_type: 'grade_statistics'
+  appears_on:
+    - view.grade_statistics.list

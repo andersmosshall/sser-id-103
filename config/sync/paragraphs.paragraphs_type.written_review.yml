@@ -1,0 +1,10 @@
+uuid: 370dff38-22f2-48f0-b899-4053ec7b678f
+langcode: en
+status: true
+dependencies: {  }
+id: written_review
+label: 'Written review'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

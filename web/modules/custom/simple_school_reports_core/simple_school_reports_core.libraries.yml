@@ -1,0 +1,150 @@
+form_overrides:
+  version: VERSION
+  css:
+    theme:
+      css/form_overrides.css: {}
+
+attendance_report:
+  version: VERSION
+  css:
+    theme:
+      css/attendance_report.css: { }
+
+chartjs:
+  version: VERSION
+  js:
+    libraries/chartjs/chart.min.js: { }
+
+invalid_absence_student_statistics:
+  version: VERSION
+  js:
+    js/invalid_absence_student_statistics.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - simple_school_reports_core/chartjs
+
+absence_day_student_statistics:
+  version: VERSION
+  js:
+    js/absence_day_student_statistics.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - simple_school_reports_core/chartjs
+
+standard_phrase_select:
+  version: VERSION
+  css:
+    theme:
+      css/standard_phrase_select.css: { }
+  js:
+    js/standard_phrase_select.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+input_copy_element:
+  version: VERSION
+  css:
+    theme:
+      css/input_copy_element.css: { }
+  js:
+    js/input_copy_element.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+details_toggle:
+  version: VERSION
+  js:
+    js/details_toggle.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+print:
+  version: VERSION
+  js:
+    js/ssr_print.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+views_students_grade_group:
+  version: VERSION
+  js:
+    js/views_students_grade_group.js: { }
+
+translations_support:
+  version: VERSION
+  js:
+    js/translations_support.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+range_to_url_autosubmit:
+  version: VERSION
+  js:
+    js/range_to_url_autosubmit.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+
+user_bulk_form:
+  version: VERSION
+  js:
+    js/user_bulk_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+absence_list_button:
+  version: VERSION
+  js:
+    js/absence_list_button.js: { }
+  css:
+    theme:
+      css/absence_list_button.css: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupal.debounce
+
+password_policy:
+  version: VERSION
+  js:
+    js/password_policy.js: { }
+  css:
+    theme:
+      css/password_policy.css: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+blur_secret_fields:
+  version: VERSION
+  js:
+    js/blur_secret_fields.js: { }
+  css:
+    theme:
+      css/blur_secret_fields.css: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

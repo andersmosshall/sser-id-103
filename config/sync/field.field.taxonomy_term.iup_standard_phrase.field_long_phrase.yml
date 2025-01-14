@@ -1,0 +1,27 @@
+uuid: b639fccb-1a3b-4211-8314-0fcf0fe5f97a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_long_phrase
+    - taxonomy.vocabulary.iup_standard_phrase
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: taxonomy_term.iup_standard_phrase.field_long_phrase
+field_name: field_long_phrase
+entity_type: taxonomy_term
+bundle: iup_standard_phrase
+label: 'Long standard phrase'
+description: 'When using long standars phrase, use the label above as a shorter identifier for the standard phrase.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

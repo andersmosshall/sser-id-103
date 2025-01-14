@@ -1,0 +1,33 @@
+uuid: c0881d60-af4f-4fec-98b2-5f446df4cff3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.iup_standard_goal.field_iup_goal
+    - field.field.taxonomy_term.iup_standard_goal.field_school_subject
+    - taxonomy.vocabulary.iup_standard_goal
+  module:
+    - text
+id: taxonomy_term.iup_standard_goal.default
+targetEntityType: taxonomy_term
+bundle: iup_standard_goal
+mode: default
+content:
+  field_iup_goal:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_school_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  description: true
+  langcode: true

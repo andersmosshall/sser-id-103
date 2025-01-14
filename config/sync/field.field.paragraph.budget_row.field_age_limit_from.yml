@@ -1,0 +1,23 @@
+uuid: befb51bc-46fb-44f0-8a19-5dac9bfec105
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_age_limit_from
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_age_limit_from
+field_name: field_age_limit_from
+entity_type: paragraph
+bundle: budget_row
+label: 'Age limit from'
+description: 'The minimum age för student specifik rows. Leave blank for no minimum age.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: 21
+  prefix: ''
+  suffix: year
+field_type: integer

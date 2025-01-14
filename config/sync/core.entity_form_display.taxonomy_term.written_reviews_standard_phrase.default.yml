@@ -1,0 +1,30 @@
+uuid: 5a1a560f-7e25-441c-8904-11554ff5fc00
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.written_reviews_standard_phrase
+id: taxonomy_term.written_reviews_standard_phrase.default
+targetEntityType: taxonomy_term
+bundle: written_reviews_standard_phrase
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  path: true

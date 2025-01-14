@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_class_support.class_service:
+    class: Drupal\simple_school_reports_class_support\Service\SsrClassService
+    arguments: [ '@entity_type.manager', '@database', '@state', '@queue', '@current_user', '@messenger' ]

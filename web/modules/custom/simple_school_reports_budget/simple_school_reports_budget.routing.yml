@@ -1,0 +1,15 @@
+simple_school_reports_budget.duplicate_budget:
+  path: '/budget/{node}/duplicate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_budget\Form\DuplicateBudgetForm'
+    _title: 'Duplicate budget'
+  requirements:
+    _permission: 'administer budget'
+
+simple_school_reports_budget.evaluate_budget:
+  path: '/budget/{node}/evaluate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_budget\Form\EvaluateBudgetForm'
+    _title: 'Evaluate budget'
+  requirements:
+    _permission: 'administer budget'

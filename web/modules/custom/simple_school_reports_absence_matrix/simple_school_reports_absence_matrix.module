@@ -1,0 +1,85 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_core\UserFormAlter;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\views\ViewExecutable;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core\CourseAttendanceReportFormAlter;
+use Drupal\simple_school_reports_core\Service\TermService;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Site\Settings;
+use Drupal\user\UserInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\simple_school_reports_core\Form\WeekNumberToUrlRangeForm;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_absence_matrix_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'absence_matrix') {
+        UserFormAlter::exposedFilterByMentor($form, $form_state);
+        UserFormAlter::exposedFilterByClass($form, $form_state);
+
+        if (!empty($form['week'])) {
+          $options = WeekNumberToUrlRangeForm::getWeekOptions('-1');
+          unset($form['week']['#size']);
+          $form['week']['#type'] = 'select';
+          $form['week']['#options'] = $options;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_absence_matrix_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'absence_matrix') {
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && !empty($condition['operator']) && $condition['operator'] === '!=') {
+          $value = $condition['value'] ?? '-1';
+
+          if ($value === '-1') {
+            $default_date = new \Drupal\Core\Datetime\DrupalDateTime();
+            $default_date = WeekNumberToUrlRangeForm::getFirstDayOfWeek($default_date);
+            $value = $default_date->getTimestamp();
+          }
+
+          $monday_timestamp = WeekNumberToUrlRangeForm::getTimestampFromOptionValue($value);
+          $view->element['#monday_timestamp'] = $monday_timestamp;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_absence_matrix_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'absence_matrix') {
+    $view->element['#cache']['contexts'][] = 'current_day';
+    $view->element['#cache']['tags'][] = 'node_list:day_absence';
+    $view->element['#attached']['library'][] = 'simple_school_reports_absence_matrix/absence_matrix_view';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_absence_matrix_preprocess_views_view_table(&$variables) {
+  if (isset($variables['view']) && !empty($variables['view']->id() === 'absence_matrix') && !empty($variables['view']->element['#monday_timestamp'])) {
+    $variables['attributes']['data-monday-timestamp'] = $variables['view']->element['#monday_timestamp'];
+  }
+}
+

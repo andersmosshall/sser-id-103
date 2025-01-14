@@ -1,0 +1,10 @@
+settings:
+  allowed_values:
+    -
+      label: Namn
+    -
+      label: 'Årskurs, namn'
+    -
+      label: 'Kön, namn'
+    -
+      label: 'Årskurs, kön, namn'

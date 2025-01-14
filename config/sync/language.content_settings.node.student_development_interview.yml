@@ -1,0 +1,11 @@
+uuid: b3c7fb63-1204-4280-837e-eb7591deaca8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.student_development_interview
+id: node.student_development_interview
+target_entity_type_id: node
+target_bundle: student_development_interview
+default_langcode: site_default
+language_alterable: false

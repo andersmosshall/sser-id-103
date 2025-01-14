@@ -1,0 +1,21 @@
+uuid: b4b1bc80-950c-4fcc-957c-caf49a516bf3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.iup
+  module:
+    - options
+id: node.iup.field_state
+field_name: field_state
+entity_type: node
+bundle: iup
+label: State
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

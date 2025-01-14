@@ -1,0 +1,21 @@
+uuid: bda731aa-bc81-409b-ace3-ba988d6339e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document_date
+    - node.type.written_reviews_round
+id: node.written_reviews_round.field_document_date
+field_name: field_document_date
+entity_type: node
+bundle: written_reviews_round
+label: 'Document date'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1640675863
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

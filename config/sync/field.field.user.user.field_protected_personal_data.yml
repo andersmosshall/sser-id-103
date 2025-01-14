@@ -1,0 +1,21 @@
+uuid: 3e95960a-23e6-46a6-8b58-7719bdac7cc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_protected_personal_data
+  module:
+    - options
+    - user
+id: user.user.field_protected_personal_data
+field_name: field_protected_personal_data
+entity_type: user
+bundle: user
+label: 'Protected personal data'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

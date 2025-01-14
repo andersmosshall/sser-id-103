@@ -1,0 +1,23 @@
+ssr_assessment_group.add_form:
+  title: 'Add assessment group'
+  route_name: entity.ssr_assessment_group.add_form
+  appears_on:
+    - entity.ssr_assessment_group.collection
+
+ssr_assessment_group_user.add_form:
+  title: 'Add assessment group user'
+  route_name: entity.ssr_assessment_group_user.add_form
+  appears_on:
+    - entity.ssr_assessment_group_user.collection
+
+ssr_examination.add_form:
+  title: 'Add examination'
+  route_name: entity.ssr_examination.add_form
+  appears_on:
+    - entity.ssr_examination.collection
+
+ssr_examination_result.add_form:
+  title: 'Add examination result'
+  route_name: entity.ssr_examination_result.add_form
+  appears_on:
+    - entity.ssr_examination_result.collection

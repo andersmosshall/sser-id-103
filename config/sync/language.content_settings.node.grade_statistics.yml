@@ -1,0 +1,11 @@
+uuid: 027df85f-89d2-4fa0-a85c-c19b8c13c8f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.grade_statistics
+id: node.grade_statistics
+target_entity_type_id: node
+target_bundle: grade_statistics
+default_langcode: site_default
+language_alterable: false

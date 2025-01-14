@@ -1,0 +1,29 @@
+uuid: 0a1c68b8-630f-43ca-aad4-57fb8c7d915c
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.student_examination_list
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__student_examination_list_list
+theme: ssr_base
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:student_examination_list-list'
+settings:
+  id: 'views_block:student_examination_list-list'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/examinations'

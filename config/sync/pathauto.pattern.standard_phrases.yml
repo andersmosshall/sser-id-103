@@ -1,0 +1,23 @@
+uuid: d9fe3d85-dc27-45c9-be25-abf38962dd47
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: standard_phrases
+label: 'Standard phrases'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/standard-phrase/[term:tid]'
+selection_criteria:
+  b36656b8-c15f-43df-96f5-9dd26a803d65:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: b36656b8-c15f-43df-96f5-9dd26a803d65
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      iup_standard_phrase: iup_standard_phrase
+      written_reviews_standard_phrase: written_reviews_standard_phrase
+selection_logic: and
+weight: -5
+relationships: {  }

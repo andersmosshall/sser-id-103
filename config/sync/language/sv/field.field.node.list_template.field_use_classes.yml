@@ -1,0 +1,5 @@
+label: 'Använd klasser'
+description: 'Filtrera listan utifrån klasser'
+settings:
+  on_label: Ja
+  off_label: Nej

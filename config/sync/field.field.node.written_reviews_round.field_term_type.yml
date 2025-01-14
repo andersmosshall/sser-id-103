@@ -1,0 +1,21 @@
+uuid: 2f55acfd-325b-48cc-aec2-296c1210ea70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_term_type
+    - node.type.written_reviews_round
+  module:
+    - options
+id: node.written_reviews_round.field_term_type
+field_name: field_term_type
+entity_type: node
+bundle: written_reviews_round
+label: 'Term type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

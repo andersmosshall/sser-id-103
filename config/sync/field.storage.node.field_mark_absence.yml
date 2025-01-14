@@ -1,0 +1,18 @@
+uuid: 9003bfb6-ea0b-41fd-81f1-f4413210bb58
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_mark_absence
+field_name: field_mark_absence
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

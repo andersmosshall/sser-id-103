@@ -1,0 +1,47 @@
+.standard-iup-goal-select--wrapper {
+  display: block;
+  width: 100%;
+}
+
+.standard-iup-goal-select--wrapper .button {
+  width: -webkit-fill-available;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.standard-iup-goal-select--wrapper .select--wrapper .form-type--standard-iup-goal-select {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 61rem) {
+  .standard-iup-goal-select--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .standard-iup-goal-select--wrapper .button {
+    width: auto;
+    margin-right: 12px;
+  }
+
+  .standard-iup-goal-select--wrapper .select--wrapper .form-type--standard-iup-goal-select {
+    margin-top: 0;
+  }
+}
+
+.standard-iup-goal-select--wrapper .button:before {
+  margin-left: -0.25em;
+  padding-right: 0.25em;
+  content: "^";
+  font-weight: 900;
+}
+
+.standard-iup-goal-select--wrapper .select--wrapper,
+.standard-iup-goal-select--wrapper .select--wrapper .form-element--type-select {
+  width: 100%;
+}
+
+

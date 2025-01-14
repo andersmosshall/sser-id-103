@@ -1,0 +1,5 @@
+ssr_maillog.add_form:
+  title: 'Add maillog'
+  route_name: entity.ssr_maillog.add_form
+  appears_on:
+    - entity.ssr_maillog.collection

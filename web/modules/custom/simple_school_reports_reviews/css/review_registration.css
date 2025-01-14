@@ -1,0 +1,66 @@
+.written-review-registration-form .students-wrapper .student-row:nth-child(even) {
+  background: #f3f4f9;
+  padding: 20px
+}
+
+.written-review-registration-form .students-wrapper .student-row:nth-child(odd) {
+  padding: 20px
+}
+
+.written-review-registration-form .students-wrapper .student-row--info-wrapper > *:not(:last-child) {
+  margin-right: 20px;
+}
+.written-review-registration-form .students-wrapper .student-row--info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.written-review-registration-form .students-wrapper .student-row--report-wrapper--review {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.written-review-registration-form .students-wrapper .student-row--report-wrapper--review > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.written-review-registration-form .students-wrapper .student-row--report-wrapper--review > *:last-child {
+  margin-left: auto;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+@media (min-width: 650px) { /* @TODO find the proper breakpoint */
+  .written-review-registration-form .students-wrapper .student-row--report-wrapper--review > *:last-child {
+    max-width: 50%;
+    min-width: 50%;
+  }
+}
+
+.written-review-registration-form .students-wrapper .form-item {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.written-review-registration-form .students-wrapper .form-item--empty-grades {
+  margin-top: 60px !important;
+}
+
+.written-review-registration-form .students-wrapper .form-item--state {
+  margin-top: 60px !important;
+}
+
+
+.written-review-registration-form .student-row--report-wrapper--review .filter-wrapper {
+  display: none;
+}
+
+.written-review-registration-form .student-row--report-wrapper--review .form-textarea-wrapper .cke_bottom {
+  display: none;
+}
+
+

@@ -1,0 +1,11 @@
+uuid: 09551574-4170-48dd-bf01-df53c481cad2
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: school_week_deviation.school_week_specific
+label: 'School week specific'
+description: ''
+targetEntityType: school_week_deviation
+cache: true

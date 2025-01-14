@@ -1,0 +1,23 @@
+uuid: e120b1a2-a46e-4880-9896-6422a8764b63
+langcode: sv
+status: true
+dependencies:
+  config:
+    - block_content.type.test
+    - field.field.block_content.test.body
+  module:
+    - text
+id: block_content.test.default
+targetEntityType: block_content
+bundle: test
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true

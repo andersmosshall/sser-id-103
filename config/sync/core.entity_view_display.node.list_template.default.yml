@@ -1,0 +1,39 @@
+uuid: 3cda6aef-e5f0-4808-b57c-fa87f7a04dcf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.list_template.field_classes
+    - field.field.node.list_template.field_grades
+    - field.field.node.list_template.field_list_template_field
+    - field.field.node.list_template.field_mark_absence
+    - field.field.node.list_template.field_mentoring_students
+    - field.field.node.list_template.field_public
+    - field.field.node.list_template.field_show_checkbox
+    - field.field.node.list_template.field_sorting
+    - field.field.node.list_template.field_use_classes
+    - node.type.list_template
+  module:
+    - user
+id: node.list_template.default
+targetEntityType: node
+bundle: list_template
+mode: default
+content:
+  list_table:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_classes: true
+  field_grades: true
+  field_list_template_field: true
+  field_mark_absence: true
+  field_mentoring_students: true
+  field_public: true
+  field_show_checkbox: true
+  field_sorting: true
+  field_use_classes: true
+  langcode: true
+  links: true

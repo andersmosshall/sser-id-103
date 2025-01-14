@@ -1,0 +1,22 @@
+uuid: 0d0b5e0d-5138-4ff2-827f-d7b5867bb356
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_grade_round
+label: 'Node Grade round'
+type: 'canonical_entities:node'
+pattern: '/grade-round/[node:title]'
+selection_criteria:
+  b2f9315b-5efc-490a-8d7d-7648c3b79fd2:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: b2f9315b-5efc-490a-8d7d-7648c3b79fd2
+    context_mapping:
+      node: node
+    bundles:
+      grade_round: grade_round
+selection_logic: and
+weight: -5
+relationships: {  }

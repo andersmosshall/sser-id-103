@@ -1,0 +1,351 @@
+<?php
+
+use Drupal\simple_school_reports_reviews\WrittenReviewRoundFormAlter;
+use Drupal\simple_school_reports_reviews\WrittenReviewsSubjectFormAlter;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_reviews\WrittenReviewsStudentFormAlter;
+use Drupal\simple_school_reports_reviews\WrittenReviewsStandardPhraseFormAlter;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_reviews_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $forms_to_alter = ['node_written_reviews_round_edit_form', 'node_written_reviews_round_form'];
+  if (in_array($form_id, $forms_to_alter)) {
+    WrittenReviewRoundFormAlter::setDefaultDates($form, $form_state);
+    WrittenReviewRoundFormAlter::WrittenReviewRoundFormAlter($form, $form_state);
+  }
+
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'written_reviews_subject_list' || $view->id() === 'written_reviews_student_list') {
+        WrittenReviewsSubjectFormAlter::exposedViewsFormAlter($form, $form_state);
+      }
+    }
+  }
+
+  if ($form_id === 'node_written_reviews_subject_state_edit_form') {
+    WrittenReviewsSubjectFormAlter::formAlter($form, $form_state);
+  }
+
+  if ($form_id === 'node_written_reviews_edit_form') {
+    WrittenReviewsStudentFormAlter::formAlter($form, $form_state);
+  }
+
+  if ($form_id === 'taxonomy_term_written_reviews_standard_phrase_form') {
+    WrittenReviewsStandardPhraseFormAlter::formAlter($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_reviews_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'written_reviews_round') {
+      $locked = $entity->get('field_locked')->value;
+      $operations['written_reviews_registration'] = [
+        'title' => t('Written reviews registration'),
+        'url' => \Drupal\Core\Url::fromRoute('view.written_reviews_subject_list.written_reviews_subject_list', ['node' => $entity->id()]),
+        'weight' => $locked ? -98 : -99,
+      ];
+
+      if ($entity->access('update')) {
+        $operations['generate_docs'] = [
+          'title' => t('Generate documents'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_reviews.generate_review_docs', ['node' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => $locked ? -99 : -98,
+        ];
+      }
+    }
+  }
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'written_reviews_subject_state') {
+      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+      $operations = [];
+      $written_review_round_node = \Drupal::request()->get('node');
+
+      if (is_numeric($written_review_round_node)) {
+        $written_review_round_node = $node_storage->load($written_review_round_node);
+      }
+
+      if ($written_review_round_node instanceof \Drupal\node\NodeInterface && $written_review_round_node->bundle() === 'written_reviews_round') {
+        if ($entity->access('update')) {
+          $operations['written_reviews_registration'] = [
+            'title' => t('Written reviews registration'),
+            'url' => \Drupal\Core\Url::fromRoute('entity.node.edit_form', ['node' => $entity->id()], ['query' => ['written_reviews_round' => $written_review_round_node->id(), 'destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -99,
+          ];
+        }
+      }
+    }
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($entity instanceof \Drupal\user\UserInterface) {
+    if ($entity->hasRole('student')) {
+      if ($route_name === 'view.written_reviews_student_list.written_reviews_student_list') {
+        $operations = [];
+
+        $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+        $operations = [];
+        $written_review_round_node = \Drupal::request()->get('node');
+
+        if (is_numeric($written_review_round_node)) {
+          $written_review_round_node = $node_storage->load($written_review_round_node);
+        }
+
+        if ($written_review_round_node instanceof \Drupal\node\NodeInterface && $written_review_round_node->bundle() === 'written_reviews_round') {
+          if ($entity->access('update')) {
+            $operations['written_reviews_router'] = [
+              'title' => t('Register school efforts'),
+              'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_reviews.student_router', ['round_nid' => $written_review_round_node->id(), 'student_uid' => $entity->id()], ['query' => ['post_save_destination' => \Drupal::service('path.current')->getPath()]]),
+              'weight' => -99,
+            ];
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_reviews_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'written_reviews_student_list') {
+
+    $has_grade_filter = FALSE;
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'user__field_grade.field_grade_value = :user__field_grade_field_grade_value') {
+          $has_grade_filter =  TRUE;
+        }
+      }
+    }
+
+    if (!$has_grade_filter) {
+      $grades = [];
+      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+      /** @var \Drupal\node\NodeInterface $written_reviews_round */
+      $written_reviews_round = \Drupal::request()->get('node');
+      if (is_numeric($written_reviews_round)) {
+        $written_reviews_round = $node_storage->load($written_reviews_round);
+      }
+
+      if (!$written_reviews_round || $written_reviews_round->bundle() !== 'written_reviews_round') {
+        return;
+      }
+      $subject_nids = array_column($written_reviews_round->get('field_written_reviews_subject')->getValue(), 'target_id');
+      if (!empty($subject_nids)) {
+        /** @var \Drupal\Core\Database\Connection $connection */
+        $connection = \Drupal::service('database');
+
+        $results = $connection->select('node__field_grade', 'g')->condition('g.entity_id', $subject_nids, 'IN')
+          ->fields('g', ['entity_id', 'field_grade_value'])
+          ->execute();
+
+        foreach ($results as $result) {
+          $grades[$result->field_grade_value] = (string) $result->field_grade_value;
+        }
+      }
+
+      if (!empty($grades)) {
+        // Add grades filter.
+
+        if (empty($query->where[0])) {
+          $query->where[0] = [
+            'args' => [],
+            'conditions' => [],
+            'type' => 'AND',
+          ];
+        }
+
+
+        $query->where[0]['conditions'][] = [
+          'field' => 'user__field_grade.field_grade_value IN(:user__field_grade_field_grade_value[])',
+          'operator' => 'formula',
+          'value' => [
+            ':user__field_grade_field_grade_value[]' => $grades,
+          ],
+        ];
+
+
+      }
+    }
+  }
+  if ($view->id() === 'written_reviews_review_list') {
+    $student = NULL;
+    $round = NULL;
+
+    /** @var \Drupal\node\NodeStorage $node_storage */
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    if ($view->current_display === 'student') {
+      /** @var \Drupal\node\NodeInterface $written_reviews_node */
+      $written_reviews_node = \Drupal::request()->get('node');
+      if (is_numeric($written_reviews_node)) {
+        $written_reviews_node = $node_storage->load($written_reviews_node);
+      }
+      if ($written_reviews_node && $written_reviews_node->bundle() === 'written_reviews') {
+        $student = current($written_reviews_node->get('field_student')->referencedEntities());
+        $round = current($written_reviews_node->get('field_written_reviews_round')->referencedEntities());
+      }
+    }
+
+    if ($view->current_display === 'preview') {
+      /** @var \Drupal\node\NodeInterface $written_reviews_node */
+      $round = \Drupal::request()->get('node');
+      if (is_numeric($round)) {
+        $round = $node_storage->load($round);
+      }
+
+      $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+      $student = \Drupal::request()->get('user');
+      if (is_numeric($student)) {
+        $student = $user_storage->load($student);
+      }
+    }
+
+    if (
+      $student &&
+      $student->hasRole('student') &&
+      $student->access('update') &&
+      $round &&
+      $round->bundle() === 'written_reviews_round'
+    ) {
+      $student_uid = $student->id();
+      $round_nid = $round->id();
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as $key => &$condition) {
+          if (!empty($condition['field']) && $condition['field'] === 'paragraphs_item_field_data_node__field_written_reviews__paragraph__field_student.field_student_target_id') {
+            $condition['value'] = $student_uid;
+          }
+          if (!empty($condition['field']) && $condition['field'] === 'node_field_data.nid') {
+            $condition['value'] = $round_nid;
+          }
+        }
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function simple_school_reports_reviews_link_alter(&$variables) {
+  if (!empty($variables['options']['attributes']['class']) && is_array($variables['options']['attributes']['class']) && in_array('button--action', $variables['options']['attributes']['class'])) {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name === 'entity.taxonomy_vocabulary.overview_form') {
+      if (!empty($variables['options']['query']['destination']) && strpos($variables['options']['query']['destination'], 'admin/structure/taxonomy/manage/written_reviews_standard_phrase/overview') !== FALSE)
+      $variables['text'] = t('Add standard phrase');
+    }
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_reviews_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'simple_school_reports_reviews.written_review_preview') {
+    $node = $context['current_request']->get('node');
+    $user = $context['current_request']->get('user');
+
+    if ($node instanceof \Drupal\node\NodeInterface && $user instanceof \Drupal\user\UserInterface) {
+      if ($node->get('field_locked')->value) {
+        $cache->addCacheableDependency($node);
+        $cache->addCacheContexts(['user']);
+        $destination = $context['current_request']->get('destination');
+        if (!$destination) {
+          $destination = $context['path.current']->getPath();
+        }
+        $local_actions['ssr_written_reviews_file_gen'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Generate written reviews document'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_reviews.generate_review_single_doc', ['node' => $node->id(), 'user' => $user->id()], ['query' => ['destination' => $destination]]),
+          ],
+          '#access' => \Drupal\Core\Access\AccessResult::allowedIfHasPermission(\Drupal::currentUser(), 'school staff permissions'),
+          '#weight' => 10,
+        ];
+      }
+    }
+
+    $local_actions['print_action'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => t('Print out'),
+        'url' => \Drupal\Core\Url::fromUserInput('#'),
+        'localized_options' => [
+          'attributes' => [
+            'class' => [
+              'action--ssr-print',
+            ],
+          ],
+        ],
+      ],
+      '#weight' => 10,
+    ];
+  }
+
+  if ($context['route_name'] === 'view.written_reviews_subject_list.written_reviews_subject_list' || $context['route_name'] === 'view.written_reviews_student_list.written_reviews_student_list') {
+    $nid = $context['current_request']->get('node');
+    if ($nid) {
+      $cache->addCacheTags(['node:' . $nid]);
+      $cache->addCacheContexts(['user']);
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = \Drupal\Core\Access\AccessResult::allowedIf(\Drupal::currentUser()->hasPermission('administer simple school reports settings'));
+      $local_actions['ssr_iup_file_gen'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Generate documents'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_reviews.generate_review_docs', ['node' => $nid], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_reviews_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'written_reviews_review_list') {
+    $view->element['#cache']['contexts'][] = 'route';
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_reviews_node_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->bundle() === 'written_reviews_subject_state') {
+    /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+    $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
+    $options_map = $school_subject_service->getSchoolSubjectOptionList(TRUE);
+
+    $label = 'Årskurs';
+    if ($grade = $entity->get('field_grade')->value) {
+      $label .= ' ' . $grade;
+    }
+    if ($class = $entity->get('field_class')->entity) {
+      $label .= ' (' . $class->label() . ')';
+    }
+    if ($subject = $entity->get('field_school_subject')->entity) {
+      $label .= ' - ' . $options_map[$subject->id()] ?? $subject->label();
+    }
+
+    $entity->set('title', $label);
+  }
+
+}

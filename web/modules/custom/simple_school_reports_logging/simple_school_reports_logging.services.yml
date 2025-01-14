@@ -1,0 +1,6 @@
+services:
+  simple_school_reports_logging.request_log:
+    class: Drupal\simple_school_reports_logging\Service\RequestLogService
+    arguments: [ '@tempstore.private', '@datetime.time', '@current_user' ]
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,22 @@
+uuid: c3ab92f6-1fd0-4620-b6fe-115788e885ed
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_iup_round
+label: 'Node IUP round'
+type: 'canonical_entities:node'
+pattern: '/iup-round/[node:title]'
+selection_criteria:
+  910e5fbe-3d87-47f1-9ad3-b9d705e4c214:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 910e5fbe-3d87-47f1-9ad3-b9d705e4c214
+    context_mapping:
+      node: node
+    bundles:
+      iup_round: iup_round
+selection_logic: and
+weight: -5
+relationships: {  }

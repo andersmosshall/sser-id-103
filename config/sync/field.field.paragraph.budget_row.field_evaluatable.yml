@@ -1,0 +1,23 @@
+uuid: a47e4ce3-d2dc-4676-9b7f-55063d54b500
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_evaluatable
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_evaluatable
+field_name: field_evaluatable
+entity_type: paragraph
+bundle: budget_row
+label: Evaluatable
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

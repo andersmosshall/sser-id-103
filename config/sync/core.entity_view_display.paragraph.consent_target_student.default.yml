@@ -1,0 +1,21 @@
+uuid: ec41bd05-e7d0-40fb-9c59-b74b7fb87bee
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.consent_target_student.field_students
+    - paragraphs.paragraphs_type.consent_target_student
+id: paragraph.consent_target_student.default
+targetEntityType: paragraph
+bundle: consent_target_student
+mode: default
+content:
+  field_students:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

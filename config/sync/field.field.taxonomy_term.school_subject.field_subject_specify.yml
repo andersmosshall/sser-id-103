@@ -1,0 +1,19 @@
+uuid: 6f97f76e-3ec4-4932-8dae-c859abf38a20
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_subject_specify
+    - taxonomy.vocabulary.school_subject
+id: taxonomy_term.school_subject.field_subject_specify
+field_name: field_subject_specify
+entity_type: taxonomy_term
+bundle: school_subject
+label: 'Subject specify'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

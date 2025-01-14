@@ -1,0 +1,30 @@
+uuid: bbbb973a-6262-4b5f-b9ef-7b5c7c938194
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - field_permissions
+    - node
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+  field_permissions:
+    permission_type: public
+id: node.field_description
+field_name: field_description
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

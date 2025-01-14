@@ -1,0 +1,4 @@
+settings:
+  allowed_values:
+    -
+      label: 'Sekretessmarkering/Skyddad folkbokföring'

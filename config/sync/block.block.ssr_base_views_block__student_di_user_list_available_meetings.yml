@@ -1,0 +1,29 @@
+uuid: 4167a39e-fd71-4d0d-90e5-6ca5035aa116
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.student_di_user_list
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__student_di_user_list_available_meetings
+theme: ssr_base
+region: content
+weight: 1
+provider: null
+plugin: 'views_block:student_di_user_list-available_meetings_student'
+settings:
+  id: 'views_block:student_di_user_list-available_meetings_student'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/development-interview'

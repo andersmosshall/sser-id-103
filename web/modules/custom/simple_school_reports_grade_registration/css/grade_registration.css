@@ -1,0 +1,72 @@
+.grade-registration-form .students-wrapper .student-row:nth-child(even) {
+  background: #f3f4f9;
+  padding: 20px
+}
+
+.grade-registration-form .students-wrapper .student-row:nth-child(odd) {
+  padding: 20px
+}
+
+.grade-registration-form .students-wrapper .student-row--info-wrapper > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.student-row--update-reason-wrapper .form-radios {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+}
+
+.grade-registration-form .students-wrapper select {
+  width: 100%;
+}
+
+.grade-registration-form .students-wrapper .form-item,
+.grade-registration-form .students-wrapper .student-row--info-name {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.grade-registration-form .students-wrapper .fieldset__label,
+.grade-registration-form .students-wrapper .form-item__label{
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.grade-registration-form .students-wrapper .form-item--empty-grades {
+  margin-top: 60px !important;
+}
+
+.grade-registration-form .students-wrapper .form-item--state {
+  margin-top: 60px !important;
+}
+
+.grade-registration-form .student-row--update-reason-wrapper .form-radios .form-type--radio {
+  margin-right: 16px;
+}
+
+@media screen and (min-width: 37.5rem) {
+  .grade-registration-form .students-wrapper .student-row--info-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .grade-registration-form .students-wrapper .student-row--report-wrapper--grade {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .grade-registration-form .students-wrapper .student-row--report-wrapper--grade > *:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  .grade-registration-form .students-wrapper .student-row--report-wrapper--grade > *:last-child {
+    margin-left: auto;
+    max-width: 40%;
+  }
+}

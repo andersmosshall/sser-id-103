@@ -1,0 +1,42 @@
+uuid: 7dc38ed1-5cab-4292-a62c-1bd9e8542da4
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: school_week.school_week.default
+targetEntityType: school_week
+bundle: school_week
+mode: default
+content:
+  table:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  deviation: true
+  from_1: true
+  from_2: true
+  from_3: true
+  from_4: true
+  from_5: true
+  from_6: true
+  from_7: true
+  label: true
+  length_1: true
+  length_2: true
+  length_3: true
+  length_4: true
+  length_5: true
+  length_6: true
+  length_7: true
+  to_1: true
+  to_2: true
+  to_3: true
+  to_4: true
+  to_5: true
+  to_6: true
+  to_7: true
+  uid: true

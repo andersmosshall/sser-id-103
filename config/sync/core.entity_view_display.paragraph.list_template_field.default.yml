@@ -1,0 +1,39 @@
+uuid: 82b1d470-0915-43bc-8b85-e1b933f5a5c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.list_template_field.field_field_type
+    - field.field.paragraph.list_template_field.field_label
+    - field.field.paragraph.list_template_field.field_size
+    - paragraphs.paragraphs_type.list_template_field
+  module:
+    - options
+id: paragraph.list_template_field.default
+targetEntityType: paragraph
+bundle: list_template_field
+mode: default
+content:
+  field_field_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_size:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

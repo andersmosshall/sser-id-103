@@ -1,0 +1,27 @@
+grade_registration:
+  version: VERSION
+  css:
+    theme:
+      css/grade_registration.css: { }
+  js:
+    js/grade_registration.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+grade_round:
+  version: VERSION
+  css:
+    theme:
+      css/grade_round.css: { }
+
+student_group:
+  version: VERSION
+  js:
+    js/student_group.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings

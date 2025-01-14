@@ -1,0 +1,71 @@
+uuid: a0ee2f91-f60e-43c5-883e-d65f81f41808
+langcode: en
+status: true
+dependencies:
+  module:
+    - inline_entity_form
+    - simple_school_reports_examinations_support
+id: ssr_assessment_group.ssr_assessment_group.default
+targetEntityType: ssr_assessment_group
+bundle: ssr_assessment_group
+mode: default
+content:
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  main_teacher:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  other_teachers:
+    type: inline_entity_form_complex
+    weight: 3
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Behörigheter för andra'
+      label_plural: 'Behörigheter för andra'
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+  school_class:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  students:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  subject:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true

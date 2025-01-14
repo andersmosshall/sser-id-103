@@ -1,0 +1,11 @@
+uuid: 2af0d7d7-f1e7-47d8-afed-c82b974c8a57
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.course_attendance_report
+id: node.course_attendance_report
+target_entity_type_id: node
+target_bundle: course_attendance_report
+default_langcode: site_default
+language_alterable: false

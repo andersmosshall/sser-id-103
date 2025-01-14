@@ -1,0 +1,21 @@
+uuid: cf873652-09fc-453b-b77e-e6252400b8c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document_date
+    - node.type.iup_round
+id: node.iup_round.field_document_date
+field_name: field_document_date
+entity_type: node
+bundle: iup_round
+label: 'Document date'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1661810400
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

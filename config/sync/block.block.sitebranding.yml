@@ -1,0 +1,23 @@
+uuid: 2aa4e0b0-e9b8-4e93-be0a-bcdc3c97a720
+langcode: sv
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ssr_base
+id: sitebranding
+theme: ssr_base
+region: header
+weight: -15
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

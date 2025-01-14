@@ -1,0 +1,25 @@
+uuid: 089d5b0f-8f0c-4d67-8158-be958cbe2b49
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_students
+    - paragraphs.paragraphs_type.consent_target_caregivers
+id: paragraph.consent_target_caregivers.field_students
+field_name: field_students
+entity_type: paragraph
+bundle: consent_target_caregivers
+label: 'Caregivers for students'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: student_reference
+      display_name: active_students
+      arguments: {  }
+field_type: entity_reference

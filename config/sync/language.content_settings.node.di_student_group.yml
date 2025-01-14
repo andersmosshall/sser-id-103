@@ -1,0 +1,11 @@
+uuid: dcd5e8d5-3536-4b9d-bf3d-7f03eae64f58
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.di_student_group
+id: node.di_student_group
+target_entity_type_id: node
+target_bundle: di_student_group
+default_langcode: site_default
+language_alterable: false

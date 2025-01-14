@@ -1,0 +1,29 @@
+uuid: d0d8886e-6610-4630-aaee-09baaa3f9af2
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Clean up public file directory'
+id: clean_up_public_dir
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: clean_up_public_dir
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0 1 * * *'
+    catch_up: 900
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

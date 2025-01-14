@@ -1,0 +1,102 @@
+uuid: c55ad8ac-627d-458c-ab31-9378753c6003
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.student_development_interview.field_caregiver_reminder_setting
+    - field.field.node.student_development_interview.field_locked
+    - field.field.node.student_development_interview.field_locked_caregivers
+    - field.field.node.student_development_interview.field_remind_teacher
+    - field.field.node.student_development_interview.field_student_groups
+    - node.type.student_development_interview
+  module:
+    - field_group
+    - inline_entity_form
+third_party_settings:
+  field_group:
+    group_grundlaggande_info:
+      children:
+        - title
+        - field_locked
+        - field_locked_caregivers
+        - field_remind_teacher
+        - field_caregiver_reminder_setting
+      label: 'Grundläggande info'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+id: node.student_development_interview.default
+targetEntityType: node
+bundle: student_development_interview
+mode: default
+content:
+  field_caregiver_reminder_setting:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_locked:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_locked_caregivers:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_remind_teacher:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_student_groups:
+    type: inline_entity_form_complex
+    weight: 1
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Elevgrupp
+      label_plural: Elevgrupper
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

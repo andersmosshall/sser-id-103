@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+use Drupal\simple_school_reports_help\Form\SyncHelpPagesForm;
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_help_install() {
+  module_set_weight('simple_school_reports_help', 10);
+}
+
+/**
+ * Sync help pages.
+ */
+function simple_school_reports_help_update_10001() {
+//  SyncHelpPagesForm::syncHelpPages();
+}
+
+/**
+ * Sync help pages.
+ */
+function simple_school_reports_help_update_10002() {
+//  SyncHelpPagesForm::syncHelpPages();
+}
+
+/**
+ * Sync help pages.
+ */
+function simple_school_reports_help_update_10003() {
+//  SyncHelpPagesForm::syncHelpPages();
+}
+
+/**
+ * Sync help pages.
+ */
+function simple_school_reports_help_update_10004() {
+//  SyncHelpPagesForm::syncHelpPages();
+}

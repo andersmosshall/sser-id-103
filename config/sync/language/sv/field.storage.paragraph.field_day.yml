@@ -1,0 +1,16 @@
+settings:
+  allowed_values:
+    -
+      label: Måndag
+    -
+      label: Tisdag
+    -
+      label: Onsdag
+    -
+      label: Torsdag
+    -
+      label: Fredag
+    -
+      label: Lördag
+    -
+      label: Söndag

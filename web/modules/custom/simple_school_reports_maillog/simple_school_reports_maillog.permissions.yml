@@ -1,0 +1,11 @@
+administer maillog:
+  title: 'Administer maillog settings'
+  restrict access: true
+delete maillog:
+  title: Delete maillog
+create maillog:
+  title: Create maillog
+view maillog:
+  title: View maillog
+edit maillog:
+  title: Edit maillog

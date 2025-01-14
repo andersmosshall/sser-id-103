@@ -1,0 +1,27 @@
+simple_school_reports_consents.consent_base:
+  title: 'Consents'
+  description: 'Handle consents'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_consents.consent_base
+
+simple_school_reports_consents.consents_list:
+  title: 'Consents'
+  description: 'Handle and list all consents'
+  weight: 100
+  parent: simple_school_reports_consents.consent_base
+  route_name: view.consents.list
+
+simple_school_reports_consents.consents_per_user:
+  title: 'Consents per user'
+  description: 'List and handle consents that user are expected to answer'
+  weight: 101
+  parent: simple_school_reports_consents.consent_base
+  route_name: view.consents_per_user.list
+
+simple_school_reports_consents.reminder:
+  title: 'Send reminder'
+  description: 'List users with unhandled consents that are able to login and handle them by themself.'
+  weight: 101
+  parent: simple_school_reports_consents.consent_base
+  route_name: view.consents_per_user.reminder
+

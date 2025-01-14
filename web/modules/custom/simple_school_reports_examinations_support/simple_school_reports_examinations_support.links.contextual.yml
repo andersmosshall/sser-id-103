@@ -1,0 +1,32 @@
+entity.ssr_assessment_group.edit_form:
+  route_name: entity.ssr_assessment_group.edit_form
+  group: ssr_assessment_group
+  title: 'Edit'
+
+entity.ssr_assessment_group.delete_form:
+  route_name: entity.ssr_assessment_group.delete_form
+  group: ssr_assessment_group
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_examination.edit_form:
+  route_name: entity.ssr_examination.edit_form
+  group: ssr_examination
+  title: 'Edit'
+
+entity.ssr_examination.delete_form:
+  route_name: entity.ssr_examination.delete_form
+  group: ssr_examination
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_examination_result.edit_form:
+  route_name: entity.ssr_examination_result.edit_form
+  group: ssr_examination_result
+  title: 'Edit'
+
+entity.ssr_examination_result.delete_form:
+  route_name: entity.ssr_examination_result.delete_form
+  group: ssr_examination_result
+  title: 'Delete'
+  weight: 10

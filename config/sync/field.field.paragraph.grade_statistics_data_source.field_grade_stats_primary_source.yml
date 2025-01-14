@@ -1,0 +1,25 @@
+uuid: d8f2d15d-63c7-4ad2-acb5-0682c88aa12e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_grade_stats_primary_source
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.field_grade_stats_primary_source
+field_name: field_grade_stats_primary_source
+entity_type: paragraph
+bundle: grade_statistics_data_source
+label: 'Primary data source'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_student_groups
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

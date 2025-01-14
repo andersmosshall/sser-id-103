@@ -1,0 +1,19 @@
+uuid: 34fad4f8-ffa0-472d-95cc-87211860d277
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_block_parent
+field_name: field_block_parent
+entity_type: taxonomy_term
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

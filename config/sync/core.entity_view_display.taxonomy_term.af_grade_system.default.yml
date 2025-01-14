@@ -1,0 +1,34 @@
+uuid: f632f1ba-d1d0-4c80-b9fa-742d7aef335a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.af_grade_system.field_merit
+    - taxonomy.vocabulary.af_grade_system
+  module:
+    - text
+id: taxonomy_term.af_grade_system.default
+targetEntityType: taxonomy_term
+bundle: af_grade_system
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_merit:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true

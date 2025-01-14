@@ -1,0 +1,22 @@
+entity.ssr_module_info.settings:
+  title: 'Settings'
+  route_name: entity.ssr_module_info.settings
+  base_route: entity.ssr_module_info.settings
+entity.ssr_module_info.view:
+  title: 'View'
+  route_name: entity.ssr_module_info.canonical
+  base_route: entity.ssr_module_info.canonical
+entity.ssr_module_info.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_module_info.edit_form
+  base_route: entity.ssr_module_info.canonical
+entity.ssr_module_info.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_module_info.delete_form
+  base_route: entity.ssr_module_info.canonical
+  weight: 10
+entity.ssr_module_info.collection:
+  title: 'Module infos'
+  route_name: entity.ssr_module_info.collection
+  base_route: system.admin_content
+  weight: 10

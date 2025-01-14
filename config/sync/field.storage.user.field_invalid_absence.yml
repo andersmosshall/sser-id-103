@@ -1,0 +1,20 @@
+uuid: 5e873c67-4c6e-44ea-9956-07daea322e0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_invalid_absence
+field_name: field_invalid_absence
+entity_type: user
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_grade_stats.grade_statistics:
+    class: Drupal\simple_school_reports_grade_stats\Service\GradeStatisticsService
+    arguments: ['@database','@entity_type.manager','@cache.default', '@simple_school_reports_extension_proxy.grade_support']

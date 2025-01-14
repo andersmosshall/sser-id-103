@@ -1,0 +1,23 @@
+uuid: a80c5a83-fa0b-481a-adf6-0e898bbfc77a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_include_eligibility
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.field_include_eligibility
+field_name: field_include_eligibility
+entity_type: paragraph
+bundle: grade_statistics_data_source
+label: 'Include eligibility'
+description: 'Includes table with percentage of  eligibility (pass in SV/EN/MA and 9 other subjects) for primary and secondary data sources. Recommended only for VT in grade 9.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

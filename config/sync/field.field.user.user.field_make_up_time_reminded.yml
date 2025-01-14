@@ -1,0 +1,20 @@
+uuid: 0a56d593-4ad3-48a5-8200-52593bc79b24
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_make_up_time_reminded
+  module:
+    - user
+id: user.user.field_make_up_time_reminded
+field_name: field_make_up_time_reminded
+entity_type: user
+bundle: user
+label: 'Make up time reminded'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

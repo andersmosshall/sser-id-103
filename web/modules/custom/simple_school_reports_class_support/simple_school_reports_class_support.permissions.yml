@@ -1,0 +1,11 @@
+administer ssr_school_class:
+  title: 'Administer school classes'
+  restrict access: true
+view ssr_school_class:
+  title: 'View school class'
+edit ssr_school_class:
+  title: 'Edit school class'
+delete ssr_school_class:
+  title: 'Delete school class'
+create ssr_school_class:
+  title: 'Create school class'

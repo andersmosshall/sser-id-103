@@ -1,0 +1,25 @@
+uuid: 29cdf9ae-4526-4a9c-b949-ddd0414a0eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student
+    - node.type.di_student_group
+id: node.di_student_group.field_student
+field_name: field_student
+entity_type: node
+bundle: di_student_group
+label: Students
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: student_reference
+      display_name: active_students
+      arguments: {  }
+field_type: entity_reference

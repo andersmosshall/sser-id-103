@@ -1,0 +1,5 @@
+name: 'Simple School Reports Constrained User List Mini'
+type: module
+description: 'Simple School Reports Constrained User List Mini'
+package: 'Simple School Reports Mini'
+core_version_requirement: ^10 || ^11

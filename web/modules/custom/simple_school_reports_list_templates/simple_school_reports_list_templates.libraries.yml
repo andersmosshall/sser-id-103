@@ -1,0 +1,12 @@
+list_template_block:
+  version: VERSION
+  css:
+    theme:
+      css/list_template_block.css: { }
+  js:
+    js/list_template_block.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings

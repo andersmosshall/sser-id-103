@@ -1,0 +1,25 @@
+uuid: 5798800f-02c2-4324-9ee4-fd5e25a16674
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_core
+    - system
+  theme:
+    - ssr_base
+id: invalidabsencestudentstatistics
+theme: ssr_base
+region: content
+weight: -12
+provider: null
+plugin: invalid_absence_student_statistics
+settings:
+  id: invalid_absence_student_statistics
+  label: 'Invalid absence per subject'
+  label_display: visible
+  provider: simple_school_reports_core
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/statistics'

@@ -1,0 +1,29 @@
+uuid: dcd9bfb4-1690-4fe3-a1b7-733c3947d50f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_student_leave_application.field_compensation_plan
+    - filter.format.plain_text_ck
+  module:
+    - allowed_formats
+    - simple_school_reports_entities
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: ssr_student_leave_application.ssr_student_leave_application.field_compensation_plan
+field_name: field_compensation_plan
+entity_type: ssr_student_leave_application
+bundle: ssr_student_leave_application
+label: 'Compensation plan'
+description: 'Enter a plan for how student may compensate for the lost tuition.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text_ck
+field_type: text_long

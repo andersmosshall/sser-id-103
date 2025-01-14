@@ -1,0 +1,19 @@
+uuid: 1458b3e6-ac0c-489f-8ea8-2b566bbbd04a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_default_grade_round
+field_name: field_default_grade_round
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

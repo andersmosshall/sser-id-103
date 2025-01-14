@@ -1,0 +1,106 @@
+uuid: 8365e08d-b03e-4178-8994-a7c3e710d599
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_compensation_plan
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_handler_notes
+    - field.field.ssr_student_leave_application.ssr_student_leave_application.field_reason
+  module:
+    - simple_school_reports_entities
+    - text
+id: ssr_student_leave_application.ssr_student_leave_application.default
+targetEntityType: ssr_student_leave_application
+bundle: ssr_student_leave_application
+mode: default
+content:
+  field_compensation_plan:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_handler_notes:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_reason:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: 'Y-m-d H:i:s'
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  handled_by:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  uid:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  status: true

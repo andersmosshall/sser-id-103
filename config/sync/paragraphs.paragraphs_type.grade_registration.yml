@@ -1,0 +1,10 @@
+uuid: 7f4eaf4d-0add-4734-bc9d-a8accf538649
+langcode: en
+status: true
+dependencies: {  }
+id: grade_registration
+label: 'Grade registration'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

@@ -1,0 +1,64 @@
+uuid: 4e7c2220-492c-46fd-8432-36f1638e9aa4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.course.field_class
+    - field.field.node.course.field_schema
+    - field.field.node.course.field_school_subject
+    - field.field.node.course.field_student
+    - field.field.node.course.field_teacher
+    - node.type.course
+  module:
+    - entity_reference_revisions
+    - user
+id: node.course.default
+targetEntityType: node
+bundle: course
+mode: default
+content:
+  field_class:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_schema:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_school_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_teacher:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  links: true
+  number_of_students: true

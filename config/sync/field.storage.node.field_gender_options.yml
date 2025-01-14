@@ -1,0 +1,27 @@
+uuid: 38ee8186-c44c-4126-accc-2eeabb0201ff
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_gender_options
+field_name: field_gender_options
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: separate
+      label: 'Separate boys and girls'
+    -
+      value: merge
+      label: 'Merge boys and girls'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

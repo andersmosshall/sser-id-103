@@ -1,0 +1,7 @@
+simple_school_reports_budget.budget_create:
+  route_name: node.add
+  title: 'Add budget'
+  route_parameters:
+    node_type: 'budget'
+  appears_on:
+    - view.budget.list

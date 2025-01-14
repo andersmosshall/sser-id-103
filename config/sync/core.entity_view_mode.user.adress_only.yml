@@ -1,0 +1,11 @@
+uuid: b87eed96-776f-4497-85ce-b9416d2ed818
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.adress_only
+label: 'Adress only'
+description: ''
+targetEntityType: user
+cache: true

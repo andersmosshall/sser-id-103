@@ -1,0 +1,9 @@
+name: Simple School Reports Maillog
+type: module
+description: Simple School Reports Maillog
+core_version_requirement: ^9 || ^10
+package: 'Simple School Reports'
+version: 1.0.0
+dependencies:
+  - drupal:entity_reference_revisions
+  - drupal:options

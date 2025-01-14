@@ -1,0 +1,21 @@
+uuid: b7d893cc-19fc-4e70-ab04-ff904ca91b5b
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_grades
+field_name: field_grades
+entity_type: node
+type: list_integer
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_core_allowed_user_grade
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

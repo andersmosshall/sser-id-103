@@ -1,0 +1,28 @@
+uuid: 4e22e21a-9955-447a-ae8b-0cf46454bd12
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Student di meeting reminder'
+id: ssr_meeting_reminder_meeting
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: ssr_meeting_reminder_meeting
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '*/15+@ * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

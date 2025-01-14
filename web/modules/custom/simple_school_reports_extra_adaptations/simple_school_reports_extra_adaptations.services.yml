@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_extra_adaptations.extra_adaptations_service:
+    class: Drupal\simple_school_reports_extra_adaptations\Service\ExtraAdaptationsService
+    arguments: ['@entity_type.manager']

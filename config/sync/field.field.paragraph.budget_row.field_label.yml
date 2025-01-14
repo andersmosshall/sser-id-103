@@ -1,0 +1,19 @@
+uuid: 14f5b37d-9b7b-409e-bba0-ea74a8959df1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_label
+    - paragraphs.paragraphs_type.budget_row
+id: paragraph.budget_row.field_label
+field_name: field_label
+entity_type: paragraph
+bundle: budget_row
+label: Title
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,20 @@
+uuid: 7cd84ec8-903d-4603-92c1-ad6f73cb14b2
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+    - user
+id: user.field_adapted_studies
+field_name: field_adapted_studies
+entity_type: user
+type: entity_reference
+settings:
+  target_type: school_week
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

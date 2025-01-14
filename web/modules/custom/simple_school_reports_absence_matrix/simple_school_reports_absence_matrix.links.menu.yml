@@ -1,0 +1,5 @@
+students.absence_matrix:
+  title: 'Absence matrix'
+  weight: 115
+  parent: students.page
+  route_name: view.absence_matrix.page

@@ -1,0 +1,29 @@
+uuid: 52aef1bc-dd92-43e8-826d-ff9c19f19877
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.consents_on_user_tab
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__consents_on_user_tab_handled
+theme: ssr_base
+region: content
+weight: -1
+provider: null
+plugin: 'views_block:consents_on_user_tab-handled'
+settings:
+  id: 'views_block:consents_on_user_tab-handled'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/consents'

@@ -1,0 +1,21 @@
+uuid: 1fb5d8a3-e3d3-48a8-86e8-c56b82761472
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_use_long_phrase
+    - taxonomy.vocabulary.iup_standard_phrase
+id: taxonomy_term.iup_standard_phrase.field_use_long_phrase
+field_name: field_use_long_phrase
+entity_type: taxonomy_term
+bundle: iup_standard_phrase
+label: 'Use long standard phrase'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

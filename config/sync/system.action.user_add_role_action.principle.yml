@@ -1,0 +1,14 @@
+uuid: ec3c4ee8-8539-41fb-be5c-10de625330fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.principle
+  module:
+    - user
+id: user_add_role_action.principle
+label: 'Add the Principle role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: principle

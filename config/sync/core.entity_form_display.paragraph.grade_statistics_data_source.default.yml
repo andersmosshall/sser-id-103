@@ -1,0 +1,47 @@
+uuid: a4c01fea-7e15-4336-b3a1-d967bf879d5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.grade_statistics_data_source.field_grade_stats_compare_source
+    - field.field.paragraph.grade_statistics_data_source.field_grade_stats_primary_source
+    - field.field.paragraph.grade_statistics_data_source.field_include_eligibility
+    - field.field.paragraph.grade_statistics_data_source.field_include_merit
+    - field.field.paragraph.grade_statistics_data_source.field_label
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.default
+targetEntityType: paragraph
+bundle: grade_statistics_data_source
+mode: default
+content:
+  field_grade_stats_compare_source:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_grade_stats_primary_source:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_include_merit:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_include_eligibility: true
+  status: true

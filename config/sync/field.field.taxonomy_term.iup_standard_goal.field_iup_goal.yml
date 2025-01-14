@@ -1,0 +1,27 @@
+uuid: 85475676-b092-4fe5-aa80-4ba47a9294be
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_iup_goal
+    - taxonomy.vocabulary.iup_standard_goal
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: taxonomy_term.iup_standard_goal.field_iup_goal
+field_name: field_iup_goal
+entity_type: taxonomy_term
+bundle: iup_standard_goal
+label: IUP-mål
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

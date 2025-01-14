@@ -1,0 +1,61 @@
+uuid: 5d53a249-72c9-49ca-bcdf-d527e89cc1c2
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - simple_school_reports_class_support
+id: ssr_school_class.ssr_school_class.default
+targetEntityType: ssr_school_class
+bundle: ssr_school_class
+mode: default
+content:
+  mentors:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  school_week:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  student_suffix:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  students:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  nickname: true
+  number_of_students: true
+  uid: true

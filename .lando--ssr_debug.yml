@@ -1,0 +1,55 @@
+name: ssr-debug-drupal9
+recipe: drupal9
+
+config:
+  webroot: web
+  php: '8.3'
+  xdebug: false
+
+proxy:
+  appserver:
+    - ssr-debug.loc
+
+services:
+  appserver:
+    composer_version: '2.5.1'
+    config:
+      php: .lando/php.ini
+    overrides:
+      environment:
+        PHP_IDE_CONFIG: "serverName=ssr-debug.loc"
+        ENV: "lando"
+        DRUSH_OPTIONS_URI: "https://ssr-debug.loc"
+        XDEBUG_MODE: "debug"
+        XDEBUG_TRIGGER: 1
+
+  database:
+    type: mysql
+    portforward: 32793
+    creds:
+      user: drupal9
+      password: drupal9
+      database: drupal9
+
+  cache:
+    type: memcached
+    mem: 512
+tooling:
+  npm:
+    service: node
+  node:
+    service: node
+  yarn:
+    service: node
+  gulp:
+    service: node
+  debug-on:
+    service: appserver
+    description: Enable xdebug for apache.
+    cmd: "docker-php-ext-enable xdebug && /etc/init.d/apache2 reload"
+    user: root
+  debug-off:
+    service: appserver
+    description: Disable xdebug for apache.
+    cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
+    user: root

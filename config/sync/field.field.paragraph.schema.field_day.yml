@@ -1,0 +1,23 @@
+uuid: 734916ea-8ed6-4266-bbb4-3ed71bb75551
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_day
+    - paragraphs.paragraphs_type.schema
+  module:
+    - options
+id: paragraph.schema.field_day
+field_name: field_day
+entity_type: paragraph
+bundle: schema
+label: Day
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

@@ -1,0 +1,17 @@
+simple_school_reports_leave_application.leave_applications_unhandled:
+  title: 'Leave applications to handle'
+  route_name: view.pending_leave_applications.pending
+  base_route: view.pending_leave_applications.pending
+  weight: 10
+
+simple_school_reports_leave_application.leave_applications_handled:
+  title: 'Handled leave applications'
+  route_name: view.pending_leave_applications.handled
+  base_route: view.pending_leave_applications.pending
+  weight: 20
+
+simple_school_reports_leave_application.leave_application_student_tab:
+  title: 'Leave applications'
+  route_name: simple_school_reports_leave_application.leave_application_student_tab
+  base_route: entity.user.canonical
+  weight: 35

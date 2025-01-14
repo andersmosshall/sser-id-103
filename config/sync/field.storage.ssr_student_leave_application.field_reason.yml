@@ -1,0 +1,27 @@
+uuid: 358cf751-dd46-4029-804a-9fd68f5a1057
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - simple_school_reports_entities
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+id: ssr_student_leave_application.field_reason
+field_name: field_reason
+entity_type: ssr_student_leave_application
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

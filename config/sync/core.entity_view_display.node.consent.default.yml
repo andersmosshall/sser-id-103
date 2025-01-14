@@ -1,0 +1,59 @@
+uuid: 9b59d87e-b561-43f9-8b9d-8ae35b18f0ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.consent.field_consent_target_groups
+    - field.field.node.consent.field_description
+    - field.field.node.consent.field_locked
+    - field.field.node.consent.field_title
+    - field.field.node.consent.field_valid_until
+    - node.type.consent
+  module:
+    - text
+    - user
+id: node.consent.default
+targetEntityType: node
+bundle: consent
+mode: default
+content:
+  field_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_valid_until:
+    type: timestamp
+    label: above
+    settings:
+      date_format: html_date
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_consent_target_groups: true
+  field_locked: true
+  langcode: true
+  links: true

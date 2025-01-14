@@ -1,0 +1,20 @@
+uuid: be7aa9e5-1a05-4c94-8a5f-ff1314bd5e51
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.wordsupported_format
+  module:
+    - ckeditor5
+format: wordsupported_format
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - undo
+      - redo
+      - bold
+      - italic
+  plugins: {  }
+image_upload:
+  status: false

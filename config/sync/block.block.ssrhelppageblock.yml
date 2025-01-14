@@ -1,0 +1,25 @@
+uuid: e02b25e1-c067-4660-842d-819a17a385c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: ssrhelppageblock
+theme: ssr_base
+region: content
+weight: 6
+provider: null
+plugin: ssr_help_page_block
+settings:
+  id: ssr_help_page_block
+  label: 'SSR help page block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /help

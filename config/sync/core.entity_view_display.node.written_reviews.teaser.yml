@@ -1,0 +1,27 @@
+uuid: 6867cd7e-0140-4fe2-972f-5b3cce49b05a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.written_reviews.field_class
+    - field.field.node.written_reviews.field_grade
+    - field.field.node.written_reviews.field_school_efforts
+    - field.field.node.written_reviews.field_student
+    - field.field.node.written_reviews.field_written_reviews_round
+    - node.type.written_reviews
+  module:
+    - user
+id: node.written_reviews.teaser
+targetEntityType: node
+bundle: written_reviews
+mode: teaser
+content: {  }
+hidden:
+  field_class: true
+  field_grade: true
+  field_school_efforts: true
+  field_student: true
+  field_written_reviews_round: true
+  langcode: true
+  links: true

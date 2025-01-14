@@ -1,0 +1,21 @@
+uuid: 41de2ca6-16f2-4ecb-89c5-401fb14f3279
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.consent_target_role.field_user_roles
+    - paragraphs.paragraphs_type.consent_target_role
+id: paragraph.consent_target_role.default
+targetEntityType: paragraph
+bundle: consent_target_role
+mode: default
+content:
+  field_user_roles:
+    type: options_buttons
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

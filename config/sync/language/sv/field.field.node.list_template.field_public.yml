@@ -1,0 +1,5 @@
+label: Publik
+description: 'Dela denna listmall med all skolpersonal.'
+settings:
+  on_label: Ja
+  off_label: Nej

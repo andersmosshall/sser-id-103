@@ -1,0 +1,31 @@
+uuid: 31494e4f-97b9-4932-83fc-f6debf8578e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.dnp_provisioning.dnp_provisioning.field_src
+  module:
+    - simple_school_reports_dnp_support
+id: dnp_provisioning.dnp_provisioning.default
+targetEntityType: dnp_provisioning
+bundle: dnp_provisioning
+mode: default
+content:
+  field_src:
+    type: string_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  downloaded: true
+  file_name_prefix: true
+  label: true
+  langcode: true
+  settings: true
+  status: true
+  synced: true
+  uid: true

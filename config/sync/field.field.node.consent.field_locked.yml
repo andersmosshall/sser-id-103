@@ -1,0 +1,23 @@
+uuid: f393b0b7-3c53-4215-a15b-a68b4014f83a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locked
+    - node.type.consent
+id: node.consent.field_locked
+field_name: field_locked
+entity_type: node
+bundle: consent
+label: Locked
+description: 'If locked, no consent answers can be handled for this consent.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Locked
+  off_label: Unlocked
+field_type: boolean

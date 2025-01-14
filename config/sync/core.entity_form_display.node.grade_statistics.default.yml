@@ -1,0 +1,102 @@
+uuid: 812e1a45-6ca7-4ae0-ace8-3ef779a01b50
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_statistics.field_compare_label
+    - field.field.node.grade_statistics.field_data_source
+    - field.field.node.grade_statistics.field_gender_options
+    - field.field.node.grade_statistics.field_grade_sectioning
+    - field.field.node.grade_statistics.field_merge
+    - field.field.node.grade_statistics.field_primary_label
+    - field.field.node.grade_statistics.field_school_subjects
+    - field.field.node.grade_statistics.field_statistics_presentation
+    - node.type.grade_statistics
+  module:
+    - paragraphs
+id: node.grade_statistics.default
+targetEntityType: node
+bundle: grade_statistics
+mode: default
+content:
+  field_compare_label:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: 'T.ex. Föregående års betyg'
+    third_party_settings: {  }
+  field_data_source:
+    type: paragraphs
+    weight: 8
+    region: content
+    settings:
+      title: Datakälla
+      title_plural: Datakällor
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: all
+      closed_mode_threshold: 0
+      add_mode: button
+      form_display_mode: default
+      default_paragraph_type: grade_statistics_data_source
+      features:
+        add_above: '0'
+        collapse_edit_all: collapse_edit_all
+        duplicate: '0'
+    third_party_settings: {  }
+  field_gender_options:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_grade_sectioning:
+    type: options_buttons
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_merge:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_primary_label:
+    type: string_textfield
+    weight: 6
+    region: content
+    settings:
+      size: 60
+      placeholder: 'T.ex. Årets betyg'
+    third_party_settings: {  }
+  field_school_subjects:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_statistics_presentation:
+    type: options_buttons
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

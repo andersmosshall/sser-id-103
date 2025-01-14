@@ -1,0 +1,23 @@
+uuid: 7b3fb309-1d36-45c3-bb5e-7d1e5d46a8a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_merit
+    - taxonomy.vocabulary.af_grade_system
+id: taxonomy_term.af_grade_system.field_merit
+field_name: field_merit
+entity_type: taxonomy_term
+bundle: af_grade_system
+label: Merit
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

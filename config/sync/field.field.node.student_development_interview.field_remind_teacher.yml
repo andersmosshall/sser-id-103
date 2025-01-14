@@ -1,0 +1,23 @@
+uuid: c29a6ae0-5ac2-4bc1-a021-87e415ac5609
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_remind_teacher
+    - node.type.student_development_interview
+id: node.student_development_interview.field_remind_teacher
+field_name: field_remind_teacher
+entity_type: node
+bundle: student_development_interview
+label: 'Remind teacher'
+description: 'If set, teachers will recieve a mail with list of all booked meetings for current day. The reminder is sent around 06:00 each morning for teachers that has meetings that day.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

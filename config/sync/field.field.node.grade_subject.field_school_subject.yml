@@ -1,0 +1,25 @@
+uuid: be771f51-d82c-4be1-bf4e-c913c0a354fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_subject
+    - node.type.grade_subject
+id: node.grade_subject.field_school_subject
+field_name: field_school_subject
+entity_type: node
+bundle: grade_subject
+label: Subject
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_school_subject
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

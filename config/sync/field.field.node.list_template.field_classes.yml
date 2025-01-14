@@ -1,0 +1,25 @@
+uuid: 68b73ede-2161-4b8a-8c8d-4ac6b953ca29
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_classes
+    - node.type.list_template
+id: node.list_template.field_classes
+field_name: field_classes
+entity_type: node
+bundle: list_template
+label: Classes
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: class_reference
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,25 @@
+uuid: a2758bd4-89c3-440a-9712-368097d72028
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_subject
+    - node.type.iup_goal
+id: node.iup_goal.field_school_subject
+field_name: field_school_subject
+entity_type: node
+bundle: iup_goal
+label: Subject
+description: 'Leave empty for generic IUP goal'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_school_subject
+      display_name: all_school_subjects
+      arguments: {  }
+field_type: entity_reference

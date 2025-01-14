@@ -1,0 +1,36 @@
+uuid: 61203f0c-a0d0-438a-85ab-d58d88b0732a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.list_template.field_classes
+    - field.field.node.list_template.field_grades
+    - field.field.node.list_template.field_list_template_field
+    - field.field.node.list_template.field_mark_absence
+    - field.field.node.list_template.field_mentoring_students
+    - field.field.node.list_template.field_public
+    - field.field.node.list_template.field_show_checkbox
+    - field.field.node.list_template.field_sorting
+    - field.field.node.list_template.field_use_classes
+    - node.type.list_template
+  module:
+    - user
+id: node.list_template.teaser
+targetEntityType: node
+bundle: list_template
+mode: teaser
+content: {  }
+hidden:
+  field_classes: true
+  field_grades: true
+  field_list_template_field: true
+  field_mark_absence: true
+  field_mentoring_students: true
+  field_public: true
+  field_show_checkbox: true
+  field_sorting: true
+  field_use_classes: true
+  langcode: true
+  links: true
+  list_table: true

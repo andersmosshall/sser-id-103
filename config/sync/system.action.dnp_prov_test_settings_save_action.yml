@@ -1,0 +1,13 @@
+uuid: 91253c54-4f44-4fe9-9527-e29d85756917
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+_core:
+  default_config_hash: kPYNtX3EYEI76jTvHhuzGlDBw5U9-i6zXPDIFWQzr_U
+id: dnp_prov_test_settings_save_action
+label: 'Save dnp provisioning test settingss'
+type: dnp_prov_test_settings
+plugin: 'entity:save_action:dnp_prov_test_settings'
+configuration: {  }

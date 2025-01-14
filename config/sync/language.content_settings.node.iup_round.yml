@@ -1,0 +1,11 @@
+uuid: 3a48ff0b-31cc-4107-a176-988d0d376a0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.iup_round
+id: node.iup_round
+target_entity_type_id: node
+target_bundle: iup_round
+default_langcode: site_default
+language_alterable: false

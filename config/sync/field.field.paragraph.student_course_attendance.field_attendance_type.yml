@@ -1,0 +1,21 @@
+uuid: 54bc82d4-39e5-47a6-a8c5-4e39ab42d097
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_attendance_type
+    - paragraphs.paragraphs_type.student_course_attendance
+  module:
+    - options
+id: paragraph.student_course_attendance.field_attendance_type
+field_name: field_attendance_type
+entity_type: paragraph
+bundle: student_course_attendance
+label: 'Attendance type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

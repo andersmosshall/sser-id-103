@@ -1,0 +1,62 @@
+uuid: 571e52a1-318b-4af7-a140-820e303d495f
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+id: ssr_assessment_group_user.ssr_assessment_group_user.default
+targetEntityType: ssr_assessment_group_user
+bundle: ssr_assessment_group_user
+mode: default
+content:
+  add_examinations:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  administer_assessment_group:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  edit_examination_results:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  teachers:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  view_examination_results:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  created: true
+  uid: true

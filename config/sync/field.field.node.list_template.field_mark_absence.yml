@@ -1,0 +1,23 @@
+uuid: 474ba08b-bf82-4140-b799-2c470022647c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mark_absence
+    - node.type.list_template
+id: node.list_template.field_mark_absence
+field_name: field_mark_absence
+entity_type: node
+bundle: list_template
+label: 'Mark absence'
+description: 'Cross over students that are reported absence'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

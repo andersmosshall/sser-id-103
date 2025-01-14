@@ -1,0 +1,18 @@
+uuid: dcd36028-0b36-44cd-906a-16b6e8927603
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_make_up_time_reminded
+field_name: field_make_up_time_reminded
+entity_type: user
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

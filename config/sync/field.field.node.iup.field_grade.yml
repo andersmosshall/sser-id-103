@@ -1,0 +1,21 @@
+uuid: 81dbb5c8-70ef-4b95-b889-f8811fa8c100
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade
+    - node.type.iup
+  module:
+    - options
+id: node.iup.field_grade
+field_name: field_grade
+entity_type: node
+bundle: iup
+label: 'Grade in generated document'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

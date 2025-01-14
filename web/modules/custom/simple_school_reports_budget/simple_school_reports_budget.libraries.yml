@@ -1,0 +1,11 @@
+table:
+  version: VERSION
+  css:
+    theme:
+      css/table.css: { }
+  js:
+    js/table.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

@@ -1,0 +1,11 @@
+name: Simple School Reports Core
+type: module
+description: Simple School Reports Core
+core_version_requirement: ^9 || ^10
+package: 'Simple School Reports'
+version: 1.0.0
+interface translation project: simple_school_reports_core
+interface translation server pattern: modules/custom/simple_school_reports_core/translations/%project-%version.%language.po
+dependencies:
+  - simple_school_reports_maillog:simple_school_reports_maillog
+  - simple_school_reports_module_info:simple_school_reports_module_info

@@ -1,0 +1,21 @@
+uuid: 58330c06-42f3-4d4a-940c-289eb9c1151d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_module_enabled
+    - node.type.help_page
+  module:
+    - options
+id: node.help_page.field_module_enabled
+field_name: field_module_enabled
+entity_type: node
+bundle: help_page
+label: 'Modules enabled'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,18 @@
+uuid: 85c5aa13-f7e0-4020-be5e-199f75a3d820
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_term_end
+field_name: field_term_end
+entity_type: taxonomy_term
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

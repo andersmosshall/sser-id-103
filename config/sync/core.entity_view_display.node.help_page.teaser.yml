@@ -1,0 +1,78 @@
+uuid: 583010eb-d4bf-4625-b92d-d955104d9cb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.help_page.body
+    - field.field.node.help_page.field_context
+    - field.field.node.help_page.field_module
+    - field.field.node.help_page.field_module_enabled
+    - field.field.node.help_page.field_system_id
+    - field.field.node.help_page.field_target_group
+    - field.field.node.help_page.field_vimeo
+    - field.field.node.help_page.field_weight
+    - node.type.help_page
+  module:
+    - options
+    - text
+    - user
+    - vimeo_embed_field
+id: node.help_page.teaser
+targetEntityType: node
+bundle: help_page
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_module:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_module_enabled:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_target_group:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_vimeo:
+    type: vimeo
+    label: hidden
+    settings:
+      vimeo_size: responsive
+      vimeo_width: '640'
+      vimeo_height: '480'
+      vimeo_color_value: 0093cb
+      vimeo_autoplay: 0
+      vimeo_loop: 0
+      vimeo_title: 0
+      vimeo_byline: 0
+      vimeo_portrait: 0
+      vimeo_color: 0
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_context: true
+  field_system_id: true
+  field_weight: true
+  langcode: true
+  links: true

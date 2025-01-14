@@ -1,0 +1,23 @@
+simple_school_reports_help.bug_report:
+  path: '/report-an-issue'
+  defaults:
+    _form: '\Drupal\simple_school_reports_help\Form\BugReportForm'
+    _title: 'I have found an issue'
+  requirements:
+    _permission: 'send bug report'
+
+simple_school_reports_help.sync_help_pages:
+  path: '/sync-help'
+  defaults:
+    _form: '\Drupal\simple_school_reports_help\Form\SyncHelpPagesForm'
+    _title: 'Sync help pages'
+  requirements:
+    _permission: 'administer modules'
+
+simple_school_reports_help.help_page:
+  path: '/help'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_help\Controller\HelpController::helpPage'
+    _title: 'Help'
+  requirements:
+    _permission: 'access content'

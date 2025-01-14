@@ -1,0 +1,15 @@
+.grade-statistics .row--primary_all,
+.grade-statistics .row--primary_male,
+.grade-statistics .row--primary_female,
+.row--primary {
+  font-weight: bold;
+}
+
+.grade-statistics .row--primary_male,
+.grade-statistics .row--primary_female,
+.grade-statistics .row--compare_male,
+.grade-statistics .row--compare_female {
+  font-style: italic;
+  font-size: 14px;
+}
+

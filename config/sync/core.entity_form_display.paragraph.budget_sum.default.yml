@@ -1,0 +1,21 @@
+uuid: 00d529d6-dcc3-475e-90b3-64f74da60864
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.budget_sum.field_sum_type
+    - paragraphs.paragraphs_type.budget_sum
+id: paragraph.budget_sum.default
+targetEntityType: paragraph
+bundle: budget_sum
+mode: default
+content:
+  field_sum_type:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

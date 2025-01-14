@@ -1,0 +1,35 @@
+uuid: 80e1f507-2156-4e6d-a786-af77106479d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_caregivers
+  module:
+    - user
+id: user.user.field_caregivers
+field_name: field_caregivers
+entity_type: user
+bundle: user
+label: Caregivers
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        caregiver: caregiver
+        teacher: teacher
+        administrator: administrator
+        student: '0'
+    include_anonymous: true
+field_type: entity_reference

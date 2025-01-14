@@ -1,0 +1,10 @@
+uuid: e36dd072-869d-4fdd-9b0e-1194240a7cc6
+langcode: en
+status: true
+dependencies: {  }
+id: extra_adaptation
+label: 'Extra adjustment'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

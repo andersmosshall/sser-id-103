@@ -1,0 +1,13 @@
+uuid: 7fae006c-34cd-4da5-9cd5-26b9a9ae1058
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_module_info
+_core:
+  default_config_hash: sXnQ-zUODlQX2OQLqw8d7d4ZNGyfnA1z-YMKRwxpMME
+id: ssr_module_info_save_action
+label: 'Save module infos'
+type: ssr_module_info
+plugin: 'entity:save_action:ssr_module_info'
+configuration: {  }

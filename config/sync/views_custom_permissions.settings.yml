@@ -1,0 +1,31 @@
+vcp_table:
+  -
+    title: 'Has mini module special diet'
+    callback: ssr_views_permission_has_special_diet_module
+    weight: '-10'
+    remove: Remove
+  -
+    title: 'Maillog is active (or I am user 1)'
+    callback: ssr_views_permission_maillog_active
+    weight: '-10'
+    remove: Remove
+  -
+    title: 'Access to user student DI tab'
+    callback: ssr_views_access_to_student_di_tab
+    weight: '-10'
+    remove: Remove
+  -
+    title: 'Access to caregivers my meetings block'
+    callback: ssr_views_access_to_caregivers_my_meetings_block
+    weight: '-10'
+    remove: Remove
+  -
+    title: 'Access to classes list'
+    callback: ssr_views_permission_access_to_classes_list
+    weight: '-10'
+    remove: Remove
+  -
+    title: 'Access to student examination list'
+    callback: ssr_views_permission_access_to_student_examination
+    weight: '-10'
+    remove: Remove

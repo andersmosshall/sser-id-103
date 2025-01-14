@@ -1,0 +1,32 @@
+entity.dnp_provisioning.edit_form:
+  route_name: entity.dnp_provisioning.edit_form
+  group: dnp_provisioning
+  title: 'Edit'
+
+entity.dnp_provisioning.delete_form:
+  route_name: entity.dnp_provisioning.delete_form
+  group: dnp_provisioning
+  title: 'Delete'
+  weight: 10
+
+entity.dnp_prov_settings.edit_form:
+  route_name: entity.dnp_prov_settings.edit_form
+  group: dnp_prov_settings
+  title: 'Edit'
+
+entity.dnp_prov_settings.delete_form:
+  route_name: entity.dnp_prov_settings.delete_form
+  group: dnp_prov_settings
+  title: 'Delete'
+  weight: 10
+
+entity.dnp_prov_test_settings.edit_form:
+  route_name: entity.dnp_prov_test_settings.edit_form
+  group: dnp_prov_test_settings
+  title: 'Edit'
+
+entity.dnp_prov_test_settings.delete_form:
+  route_name: entity.dnp_prov_test_settings.delete_form
+  group: dnp_prov_test_settings
+  title: 'Delete'
+  weight: 10

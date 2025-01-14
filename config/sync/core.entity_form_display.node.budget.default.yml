@@ -1,0 +1,55 @@
+uuid: 5313b6d9-b9f4-4a4a-bcde-17bea2cc7fe8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.budget.field_budget_row
+    - node.type.budget
+  module:
+    - paragraphs
+id: node.budget.default
+targetEntityType: node
+bundle: budget
+mode: default
+content:
+  field_budget_row:
+    type: paragraphs
+    weight: 1
+    region: content
+    settings:
+      title: Row
+      title_plural: Rows
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: collapse_edit_all
+        duplicate: '0'
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

@@ -1,0 +1,18 @@
+uuid: 052cc5ba-79c5-452f-84b8-569e66a984a4
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_invalid_absence_from
+field_name: field_invalid_absence_from
+entity_type: node
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

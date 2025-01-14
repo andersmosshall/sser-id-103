@@ -1,0 +1,89 @@
+uuid: 53e6b540-6f12-4d4d-85db-dc71c34c71ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.contact_only
+    - field.field.user.user.field_adapted_studies
+    - field.field.user.user.field_address
+    - field.field.user.user.field_allow_login
+    - field.field.user.user.field_birth_date
+    - field.field.user.user.field_birth_date_source
+    - field.field.user.user.field_caregivers
+    - field.field.user.user.field_class
+    - field.field.user.user.field_dnp_username
+    - field.field.user.user.field_eduid_username
+    - field.field.user.user.field_extra_adaptations
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_gender
+    - field.field.user.user.field_grade
+    - field.field.user.user.field_invalid_absence
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_last_password_reset
+    - field.field.user.user.field_make_up_time_reminded
+    - field.field.user.user.field_mentor
+    - field.field.user.user.field_middle_name
+    - field.field.user.user.field_notes
+    - field.field.user.user.field_password_expiration
+    - field.field.user.user.field_pending_expire_sent
+    - field.field.user.user.field_protected_personal_data
+    - field.field.user.user.field_special_diet
+    - field.field.user.user.field_ssn
+    - field.field.user.user.field_telephone_number
+  module:
+    - user
+id: user.user.contact_only
+targetEntityType: user
+bundle: user
+mode: contact_only
+content:
+  field_telephone_number:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  readable_user_name:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  valid_email:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  blur_secret_fields: true
+  caregiver_for: true
+  field_adapted_studies: true
+  field_address: true
+  field_allow_login: true
+  field_birth_date: true
+  field_birth_date_source: true
+  field_caregivers: true
+  field_class: true
+  field_dnp_username: true
+  field_eduid_username: true
+  field_extra_adaptations: true
+  field_first_name: true
+  field_gender: true
+  field_grade: true
+  field_invalid_absence: true
+  field_last_name: true
+  field_last_password_reset: true
+  field_make_up_time_reminded: true
+  field_mentor: true
+  field_middle_name: true
+  field_notes: true
+  field_password_expiration: true
+  field_pending_expire_sent: true
+  field_protected_personal_data: true
+  field_special_diet: true
+  field_ssn: true
+  langcode: true
+  masquerade: true
+  member_for: true
+  roles: true

@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_dnp_support.dnp_support_service:
+    class: Drupal\simple_school_reports_dnp_support\Service\DnpSupportService
+    arguments: [ '@module_handler', '@entity_type.manager' ]

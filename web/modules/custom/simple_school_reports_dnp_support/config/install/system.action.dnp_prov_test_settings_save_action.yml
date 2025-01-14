@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+id: dnp_prov_test_settings_save_action
+label: 'Save dnp provisioning test settingss'
+type: dnp_prov_test_settings
+plugin: entity:save_action:dnp_prov_test_settings
+configuration: {  }

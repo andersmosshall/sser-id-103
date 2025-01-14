@@ -1,0 +1,29 @@
+uuid: fea61183-04c8-4544-82f3-a3e5b7d2472c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_iup_round
+    - node.type.di_student_group
+    - node.type.iup_round
+id: node.di_student_group.field_iup_round
+field_name: field_iup_round
+entity_type: node
+bundle: di_student_group
+label: 'IUP round'
+description: 'If set, a link for the student IUP will be shown at the meeting page.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      iup_round: iup_round
+    sort:
+      field: nid
+      direction: DESC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

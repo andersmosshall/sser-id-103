@@ -1,0 +1,27 @@
+uuid: 54e06cce-701e-4b2c-a718-22ec51beb653
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - paragraphs
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+id: paragraph.field_review_comment
+field_name: field_review_comment
+entity_type: paragraph
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

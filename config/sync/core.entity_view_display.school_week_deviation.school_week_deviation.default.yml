@@ -1,0 +1,33 @@
+uuid: cf558789-054c-44a5-8783-f6028de7cf66
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.school_week_deviation.school_week_deviation.field_classes
+  module:
+    - simple_school_reports_entities
+id: school_week_deviation.school_week_deviation.default
+targetEntityType: school_week_deviation
+bundle: school_week_deviation
+mode: default
+content:
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  deviation_type: true
+  field_classes: true
+  from: true
+  from_date: true
+  grade: true
+  length: true
+  status: true
+  to: true
+  to_date: true
+  uid: true

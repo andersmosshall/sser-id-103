@@ -1,0 +1,11 @@
+uuid: 6d6ea658-a1a7-4090-8c85-da1cfc8197e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.written_reviews_standard_phrase
+id: taxonomy_term.written_reviews_standard_phrase
+target_entity_type_id: taxonomy_term
+target_bundle: written_reviews_standard_phrase
+default_langcode: site_default
+language_alterable: false

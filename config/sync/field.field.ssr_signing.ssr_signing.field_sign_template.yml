@@ -1,0 +1,20 @@
+uuid: 3988b891-0eb8-421d-aafd-d4eee10af349
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_signing.field_sign_template
+  module:
+    - simple_school_reports_entities
+id: ssr_signing.ssr_signing.field_sign_template
+field_name: field_sign_template
+entity_type: ssr_signing
+bundle: ssr_signing
+label: 'Signing template'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

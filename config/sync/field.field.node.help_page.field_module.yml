@@ -1,0 +1,21 @@
+uuid: 4e425446-473e-4ae6-b530-00b7c07ff397
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_module
+    - node.type.help_page
+  module:
+    - options
+id: node.help_page.field_module
+field_name: field_module
+entity_type: node
+bundle: help_page
+label: Module
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

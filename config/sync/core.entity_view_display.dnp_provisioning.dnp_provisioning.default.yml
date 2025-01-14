@@ -1,0 +1,100 @@
+uuid: 63ed99f1-a15e-4101-89f7-28f7030a336f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.dnp_provisioning.dnp_provisioning.field_src
+  module:
+    - link
+    - simple_school_reports_dnp_support
+id: dnp_provisioning.dnp_provisioning.default
+targetEntityType: dnp_provisioning
+bundle: dnp_provisioning
+mode: default
+content:
+  field_src:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  number_of_classes:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  number_of_staff:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  number_of_students:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  number_of_subject_groups:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  settings:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  warnings:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  downloaded: true
+  file_name_prefix: true
+  langcode: true
+  status: true
+  synced: true
+  uid: true

@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_attendance_analyse.attendance_analyse_service:
+    class: Drupal\simple_school_reports_attendance_analyse\Service\AttendanceAnalyseService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default', '@state', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_entities.school_week_service']

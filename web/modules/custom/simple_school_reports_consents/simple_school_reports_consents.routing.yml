@@ -1,0 +1,27 @@
+simple_school_reports_consents.handle_consent:
+  path: '/consent/{node}/target_uid/{user}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_consents\Form\HandleConsentForm'
+    _title: 'Handle consent'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_consents\Form\HandleConsentForm::accessConsentForm'
+
+simple_school_reports_consents.consent_base:
+  path: '/consents'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Consents'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_consents.user_consents_page:
+  path: '/user/{user}/consents'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_consents\Controller\UserConsentsController::build'
+    _title_callback: '\Drupal\simple_school_reports_consents\Controller\UserConsentsController::title'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_consents\Controller\UserConsentsController::access'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

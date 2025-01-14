@@ -1,0 +1,23 @@
+uuid: 8e9b6597-fb95-479e-860b-1d7909e0fc21
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_public
+    - node.type.list_template
+id: node.list_template.field_public
+field_name: field_public
+entity_type: node
+bundle: list_template
+label: Public
+description: 'Share this list tamplate with other school personel.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

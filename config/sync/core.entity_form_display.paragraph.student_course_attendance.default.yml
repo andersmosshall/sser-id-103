@@ -1,0 +1,53 @@
+uuid: 11524106-c326-4e90-9a9a-57f50955856a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.student_course_attendance.field_attendance_type
+    - field.field.paragraph.student_course_attendance.field_invalid_absence
+    - field.field.paragraph.student_course_attendance.field_invalid_absence_original
+    - field.field.paragraph.student_course_attendance.field_student
+    - field.field.paragraph.student_course_attendance.field_subject
+    - paragraphs.paragraphs_type.student_course_attendance
+id: paragraph.student_course_attendance.default
+targetEntityType: paragraph
+bundle: student_course_attendance
+mode: default
+content:
+  field_attendance_type:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_invalid_absence:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_student:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_subject:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_invalid_absence_original: true
+  status: true

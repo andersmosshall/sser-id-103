@@ -1,0 +1,20 @@
+uuid: 4e8f3796-5892-44b1-95f1-b637f5a61567
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+    - user
+id: ssr_meeting.field_teachers
+field_name: field_teachers
+entity_type: ssr_meeting
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

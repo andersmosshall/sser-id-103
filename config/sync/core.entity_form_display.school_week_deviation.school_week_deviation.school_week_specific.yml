@@ -1,0 +1,72 @@
+uuid: 6d914256-5f1f-431c-bebd-a9199b33964b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.school_week_deviation.school_week_specific
+    - field.field.school_week_deviation.school_week_deviation.field_classes
+  module:
+    - simple_school_reports_core
+    - simple_school_reports_entities
+    - time_field
+id: school_week_deviation.school_week_deviation.school_week_specific
+targetEntityType: school_week_deviation
+bundle: school_week_deviation
+mode: school_week_specific
+content:
+  deviation_type:
+    type: entity_reference_autocomplete_tags
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: time_widget
+    weight: 4
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_date:
+    type: ssr_date_timestamp
+    weight: 0
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+    third_party_settings: {  }
+  length:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: min
+    third_party_settings: {  }
+  to:
+    type: time_widget
+    weight: 5
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_date:
+    type: ssr_date_timestamp
+    weight: 1
+    region: content
+    settings:
+      end_of_day: '1'
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_classes: true
+  grade: true
+  label: true
+  status: true
+  uid: true

@@ -1,0 +1,11 @@
+uuid: 4d4e1f65-629c-449a-a1ab-7f8e941cdacc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.iup
+id: node.iup
+target_entity_type_id: node
+target_bundle: iup
+default_langcode: site_default
+language_alterable: false

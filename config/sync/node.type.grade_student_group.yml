@@ -1,0 +1,17 @@
+uuid: da2e1bab-99a5-4764-9330-f246996a14be
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Grade student group'
+type: grade_student_group
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

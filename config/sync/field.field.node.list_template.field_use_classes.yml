@@ -1,0 +1,21 @@
+uuid: f4ebedfd-c86a-4487-9a9d-c52489778559
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_use_classes
+    - node.type.list_template
+id: node.list_template.field_use_classes
+field_name: field_use_classes
+entity_type: node
+bundle: list_template
+label: 'Use classes'
+description: 'Filter this list by classes'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

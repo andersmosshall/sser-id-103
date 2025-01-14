@@ -1,0 +1,27 @@
+uuid: 33571013-f88b-4952-bb7f-43a737ebf117
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_merge
+field_name: field_merge
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: separate
+      label: 'Show one graph/table per subject'
+    -
+      value: merge
+      label: 'Merge selected subjects to one graph/table'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

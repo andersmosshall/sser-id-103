@@ -1,0 +1,26 @@
+uuid: 20cbdb7d-d6e5-4651-8c15-0def58c46c7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.extra_adaptations.field_extra_adaptation
+    - taxonomy.vocabulary.extra_adaptations
+id: taxonomy_term.extra_adaptations.default
+targetEntityType: taxonomy_term
+bundle: extra_adaptations
+mode: default
+content:
+  field_extra_adaptation:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  name: true
+  path: true
+  status: true

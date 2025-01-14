@@ -1,0 +1,14 @@
+uuid: 9d06f9e7-73b6-4835-a0e9-7b3ed7bf3208
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.caregiver
+  module:
+    - user
+id: user_remove_role_action.caregiver
+label: 'Remove the Caregiver role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: caregiver

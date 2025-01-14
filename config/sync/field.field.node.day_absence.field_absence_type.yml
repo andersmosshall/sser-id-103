@@ -1,0 +1,23 @@
+uuid: 26216990-ac06-4f17-b508-39191a5e0bdf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_absence_type
+    - node.type.day_absence
+  module:
+    - options
+id: node.day_absence.field_absence_type
+field_name: field_absence_type
+entity_type: node
+bundle: day_absence
+label: 'Absence type'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: reported
+default_value_callback: ''
+settings: {  }
+field_type: list_string

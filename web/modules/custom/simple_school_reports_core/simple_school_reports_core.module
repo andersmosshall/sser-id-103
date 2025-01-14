@@ -1,0 +1,1714 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_core\UserFormAlter;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\views\ViewExecutable;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core\CourseAttendanceReportFormAlter;
+use Drupal\simple_school_reports_core\Service\TermService;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Site\Settings;
+use Drupal\user\UserInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+
+/**
+ * Allowed values function for user grade field.
+ */
+function simple_school_reports_core_allowed_user_grade() : array {
+  $map = [
+    0 => t('Pre school class'),
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+    6 => 6,
+    7 => 7,
+    8 => 8,
+    9 => 9,
+  ];
+
+  $return = [
+    -99 => t('Unknown grade'),
+  ];
+  $grade_from = Settings::get('ssr_grade_from', 0);
+  $grade_to = Settings::get('ssr_grade_to', 9);
+
+  if (is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
+    for ($i = $grade_from; $i <= $grade_to; $i++) {
+      if (isset($map[$i])) {
+        $return[$i] = $map[$i];
+      }
+    }
+  }
+  $return[99] = t('Student has quit');
+  return $return;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $cache = new CacheableMetadata();
+  $cache->setCacheMaxAge(0);
+  $cache->applyTo($form);
+
+  // Skip revision forms.
+  if (!empty($form['revision'])) {
+    $form['revision']['#access'] = FALSE;
+  }
+  if (!empty($form['revision_information'])) {
+    $form['revision_information']['#access'] = FALSE;
+  }
+
+  $form_object = $form_state->getFormObject();
+  if (method_exists($form_object, 'getOperation')) {
+    $form['#form_mode'] = $form_object->getOperation();
+  }
+
+  $form['#attached']['library'][] = 'simple_school_reports_core/form_overrides';
+  $forms_to_alter = [
+    'user_register_form',
+    'user_form',
+    'user_student_form',
+    'user_caregiver_form'
+  ];
+  if (in_array($form_id, $forms_to_alter)) {
+    UserFormAlter::resolveRolesAutoSet($form, $form_state);
+    UserFormAlter::userFormAlter($form, $form_state);
+  }
+
+  $forms_to_alter = [
+    'node_course_attendance_report_form',
+    'node_course_attendance_report_edit_form'
+  ];
+  if (in_array($form_id, $forms_to_alter)) {
+    CourseAttendanceReportFormAlter::nodeFormAlter($form, $form_state);
+  }
+
+  $forms_to_alter = ['taxonomy_term_term_form'];
+  if (in_array($form_id, $forms_to_alter)) {
+    TermService::termFormAlter($form, $form_state);
+  }
+
+  if ($form_id === 'user_login_form') {
+    \Drupal\simple_school_reports_core\UserLoginFormAlter::formAlter($form, $form_state);
+  }
+
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'courses' && $view->current_display === 'all_courses') {
+        UserFormAlter::exposedFilterByTeacher($form, $form_state);
+      }
+      if ($view->id() === 'students') {
+        UserFormAlter::exposedFilterByMentor($form, $form_state);
+        UserFormAlter::exposedFilterByClass($form, $form_state);
+      }
+      if ($view->id() === 'ssr_maillog') {
+        UserFormAlter::exposedFilterAutocomplete($form, $form_state, 'recipient_user');
+        UserFormAlter::exposedFilterAutocomplete($form, $form_state, 'student_context');
+        UserFormAlter::exposedFilterAutocomplete($form, $form_state, 'uid');
+      }
+    }
+  }
+
+  if ($form_id === 'user_cancel_form' || $form_id === 'user_multiple_cancel_confirm') {
+    UserFormAlter::cancelFormAlter($form, $form_state);
+  }
+
+  if ($form_id === 'views_exposed_form') {
+    if (!empty($form['field_school_subject_target_id']['#options'])) {
+      /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+      $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
+
+      $options_map = $school_subject_service->getSchoolSubjectOptionList();
+
+      foreach ($form['field_school_subject_target_id']['#options'] as $key => &$option) {
+        if (isset($options_map[$key])) {
+          $option = $options_map[$key];
+        }
+      }
+    }
+  }
+
+  $build_info = $form_state->getBuildInfo();
+  if (is_array($build_info) && !empty($build_info['args'][0]) && $build_info['args'][0] instanceof ViewExecutable) {
+    $view = $build_info['args'][0];
+    if (isset($view->field['user_bulk_form']) && $view->total_rows < 2000) {
+      $form['#attached']['library'][] = 'simple_school_reports_core/user_bulk_form';
+      $form['override_uid_list'] = [
+        '#type' => 'hidden',
+        '#attributes' => [
+          'data-override-uid-list' => TRUE,
+        ],
+      ];
+      $form['#validate'][] = 'simple_school_reports_core_form_user_bulk_form_modifier';
+    }
+  }
+
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_core_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
+  if (!empty($entity_form['#form_mode']) && $entity_form['#form_mode'] === 'caregiver_ief') {
+    $entity_form['#entity_builders'][] = [UserFormAlter::class, 'iefUserBuilder'];
+    /** @var \Drupal\user\Entity\User $account */
+    $account = !empty($entity_form['#entity']) ? $entity_form['#entity'] : NULL;
+    UserFormAlter::resolveRolesAutoSet($entity_form, $form_state);
+    UserFormAlter::addGuards($entity_form, $account);
+  }
+}
+
+/**
+ * Implements hook_user_format_name_alter().
+ */
+function simple_school_reports_core_user_format_name_alter(&$name, \Drupal\Core\Session\AccountInterface $account) {
+  $use_email = \Drupal::routeMatch()->getRouteName() === 'system.entity_autocomplete';
+  if ($account instanceof \Drupal\user\UserInterface) {
+    if (!$account->get('field_first_name')->isEmpty() && !$account->get('field_last_name')->isEmpty()) {
+      _simple_school_reports_core_resolve_name($name, $account, FALSE, $use_email);
+    }
+    return;
+  }
+
+  /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session_service */
+  $session_service = \Drupal::service('session');
+  $cached_names = $session_service->get('resolved_account_name', []);
+
+  if (!empty($cached_names[$account->id()])) {
+    $name = $cached_names[$account->id()];
+    return;
+  }
+  $cached_names[$account->id()] = $name;
+  $user = \Drupal\user\Entity\User::load($account->id());
+  if ($user instanceof \Drupal\user\UserInterface) {
+    _simple_school_reports_core_resolve_name($name, $user, FALSE, $use_email);
+    $cached_names[$account->id()] = $name;
+  }
+  $session_service->set('resolved_account_name', $cached_names);
+  $name = $cached_names[$account->id()];
+}
+
+function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInterface $user, $skip_suffix = FALSE, $use_email = FALSE) {
+  if (!$user->get('field_first_name')->isEmpty() && !$user->get('field_last_name')->isEmpty()) {
+    $name = trim(strip_tags($user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value));
+
+    if (!$skip_suffix && $user->hasRole('student')) {
+
+      $suffix_type = 'default';
+      $class = $user->get('field_class')->entity;
+      if ($class instanceof FieldableEntityInterface) {
+        $suffix_type = $class->get('student_suffix')->value ?? 'default';
+      }
+
+      $suffix = '';
+
+      $grade_formatted = NULL;
+      if ($suffix_type === 'default' || $suffix_type === 'class_grade') {
+        $grade = $user->get('field_grade')->value;
+        if ($grade) {
+          if ($grade >= 1 && $grade <= 9) {
+            $grade_formatted = t('Gr @grade', ['@grade' => $grade]);
+          }
+          if ($grade == 0) {
+            $grade_formatted = t('Gr @grade', ['@grade' => 'F']);
+          }
+        }
+      }
+
+      $class_formatted = NULL;
+      if ($suffix_type === 'class' || $suffix_type === 'class_grade') {
+        $class_formatted = $class?->label() ?? NULL;
+      }
+
+      if ($suffix_type === 'class_grade') {
+        if (!$class_formatted) {
+          $suffix_type = 'default';
+        }
+        elseif (!$grade_formatted) {
+          $suffix_type = 'class';
+        }
+      }
+
+      if ($suffix_type === 'default' && $grade_formatted) {
+        $suffix = ' (' .$grade_formatted . ')';
+      }
+      elseif ($suffix_type === 'class' && $class_formatted) {
+        $suffix = ' (' . $class_formatted . ')';
+      }
+      elseif ($suffix_type === 'class_grade') {
+        $suffix = ' (' . $class_formatted . ' ' . $grade_formatted . ')';
+      }
+
+      $name .= $suffix;
+    }
+  }
+
+  if ($use_email && $user->getEmail()) {
+    /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+    $email_service = \Drupal::service('simple_school_reports_core.email_service');
+    if ($email = $email_service->getUserEmail($user)) {
+      $name .= ' (' . $email . ')';
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_core_taxonomy_term_presave(EntityInterface $entity) {
+  if ($entity->bundle() === 'school_subject') {
+    SchoolSubjectHelper::$subjectShortNameMap = NULL;
+    if ($subject_code = $entity->get('field_subject_code')->value) {
+      if ($language_code = $entity->get('field_language_code')->value) {
+        $subject_options = SchoolSubjectHelper::getSupportedLanguageSubjectCodes();
+        $raw_name = $subject_options[$subject_code] ?? '() ?';
+        $parts = explode(') ', $raw_name);
+        $name = count($parts) >= 2 ? $parts[1] : $raw_name;
+
+        $language_options = SchoolSubjectHelper::getSupportedLanguageCodes();
+        $raw_name = $language_options[$language_code] ?? '() ?';
+        $parts = explode(' ', $raw_name);
+        // First part is the code.
+        array_shift($parts);
+        $language_name = implode(' ', $parts);
+        $language_name = mb_strtolower($language_name);
+
+        if (strlen($language_name) >= 25) {
+          $language_name = substr($language_name, 0, 22) . '...';
+        }
+        $name .= ', ' . $language_name;
+        $entity->set('name', $name);
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_core_node_presave(EntityInterface $entity) {
+  if ($entity->bundle() === 'day_absence') {
+    AbsenceDayHandler::preSave($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function simple_school_reports_core_node_delete(EntityInterface $entity) {
+  if ($entity->bundle() === 'day_absence') {
+    AbsenceDayHandler::delete($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_core_paragraph_presave(EntityInterface $entity) {
+  if ($entity->bundle() === 'student_course_attendance') {
+    UserFormAlter::handleAbsenceField($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function simple_school_reports_core_paragraph_delete(EntityInterface $entity) {
+  if ($entity->bundle() === 'student_course_attendance') {
+    UserFormAlter::handleAbsenceField($entity, TRUE);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_core_user_presave(\Drupal\user\UserInterface $user) {
+  if ($user->hasRole('student') && !$user->get('field_caregivers')->isEmpty()) {
+    /** @var \Drupal\user\UserInterface $caregiver */
+    foreach ($user->get('field_caregivers')->referencedEntities() as $caregiver) {
+      if (!$caregiver->hasRole('caregiver')) {
+        $caregiver->addRole('caregiver');
+        $caregiver->save();
+      }
+    }
+  }
+
+  if (!$user->get('field_birth_date_source')->isEmpty()) {
+    if ($user->get('field_birth_date_source')->value !== 'ssn') {
+      $user->set('field_ssn', NULL);
+    }
+    else {
+      $birth_date = NULL;
+      $ssn = $user->get('field_ssn')->value;
+      if ($ssn) {
+        /** @var \Drupal\simple_school_reports_core\Pnum $pnum_serivice */
+        $pnum_serivice = \Drupal::service('simple_school_reports_core.pnum');
+        $birth_date = $pnum_serivice->getBirthDateTimestamp($ssn);
+      }
+      $user->set('field_birth_date', $birth_date);
+    }
+  }
+  else {
+    $user->set('field_ssn', NULL);
+    $user->set('field_birth_date', NULL);
+  }
+
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function simple_school_reports_core_user_update(\Drupal\user\UserInterface $user) {
+  // Check if ssn has changed.
+  $new_ssn = $user->get('field_ssn')->value;
+  $old_ssn = $user->original?->get('field_ssn')->value ?? NULL;
+
+  if ($new_ssn !== $old_ssn) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['user:ssn']);
+  }
+
+  // Check if roles has changed.
+  $original_roles = $user->original?->getRoles() ?? [];
+  $current_roles = $user->getRoles();
+
+  if (json_encode($original_roles) !== json_encode($current_roles)) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['user_list:roles']);
+  }
+
+  foreach ($user->getRoles() as $role) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['user_list:' . $role]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_core_user_insert(\Drupal\user\UserInterface $user) {
+  \Drupal\Core\Cache\Cache::invalidateTags(['user:ssn']);
+  \Drupal\Core\Cache\Cache::invalidateTags(['user_list:roles']);
+  \Drupal\Core\Cache\Cache::invalidateTags(['user_list:new']);
+  foreach ($user->getRoles() as $role) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['user_list:' . $role]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function simple_school_reports_core_user_delete(\Drupal\user\UserInterface $user) {
+  $caregiver_uids = array_column($user->get('field_caregivers')->getValue(), 'target_id');
+  if (!empty($caregiver_uids)) {
+    $queue = \Drupal::service('queue')->get('check_caregiver_queue');
+    $queue->createQueue();
+    foreach ($caregiver_uids as $caregiver_uid) {
+      $queue->createItem($caregiver_uid);
+    }
+  }
+  \Drupal\Core\Cache\Cache::invalidateTags(['user:ssn']);
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_core_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  foreach ($query->where as &$condition_group) {
+    foreach ($condition_group['conditions'] as &$condition) {
+      if ($condition['value'] === 'my_uid') {
+        $condition['value'] = \Drupal::currentUser()->id();
+      }
+    }
+  }
+
+  if ($view->id() === 'registered_absence' && $view->current_display !== 'student_register_absence_list') {
+    $date = new \DateTime();
+    $date->setTime(0,0,0);
+    $absence_from = $date->getTimestamp();
+
+    $date = new \DateTime();
+    $date->setTime(23,59,59);
+    if ($view->current_display === 'upcoming') {
+      $date->add(new \DateInterval('P1Y'));
+    }
+    $absence_to = $date->getTimestamp();
+
+    if ($view->current_display === 'history') {
+      $absence_to = $absence_from - 1;
+      $date->sub(new \DateInterval('P2Y'));
+      $absence_from = $date->getTimestamp();
+    }
+
+    if ($view->current_display === 'student_helper') {
+      $current_user =  \Drupal::currentUser();
+      $interval = in_array('caregiver', $current_user->getRoles())  && !$current_user->hasPermission('school staff permissions') ? 'P7D' : 'P1Y';
+
+      $date_from = new \DateTime();
+      $date_from->setTime(0,0,0);
+      $date_from->sub(new \DateInterval($interval));
+
+      $date_to = new \DateTime();
+      $date_to->setTime(23,59, 59);
+      $date_to->add(new \DateInterval($interval));
+
+      $absence_from = $date_from->getTimestamp();
+      $absence_to = $date_to->getTimestamp();
+    }
+
+
+    $created_from_alter = FALSE;
+    $created_to_alter = FALSE;
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'node__field_absence_from.field_absence_from_value') {
+
+          if ($condition['operator'] === '>=') {
+            $condition['value'] = $absence_from;
+            $created_from_alter = TRUE;
+          }
+
+          if ($condition['operator'] === '<=') {
+            $condition['value'] = $absence_to;
+            $created_from_alter = TRUE;
+          }
+        }
+
+        // Break traverse if no field are in need of alter.
+        if ($created_from_alter && $created_to_alter) {
+          break 2;
+        }
+      }
+    }
+  }
+
+  // Alter sort for registered absence so that its granularity is per day for
+  // views showing multiple users.
+  if ($view->id() === 'registered_absence') {
+    if (isset($query->fields['users_field_data_node__field_student__user__field_first_name'])) {
+      $timezone = \Drupal::config('system.date')->get('timezone.default') ?? 'Europe/Stockholm';
+      $date = new \DateTime('now', new \DateTimeZone($timezone));
+      $tz_offset = $date->getOffset();
+      $field_alias = $query->addField(NULL, 'DATE(FROM_UNIXTIME("node__field_absence_from"."field_absence_from_value" + ' . $tz_offset . '))', 'absence_from_date_only');
+      foreach ($query->orderby as &$order) {
+        if ($order['field'] === 'node__field_absence_from_field_absence_from_value') {
+          $order['field'] = $field_alias;
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'ssr_maillog') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        $fields_to_alter = ['ssr_maillog.recipient_user', 'ssr_maillog.uid', 'ssr_maillog.student_context'];
+
+        if (!empty($condition['field']) && in_array($condition['field'], $fields_to_alter) && array_key_exists('value', $condition)) {
+          if ($condition['value'] === NULL) {
+            unset($condition_group['conditions'][$key]);
+            continue;
+          }
+
+          $uid = UserFormAlter::getUidFromAutocompleteString($condition['value'] ?? NULL);
+          $condition['value'] = $uid;
+        }
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_core_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  $view->element['#cache']['contexts'][] = 'route';
+
+  // Add cache user permissions on views that is rendering nodes.
+  if ($view->getBaseEntityType() && $view->getBaseEntityType()->id() === 'node') {
+    $view->element['#cache']['contexts'][] = 'user.permissions';
+    $view->element['#cache']['contexts'][] = 'user.node_grants';
+  }
+
+  if ($view->id() === 'registered_absence') {
+    $view->element['#cache']['contexts'][] = 'current_day';
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+
+  if ($view->id() === 'courses') {
+    if ($view->current_display === 'my_courses') {
+      $view->element['#cache']['contexts'][] = 'user';
+    }
+  }
+
+  if ($view->id() === 'students') {
+    $view->element['#attached']['library'][] = 'simple_school_reports_core/views_students_grade_group';
+  }
+}
+
+/**
+ * Implements hook_views_post_execute().
+ */
+function simple_school_reports_core_views_post_execute(ViewExecutable $view) {
+  if (isset($view->field['user_bulk_form']) && $view->total_rows < 2000) {
+    /** @var \Drupal\mysql\Driver\Database\mysql\Select $count_query */
+    $count_query = clone $view->build_info['count_query'];
+    $results = $count_query->execute();
+
+    $uids = [];
+
+    foreach ($results as $result) {
+      if (isset($result->uid)) {
+        $uids[] = $result->uid;
+      }
+    }
+
+    $view->element['#total_uid_list'] = $uids;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_core_preprocess_views_view_table(&$variables) {
+  if (isset($variables['view']) && !empty($variables['view']->element['#total_uid_list'])) {
+    $uids = $variables['view']->element['#total_uid_list'];
+    $variables['attributes']['data-total-uid-list'] = json_encode($uids);
+  }
+}
+
+function simple_school_reports_core_form_user_bulk_form_modifier($form, FormStateInterface $form_state) {
+  if (empty($form_state->getErrors()) && $form_state->get('step') == 'views_form_views_form') {
+    $user_input = $form_state->getUserInput();
+    if (!empty($user_input['override_uid_list'])) {
+      $uids = json_decode($user_input['override_uid_list']);
+      if (is_array($uids) && !empty($uids)) {
+        $user_bulk_form = [];
+
+        $query = \Drupal::database()->select('users_field_data', 'u');
+        $query->innerJoin('user__field_first_name', 'fn', 'fn.entity_id = u.uid');
+        $query->innerJoin('user__field_last_name', 'ln', 'ln.entity_id = u.uid');
+        $query->leftJoin('user__field_grade', 'g', 'g.entity_id = u.uid');
+        $query
+          ->condition('u.uid', $uids, 'IN')
+          ->fields('u', ['langcode', 'uid'])
+          ->orderBy('g.field_grade_value')
+          ->orderBy('fn.field_first_name_value')
+          ->orderBy('ln.field_last_name_value')
+          ->execute();
+
+        $result = $query->execute();
+        foreach ($result as $result) {
+          if (isset($result->uid) && isset($result->langcode)) {
+            $key_parts = [
+              $result->langcode,
+              $result->uid,
+            ];
+            $key = json_encode($key_parts);
+            $user_bulk_form[] =  base64_encode($key);
+          }
+        }
+
+        $user_input['user_bulk_form'] = $user_bulk_form;
+        $form_state->setUserInput($user_input);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function simple_school_reports_core_entity_type_alter(array &$entity_types) {
+  // We get all form modes, for all entities, and loop through them.
+  $form_modes = \Drupal::service('entity_display.repository')->getAllFormModes();
+  foreach ($form_modes as $entity_type => $display_modes) {
+    if ($entity_type !== 'user') {
+      // We are only interested in adding a handler to the Node entity.
+      continue;
+    }
+
+    $sub_entity_type = $entity_types[$entity_type];
+    foreach ($display_modes as $machine_name => $form_display) {
+      if (!in_array($machine_name, ['student', 'caregiver'])) {
+        // We are only interested in adding this form mode to the definition.
+        continue;
+      }
+      // We get the default handler class. It will be enough for us.
+      $default_handler_class = $sub_entity_type->getHandlerClasses()['form']['default'];
+      // We set the form class, keyed by the machine name of our custom form mode.
+      $sub_entity_type->setFormClass($machine_name, $default_handler_class);
+    }
+  }
+
+  $entity_types['user']->addConstraint('SsrRolesConstraint');
+}
+
+
+function simple_school_reports_core_entity_reference_selection_alter(array &$definitions) {
+  $definitions['default:user']['class'] = 'Drupal\simple_school_reports_core\Plugin\EntityReferenceSelection\SSRUserSelection';
+}
+
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_core_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof \Drupal\user\UserInterface) {
+    if ($entity->hasRole('student')) {
+      $operations['add_absence'] = [
+        'title' => t('Register absence'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.single_absence_day', ['user' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+
+      if (\Drupal::currentUser()->hasPermission('mail caregivers')) {
+        $cache = new CacheableMetadata();
+        $cache->addCacheContexts(['user']);
+
+        $operations['mail_caregivers'] = [
+          'title' => t('Mail caregivers'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.mail_caregivers', ['user' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -98,
+        ];
+        $cache->applyTo($operations['mail_caregivers']);
+      }
+
+      if (\Drupal::currentUser()->hasPermission('school staff permissions') && $entity->hasRole('student')) {
+        /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+        $email_service = \Drupal::service('simple_school_reports_core.email_service');
+        if ($email_service->getUserEmail($entity)) {
+          $cache = new CacheableMetadata();
+          $cache->addCacheContexts(['user']);
+
+          $operations['mail_student'] = [
+            'title' => t('Mail student'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.user_send_mail', ['user' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -97,
+          ];
+          $cache->applyTo($operations['mail_student']);
+        }
+      }
+    }
+  }
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'course') {
+      if ($entity->access('update')) {
+        $operations['report'] = [
+          'title' => t('Report'),
+          'url' => \Drupal\Core\Url::fromRoute('node.add', ['node_type' => 'course_attendance_report'], ['query' => ['destination' => \Drupal::service('path.current')->getPath(), 'course_id' => $entity->id()]]),
+          'weight' => -99,
+        ];
+      }
+    }
+  }
+
+  if ($entity instanceof \Drupal\taxonomy\TermInterface) {
+    unset($operations['add-child']);
+    if ($entity->bundle() === 'school_subject') {
+      $status = $entity->get('status')->value;
+      if ($status) {
+        $operations['deactivate'] = [
+          'title' => t('Deactivate'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.deactivate_school_subject', ['taxonomy_term' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -99,
+        ];
+      }
+      else {
+        $operations['activate'] = [
+          'title' => t('Activate'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_school_subject', ['taxonomy_term' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -99,
+        ];
+      }
+
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ */
+function simple_school_reports_core_field_widget_single_element_paragraphs_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if (!empty($element['#paragraph_type']) && $element['#paragraph_type'] === 'schema') {
+    $element['subform']['field_class_start']['widget'][0]['value']['#date_increment'] = 60;
+    unset($element['subform']['field_class_start']['widget'][0]['value']['#description']);
+  }
+}
+
+function _simple_school_reports_core_school_subject_codes() {
+  return SchoolSubjectHelper::getSupportedSubjectCodes();
+}
+
+function _simple_school_reports_core_school_subject_language_codes() {
+  return SchoolSubjectHelper::getSupportedLanguageCodes();
+}
+
+function _simple_school_reports_core_module_list() {
+  return [
+    'core' => 'simple_school_reports_core',
+    'bonus' => 'simple_school_reports_bonus_time',
+  ];
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function simple_school_reports_core_menu_local_tasks_alter(&$data, $route_name, \Drupal\Core\Cache\RefinableCacheableDependencyInterface &$cacheability) {
+  if (!empty($data['tabs'][0]['simple_school_reports_core.add_report'])) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof \Drupal\node\NodeInterface) {
+      if ($node->bundle() !== 'course') {
+        if (!empty($data['tabs'][0]['simple_school_reports_core.add_report'])) {
+          $data['tabs'][0]['simple_school_reports_core.add_report']['#access'] = FALSE;
+        }
+      }
+      else {
+        if (!empty($data['tabs'][0]['simple_school_reports_core.add_report']['#link']['url'])) {
+          /** @var \Drupal\Core\Url $url */
+          $url = $data['tabs'][0]['simple_school_reports_core.add_report']['#link']['url'];
+          $url->setOption('query', ['course_id' => $node->id(), 'destination' => \Drupal::service('path.current')->getPath()]);
+          $data['tabs'][0]['simple_school_reports_core.add_report']['#link']['url'] = $url;
+        }
+
+      }
+    }
+  }
+
+  if ($route_name === 'entity.user.canonical') {
+    $user = \Drupal::routeMatch()->getParameter('user');
+    if ($user instanceof \Drupal\user\UserInterface) {
+      if (!$user->hasRole('student')) {
+        $data['tabs'][0]['simple_school_reports_core.student_statistics']['#access'] = FALSE;
+      }
+    }
+  }
+
+  if (!empty($data['tabs'])) {
+    $destination = \Drupal::requestStack()->getCurrentRequest()->get('destination');
+    if ($destination) {
+      foreach ($data['tabs'] as &$tabs_wrapper) {
+        foreach ($tabs_wrapper as &$tab) {
+          $url = !empty($tab['#link']['url']) ? $tab['#link']['url'] : NULL;
+          if ($url instanceof \Drupal\Core\Url) {
+            $query = $url->getOption('query') ?? [];
+            if (!isset($query['destination'])) {
+              $query['destination'] = $destination;
+              $url->setOption('query', $query);
+              $tab['#link']['url'] = $url;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_core_taxonomy_term_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  $access = AccessResult::neutral();
+  if ($entity->bundle() === 'school_subject') {
+    if ($operation === 'update' || $operation === 'delete') {
+      if ($account->id() !== '1') {
+        $access = AccessResult::forbidden();
+      }
+    }
+  }
+
+  $access->cachePerPermissions();
+  return $access;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_core_user_access(UserInterface $user, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  $access = AccessResult::neutral();
+
+  $allow_handle_self = !in_array('student', $account->getRoles());
+
+  if (!$user->hasRole('teacher') && !$account->hasPermission('school staff permissions') && $operation !== 'delete') {
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+
+    $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+    if (in_array($user->id(), $caregiving_students) || $user->id() == $account->id()) {
+      if ($operation === 'view' || $operation === 'view label' || $allow_handle_self) {
+        $access = AccessResult::allowed();
+      }
+      else {
+        $access = AccessResult::forbidden();
+      }
+    }
+    else {
+      $access = AccessResult::forbidden();
+    }
+    $access->addCacheTags(['user_list:student']);
+  }
+
+  if ($account->hasPermission('school staff permissions') && !$account->hasPermission('administer users') && $operation !== 'delete') {
+    if ($user->hasRole('student') || $user->hasRole('caregiver')) {
+      $access = AccessResult::allowed();
+    }
+  }
+
+  if ($user->id() == 1 && $account->id() != 1 && $operation !== 'view') {
+    $access = AccessResult::forbidden();
+  }
+
+  if ($user->hasRole('student') && $operation === 'caregiver_access') {
+    if ($account->hasPermission('school staff permissions')) {
+      $access = AccessResult::allowed();
+    }
+    else {
+      $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+      if (in_array($user->id(), $caregiving_students)) {
+        $access = AccessResult::allowed();
+      }
+      else {
+        $access = AccessResult::forbidden();
+      }
+      $access->addCacheTags(['user_list:student']);
+    }
+  }
+
+  $access->cachePerUser();
+  $access->addCacheableDependency($user);
+  return $access;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_core_paragraph_access(\Drupal\paragraphs\ParagraphInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  $access = AccessResult::neutral();
+
+  if (!$account->hasPermission('school staff permissions') && $operation !== 'delete') {
+    if ($entity->hasField('field_student')) {
+      $student_uid = $entity->get('field_student')->target_id;
+      if (!$student_uid) {
+        $access = AccessResult::forbidden();
+      }
+      else {
+        /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+        $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+        $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+        if (in_array($student_uid, $caregiving_students)) {
+          $access = AccessResult::allowed();
+        }
+        else {
+          $access = AccessResult::forbidden();
+        }
+      }
+      $access->addCacheTags(['user_list:student']);
+    }
+  }
+
+  $access->cachePerUser();
+  return $access;
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function simple_school_reports_core_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  $access = AccessResult::neutral();
+
+  // User field access.
+  if ($field_definition->getTargetEntityTypeId() === 'user') {
+    $user = $items?->getEntity() ?? NULL;
+
+    if (!$account->hasPermission('school staff permissions')) {
+      $non_staff_allow_to_edit = [
+        'field_address',
+        'field_first_name',
+        'field_middle_name',
+        'field_last_name',
+        'field_gender',
+        'field_telephone_number',
+        'mail',
+      ];
+
+      $non_staff_allow_to_view = $non_staff_allow_to_edit;
+      $non_staff_allow_to_view[] = 'field_adapted_studies';
+      $non_staff_allow_to_view[] = 'field_birth_date';
+      $non_staff_allow_to_view[] = 'field_caregivers';
+      $non_staff_allow_to_view[] = 'field_class';
+      $non_staff_allow_to_view[] = 'field_gender';
+      $non_staff_allow_to_view[] = 'field_grade';
+      $non_staff_allow_to_view[] = 'field_invalid_absence';
+      $non_staff_allow_to_view[] = 'field_mentor';
+      $non_staff_allow_to_view[] = 'field_telephone_number';
+
+      $non_staff_fields = $operation === 'view' ? $non_staff_allow_to_view : $non_staff_allow_to_edit;
+      if (!in_array($field_definition->getName(), $non_staff_fields)) {
+        $access = AccessResult::forbidden();
+      }
+    }
+
+    // Restrict access to fields for users that has protected personal data.
+    $protected_data_value = $user?->get('field_protected_personal_data')->value ?? NULL;
+    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
+    if ($has_protected_data && !$account->hasPermission('view protected personal data')) {
+      // White list of fields that are allowed to edit and view
+      // (for those with permission to do so). Forbid access to any other
+      // fields.
+      $allow_to_edit = [
+        'field_first_name',
+        'field_middle_name',
+        'field_last_name',
+        'field_mentor',
+        'field_grade',
+        'field_class',
+      ];
+      $allowed_to_view = $allow_to_edit;
+      $allowed_to_view[] = 'field_notes';
+      $allowed_to_view[] = 'field_extra_adaptations';
+      $allowed_to_view[] = 'field_invalid_absence';
+      $allowed_to_view[] = 'field_special_diet';
+      $allowed_to_view[] = 'field_allow_login';
+
+      $access_fields = $operation === 'view' ? $allowed_to_view : $allow_to_edit;
+      if (!in_array($field_definition->getName(), $access_fields)) {
+        $access = AccessResult::forbidden();
+      }
+      $access->addCacheableDependency($user);
+    }
+  }
+
+  $access->cachePerPermissions();
+  return $access;
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function simple_school_reports_core_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
+  if ($entity_type->id() === 'user') {
+    $fields['field_ssn']->addConstraint('SsrSsnConstraint', []);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_core_user_role_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  if ($operation === 'view') {
+    return AccessResult::allowed();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_core_views_data_alter(array &$data) {
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to invalid_absence_student.
+    $data['users_field_data']['invalid_absence_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['invalid_absence_student']['title'] = t('Invalid absence');
+    $data['users_field_data']['invalid_absence_student']['help'] =  t('Summarize the invalid absence for period supplied in url.');
+    $data['users_field_data']['invalid_absence_student']['field'] = [
+      'id' => 'invalid_absence_student',
+    ];
+    $data['users_field_data']['invalid_absence_student']['sort'] = [
+      'id' => 'invalid_absence_student',
+    ];
+
+    // Copy uid data to absence_day_student.
+    $data['users_field_data']['absence_day_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['absence_day_student']['title'] = t('Absence day');
+    $data['users_field_data']['absence_day_student']['help'] =  t('Summarize the absence days for period supplied in url.');
+    $data['users_field_data']['absence_day_student']['field'] = [
+      'id' => 'absence_day_student',
+    ];
+    $data['users_field_data']['absence_day_student']['sort'] = [
+      'id' => 'absence_day_student',
+    ];
+
+    $data['users_field_data']['attendance_report_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['attendance_report_student']['title'] = t('Attendance report student');
+    $data['users_field_data']['attendance_report_student']['help'] =  t('Show attendance in percent.');
+    $data['users_field_data']['attendance_report_student']['field'] = [
+      'id' => 'attendance_report_student',
+    ];
+    $data['users_field_data']['attendance_report_student']['sort'] = [
+      'id' => 'attendance_report_student',
+    ];
+
+    // Copy uid data to absence_day_student.
+    $data['users_field_data']['caregiver_for_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['caregiver_for_student']['title'] = t('Caregiver for field');
+    $data['users_field_data']['caregiver_for_student']['help'] =  t('List all students that user is caregiver for');
+    $data['users_field_data']['caregiver_for_student']['field'] = [
+      'id' => 'caregiver_for_student',
+    ];
+
+    // Copy uid data to user_ssn.
+    $data['users_field_data']['ssr_uid_ssn'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['ssr_uid_ssn']['title'] = t('User ssn');
+    $data['users_field_data']['ssr_uid_ssn']['help'] =  t('Show user ssn. For user without school staff permission, the last four digits will be hidden. That will also be the case if there is no ssn registered but birth date is.');
+    $data['users_field_data']['ssr_uid_ssn']['field'] = [
+      'id' => 'ssr_uid_ssn',
+    ];
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * When form updates, delete any paragraph entities that were removed.
+ */
+function simple_school_reports_core_entity_update(EntityInterface $entity) {
+  // Only act on content entities.
+  if (!($entity instanceof FieldableEntityInterface)) {
+    return;
+  }
+
+  /** @var \Drupal\Core\Entity\EntityFieldManager $fieldManager */
+  $fieldManager = \Drupal::service('entity_field.manager');
+  $parentEntities = $fieldManager->getFieldMapByFieldType('entity_reference_revisions');
+
+  if (!array_key_exists($entity->getEntityTypeId(), $parentEntities)) {
+    return;
+  }
+
+  $field_definitions = [];
+  foreach ($parentEntities[$entity->getEntityTypeId()] as $field_id => $settings) {
+    if ($configField = FieldConfig::loadByName($entity->getEntityTypeId(), $entity->bundle(), $field_id)) {
+      $field_definitions[] = $configField;
+    }
+  }
+
+  if (empty($field_definitions)) {
+    return;
+  }
+
+  // Loop through each field definition looking for paragraphs.
+  foreach ($field_definitions as $field_definition) {
+    // Check if a paragraph field with revisions.
+    if ($field_definition->getSetting('target_type') != 'paragraph') {
+      continue;
+    }
+
+    // Get field original ids.
+    if ($entity->original) {
+      $original_ids = array_column($entity->original->{$field_definition->getName()}->getValue(), 'target_id');
+    }
+    // If no original ids, skip field.
+    if (empty($original_ids)) {
+      continue;
+    }
+
+    // Get field new ids.
+    $new_ids = array_column($entity->{$field_definition->getName()}->getValue(), 'target_id');
+
+    // Flag original ids not in new ids for deletion.
+    $delete_ids = array_diff($original_ids, $new_ids);
+
+    // Delete flagged ids.
+    if (!empty($delete_ids)) {
+      $storage_handler = \Drupal::entityTypeManager()->getStorage('paragraph');
+      $entities = $storage_handler->loadMultiple($delete_ids);
+      $storage_handler->delete($entities);
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function simple_school_reports_core_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'simple_school_reports_core/print';
+  $attachments['#attached']['library'][] = 'simple_school_reports_core/translations_support';
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'robots',
+        'content' => 'noindex, nofollow',
+      ],
+    ],
+    'robots_none',
+  ];
+}
+
+/**
+ * Implements hook_ssr_login_access().
+ */
+function simple_school_reports_core_ssr_login_access(\Drupal\user\UserInterface $user) {
+  if ($user->id() == 1 || $user->hasPermission('school staff permissions')) {
+    return AccessResult::allowed();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function simple_school_reports_core_mail_alter(&$message) {
+  $login_access_check_mails = [
+    'password_reset',
+    'register_admin_created',
+  ];
+
+  if (in_array($message['key'] ?? '?', $login_access_check_mails)) {
+    $user = !empty($message['params']['account']) ? $message['params']['account'] : NULL;
+    if ($user) {
+      $access = FALSE;
+      /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+      $module_handler = \Drupal::service('module_handler');
+
+      $access_resolvers = $module_handler->invokeAll('ssr_login_access', [$user]);
+      /** @var \Drupal\Core\Access\AccessResult $access_resolver */
+      foreach ($access_resolvers as $access_resolver) {
+        if ($access_resolver->isAllowed()) {
+          $access = TRUE;
+        }
+        if ($access_resolver->isForbidden()) {
+          $access = FALSE;
+          break;
+        }
+      }
+      if (!$access) {
+        $message['send'] = FALSE;
+      }
+    }
+  }
+
+  if (!empty($message['send'])) {
+    /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+    $email_service = \Drupal::service('simple_school_reports_core.email_service');
+    $email_service->mailCountIncrement();
+  }
+}
+
+/**
+ * Implements hook_ssr_start_page_route().
+ */
+function simple_school_reports_core_ssr_start_page_route(\Drupal\Core\Session\AccountInterface $account) {
+  if ($account->hasPermission('school staff permissions')) {
+    return 'simple_school_reports_core.start_page_default';
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_core_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  $is_start_page = str_contains($context['route_name'], 'start_page_') && $context['route_name'] !== 'simple_school_reports_core.start_page_resolver';
+
+  if ($is_start_page) {
+    $cache->addCacheContexts(['user']);
+    $local_actions['view_profile'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => t('My profile'),
+        'url' => \Drupal\Core\Url::fromRoute('entity.user.canonical', ['user' => \Drupal::currentUser()->id()]),
+      ],
+      '#weight' => 10,
+    ];
+
+    if (in_array('teacher', \Drupal::currentUser()->getRoles())) {
+      $cache->addCacheContexts(['user']);
+      $local_actions['my_mentor_student'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('My mentoring students'),
+          'url' => \Drupal\Core\Url::fromRoute('view.students.students', [], ['query' => ['field_mentor_target_id' => 'my_uid']]),
+        ],
+        '#weight' => 20,
+      ];
+    }
+  }
+
+  if ($context['route_name'] === 'entity.user.canonical' || $context['route_name'] === 'simple_school_reports_core.latest_reports') {
+    $user = $context['current_request']->get('user');
+    if ($user instanceof UserInterface && $user->hasRole('student')) {
+      $cache->addCacheContexts(['user']);
+      if ($user->access('update')) {
+        $local_actions['register_absence'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Register absence'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.single_absence_day', ['user' => $user->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          ],
+          '#weight' => 10,
+        ];
+
+        if (\Drupal::currentUser()->hasPermission('mail caregivers')) {
+          $cache = new CacheableMetadata();
+          $cache->addCacheContexts(['user']);
+
+          $local_actions['mail_caregivers'] = [
+            '#theme' => 'menu_local_action',
+            '#link' => [
+              'title' => t('Mail caregivers'),
+              'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.mail_caregivers', ['user' => $user->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            ],
+            '#weight' => 11,
+          ];
+          $cache->applyTo($local_actions['mail_caregivers']);
+        }
+      }
+    }
+  }
+
+  if ($context['route_name'] === 'entity.node.canonical') {
+    $course_node = $context['current_request']->get('node');
+    if ($course_node instanceof \Drupal\node\NodeInterface && $course_node->bundle() === 'course') {
+      $cache->addCacheContexts(['user']);
+      if ($course_node->access('update')) {
+        $local_actions['register_absence'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Report'),
+            'url' => \Drupal\Core\Url::fromRoute('node.add', ['node_type' => 'course_attendance_report'], ['query' => ['destination' => \Drupal::service('path.current')->getPath(), 'course_id' => $course_node->id()]]),
+          ],
+          '#weight' => 10,
+        ];
+      }
+    }
+  }
+
+
+  if ($is_start_page || str_starts_with($context['path.current']->getPath(), '/student')) {
+    $cache->addCacheContexts(['route']);
+    $local_actions['to_absence_list'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => t('To absence list'),
+        'url' => \Drupal\Core\Url::fromUserInput('#block-ssr-base-views-block-registered-absence-today'),
+      ],
+      '#attributes' => [
+        'class' => ['absence-list-button'],
+      ],
+      '#attached' => [
+        'library' => ['simple_school_reports_core/absence_list_button'],
+      ],
+      '#weight' => 99,
+    ];
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function simple_school_reports_core_entity_base_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'node' && !empty($fields['status'])) {
+    $fields['status']->setLabel(t('Active'));
+  }
+  if ($entity_type->id() === 'taxonomy_term' && !empty($fields['status'])) {
+    $fields['status']->setLabel(t('Active'));
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_core_preprocess_menu(&$variables) {
+  if (!empty($variables['menu_name']) && $variables['menu_name'] === 'admin' && !empty($variables['items']['simple_school_reports_core.logout'])) {
+    $cache = new \Drupal\Core\Cache\CacheableMetadata();
+    $cache->addCacheContexts(['user']);
+    $cache->addCacheTags(['user_list:student', 'user_list:caregiver']);
+
+    $cache->applyTo($variables);
+
+    /** @var \Drupal\Core\Session\AccountProxyInterface $current_user */
+    $current_user = \Drupal::currentUser();
+
+    if (in_array('caregiver', $current_user->getRoles())) {
+      /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+      $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+      $caregiving_students = $user_meta_data->getCaregiverStudentsData($current_user->id());
+
+      if (!empty($caregiving_students)) {
+        $copy = $variables['items']['simple_school_reports_core.logout'];
+        unset($variables['items']['simple_school_reports_core.logout']);
+
+        foreach ($caregiving_students as $student_uid => $data) {
+          $variables['items']['student' . $student_uid] = [
+            'title' => $data['name'],
+            'url' => \Drupal\Core\Url::fromRoute('entity.user.canonical', ['user' => $student_uid]),
+          ];
+          $cache->applyTo($variables['items']['student' . $student_uid]);
+        }
+        $variables['items']['simple_school_reports_core.logout'] = $copy;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_toolbar_alter().
+ */
+function simple_school_reports_core_toolbar_alter(&$items) {
+  if (!empty($items['administration']['tab']['#title'])) {
+    $items['administration']['tab']['#title'] = t('Menu');
+    $items['administration']['tab']['#attributes']['title'] = t('Menu');
+  }
+}
+
+/**
+ * Implements hook_menu_local_actions_alter().
+ */
+function simple_school_reports_core_menu_local_actions_alter(&$local_actions) {
+  // Alter local actions title.
+  if (!empty($local_actions['simple_school_reports_core.term_add']['title'])) {
+    $local_actions['simple_school_reports_core.term_add']['title'] = t('Add term', [], ['context' => 'school_term']);
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function simple_school_reports_core_entity_extra_field_info() {
+  $fields['node']['course']['display']['number_of_students'] = [
+    'label' => t('Number of students'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['user']['user']['display']['roles'] = [
+    'label' => t('Roles'),
+    'description' => t('User module \'roles\' view element.'),
+    'weight' => 50,
+    'visible' => FALSE,
+  ];
+
+  $fields['user']['user']['display']['caregiver_for'] = [
+    'label' => t('Caregiver for'),
+    'description' => t('Caregiver for'),
+    'weight' => 51,
+    'visible' => FALSE,
+  ];
+
+  $fields['user']['user']['display']['blur_secret_fields'] = [
+    'label' => t('Blur secret fields'),
+    'description' => t('Blur secret fields.'),
+    'weight' => 52,
+    'visible' => FALSE,
+  ];
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_core_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() === 'course' && ($display->getComponent('number_of_students') || $display->getComponent('field_student'))) {
+
+    $students_uid = array_column($entity->get('field_student')->getValue(), 'target_id');
+    $all_uids = [];
+    if (!empty($students_uid)) {
+      /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+      $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+      $all_uids = array_keys($user_meta_data->getUserWeights());
+    }
+    $students_uid = array_intersect($students_uid, $all_uids);
+    $cache = \Drupal\Core\Cache\CacheableMetadata::createFromRenderArray($build);
+    $cache->addCacheTags(['user_list:student']);
+    $cache->applyTo($build);
+
+    if ($display->getComponent('number_of_students')) {
+      $build['number_of_students'] = [
+        '#type' => 'container',
+      ];
+      $build['number_of_students']['value'] = [
+        '#markup' => count($students_uid),
+      ];
+    }
+
+    if ($display->getComponent('field_student') && !empty($students_uid)) {
+      $build['field_student']['#title'] = (string) $build['field_student']['#title'] ?? '';
+      $build['field_student']['#title'] .= ' (' . count($students_uid) . ')';
+    }
+  }
+
+  if ($entity->hasField('field_student') && !$entity->get('field_student')->isEmpty() && $display->getComponent('field_student')) {
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+    $user_weight = $user_meta_data->getUserWeights();
+    $children = [];
+    foreach (\Drupal\Core\Render\Element::children($build['field_student']) as $key) {
+      $trash = FALSE;
+      $children_key = 'unsorted_' . $key;
+      if (!empty($build['field_student'][$key]['#options']['entity']) && $build['field_student'][$key]['#options']['entity'] instanceof UserInterface) {
+        $uid = $build['field_student'][$key]['#options']['entity']->id();
+        if (isset($user_weight[$uid])) {
+          $children_key = $user_weight[$uid];
+        }
+        else {
+          $trash = TRUE;
+        }
+      }
+      if (!$trash) {
+        $build['field_student'][$key]['#old_key'] = $key;
+        $children[$children_key] = $build['field_student'][$key];
+      }
+      unset($build['field_student'][$key]);
+    }
+
+    ksort($children);
+    $numeric_index = 0;
+    foreach ($children as $key => $element) {
+      if (is_numeric($key)) {
+        $key = $numeric_index;
+        $numeric_index++;
+      }
+      else {
+        $key = $element['#old_key'];
+      }
+      $build['field_student'][$key] = $element;
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_core_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  $cache = new CacheableMetadata();
+  $cache->addCacheContexts(['user.permissions']);
+
+  if ($display->getComponent('blur_secret_fields')) {
+    $cache->addCacheableDependency($entity);
+
+    $protected_data_value = $entity->get('field_protected_personal_data')->value ?? NULL;
+    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
+    if ($has_protected_data && \Drupal::currentUser()->hasPermission('view protected personal data')) {
+      $build['#attached']['library'][] = 'simple_school_reports_core/blur_secret_fields';
+      $build['blur_secret_fields'] = [
+        '#type' => 'container',
+      ];
+
+      $messages['warning'][] = t('This user has protected personal data. Be very careful with sharing this information.');
+
+      $build['blur_secret_fields']['warning'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => $messages,
+        '#status_headings' => [
+          'warning' => t('Warning'),
+        ],
+      ];
+
+      $build['blur_secret_fields']['switch'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Show protected data'),
+        '#default_value' => FALSE,
+        '#attributes' => [
+          'class' => ['blur-secret-fields-switch'],
+        ],
+      ];
+    }
+  }
+
+  if ($display->getComponent('roles')) {
+    $build['roles'] = [];
+    if (\Drupal::currentUser()->hasPermission('school staff permissions')) {
+      $rids = $entity->getRoles(TRUE);
+
+      $role_entities = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple($rids);
+      $roles = [];
+      foreach ($role_entities as $role) {
+        $roles[] = $role->label();
+      }
+
+      $build['roles'] = [
+        '#markup' => '<div class="field field--label-above field-roles"><div class="field__label">' . t('Roles') . '</div><div class="field__item">' . implode('<br />', $roles) . '</div></div>',
+      ];
+      $cache->applyTo($build['roles']);
+    }
+  }
+
+  if ($display->getComponent('caregiver_for')) {
+    $build['caregiver_for'] = [];
+    if ($entity->access('update')) {
+      /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+      $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+      $caregiving_students = $user_meta_data->getCaregiverStudentsData($entity->id());
+      $cache->addCacheTags(['user_list:student']);
+      $student_links = [];
+      foreach ($caregiving_students as $caregiving_student) {
+        if (!empty($caregiving_student['link']) && !empty($caregiving_student['name'])) {
+          /** @var \Drupal\Core\Url $link */
+          $link = $caregiving_student['link'];
+          $student_links[] = $link->toString(TRUE)->getGeneratedLink();
+          continue;
+        }
+        if (!empty($caregiving_student['name'])) {
+          $student_links[] = $caregiving_student['name'];
+          continue;
+        }
+      }
+      if (!empty($student_links)) {
+        $build['caregiver_for'] = [
+          '#markup' => '<div class="field field--label-above"><div class="field__label">' . t('Caregiver for') . '</div><div class="field__item">' . implode('<br />', $student_links) . '</div></div>',
+        ];
+      }
+      $cache->applyTo($build['caregiver_for']);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_core_preprocess_username(&$variables) {
+  /** @var \Drupal\Core\Session\AccountInterface|null $account */
+  $account = $variables['account'] ?? NULL;
+  if (!$account) {
+    return;
+  }
+  $variables['name'] = $account->getDisplayName();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_core_preprocess_links(&$variables) {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+
+  if (!empty($variables['links'])) {
+    foreach ($variables['links'] as $link_wrapper) {
+      $link = $link_wrapper['link'] ?? NULL;
+
+      if (!empty($link['#type']) && $link['#type'] === 'link' && !empty($link['#url']) && $link['#url'] instanceof \Drupal\Core\Url) {
+        $link['#access'] = $link['#access'] ?? $link['#url']->access(NULL, TRUE);
+        if (!$link['#access'] instanceof \Drupal\Core\Access\AccessResultInterface) {
+          continue;
+        }
+        $cache->addCacheableDependency($link['#access']);
+      }
+    }
+  }
+
+  $cache->applyTo($variables);
+}
+
+function ssr_tmp_ssn_check() {
+  $database = \Drupal::database();
+
+  $results = $database->select('user__field_ssn', 's')
+    ->fields('s', ['entity_id', 'field_ssn_value'])
+    ->execute();
+
+  $ssn_map = [];
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  foreach ($results as $result) {
+    $user = $user_storage->load($result->entity_id);
+    $ssn = $user->get('field_ssn')->value;
+    if (!empty($ssn)) {
+      $ssn_map[$ssn][] = $result->entity_id;
+    }
+  }
+
+  $found = FALSE;
+
+  foreach ($ssn_map as $uids) {
+    if (count($uids) > 1) {
+      $found = TRUE;
+      echo 'A ssn is used by ' . count($uids) . ' users: ' . implode(', ', $uids) . PHP_EOL;
+    }
+  }
+
+  if (!$found) {
+    echo 'No duplicate ssns found.' . PHP_EOL;
+  }
+
+}
+
+function simple_school_reports_core_character_normalise_word(string $word): string {
+  $charMap = [
+    'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'AE',
+    'Ç' => 'C',
+    'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+    'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
+    'Ð' => 'D', 'Ñ' => 'N',
+    'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O',
+    'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U',
+    'Ý' => 'Y',
+    'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'ae',
+    'ç' => 'c',
+    'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e',
+    'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
+    'ð' => 'd', 'ñ' => 'n',
+    'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o',
+    'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u',
+    'ý' => 'y', 'ÿ' => 'y'
+  ];
+  $normalized_word = strtr($word, $charMap);
+  $normalized_word = preg_replace('/[^A-Za-z]/', '', $normalized_word);
+  return $normalized_word;
+}
+
+function simple_school_reports_core_password_policy_constraints_table_rows_alter(array &$rows) {
+  foreach ($rows as $key => &$row) {
+    if (is_array($row['class'] ?? NULL) && !empty($row['data']['status'])) {
+      $row['class'][] = 'password-suggestions';
+      if (in_array('password-policy-constraint-failed', $row['class'])) {
+        // Parse out the password-score and policy-score.
+        $password_score = '?';
+        $policy_score = '?';
+
+        $status = $row['data']['status'];
+        if ($status instanceof \Drupal\Core\StringTranslation\TranslatableMarkup) {
+          $status_message = $status->getArguments()['@message'];
+          if ($status_message instanceof \Drupal\Core\StringTranslation\TranslatableMarkup) {
+            $password_score = $status_message->getArguments()['@password-score'];
+            $policy_score = $status_message->getArguments()['@policy-score'];
+          }
+        }
+
+        $row['data']['status'] = [
+          'class' => [
+            'password-policy-constraint--status',
+            'password-policy-constraint--status--' . (is_numeric($password_score) ? $password_score : '0'),
+          ],
+          'data' => [
+            '#plain_text' => t('Password rejected (Strength: @password-score of @policy-score)', ['@password-score' => $password_score, '@policy-score' => $policy_score]),
+          ],
+        ];
+      }
+      if (in_array('password-policy-constraint-passed', $row['class'])) {
+        $password_score = 3;
+        $policy_score = 3;
+
+        $row['data']['status'] = [
+          'class' => [
+            'password-policy-constraint--status',
+            'password-policy-constraint--status--' . (is_numeric($password_score) ? $password_score : '0'),
+          ],
+          'data' => [
+            '#plain_text' => t('Password approved (Strength: @password-score of @policy-score)', ['@password-score' => $password_score, '@policy-score' => $policy_score]),
+          ],
+        ];
+      }
+    }
+  }
+
+
+
+
+}

@@ -1,0 +1,23 @@
+uuid: d030f3b2-1f87-4741-adf5-622fc75afc02
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade_sectioning
+    - node.type.grade_statistics
+  module:
+    - options
+id: node.grade_statistics.field_grade_sectioning
+field_name: field_grade_sectioning
+entity_type: node
+bundle: grade_statistics
+label: 'Grade sectioning'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: separate
+default_value_callback: ''
+settings: {  }
+field_type: list_string
