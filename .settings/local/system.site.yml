@@ -1,15 +1,15 @@
 _core:
-  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
+  default_config_hash: HlN7eAN2N4JIHsYv56V4E7sqC9bS609KwvGFjyD_mgk
 langcode: sv
-uuid: e201e4d3-bb1e-4ab4-9ba6-ac78d9996da7
+uuid: bcbccd46-1377-4870-a606-6ecf0b1a887d
 name: Selektivskolan
 mail: anders@mosshall.se
 slogan: ''
 page:
   403: ''
   404: ''
-  front: /start/resolve
+  front: /user/login
 admin_compact_mode: false
 weight_select_max: 100
 default_langcode: sv
-mail_notification: noreply@sser.loc
+mail_notification: null
