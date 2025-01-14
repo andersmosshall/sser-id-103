@@ -997,7 +997,9 @@ function simple_school_reports_core_entity_field_access($operation, \Drupal\Core
  */
 function simple_school_reports_core_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
   if ($entity_type->id() === 'user') {
-    $fields['field_ssn']->addConstraint('SsrSsnConstraint', []);
+    if (!empty($fields['field_ssn'])) {
+      $fields['field_ssn']->addConstraint('SsrSsnConstraint', []);
+    }
   }
 }
 

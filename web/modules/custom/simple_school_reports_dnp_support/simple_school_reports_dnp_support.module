@@ -168,7 +168,9 @@ function simple_school_reports_dnp_support_entity_field_access($operation, \Drup
  */
 function simple_school_reports_dnp_support_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
   if ($entity_type->id() === 'user') {
-    $fields['field_eduid_username']->addConstraint('UniqueField');
+    if (!empty($fields['field_eduid_username'])) {
+      $fields['field_eduid_username']->addConstraint('UniqueField');
+    }
   }
 }
 
