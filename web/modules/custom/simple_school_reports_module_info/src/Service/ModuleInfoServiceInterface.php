@@ -7,11 +7,11 @@ namespace Drupal\simple_school_reports_module_info\Service;
  */
 interface ModuleInfoServiceInterface {
 
-  const CORE_PRICE = 7900;
-  const CORE_ANNUAL_FEE = 2500;
-  const MODULE_PRICE = 4800;
+  const CORE_PRICE = 8200;
+  const CORE_ANNUAL_FEE = 2700;
+  const MODULE_PRICE = 4900;
   const MODULE_ANNUAL_FEE = 0;
-  const MINI_MODULE_PRICE = 1800;
+  const MINI_MODULE_PRICE = 1900;
 
   public function syncModuleInfo(bool $force = FALSE): bool;
 
