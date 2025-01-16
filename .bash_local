@@ -65,10 +65,13 @@ ssr_update_local() {
   git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
 
   # Attempt to merge ssr-base/main into the current branch
-  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff || {
-    echo "Merge failed. Please resolve conflicts and retry.";
-    return 1;
-  }
+  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+
+  # Check if there is nothing to merge
+  if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
+    echo "Nothing to merge. Already up to date.";
+    return 0;
+  fi
 
   # Check for merge conflicts
   if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
@@ -89,6 +92,7 @@ ssr_update_local() {
 
   echo "Updated successfully."
 }
+
 
 ### Make sure everything is up to date and then update all sites.
 ssr_update_all() {
