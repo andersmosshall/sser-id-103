@@ -62,7 +62,8 @@ sser_update_from_ssr() {
   # Push changes
   git push || { echo "Push failed."; return 1; }
 
-  echo
+  echo "Updated successfully."
+}
 
 ### LOCAL SECRET PROJECT STUFF
 ### In this file alias for "sser_fetch_all" && "sser_update_all" is places that is aware of all sser projects and their git locations.
