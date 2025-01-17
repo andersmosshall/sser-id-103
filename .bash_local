@@ -98,11 +98,11 @@ sser_update_local() {
   # Pull the latest changes
   git pull || { echo "Failed to pull changes."; return 1; }
 
-  # Fetch the latest main branch from ssr-base
-  git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
+  # Fetch the latest main branch from sser-base
+  git fetch sser-base main || { echo "Failed to fetch sser-base/main."; return 1; }
 
-  # Attempt to merge ssr-base/main into the current branch
-  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+  # Attempt to merge sser-base/main into the current branch
+  git merge sser-base/main --allow-unrelated-histories --no-commit --no-ff
 
   # Check if there is nothing to merge
   if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
