@@ -28,6 +28,42 @@ alias sser_deploy_dev="git pull &&
  lando drush cr &&
  lando drush php-eval 'if (function_exists(\"simple_school_reports_module_info_deploy\")) { simple_school_reports_module_info_deploy(); }'"
 
+# Run only on the sser-base branch. Then run sser_update_local on each sser sites.
+sser_update_from_ssr() {
+  # Pull the latest changes
+  git pull || { echo "Failed to pull changes."; return 1; }
+
+  # Fetch the latest main branch from ssr-base
+  git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
+
+  # Attempt to merge ssr-base/main into the current branch
+  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+
+  # Check if there is nothing to merge
+  if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
+    echo "Nothing to merge. Already up to date.";
+    return 0;
+  fi
+
+  # Check for merge conflicts
+  if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
+    echo "Merge conflicts detected. Aborting.";
+    git merge --abort;
+    return 1;
+  fi
+
+  # Ignore changes to .gitignore
+  git checkout .gitignore || { echo "Failed to reset .gitignore."; return 1; }
+
+  # Stage changes and commit
+  git add . &&
+  git commit -m "Auto merged ssr-base" || { echo "Commit failed."; return 1; }
+
+  # Push changes
+  git push || { echo "Push failed."; return 1; }
+
+  echo
+
 ### LOCAL SECRET PROJECT STUFF
 ### In this file alias for "sser_fetch_all" && "sser_update_all" is places that is aware of all sser projects and their git locations.
 ### Example:
@@ -57,16 +93,42 @@ alias sser_fetch_all="cd ~/Projects/sser &&
   cd ~/Projects/sser;
 "
 
-alias sser_update_local="git pull;
-  git fetch sser-base main;
-  git merge sser-base/main --no-commit --no-ff;
-  ### Ignore .gitignore changes.
-  git checkout .gitignore;
+sser_update_local() {
+  # Pull the latest changes
+  git pull || { echo "Failed to pull changes."; return 1; }
+
+  # Fetch the latest main branch from ssr-base
+  git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
+
+  # Attempt to merge ssr-base/main into the current branch
+  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+
+  # Check if there is nothing to merge
+  if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
+    echo "Nothing to merge. Already up to date.";
+    return 0;
+  fi
+
+  # Check for merge conflicts
+  if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
+    echo "Merge conflicts detected. Aborting.";
+    git merge --abort;
+    return 1;
+  fi
+
+  # Ignore changes to .gitignore
+  git checkout .gitignore || { echo "Failed to reset .gitignore."; return 1; }
+
+  # Stage changes and commit
   git add . &&
-  git commit -m \"Auto merged sser-base\" &&
-  git push &&
-  echo \"Updated\";
-"
+  git commit -m "Auto merged sser-base" || { echo "Commit failed."; return 1; }
+
+  # Push changes
+  git push || { echo "Push failed."; return 1; }
+
+  echo "Updated successfully."
+}
+
 
 ### Make sure everything is up to date and then update all sites.
 sser_update_all() {

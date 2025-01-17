@@ -7,7 +7,7 @@
 5. Store the key in last pass
 6. Visit site to set up drupal core (setup english use minimal installation)
 7. Temporary set web/sites/default and web/sites/default/files to writeable (chmod +w)
-7. Add 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_swedish_ci' to settings.php
+8. Add 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_swedish_ci' to settings.php
 8. Remove generated $settings['config_sync_directory'] in web/sites/default/settings.php
 9. Copy .settings/prod/settings.local to web/sites/default/settings.local.php
 9. Create web/sites/default/settings.common-secrets.php with data stored in bitwarden
