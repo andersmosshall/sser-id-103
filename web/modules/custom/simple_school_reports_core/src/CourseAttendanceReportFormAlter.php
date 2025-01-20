@@ -28,7 +28,6 @@ class CourseAttendanceReportFormAlter {
       return;
     }
 
-
     if (!$node->isNew()) {
       self::formStepTwo($form, $form_state, $node);
       return;
@@ -199,7 +198,94 @@ class CourseAttendanceReportFormAlter {
     $class_start_default = NULL;
     $duration_default = NULL;
 
-    if (!$course->get('field_schema')->isEmpty()) {
+    $calendar_event_options = [];
+    $today = new \DateTime();
+    $today->setTime(23, 59, 59);
+
+    $suggested_calender_event_id =  \Drupal::request()->query->get('calendar_event_id');
+    if ($suggested_calender_event_id) {
+      $suggested_calender_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($suggested_calender_event_id);
+      if ($suggested_calender_event && $suggested_calender_event->get('field_course')->target_id == $course->id()) {
+        $calendar_event_options[$suggested_calender_event_id] = $suggested_calender_event->label();
+      }
+    }
+
+    $calendar_event_ids = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('bundle', 'course')
+      ->condition('field_course', $course->id())
+      ->condition('from', $today->getTimestamp(), '<')
+      ->range(0, 10)
+      ->sort('from', 'DESC')
+      ->execute();
+    foreach ($calendar_event_ids as $calendar_event_id) {
+      $calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calendar_event_id);
+      $calendar_event_options[$calendar_event_id] = $calendar_event->label();
+    }
+
+    $has_calendar_events = !empty($calendar_event_options);
+
+    if ($has_calendar_events) {
+      $form['input_type'] = [
+        '#type' => 'radios',
+        '#options' => [
+          'calendar_event' => t('Use existing lesson'),
+          'manual' => t('Manually set date and time'),
+        ],
+        '#default_value' => 'calendar_event',
+        '#weight' => -11,
+      ];
+
+      $form['calendar_event'] = [
+        '#type' => 'select',
+        '#title' => t('Lesson'),
+        '#options' => $calendar_event_options,
+        '#empty_option' => t('Select lesson'),
+        '#default_value' => array_key_first($calendar_event_options),
+        '#weight' => -10,
+      ];
+
+      $form['field_class_start']['widget'][0]['value']['#required'] = FALSE;
+      $form['field_duration']['widget'][0]['value']['#required'] = FALSE;
+
+      // Set states depending on input type.
+      $form['calendar_event']['#states'] = [
+        'visible' => [
+          ':input[name="input_type"]' => [
+            'value' => 'calendar_event',
+          ],
+        ],
+        'required' => [
+          ':input[name="input_type"]' => [
+            'value' => 'calendar_event',
+          ],
+        ],
+      ];
+      $form['field_class_start']['visible'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
+      $form['field_class_start']['widget'][0]['value']['#states']['required'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
+
+      $form['field_duration']['visible'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
+      $form['field_duration']['widget'][0]['value']['#states']['required'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
+    }
+
+    if (!$has_calendar_events && !$course->get('field_schema')->isEmpty()) {
       $now = new DrupalDateTime();
       $day = $now->format('N');
       $now_time = $now->getTimestamp();
@@ -227,7 +313,6 @@ class CourseAttendanceReportFormAlter {
 
     $form['#validate'][] = [self::class, 'validateStepOne'];
 
-    // Add a submit button. Give it a class for easy JavaScript targeting.
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -286,24 +371,59 @@ class CourseAttendanceReportFormAlter {
   }
 
   public static function validateStepOne(&$form, FormStateInterface $form_state) {
-    /** @var DrupalDateTime $field_class_start */
-    $field_class_start = $form_state->getValue('field_class_start')[0]['value'];
-    $field_duration = $form_state->getValue('field_duration')[0]['value'];
 
-    if (!$field_class_start instanceof DrupalDateTime) {
-      $form_state->setErrorByName('field_class_start', t('Invalid date'));
+    $input_type = $form_state->getValue('input_type');
+
+    if ($input_type === 'calendar_event') {
+      $calender_event_id = $form_state->getValue('calendar_event');
+      $calender_event = $calender_event_id
+        ? \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calender_event_id)
+        : NULL;
+
+      try {
+        $field_class_start = (new DrupalDateTime())->setTimestamp((int) $calender_event->get('from')->value);
+        $field_class_start->setTime($field_class_start->format('H'), $field_class_start->format('i'), 0);
+        $field_duration = (int) floor(($calender_event->get('to')->value - $calender_event->get('from')->value) / 60);
+
+        $form_state->setValue(['field_class_start', 0, 'value'], $field_class_start);
+        $form_state->setValue(['field_duration', 0, 'value'], $field_duration);
+      }
+      catch (\Exception $e) {
+        $form_state->setError($form, t('Something went wrong. Try again.'));
+        return;
+      }
+
+      if (empty($calender_event)) {
+        $form_state->setErrorByName('calendar_event', t('Select a lesson'));
+        return;
+      }
+    }
+    else {
+      /** @var DrupalDateTime $field_class_start */
+      $field_class_start = $form_state->getValue('field_class_start')[0]['value'];
+      $field_duration = $form_state->getValue('field_duration')[0]['value'];
+
+      if (!$field_class_start instanceof DrupalDateTime) {
+        $form_state->setErrorByName('field_class_start', t('Invalid date'));
+      }
+
+      if (!is_numeric($field_duration) || $field_duration <= 0) {
+        $form_state->setErrorByName('field_duration', t('Invalid duration'));
+      }
     }
 
-    if (!is_numeric($field_duration) || $field_duration <= 0) {
-      $form_state->setErrorByName('field_duration', t('Invalid duration'));
-    }
     self::validateOccurance($field_class_start, $field_duration, $form, $form_state);
   }
 
   public static function submitStepOne(&$form, FormStateInterface $form_state) {
+    $calendar_event_id = $form_state->getValue('input_type') === 'calendar_event'
+      ? $form_state->getValue('calendar_event')
+      : NULL;
+
     $step1_values = [
       'field_class_start' => $form_state->getValue('field_class_start')[0]['value'],
       'field_duration' => $form_state->getValue('field_duration')[0]['value'],
+      'calendar_event' => $calendar_event_id,
     ];
 
     $form_state->set('step', 2);
@@ -561,6 +681,12 @@ class CourseAttendanceReportFormAlter {
       $node = self::courseAttendanceReportNode($form_state);
       if ($node->isNew()) {
         $step1_values = $form_state->get('step1_values', []);
+
+
+        if (!empty($step1_values['calendar_event'])) {
+          $node->set('field_calendar_event', ['target_id' => $step1_values['calendar_event']]);
+        }
+
         $node->set('field_course', $course);
         $node->set('field_duration', $step1_values['field_duration']);
         $node->set('field_class_start', $step1_values['field_class_start']);

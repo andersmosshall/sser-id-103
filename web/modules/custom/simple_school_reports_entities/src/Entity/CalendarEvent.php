@@ -86,6 +86,13 @@ final class CalendarEvent extends ContentEntityBase implements CalendarEventInte
       }
       $this->set('label', $label);
     }
+
+    // Make sure that the from date is always smaller than the to date.
+    if ($this->get('from')->value > $this->get('to')->value) {
+      $temp = $this->get('to')->value;
+      $this->set('to', $this->get('from')->value);
+      $this->set('from', $temp);
+    }
   }
 
   /**

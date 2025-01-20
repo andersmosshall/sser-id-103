@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.ssr_calendar_event.course.field_course
-    - field.field.ssr_calendar_event.course.field_course_attendance_report
     - simple_school_reports_entities.ssr_calendar_event_type.course
   module:
     - simple_school_reports_core
@@ -61,7 +60,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_course_attendance_report: true
   identifier: true
   meta: true
   status: true

@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.ssr_calendar_event.course.field_course
-    - field.field.ssr_calendar_event.course.field_course_attendance_report
     - simple_school_reports_entities.ssr_calendar_event_type.course
 id: ssr_calendar_event.course.default
 targetEntityType: ssr_calendar_event
@@ -81,7 +80,6 @@ content:
     region: content
 hidden:
   created: true
-  field_course_attendance_report: true
   identifier: true
   label: true
   meta: true

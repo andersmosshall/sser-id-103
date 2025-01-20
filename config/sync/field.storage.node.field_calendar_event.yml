@@ -1,16 +1,16 @@
-uuid: 02a1aaf3-eb46-49ac-96b3-28264de00dc4
+uuid: 4e50dbaa-c10e-444c-80fd-bd960b6ac1f5
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - simple_school_reports_entities
-id: ssr_calendar_event.field_course_attendance_report
-field_name: field_course_attendance_report
-entity_type: ssr_calendar_event
+id: node.field_calendar_event
+field_name: field_calendar_event
+entity_type: node
 type: entity_reference
 settings:
-  target_type: node
+  target_type: ssr_calendar_event
 module: core
 locked: false
 cardinality: 1
