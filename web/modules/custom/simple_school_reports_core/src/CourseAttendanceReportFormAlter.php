@@ -214,6 +214,9 @@ class CourseAttendanceReportFormAlter {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('bundle', 'course')
+      ->condition('status', 1)
+      ->condition('cancelled', FALSE)
+      ->condition('completed', FALSE)
       ->condition('field_course', $course->id())
       ->condition('from', $today->getTimestamp(), '<')
       ->range(0, 10)
@@ -229,12 +232,13 @@ class CourseAttendanceReportFormAlter {
     if ($has_calendar_events) {
       $form['input_type'] = [
         '#type' => 'radios',
+        '#title' => t('Report method'),
         '#options' => [
-          'calendar_event' => t('Use existing lesson'),
-          'manual' => t('Manually set date and time'),
+          'calendar_event' => t('Lesson from schema'),
+          'manual' => t('Divergent lesson'),
         ],
         '#default_value' => 'calendar_event',
-        '#weight' => -11,
+        '#weight' => 10,
       ];
 
       $form['calendar_event'] = [
@@ -243,7 +247,7 @@ class CourseAttendanceReportFormAlter {
         '#options' => $calendar_event_options,
         '#empty_option' => t('Select lesson'),
         '#default_value' => array_key_first($calendar_event_options),
-        '#weight' => -10,
+        '#weight' => 11,
       ];
 
       $form['field_class_start']['widget'][0]['value']['#required'] = FALSE;
@@ -262,7 +266,7 @@ class CourseAttendanceReportFormAlter {
           ],
         ],
       ];
-      $form['field_class_start']['visible'] = [
+      $form['field_class_start']['#states']['visible'] = [
         ':input[name="input_type"]' => [
           'value' => 'manual',
         ],
@@ -273,7 +277,7 @@ class CourseAttendanceReportFormAlter {
         ],
       ];
 
-      $form['field_duration']['visible'] = [
+      $form['field_duration']['#states']['visible'] = [
         ':input[name="input_type"]' => [
           'value' => 'manual',
         ],
@@ -283,6 +287,11 @@ class CourseAttendanceReportFormAlter {
           'value' => 'manual',
         ],
       ];
+    }
+
+    if (!$has_calendar_events) {
+      $form['field_class_start']['widget'][0]['value']['#required'] = TRUE;
+      $form['field_duration']['widget'][0]['value']['#required'] = TRUE;
     }
 
     if (!$has_calendar_events && !$course->get('field_schema')->isEmpty()) {
@@ -412,6 +421,13 @@ class CourseAttendanceReportFormAlter {
       }
     }
 
+    if (!$field_class_start instanceof DrupalDateTime) {
+      return;
+    }
+
+    if (!is_numeric($field_duration) || $field_duration <= 0) {
+      return;
+    }
     self::validateOccurance($field_class_start, $field_duration, $form, $form_state);
   }
 
@@ -866,6 +882,46 @@ class CourseAttendanceReportFormAlter {
   }
 
   public static function handleInsert(NodeInterface $node) {
+    if ($node->bundle() !== 'course_attendance_report') {
+      return;
+    }
+
+    try {
+      $calendar_event = $node->get('field_calendar_event')->entity;
+
+      if (!$calendar_event) {
+        // Look for calender event that matches the report.
+        $from = $node->get('field_class_start')->value;
+        $to = $node->get('field_class_end')->value;
+        $course = $node->get('field_course')->target_id;
+
+        $calendar_event_id = current(\Drupal::entityTypeManager()->getStorage('ssr_calendar_event')
+          ->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('bundle', 'course')
+          ->condition('completed', FALSE)
+          ->condition('field_course', $course)
+          ->condition('from', $from, '=')
+          ->condition('to', $to, '=')
+          ->range(0, 1)
+          ->execute());
+
+        if ($calendar_event_id) {
+          $calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calendar_event_id);
+        }
+      }
+
+      if ($calendar_event) {
+        $calendar_event->set('cancelled', FALSE);
+        $calendar_event->set('completed', TRUE);
+        $calendar_event->save();
+      }
+
+    }
+    catch (\Exception $e) {
+      \Drupal::messenger()->addError(t('Something went wrong. Try again.'));
+    }
+
 
   }
 

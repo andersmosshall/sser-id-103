@@ -78,12 +78,7 @@ final class CalendarEvent extends ContentEntityBase implements CalendarEventInte
     }
 
     if ($this->isNew() || empty($this->label())) {
-      $label = '-';
-      $from = $this->get('from')->value;
-      $to = $this->get('to')->value;
-      if ($from && $to) {
-        $label = date('Y-m-d H:i', (int) $from) . ' - ' . date('Y-m-d H:i', (int) $to);
-      }
+      $label = $this->calculateLabel();
       $this->set('label', $label);
     }
 
@@ -93,6 +88,28 @@ final class CalendarEvent extends ContentEntityBase implements CalendarEventInte
       $this->set('to', $this->get('from')->value);
       $this->set('from', $temp);
     }
+  }
+
+  protected function calculateLabel(): string {
+    $label = '-';
+    $from = $this->get('from')->value;
+    $to = $this->get('to')->value;
+    if ($from && $to) {
+      $from_day = date('Y-m-d', (int) $from);
+      $to_day = date('Y-m-d', (int) $to);
+
+      if ($from_day === $to_day) {
+        $label = date('Y-m-d H:i', (int) $from) . ' - ' . date('H:i', (int) $to);
+      }
+      else {
+        $label = date('Y-m-d H:i', (int) $from) . ' - ' . date('Y-m-d H:i', (int) $to);
+      }
+    }
+    return $label;
+  }
+
+  public function label(): string {
+    return $this->calculateLabel();
   }
 
   /**

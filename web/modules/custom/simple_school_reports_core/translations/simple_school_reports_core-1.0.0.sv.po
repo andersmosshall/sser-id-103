@@ -2835,11 +2835,11 @@ msgstr "Årskurser att inkludera i exportfil"
 msgid "Extens export (MGBETYG)"
 msgstr "Extens-export (MGBETYG)"
 
-msgid ""
-msgstr ""
+msgid "Invalid date"
+msgstr "Ogiltigt datum"
 
-msgid ""
-msgstr ""
+msgid "Invalid duration"
+msgstr "Ogiltig lektionslängd"
 
 msgid ""
 msgstr ""

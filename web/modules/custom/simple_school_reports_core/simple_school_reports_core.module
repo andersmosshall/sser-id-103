@@ -403,6 +403,15 @@ function simple_school_reports_core_user_insert(\Drupal\user\UserInterface $user
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_core_node_insert(\Drupal\node\NodeInterface $node) {
+  if ($node->bundle() === 'course_attendance_report') {
+    CourseAttendanceReportFormAlter::handleInsert($node);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function simple_school_reports_core_user_delete(\Drupal\user\UserInterface $user) {
