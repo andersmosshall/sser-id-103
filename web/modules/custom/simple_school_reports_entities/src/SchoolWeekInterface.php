@@ -11,6 +11,8 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface SchoolWeekInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  const CALCULATE_LENGTH = -1;
+
   /**
    * @param bool $show_lessons
    * @param bool $show_deviations

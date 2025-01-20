@@ -280,14 +280,6 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
             $valid_absence = ($lesson['valid_absence'] ?? 0) + ($lesson['leave_absence'] ?? 0) + ($lesson['reported_absence'] ?? 0);
             $invalid_absence = $lesson['invalid_absence'] ?? 0;
 
-            // TEMP!!!
-            if ($name === 'n/a') {
-              // Randomize the attendance.
-              $attended = rand(0, $lesson_length);
-              $valid_absence = rand(0, $lesson_length - $attended);
-              $invalid_absence = $lesson_length - $attended - $valid_absence;
-            }
-
             if ($attended + $valid_absence + $invalid_absence !== $lesson_length) {
               $lesson_length = $attended + $valid_absence + $invalid_absence;
             }

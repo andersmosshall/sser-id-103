@@ -12,6 +12,29 @@ use Drupal\Core\Form\FormStateInterface;
  */
 final class SchoolWeekDeviationForm extends ContentEntityForm {
 
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildForm($form, $form_state);
+
+    if (!empty($form['no_teaching'])) {
+      if (!empty($form['from'])) {
+        $form['from']['#states'] = [
+          'visible' => [
+            ':input[name="no_teaching[value]"]' => ['checked' => FALSE],
+          ],
+        ];
+      }
+      if (!empty($form['to'])) {
+        $form['to']['#states'] = [
+          'visible' => [
+            ':input[name="no_teaching[value]"]' => ['checked' => FALSE],
+          ],
+        ];
+      }
+    }
+
+    return $form;
+  }
+
   /**
    * {@inheritdoc}
    */

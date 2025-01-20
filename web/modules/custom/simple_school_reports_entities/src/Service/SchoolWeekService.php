@@ -191,7 +191,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
     $day_data = [
       'from' => $src->from,
       'to' => $src->to,
-      'length' => $src->length,
+      'no_teaching' => !!($src->no_teaching ?? FALSE),
       'deviation_tid' => $src->deviation_type,
       'reference' => $reference,
       'reference_id' => $reference_id,
@@ -244,7 +244,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
     $specific_deviations_query = $this->connection->select('school_week__deviation', 'sw_d');
     $specific_deviations_query->innerJoin('school_week_deviation', 'swd', 'sw_d.deviation_target_id = swd.id');
     $specific_deviations_query->fields('sw_d', ['entity_id', 'deviation_target_id']);
-    $specific_deviations_query->fields('swd', ['from_date', 'to_date', 'deviation_type', 'length', 'from', 'to']);
+    $specific_deviations_query->fields('swd', ['from_date', 'to_date', 'deviation_type', 'no_teaching', 'from', 'to']);
     $specific_deviations_query->orderBy('swd.from_date', 'DESC');
 
     foreach ($specific_deviations_query->execute() as $result) {
@@ -272,7 +272,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $grade_deviations_query->innerJoin('ssr_school_class_field_data', 'c', 'swd_c.field_classes_target_id = c.id');
       $grade_deviations_query->condition('field_classes_target_id', array_keys($class_ids), 'IN');
       $grade_deviations_query->fields('c', ['school_week']);
-      $grade_deviations_query->fields('swd', ['id', 'from_date', 'to_date', 'deviation_type', 'length', 'from', 'to']);
+      $grade_deviations_query->fields('swd', ['id', 'from_date', 'to_date', 'deviation_type', 'no_teaching', 'from', 'to']);
       $grade_deviations_query->orderBy('swd.from_date', 'DESC');
       foreach ($grade_deviations_query->execute() as $result) {
         $school_week_id = $result->school_week ?? 'unknown';
@@ -294,7 +294,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $grade_deviations_query->innerJoin('school_week_deviation', 'swd', 'swd_g.entity_id = swd.id');
       $grade_deviations_query->condition('grade_value', array_keys($grade_school_week_map), 'IN');
       $grade_deviations_query->fields('swd_g', ['grade_value']);
-      $grade_deviations_query->fields('swd', ['id', 'from_date', 'to_date', 'deviation_type', 'length', 'from', 'to']);
+      $grade_deviations_query->fields('swd', ['id', 'from_date', 'to_date', 'deviation_type', 'no_teaching', 'from', 'to']);
       $grade_deviations_query->orderBy('swd.from_date', 'DESC');
       foreach ($grade_deviations_query->execute() as $result) {
         $school_week_id = $grade_school_week_map[$result->grade_value] ?? 'unknown';

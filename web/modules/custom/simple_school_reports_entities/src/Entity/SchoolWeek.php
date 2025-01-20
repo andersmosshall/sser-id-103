@@ -97,21 +97,62 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     return $this->parentSchoolWeek;
   }
 
-  protected function getSchoolDayData(string $date_string, string $day_index): array {
+  protected function getSchoolDayData(string $date_string, string $day_index, bool $include_deviation = TRUE): array {
     $length = $this->get('length_' . $day_index)->value ?? 0;
     $length *= 60;
     $from = $this->get('from_' . $day_index)->value ?? NULL;
     $to = $this->get('to_' . $day_index)->value ?? NULL;
 
-    $map = $this->getSchoolWeekService()->getSchoolWeekDeviationMap($this);
+    $map = $include_deviation
+      ? $this->getSchoolWeekService()->getSchoolWeekDeviationMap($this)
+      : [];
     if (!empty($map[$date_string])) {
       $deviation_data = $map[$date_string];
-      if ($deviation_data) {
-        $length = $deviation_data['length'] ?? 0;
-        $length *= 60;
-        $from = $deviation_data['from'] ?? NULL;
-        $to = $deviation_data['to'] ?? NULL;
+      if ($deviation_data['no_teaching']) {
+        $length = 0;
+        $from = NULL;
+        $to = NULL;
       }
+      if ($deviation_data['from'] && $deviation_data['to']) {
+        $length = self::CALCULATE_LENGTH;
+        $from = $deviation_data['from'];
+        $to = $deviation_data['to'];
+      }
+    }
+
+    // Sanity check $from and $to.
+    if (!$from || !$to) {
+      $from = NULL;
+      $to = NULL;
+    }
+
+    if ($from && $to && $from > $to) {
+      $t = $from;
+      $from = $to;
+      $to = $t;
+    }
+
+    if ($from && $to && $to - $from < $length) {
+      $from = NULL;
+      $to = NULL;
+    }
+
+    $base_time = new \DateTime($date_string . ' 00:00:00');
+
+    if (!$from) {
+      $from_object = new \DateTime($date_string . ' 12:00:00');
+      $from = $from_object->getTimestamp() - ($length / 2) - 60 * 60;
+    }
+    else {
+      $from = $base_time->getTimestamp() + $from;
+    }
+
+    if (!$to) {
+      $to_object = new \DateTime($date_string . ' 12:00:00');
+      $to = $to_object->getTimestamp() + ($length / 2) + 60 * 60;
+    }
+    else {
+      $to = $base_time->getTimestamp() + $to;
     }
 
     return [
@@ -141,13 +182,11 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       return $this->lookup[$cid];
     }
 
-    $date_clone = clone $date_time;
-    $date_clone->setTime(0,0,0);
-    $day_start = $date_clone->getTimestamp();
-    // Make time at 23:59:59.
-    $day_end = $day_start + 86399;
-
-    [$length, $from, $to] = $this->getSchoolDayData($date, $day_index);
+    [
+      $length,
+      $from,
+      $to,
+    ] = $this->getSchoolDayData($date, $day_index);
 
     if ($length === 0) {
       $this->lookup[$cid] = [
@@ -159,43 +198,32 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       return $this->lookup[$cid];
     }
 
-    // Sanity check $from and $to.
-    if (!$from || !$to) {
-      $from = NULL;
-      $to = NULL;
-    }
+    if ($length === self::CALCULATE_LENGTH) {
+      [
+        $original_length,
+        $original_from,
+        $original_to,
+      ] = $this->getSchoolDayData($date, $day_index, FALSE);
+      $original_lessons = $this->makeLessons($original_from, $original_to, $original_length);
+      $lessons = [];
 
-    if ($from && $to && $from > $to) {
-      $t = $from;
-      $from = $to;
-      $to = $t;
-    }
+      $length = 0;
 
-    if ($from && $to && $to - $from < $length) {
-      $from = NULL;
-      $to = NULL;
-    }
+      foreach ($original_lessons as $lesson) {
+        if ($lesson['to'] <= $from || $lesson['from'] >= $to) {
+          continue;
+        }
 
-    $base_time = clone $date_time;
-    $base_time->setTime(0,0,0);
-
-    if (!$from) {
-      $from_object = new \DateTime($date . '12:00:00');
-      $from = $from_object->getTimestamp() - ($length / 2) - 60 * 60;
+        $lesson['from'] = max($lesson['from'], $from);
+        $lesson['to'] = min($lesson['to'], $to);
+        $lesson['length'] = $lesson['to'] - $lesson['from'];
+        $length += $lesson['length'];
+        $lessons[] = $lesson;
+      }
     }
     else {
-      $from = $base_time->getTimestamp() + $from;
+      $lessons = $include_base_lessons ? $this->makeLessons($from, $to, $length) : [];
     }
-
-    if (!$to) {
-      $to_object = new \DateTime($date . '12:00:00');
-      $to = $to_object->getTimestamp() + ($length / 2) + 60 * 60;
-    }
-    else {
-      $to = $base_time->getTimestamp() + $to;
-    }
-
-    $lessons = $include_base_lessons ? $this->makeLessons($from, $to, $length) : [];
 
     $info = [
       'length' => $length,
@@ -209,7 +237,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
   }
 
   protected function makeLessons(int $from, int $to, int $length): array {
-    if ($length === 0) {
+    if ($length <= 0) {
       return [];
     }
 

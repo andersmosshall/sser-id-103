@@ -2841,6 +2841,66 @@ msgstr "Ogiltigt datum"
 msgid "Invalid duration"
 msgstr "Ogiltig lektionslängd"
 
+msgid "free day"
+msgstr "ledig"
+
+msgid "Free day"
+msgstr "Ledig"
+
+msgid "School day"
+msgstr "Skoldag"
+
+msgid "No teaching hours (free)"
+msgstr "Ingen undervisning (ledig)"
+
+msgid "If the school week deviation has teaching hours, it must have a start and end date for the school day."
+msgstr "Om avvikelse för skolveckan har undervisningstider måste den ha ett start- och sluttid för skoldagen."
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 
