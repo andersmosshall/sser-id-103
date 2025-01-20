@@ -1,0 +1,89 @@
+uuid: 132dc952-f10e-400d-9fa5-cc435ad60165
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_calendar_event.course.field_course
+    - field.field.ssr_calendar_event.course.field_course_attendance_report
+    - simple_school_reports_entities.ssr_calendar_event_type.course
+id: ssr_calendar_event.course.default
+targetEntityType: ssr_calendar_event
+bundle: course
+mode: default
+content:
+  cancelled:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  completed:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  created: true
+  field_course_attendance_report: true
+  identifier: true
+  label: true
+  meta: true
+  status: true
+  uid: true

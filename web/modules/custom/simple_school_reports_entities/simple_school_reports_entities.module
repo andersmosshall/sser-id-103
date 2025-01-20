@@ -36,7 +36,10 @@ function simple_school_reports_entities_theme() {
       'render element' => 'elements',
     ],
     'ssr_student_leave_application' => [
-      'render element' => 'elements'
+      'render element' => 'elements',
+    ],
+    'ssr_calendar_event' => [
+      'render element' => 'elements',
     ],
   ];
 }
@@ -195,5 +198,23 @@ function template_preprocess_ssr_student_leave_application(array &$variables): v
 function simple_school_reports_entities_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
   if ($entity_form['#entity_type'] == 'school_week') {
     \Drupal\simple_school_reports_entities\Form\SchoolWeekForm::alterFieldCopy($entity_form, $form_state);
+  }
+}
+
+/**
+ * Prepares variables for calendar event templates.
+ *
+ * Default template: ssr-calendar-event.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the calendar event information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_calendar_event(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
   }
 }

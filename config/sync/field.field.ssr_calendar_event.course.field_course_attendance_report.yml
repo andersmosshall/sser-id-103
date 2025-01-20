@@ -1,0 +1,29 @@
+uuid: 75ace183-eb6f-49fc-a5e8-b0569cba9fa2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_calendar_event.field_course_attendance_report
+    - node.type.course_attendance_report
+    - simple_school_reports_entities.ssr_calendar_event_type.course
+id: ssr_calendar_event.course.field_course_attendance_report
+field_name: field_course_attendance_report
+entity_type: ssr_calendar_event
+bundle: course
+label: 'Course attendance report'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      course_attendance_report: course_attendance_report
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

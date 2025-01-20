@@ -1,0 +1,68 @@
+uuid: 88dbcce5-ad2f-4ec4-a877-c9e03ad39c08
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_calendar_event.course.field_course
+    - field.field.ssr_calendar_event.course.field_course_attendance_report
+    - simple_school_reports_entities.ssr_calendar_event_type.course
+  module:
+    - simple_school_reports_core
+id: ssr_calendar_event.course.default
+targetEntityType: ssr_calendar_event
+bundle: course
+mode: default
+content:
+  cancelled:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  completed:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_course:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: ssr_date_time_timestamp
+    weight: 1
+    region: content
+    settings:
+      seconds_value: '0'
+    third_party_settings: {  }
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  to:
+    type: ssr_date_time_timestamp
+    weight: 2
+    region: content
+    settings:
+      seconds_value: '0'
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_course_attendance_report: true
+  identifier: true
+  meta: true
+  status: true
+  uid: true

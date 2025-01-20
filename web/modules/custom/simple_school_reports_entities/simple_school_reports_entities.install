@@ -180,3 +180,25 @@ function simple_school_reports_entities_update_10008() {
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_student_leave_application'));
   }
 }
+
+/**
+ * Install calendar event entity type.
+ */
+function simple_school_reports_entities_update_10009() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_calendar_event')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_calendar_event'));
+  }
+
+  // Install ssr_calendar_event_type.
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  $cl = $entity_update_manager->getChangeList();
+  if (!empty($cl['ssr_calendar_event_type']['entity_type']) && $cl['ssr_calendar_event_type']['entity_type'] === $entity_update_manager::DEFINITION_CREATED && ($ssr_calendar_event_type = \Drupal::entityTypeManager()->getDefinition('ssr_calendar_event_type'))) {
+    $entity_update_manager->installEntityType($ssr_calendar_event_type);
+  }
+}
