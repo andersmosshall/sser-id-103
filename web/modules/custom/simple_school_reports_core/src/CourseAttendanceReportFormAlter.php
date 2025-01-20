@@ -865,4 +865,8 @@ class CourseAttendanceReportFormAlter {
     }
   }
 
+  public static function handleInsert(NodeInterface $node) {
+
+  }
+
 }
