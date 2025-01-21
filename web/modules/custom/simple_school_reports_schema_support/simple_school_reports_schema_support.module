@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Schema Support module.
+ */
+
+function ssr_use_schema(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+
+  return $module_handler->moduleExists('simple_school_reports_schema_ssr') || $module_handler->moduleExists('simple_school_reports_schema_oreda');
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function simple_school_reports_schema_support_menu_links_discovered_alter(&$links) {
+  if (ssr_use_schema()) {
+    if (isset($links['courses.page.courses'])) {
+      $links['courses.page.courses']['route_name'] = '<front>';
+    }
+  }
+}

@@ -47,16 +47,22 @@ students.page.caregivers:
   parent: students.page
   route_name: view.caregivers.caregivers
 
-courses.page.my_courses:
+courses.page.courses:
   title: 'Courses'
   weight: 101
   parent: system.admin
   route_name: view.courses.my_courses
 
+courses.page.my_courses:
+  title: 'My Courses'
+  weight: 150
+  parent: courses.page.courses
+  route_name: view.courses.my_courses
+
 courses.page.all_courses:
   title: 'All Courses'
-  weight: 100
-  parent: courses.page.my_courses
+  weight: 160
+  parent: courses.page.courses
   route_name: view.courses.all_courses
 
 simple_school_reports_core.config:
