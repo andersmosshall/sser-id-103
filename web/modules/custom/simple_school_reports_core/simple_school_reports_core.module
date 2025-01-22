@@ -140,7 +140,7 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
   $build_info = $form_state->getBuildInfo();
   if (is_array($build_info) && !empty($build_info['args'][0]) && $build_info['args'][0] instanceof ViewExecutable) {
     $view = $build_info['args'][0];
-    if (isset($view->field['user_bulk_form']) && $view->total_rows < 2000) {
+    if (isset($view->field['user_bulk_form']) && $view->total_rows < 1200) {
       $form['#attached']['library'][] = 'simple_school_reports_core/user_bulk_form';
       $form['override_uid_list'] = [
         '#type' => 'hidden',
@@ -149,6 +149,17 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
         ],
       ];
       $form['#validate'][] = 'simple_school_reports_core_form_user_bulk_form_modifier';
+    }
+
+    if (isset($view->field['ssr_calendar_event_bulk_form'])) {
+      $form['#attached']['library'][] = 'simple_school_reports_core/bulk_form';
+      $form['override_id_list'] = [
+        '#type' => 'hidden',
+        '#attributes' => [
+          'data-override-id-list' => TRUE,
+        ],
+      ];
+      $form['#validate'][] = 'simple_school_reports_core_form_ssr_calendar_event_bulk_form_modifier';
     }
   }
 
@@ -321,6 +332,21 @@ function simple_school_reports_core_paragraph_presave(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_block_access().
+ */
+function simple_school_reports_core_block_access(\Drupal\block\Entity\Block $block, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  $access = \Drupal\Core\Access\AccessResult::neutral();
+  if ($block->id() === 'views_block__latest_attendance_reports') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name !== 'entity.node.canonical') {
+      $access = \Drupal\Core\Access\AccessResult::forbidden();
+    }
+    $access->addCacheContexts(['route']);
+  }
+  return $access;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function simple_school_reports_core_paragraph_delete(EntityInterface $entity) {
@@ -388,6 +414,13 @@ function simple_school_reports_core_user_update(\Drupal\user\UserInterface $user
   foreach ($user->getRoles() as $role) {
     \Drupal\Core\Cache\Cache::invalidateTags(['user_list:' . $role]);
   }
+
+  $original_grade = $user->original?->get('field_grade')->value ?? NULL;
+  $current_grade = $user->get('field_grade')->value;
+
+  if ($original_grade !== $current_grade) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['user_list:grade']);
+  }
 }
 
 /**
@@ -397,6 +430,7 @@ function simple_school_reports_core_user_insert(\Drupal\user\UserInterface $user
   \Drupal\Core\Cache\Cache::invalidateTags(['user:ssn']);
   \Drupal\Core\Cache\Cache::invalidateTags(['user_list:roles']);
   \Drupal\Core\Cache\Cache::invalidateTags(['user_list:new']);
+  \Drupal\Core\Cache\Cache::invalidateTags(['user_list:grade']);
   foreach ($user->getRoles() as $role) {
     \Drupal\Core\Cache\Cache::invalidateTags(['user_list:' . $role]);
   }
@@ -568,7 +602,7 @@ function simple_school_reports_core_views_pre_view(ViewExecutable $view, $displa
  * Implements hook_views_post_execute().
  */
 function simple_school_reports_core_views_post_execute(ViewExecutable $view) {
-  if (isset($view->field['user_bulk_form']) && $view->total_rows < 2000) {
+  if (isset($view->field['user_bulk_form']) && $view->total_rows < 1200) {
     /** @var \Drupal\mysql\Driver\Database\mysql\Select $count_query */
     $count_query = clone $view->build_info['count_query'];
     $results = $count_query->execute();
@@ -583,6 +617,25 @@ function simple_school_reports_core_views_post_execute(ViewExecutable $view) {
 
     $view->element['#total_uid_list'] = $uids;
   }
+
+  if (isset($view->field['ssr_calendar_event_bulk_form'])) {
+    /** @var \Drupal\mysql\Driver\Database\mysql\Select $count_query */
+    $count_query = clone $view->build_info['count_query'];
+    $results = $count_query->execute();
+
+    $ids = [];
+
+    foreach ($results as $result) {
+      if (isset($result->id)) {
+        $ids[] = $result->id;
+        if (count($ids) >= 500) {
+          break;
+        }
+      }
+    }
+
+    $view->element['#total_id_list'] = $ids;
+  }
 }
 
 /**
@@ -592,6 +645,11 @@ function simple_school_reports_core_preprocess_views_view_table(&$variables) {
   if (isset($variables['view']) && !empty($variables['view']->element['#total_uid_list'])) {
     $uids = $variables['view']->element['#total_uid_list'];
     $variables['attributes']['data-total-uid-list'] = json_encode($uids);
+  }
+
+  if (isset($variables['view']) && !empty($variables['view']->element['#total_id_list'])) {
+    $ids = $variables['view']->element['#total_id_list'];
+    $variables['attributes']['data-total-id-list'] = json_encode($ids);
   }
 }
 
@@ -615,19 +673,52 @@ function simple_school_reports_core_form_user_bulk_form_modifier($form, FormStat
           ->orderBy('ln.field_last_name_value')
           ->execute();
 
-        $result = $query->execute();
-        foreach ($result as $result) {
+        $results = $query->execute();
+        foreach ($results as $result) {
           if (isset($result->uid) && isset($result->langcode)) {
             $key_parts = [
               $result->langcode,
               $result->uid,
             ];
             $key = json_encode($key_parts);
-            $user_bulk_form[] =  base64_encode($key);
+            $user_bulk_form[] = base64_encode($key);
           }
         }
 
         $user_input['user_bulk_form'] = $user_bulk_form;
+        $form_state->setUserInput($user_input);
+      }
+    }
+  }
+}
+
+function simple_school_reports_core_form_ssr_calendar_event_bulk_form_modifier($form, FormStateInterface $form_state) {
+  if (empty($form_state->getErrors()) && $form_state->get('step') == 'views_form_views_form') {
+    $user_input = $form_state->getUserInput();
+    if (!empty($user_input['override_id_list'])) {
+      $ids = json_decode($user_input['override_id_list']);
+      if (is_array($ids) && !empty($ids)) {
+        $bulk_form = [];
+
+        $query = \Drupal::database()->select('ssr_calendar_event', 'ce');
+        $query->condition('ce.id', $ids, 'IN')
+          ->fields('ce', ['id'])
+          ->orderBy('ce.from')
+          ->execute();
+
+        $results = $query->execute();
+        foreach ($results as $result) {
+          if (isset($result->id)) {
+            $key_parts = [
+              'und',
+              $result->id,
+            ];
+            $key = json_encode($key_parts);
+            $bulk_form[] = base64_encode($key);
+          }
+        }
+
+        $user_input['ssr_calendar_event_bulk_form'] = $bulk_form;
         $form_state->setUserInput($user_input);
       }
     }
@@ -1719,7 +1810,16 @@ function simple_school_reports_core_password_policy_constraints_table_rows_alter
     }
   }
 
+}
 
-
-
+function ssr_day_map() {
+  return [
+    1 => t('Monday'),
+    2 => t('Tuesday'),
+    3 => t('Wednesday'),
+    4 => t('Thursday'),
+    5 => t('Friday'),
+    6 => t('Saturday'),
+    7 => t('Sunday'),
+  ];
 }

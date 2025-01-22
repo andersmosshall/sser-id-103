@@ -6,3 +6,4 @@ core_version_requirement: ^10 || ^11
 dependencies:
   - simple_school_reports_core:simple_school_reports_core
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+  - simple_school_reports_entities:simple_school_reports_entities

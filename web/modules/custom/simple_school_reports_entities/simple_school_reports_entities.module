@@ -217,4 +217,23 @@ function template_preprocess_ssr_calendar_event(array &$variables): void {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
+
+
 }
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_entities_views_data_alter(array &$data) {
+  if (isset($data['ssr_calendar_event'])) {
+    $data['ssr_calendar_event']['ssr_calendar_event_bulk_form'] = [
+      'title' => t('Calendar event operations bulk form'),
+      'help' => t('Add a form element that lets you run operations on multiple calendar events.'),
+      'field' => [
+        'id' => 'ssr_calendar_event_bulk_form',
+      ],
+    ];
+  }
+}
+
+

@@ -16,6 +16,10 @@ services:
     class: Drupal\simple_school_reports_core\Service\AbsenceStatisticsService
     arguments: [ '@database', '@entity_type.manager', '@cache.default' ]
 
+  simple_school_reports_core.course_service:
+    class: Drupal\simple_school_reports_core\Service\CourseService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default' ]
+
   simple_school_reports_core.email_service:
     class: Drupal\simple_school_reports_core\Service\EmailService
     arguments: [ '@database', '@entity_type.manager', '@request_stack', '@plugin.manager.mail', '@current_user', '@?email_factory', '@logger.factory' ]

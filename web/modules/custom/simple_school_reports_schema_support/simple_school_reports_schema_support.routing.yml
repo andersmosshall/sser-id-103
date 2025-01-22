@@ -1,0 +1,43 @@
+simple_school_reports_schema.cancel_event:
+  path: '/courses/{node}/cancel-event/{ssr_calendar_event}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\CancelCourseEventForm'
+    _title: 'Cancel lesson'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_schema_support\Form\CancelCourseEventForm::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+      ssr_calendar_event:
+        type: 'entity:ssr_calendar_event'
+
+simple_school_reports_schema.multiple_cancel_event:
+  path: '/courses/cancel-event-multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\MultipleCancelCourseEventForm'
+    _title: 'Cancel lesson'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_schema.fast_report:
+  path: '/courses/{node}/fast-report/{ssr_calendar_event}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\FastReportCourseEventForm'
+    _title: 'Cancel lesson'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_schema_support\Form\FastReportCourseEventForm::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+      ssr_calendar_event:
+        type: 'entity:ssr_calendar_event'
+
+simple_school_reports_schema.multiple_fast_report:
+  path: '/courses/fast-report-multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\MultipleFastReportCourseEventForm'
+    _title: 'Cancel lesson'
+  requirements:
+    _permission: 'school staff permissions'

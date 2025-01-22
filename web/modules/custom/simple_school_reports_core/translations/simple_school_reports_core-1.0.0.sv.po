@@ -331,6 +331,9 @@ msgstr "Kurser"
 msgid "All Courses"
 msgstr "Alla kurser"
 
+msgid "My Courses"
+msgstr "Mina Kurser"
+
 msgid "My courses"
 msgstr "Mina kurser"
 

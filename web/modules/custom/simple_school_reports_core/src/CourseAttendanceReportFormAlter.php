@@ -117,8 +117,12 @@ class CourseAttendanceReportFormAlter {
         foreach ($node->get('field_student_course_attendance')
                    ->referencedEntities() as $paragraph) {
           if (!$paragraph->get('field_student')->isEmpty()) {
-            $user_id = $paragraph->get('field_student')->target_id;
-            $course_students[$user_id]['paragraph'] = $paragraph;
+            $student = $paragraph->get('field_student')->entity;
+            if ($student) {
+              $user_id = $student->id();
+              $course_students[$user_id]['student'] = $student;
+              $course_students[$user_id]['paragraph'] = $paragraph;
+            }
           }
         }
       }
@@ -202,11 +206,15 @@ class CourseAttendanceReportFormAlter {
     $today = new \DateTime();
     $today->setTime(23, 59, 59);
 
-    $suggested_calender_event_id =  \Drupal::request()->query->get('calendar_event_id');
-    if ($suggested_calender_event_id) {
-      $suggested_calender_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($suggested_calender_event_id);
-      if ($suggested_calender_event && $suggested_calender_event->get('field_course')->target_id == $course->id()) {
-        $calendar_event_options[$suggested_calender_event_id] = $suggested_calender_event->label();
+    /** @var \Drupal\simple_school_reports_schema_support\Service\SchemaSupportServiceInterface $schema_support_service */
+    $schema_support_service = \Drupal::service('simple_school_reports_schema_support.schema_support');
+
+    $suggested_calendar_event_id =  \Drupal::request()->query->get('calendar_event_id');
+    if ($suggested_calendar_event_id) {
+      /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $suggested_calendar_event */
+      $suggested_calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($suggested_calendar_event_id);
+      if ($suggested_calendar_event && $suggested_calendar_event->get('field_course')->target_id == $course->id()) {
+        $calendar_event_options[$suggested_calendar_event_id] = $schema_support_service->resolveCalenderEventName($suggested_calendar_event, FALSE);
       }
     }
 
@@ -223,8 +231,9 @@ class CourseAttendanceReportFormAlter {
       ->sort('from', 'DESC')
       ->execute();
     foreach ($calendar_event_ids as $calendar_event_id) {
+      /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $calendar_event */
       $calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calendar_event_id);
-      $calendar_event_options[$calendar_event_id] = $calendar_event->label();
+      $calendar_event_options[$calendar_event_id] = $schema_support_service->resolveCalenderEventName($calendar_event, FALSE);
     }
 
     $has_calendar_events = !empty($calendar_event_options);
@@ -316,6 +325,8 @@ class CourseAttendanceReportFormAlter {
         }
       }
     }
+
+    // @ToDo alter the field_sub_group.
 
     $form['field_class_start']['widget'][0]['value']['#default_value'] = $class_start_default;
     $form['field_duration']['widget'][0]['value']['#default_value'] = $duration_default;
@@ -761,7 +772,7 @@ class CourseAttendanceReportFormAlter {
         $paragraph->set('field_invalid_absence_original', $invalid_absence);
 
         $paragraph->set('field_student', $data['user']);
-        $paragraph->set('field_subject', $course->get('field_school_subject')->target_id);
+        $paragraph->set('field_subject', ['target_id' => $course->get('field_school_subject')->target_id]);
         $paragraph->setNewRevision(FALSE);
 
         if (!$paragraph->isNew()) {

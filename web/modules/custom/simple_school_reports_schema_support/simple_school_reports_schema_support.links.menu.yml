@@ -1,0 +1,11 @@
+courses.page.to_report:
+  title: 'To report'
+  weight: 50
+  parent: courses.page.courses
+  route_name: view.calendar_events_courses.my_courses
+
+courses.page.to_report_all:
+  title: 'To report all'
+  weight: 60
+  parent: courses.page.courses
+  route_name: view.calendar_events_courses.all_courses

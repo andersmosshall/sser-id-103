@@ -79,5 +79,6 @@ content:
 hidden:
   created: true
   label: true
+  no_teaching: true
   status: true
   uid: true

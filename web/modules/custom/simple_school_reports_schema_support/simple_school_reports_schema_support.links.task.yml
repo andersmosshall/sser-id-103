@@ -1,0 +1,11 @@
+simple_school_reports_schema_support.my_courses:
+  title: 'To report'
+  route_name: view.calendar_events_courses.my_courses
+  base_route: view.courses.my_courses
+  weight: 5
+
+simple_school_reports_schema_support.all_courses:
+  title: 'To report all'
+  route_name: view.calendar_events_courses.all_courses
+  base_route: view.courses.my_courses
+  weight: 6

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.ssr_calendar_event.course.field_course
+    - field.field.ssr_calendar_event.course.field_course_sub_group
     - simple_school_reports_entities.ssr_calendar_event_type.course
 id: ssr_calendar_event.course.default
 targetEntityType: ssr_calendar_event
@@ -37,6 +38,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_course_sub_group:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
     region: content
   from:
     type: timestamp

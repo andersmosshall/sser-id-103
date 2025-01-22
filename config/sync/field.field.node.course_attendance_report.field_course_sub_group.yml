@@ -1,0 +1,21 @@
+uuid: 24a80545-6563-45b5-9412-f0b8bf3bb8d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course_sub_group
+    - node.type.course_attendance_report
+id: node.course_attendance_report.field_course_sub_group
+field_name: field_course_sub_group
+entity_type: node
+bundle: course_attendance_report
+label: 'Sub group'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: default
+default_value_callback: ''
+settings: {  }
+field_type: string

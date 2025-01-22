@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_schema_support.schema_support:
+    class: Drupal\simple_school_reports_schema_support\Service\SchemaSupportService
+    arguments: [ '@simple_school_reports_core.course_service', '@entity_type.manager' ]

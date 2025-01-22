@@ -1,0 +1,12 @@
+uuid: 2d654826-a2ef-4a08-a6f8-3860d985a63e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+    - simple_school_reports_schema_support
+id: ssr_multiple_cancel_course_event
+label: 'Cancel lessons'
+type: ssr_calendar_event
+plugin: ssr_multiple_cancel_course_event
+configuration: {  }
