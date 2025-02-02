@@ -311,6 +311,12 @@ function simple_school_reports_core_node_presave(EntityInterface $entity) {
   if ($entity->bundle() === 'day_absence') {
     AbsenceDayHandler::preSave($entity);
   }
+
+  if ($entity->bundle() === 'course') {
+    /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+    $course_service = \Drupal::service('simple_school_reports_core.course_service');
+    $course_service->clearLookup();
+  }
 }
 
 /**
@@ -388,7 +394,6 @@ function simple_school_reports_core_user_presave(\Drupal\user\UserInterface $use
     $user->set('field_ssn', NULL);
     $user->set('field_birth_date', NULL);
   }
-
 }
 
 /**
@@ -420,6 +425,9 @@ function simple_school_reports_core_user_update(\Drupal\user\UserInterface $user
 
   if ($original_grade !== $current_grade) {
     \Drupal\Core\Cache\Cache::invalidateTags(['user_list:grade']);
+    /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+    $course_service = \Drupal::service('simple_school_reports_core.course_service');
+    $course_service->clearLookup();
   }
 }
 
@@ -434,6 +442,10 @@ function simple_school_reports_core_user_insert(\Drupal\user\UserInterface $user
   foreach ($user->getRoles() as $role) {
     \Drupal\Core\Cache\Cache::invalidateTags(['user_list:' . $role]);
   }
+
+  /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+  $course_service = \Drupal::service('simple_school_reports_core.course_service');
+  $course_service->clearLookup();
 }
 
 /**

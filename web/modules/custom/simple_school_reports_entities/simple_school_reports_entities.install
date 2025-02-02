@@ -269,3 +269,35 @@ function simple_school_reports_entities_update_10011() {
 
 }
 
+/**
+ * Install new fields on school week.
+ */
+function simple_school_reports_entities_update_10012() {
+  $fields = [];
+
+  $fields['school_week_type'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('School week type'))
+    ->setRequired(TRUE)
+    ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_week_types')
+    ->setDefaultValue('default')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['calculate_from_schema'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Calculate school days from schema'))
+    ->setDefaultValue(FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['identifier'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Identifier'))
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'school_week', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+

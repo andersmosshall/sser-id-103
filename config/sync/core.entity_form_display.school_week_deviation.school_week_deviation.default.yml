@@ -52,12 +52,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  length:
-    type: number
+  no_teaching:
+    type: boolean_checkbox
     weight: 3
     region: content
     settings:
-      placeholder: min
+      display_label: true
     third_party_settings: {  }
   to:
     type: time_widget
@@ -79,6 +79,6 @@ content:
 hidden:
   created: true
   label: true
-  no_teaching: true
+  length: true
   status: true
   uid: true

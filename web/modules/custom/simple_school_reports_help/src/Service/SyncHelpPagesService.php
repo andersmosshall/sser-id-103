@@ -416,7 +416,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['administrator', 'principle'],
         'body' => 'Denna film går igenom hur du som administratör hanterar skolveckor för närvaroanalys.',
         'vimeo' => 'https://vimeo.com/903808733',
-        'context' => ['user', 'simple_school_reports_attendance_analyse.school_week_settings'],
+        'context' => ['user', 'simple_school_reports_extension_proxy.school_week_settings'],
         'module' => ['simple_school_reports_attendance_analyse']
       ],
       [
@@ -424,7 +424,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['administrator', 'principle'],
         'body' => 'Denna film går igenom hur du som administratör hanterar avvikelser skolveckor för närvaroanalys.',
         'vimeo' => 'https://vimeo.com/946488255',
-        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_attendance_analyse.school_week_settings'],
+        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_extension_proxy.school_week_settings'],
         'module' => ['simple_school_reports_attendance_analyse']
       ],
       [
@@ -432,7 +432,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['administrator', 'principle'],
         'body' => 'Denna film går igenom hur du som administratör kan kopiera skolveckor.',
         'vimeo' => 'https://vimeo.com/1040468222',
-        'context' => ['simple_school_reports_attendance_analyse.school_week_settings'],
+        'context' => ['simple_school_reports_extension_proxy.school_week_settings'],
         'module' => ['simple_school_reports_attendance_analyse']
       ],
       [
@@ -440,7 +440,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['administrator', 'principle', 'teacher'],
         'body' => 'Denna film går igenom hur du som skolpersonal hanterar anpassad studiegång för närvaroanalys.',
         'vimeo' => 'https://vimeo.com/903809075',
-        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_attendance_analyse.school_week_settings'],
+        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_extension_proxy.school_week_settings'],
         'module' => ['simple_school_reports_attendance_analyse']
       ],
       [
@@ -448,7 +448,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['administrator', 'principle', 'teacher'],
         'body' => 'Denna film går igenom hur du som skolpersonal hittar närvarostatistik, för enskilda elever och veckosammanställningar.',
         'vimeo' => 'https://vimeo.com/903805829',
-        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_attendance_analyse.school_week_settings'],
+        'context' => ['user', 'simple_school_reports_student_di.di_user_tab', 'simple_school_reports_extension_proxy.school_week_settings'],
         'module' => ['simple_school_reports_attendance_analyse']
       ],
       // Attendance statistics for a period
@@ -457,7 +457,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'roles' => ['teacher', 'administrator', 'principle'],
         'body' => 'Denna film går igenom hur du som administratör hittar närvarostatistik över en period samt hur du ser sammanställningar för frånvaro utifrån procentuella grupperingar.',
         'vimeo' => 'https://vimeo.com/946488236',
-        'context' => ['simple_school_reports_attendance_analyse.school_week_settings', 'simple_school_reports_attendance_period_analyse.attendance_period_analyse_settings', '/statistics/attendance-period-analyse'],
+        'context' => ['simple_school_reports_extension_proxy.school_week_settings', 'simple_school_reports_attendance_period_analyse.attendance_period_analyse_settings', '/statistics/attendance-period-analyse'],
         'module' => ['simple_school_reports_attendance_period_analyse']
       ],
       // Leave applications

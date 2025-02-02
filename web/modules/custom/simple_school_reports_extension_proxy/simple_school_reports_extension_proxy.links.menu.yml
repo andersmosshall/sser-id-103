@@ -4,3 +4,9 @@ simple_school_reports_extension_proxy.special_diet:
   weight: 130
   parent: simple_school_reports_core.statistics
   route_name: view.special_diet.special_diet
+
+simple_school_reports_extension_proxy.school_week_settings:
+  title: 'School week settings'
+  parent: simple_school_reports_core.config
+  description: 'List and administer school week settings'
+  route_name: simple_school_reports_extension_proxy.school_week_settings

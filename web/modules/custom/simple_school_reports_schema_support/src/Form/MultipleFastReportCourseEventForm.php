@@ -13,6 +13,7 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
 use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_core\Service\MessageTemplateServiceInterface;
@@ -213,6 +214,12 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
       ],
       '#default_value' => 'skip',
       '#required' => TRUE,
+    ];
+
+    $form['disclaimer'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('NOTE: Students that has registered absence during any part of the lesson will be set as valid absence from the lesson.'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -456,6 +463,13 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
       $student_target_ids = $schema_support_service->getStudentIds($calendar_event);
 
       $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+
+      // Skip students in a CBT/BT (bonustimme) course.
+      $course_short_name = SchoolSubjectHelper::getSubjectShortName($course->get('field_school_subject')->target_id);
+      if ($course_short_name === 'CBT' || $course_short_name === 'BT') {
+        $student_target_ids = [];
+      }
+
       foreach ($student_target_ids as $student_target_id) {
         /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
         $paragraph = $paragraph_storage->create([

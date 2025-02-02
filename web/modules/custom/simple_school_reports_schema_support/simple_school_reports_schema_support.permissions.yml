@@ -1,0 +1,11 @@
+administer ssr_schema_entry:
+  title: 'Administer ssr schema entries'
+  restrict access: true
+view ssr_schema_entry:
+  title: 'View ssr schema entry'
+edit ssr_schema_entry:
+  title: 'Edit ssr schema entry'
+delete ssr_schema_entry:
+  title: 'Delete ssr schema entry'
+create ssr_schema_entry:
+  title: 'Create ssr schema entry'

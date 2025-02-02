@@ -111,6 +111,13 @@ function simple_school_reports_entities_answer_types() {
   ];
 }
 
+function simple_school_reports_entities_school_week_types() {
+  return [
+    'default' => t('Regular'),
+    'student_schema' => t('Schema for student'),
+  ];
+}
+
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */

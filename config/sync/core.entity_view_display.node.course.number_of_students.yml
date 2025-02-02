@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.course.field_class
     - field.field.node.course.field_schema
     - field.field.node.course.field_school_subject
+    - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
     - field.field.node.course.field_teacher
     - node.type.course
@@ -26,6 +27,7 @@ hidden:
   field_class: true
   field_schema: true
   field_school_subject: true
+  field_ssr_schema: true
   field_student: true
   field_teacher: true
   langcode: true

@@ -207,6 +207,8 @@ class AttendancePeriodAnalyseService implements AttendancePeriodAnalyseServiceIn
       'user_list:student',
       'school_week_deviation_list',
       'ssr_school_week_per_grade',
+      'ssr_schema_entry_list',
+      'ssr_calendar_event_list',
     ];
     $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);
     $this->lookup[$cid] = $data;

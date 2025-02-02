@@ -1,0 +1,13 @@
+uuid: dda9f56f-de36-4880-926f-cc8d9914df75
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+_core:
+  default_config_hash: 2KakbL4yrA9roE1A2HxPrVrRh37HfamJ5apxxVL9hiI
+id: ssr_schema_entry_delete_action
+label: 'Delete ssr schema entries'
+type: ssr_schema_entry
+plugin: 'entity:delete_action:ssr_schema_entry'
+configuration: {  }

@@ -82,5 +82,38 @@ class SchoolWeekForm extends ContentEntityForm {
       '#target_selectors' => ['.school-week-to input'],
     ];
 
+    $form['#attached']['library'][] = 'simple_school_reports_entities/school_week_form';
+  }
+
+  public static function addCalculateFromSchoolWeekStates(array &$form, FormStateInterface $form_state) {
+    if (!ssr_use_schema()) {
+      return;
+    }
+
+    for ($day_index = 1; $day_index <= 7; $day_index++) {
+      if (isset($form['length_' . $day_index])) {
+        $form['length_' . $day_index]['#states'] = [
+          'visible' => [
+            ':input[name="calculate_from_schema"]' => ['checked' => FALSE],
+          ],
+        ];
+      }
+
+      if (isset($form['from_' . $day_index])) {
+        $form['from_' . $day_index]['#states'] = [
+          'visible' => [
+            ':input[name="calculate_from_schema"]' => ['checked' => FALSE],
+          ],
+        ];
+      }
+
+      if (isset($form['to_' . $day_index])) {
+        $form['to_' . $day_index]['#states'] = [
+          'visible' => [
+            ':input[name="calculate_from_schema"]' => ['checked' => FALSE],
+          ],
+        ];
+      }
+    }
   }
 }

@@ -2,3 +2,7 @@ services:
   simple_school_reports_schema_support.schema_support:
     class: Drupal\simple_school_reports_schema_support\Service\SchemaSupportService
     arguments: [ '@simple_school_reports_core.course_service', '@entity_type.manager' ]
+
+  simple_school_reports_schema_support.calendar_events_sync:
+    class: Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncService
+    arguments: [ '@simple_school_reports_core.course_service', '@simple_school_reports_core.term_service', '@entity_type.manager', '@database', '@event_dispatcher', '@simple_school_reports_entities.school_week_service' ]

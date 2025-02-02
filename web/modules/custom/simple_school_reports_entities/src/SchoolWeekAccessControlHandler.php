@@ -24,6 +24,10 @@ class SchoolWeekAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowedIfHasPermission($account, 'view school week');
 
       case 'update':
+        if ($entity->get('school_week_type')->value === 'student_schema') {
+          AccessResult::forbidden();
+        }
+
         return AccessResult::allowedIfHasPermissions(
           $account,
           ['edit school week', 'administer school week'],
@@ -65,6 +69,12 @@ class SchoolWeekAccessControlHandler extends EntityAccessControlHandler {
     if (is_numeric($day_index)) {
       // Prevent access to sat and sun fields for now.
       if ($day_index > 5) {
+        return AccessResult::forbidden();
+      }
+    }
+
+    if ($field_name === 'calculate_from_schema') {
+      if (!ssr_use_schema()) {
         return AccessResult::forbidden();
       }
     }

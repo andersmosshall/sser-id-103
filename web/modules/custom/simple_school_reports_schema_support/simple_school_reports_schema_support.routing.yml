@@ -41,3 +41,19 @@ simple_school_reports_schema.multiple_fast_report:
     _title: 'Cancel lesson'
   requirements:
     _permission: 'school staff permissions'
+
+entity.ssr_schema_entry.settings:
+  path: 'admin/structure/ssr-schema-entry'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\SSRSchemaEntrySettingsForm'
+    _title: 'SSR schema entry'
+  requirements:
+    _permission: 'administer ssr_schema_entry'
+
+simple_school_reports_schema.sync_calendar_events:
+  path: '/courses/sync-calendar-events'
+  defaults:
+    _form: '\Drupal\simple_school_reports_schema_support\Form\SyncCourseEventForm'
+    _title: 'Sync lessons to report'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_schema_support\Form\SyncCourseEventForm::access'

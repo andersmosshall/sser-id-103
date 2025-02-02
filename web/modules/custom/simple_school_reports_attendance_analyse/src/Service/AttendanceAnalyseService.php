@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core\Service\CourseServiceInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
@@ -31,6 +32,7 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
     protected StateInterface $state,
     protected UserMetaDataServiceInterface $userMetaDataService,
     protected SchoolWeekServiceInterface $schoolWeekService,
+    protected CourseServiceInterface $courseService,
   ) {}
 
   protected function supportedPeriod(\DateTime $from, \DateTime $to): bool {
@@ -46,7 +48,14 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
    * @return bool
    */
   protected function isAdaptedStudies(SchoolWeekInterface $school_week): bool {
-    return $this->schoolWeekService->getSchoolWeekReference($school_week->id())['type'] === 'user';
+    $to_check = $school_week;
+    if ($school_week->isStudentSchema()) {
+      $to_check = $school_week->getParentSchoolWeek();
+    }
+    if (!$to_check) {
+      return FALSE;
+    }
+    return $this->schoolWeekService->getSchoolWeekReference($to_check->id())['type'] === 'user';
   }
 
   /**
@@ -99,7 +108,6 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
     $lessons = array_merge($school_day_info['lessons'], $other_lessons);
 
     $target_length = $school_day_info['length'];
-    $reported_length = 0;
 
     $reported_lessons = [];
     $secondary_lessons = [];
@@ -113,7 +121,6 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
 
       $type = $lesson['type'];
       if ($type === 'reported') {
-        $reported_length += $lesson['length'];
         $reported_lessons[] = $lesson;
       }
       elseif ($type === 'dynamic') {
@@ -124,39 +131,41 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       }
     }
 
-    if ($reported_length >= $target_length) {
-      $final_lessons = $reported_lessons;
-    }
-    else {
-      $final_lessons = $reported_lessons;
-      // Remove secondary lessons that are fully overlapping or overlapping by
+    $final_lessons = $reported_lessons;
+
+    foreach ($secondary_lessons as $lesson) {
+      $insert_secondary = TRUE;
+
+      // Skip secondary lessons that are fully overlapping or overlapping by
       // part with reported lessons.
-      foreach ($secondary_lessons as $key => $lesson) {
-        foreach ($reported_lessons as $reported_lesson) {
-          if ($lesson['to'] <= $reported_lesson['from'] || $lesson['from'] >= $reported_lesson['to']) {
-            $final_lessons[] = $lesson;
-            continue;
-          }
-          unset($secondary_lessons[$key]);
+      foreach ($reported_lessons as $reported_lesson) {
+        if ($lesson['to'] <= $reported_lesson['from'] || $lesson['from'] >= $reported_lesson['to']) {
+          continue;
         }
+        $insert_secondary = FALSE;
+        break;
       }
 
-      $current_length = 0;
-      foreach ($final_lessons as $lesson) {
-        $current_length += $lesson['length'];
-        if ($current_length >= $target_length) {
-          break;
-        }
+      if ($insert_secondary) {
+        $final_lessons[] = $lesson;
       }
-      if ($current_length < $target_length && !empty($dynamic_lessons)) {
-        // Adjust the dynamic lessons to fill the gap.
-        $target_dynamic_length = floor(($target_length - $current_length) / count($dynamic_lessons));
-        foreach ($dynamic_lessons as $lesson) {
-          $lesson['length'] = $target_dynamic_length;
-          $lesson['to'] = $lesson['from'] + $target_dynamic_length;
-          $lesson['attended'] = $target_dynamic_length;
-          $final_lessons[] = $lesson;
-        }
+    }
+
+    $current_length = 0;
+    foreach ($final_lessons as $lesson) {
+      $current_length += $lesson['length'];
+      if ($current_length >= $target_length) {
+        break;
+      }
+    }
+    if ($current_length < $target_length && !empty($dynamic_lessons)) {
+      // Adjust the dynamic lessons to fill the gap.
+      $target_dynamic_length = floor(($target_length - $current_length) / count($dynamic_lessons));
+      foreach ($dynamic_lessons as $lesson) {
+        $lesson['length'] = $target_dynamic_length;
+        $lesson['to'] = $lesson['from'] + $target_dynamic_length;
+        $lesson['attended'] = $target_dynamic_length;
+        $final_lessons[] = $lesson;
       }
     }
 
@@ -379,6 +388,60 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       ];
     }
 
+    $not_reported_lessons = [];
+    $not_reported_lessons_students_map = [];
+    if (ssr_use_schema()) {
+      $query = $this->connection->select('ssr_calendar_event', 'ce');
+      $query->innerJoin('ssr_calendar_event__field_course', 'c', 'c.entity_id = ce.id');
+      $query->innerJoin('ssr_calendar_event__field_course_sub_group', 'csg', 'csg.entity_id = ce.id');
+      $query->leftJoin('node__field_school_subject', 'sub', 'sub.entity_id = c.field_course_target_id');
+      $query->condition('ce.bundle', 'course')
+        ->condition('ce.completed', FALSE)
+        ->condition('ce.cancelled', FALSE)
+        ->condition('ce.from', $to->getTimestamp(), '<')
+        ->condition('ce.to', $from->getTimestamp(), '>')
+        ->fields('ce', ['id', 'from', 'to'])
+        ->fields('c', ['field_course_target_id'])
+        ->fields('csg', ['field_course_sub_group_value'])
+        ->fields('sub', ['field_school_subject_target_id']);
+      $results = $query->execute();
+
+      foreach ($results as $result) {
+        $course_id = $result->field_course_target_id ?? '0';
+        $sub_group = $result->field_course_sub_group_value ?? 'default';
+
+        $course_student_ids = $this->courseService->getStudentIdsInCourse($course_id, $sub_group);
+        if (empty($course_student_ids)) {
+          continue;
+        }
+
+        $ce_id = $result->id;
+        $ce_from = $result->from;
+        $ce_to = $result->to;
+
+        $course_lesson_length = abs($ce_to - $ce_from);
+        $subject_short_name = SchoolSubjectHelper::getSubjectShortName($result->field_school_subject_target_id);
+
+        $not_reported_lessons[$ce_id] = [
+          'from' => $ce_from,
+          'to' => $ce_to,
+          'type' => 'not_reported',
+          'subject' => $subject_short_name,
+          'length' => $course_lesson_length,
+          'attended' => 0,
+          'reported_absence' => 0,
+          'leave_absence' => 0,
+          'valid_absence' => 0,
+          'invalid_absence' => 0,
+        ];
+
+        $day = (new \DateTime())->setTimestamp($ce_from)->format('Y-m-d');
+        foreach ($course_student_ids as $student_id) {
+          $not_reported_lessons_students_map[$student_id][$day][] = $ce_id;
+        }
+      }
+    }
+
     $uids = $this->entityTypeManager->getStorage('user')->getQuery()
       ->accessCheck(FALSE)
       ->condition('roles', 'student')
@@ -397,12 +460,24 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       $lessons_data = [];
 
       foreach ($days as $day_string => $day) {
-        $include_base_lessons = TRUE;
-        $school_day_info = $school_week->getSchoolDayInfo($day, $include_base_lessons);
+        $include_day_base_lessons = TRUE;
+        if ($school_week->isStudentSchema()) {
+          $include_day_base_lessons = FALSE;
+          if ($school_week->getParentSchoolWeek() && !$school_week->getParentSchoolWeek()->calculateFromSchema()) {
+            $include_day_base_lessons = TRUE;
+          }
+        }
+        $school_day_info = $school_week->getSchoolDayInfo($day, $include_day_base_lessons);
 
         $student_course_lessons = !empty($course_lessons[$uid][$day_string]) ? $course_lessons[$uid][$day_string] : [];
+        $student_not_reported_lessons = [];
+        $ce_ids = !empty($not_reported_lessons_students_map[$uid][$day_string]) ? $not_reported_lessons_students_map[$uid][$day_string] : [];
+        foreach ($ce_ids as $ce_id) {
+          $student_not_reported_lessons[] = $not_reported_lessons[$ce_id];
+        }
 
-        $lessons = $this->getStudentLessons($day, $school_day_info, $student_course_lessons);
+        $other_lessons = array_merge($student_course_lessons, $student_not_reported_lessons);
+        $lessons = $this->getStudentLessons($day, $school_day_info, $other_lessons);
         $lessons_data[$day_string] = $lessons;
       }
 
@@ -542,6 +617,8 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       'node_list:course_attendance_report',
       'school_week_deviation_list',
       'ssr_school_week_per_grade',
+      'ssr_schema_entry_list',
+      'ssr_calendar_event_list',
     ];
     $this->cache->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $cache_tags);
     $this->lookup[$cid] = $data;

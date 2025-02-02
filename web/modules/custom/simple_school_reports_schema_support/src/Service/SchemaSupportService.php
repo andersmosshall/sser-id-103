@@ -2,6 +2,7 @@
 
 namespace Drupal\simple_school_reports_schema_support\Service;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\simple_school_reports_core\Service\CourseServiceInterface;
 use Drupal\simple_school_reports_entities\CalendarEventInterface;
@@ -68,6 +69,13 @@ class SchemaSupportService implements SchemaSupportServiceInterface {
     }
 
     return $this->courseService->getStudentIdsInCourse($course_id, $sub_group);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getStudentSchemaId(string $student_id): ?string {
+    return $this->courseService->getStudentSchemaEntryDataIdentifiersHash($student_id);
   }
 
 }

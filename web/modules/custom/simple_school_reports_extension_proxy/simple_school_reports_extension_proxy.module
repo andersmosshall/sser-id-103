@@ -6,6 +6,9 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_school_reports_extension_proxy\UserRolesFormAlter;
 use Drupal\simple_school_reports_extension_proxy\ViewsFormAlter;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+
 
 /**
  * Implements hook_form_alter().
@@ -820,6 +823,8 @@ function clean_up_custom_entities() {
     ->notExists($subquery_user)
     ->notExists($subquery_class)
     ->fields('sw', ['id'])
+    // The school week type student_schema has its own clean up.
+    ->condition('school_week_type', 'student_schema', '<>')
     ->range(0, 50);
 
   if (!empty($safe_school_weeks_ids)) {
@@ -837,6 +842,27 @@ function clean_up_custom_entities() {
     $entities = $school_week_storage->loadMultiple($ids);
     $school_week_storage->delete($entities);
   }
+
+  // Clean up school weeks of type student_schema. (TODO)
+  /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+  $course_service = \Drupal::service('simple_school_reports_core.course_service');
+  $all_valid_student_schema_hashes = $course_service->getAllSchemaEntryDataIdentifiersHashes();
+  if (!empty($all_valid_student_schema_hashes)) {
+    $school_week_storage = \Drupal::entityTypeManager()->getStorage('school_week');
+    $ids = $school_week_storage
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('school_week_type', 'student_schema')
+      ->condition('id', $all_valid_student_schema_hashes, 'NOT IN')
+      ->range(0, 25)
+      ->execute();
+
+    if (!empty($ids)) {
+      $entities = $school_week_storage->loadMultiple($ids);
+      $school_week_storage->delete($entities);
+    }
+  }
+
 
   // Clean up orphaned school week deviations.
   /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
@@ -1301,7 +1327,7 @@ function simple_school_reports_extension_proxy_school_week_access(\Drupal\Core\E
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
   $module_handler = \Drupal::service('module_handler');
 
-  if (!$module_handler->moduleExists('simple_school_reports_attendance_analyse')) {
+  if (!ssr_use_schema() && !$module_handler->moduleExists('simple_school_reports_attendance_analyse')) {
     return AccessResult::forbidden();
   }
 
@@ -1331,4 +1357,50 @@ function simple_school_reports_extension_proxy_iup_prefill_options() {
   }
 
   return $options;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_extension_proxy_school_week_insert(EntityInterface $entity) {
+  $grade = \Drupal::request()->query->get('school_week_grade_set', NULL);
+  if ($grade !== NULL) {
+    $school_week_state = \Drupal::state()->get('ssr_school_week_per_grade', []);
+    $school_week_state[$grade] = $entity->id();
+    Cache::invalidateTags(['ssr_school_week_per_grade']);
+    \Drupal::state()->set('ssr_school_week_per_grade', $school_week_state);
+    $entity->set('label', 'Skolvecka - Årskurs ' . $grade);
+  }
+
+  $class_id = \Drupal::request()->query->get('school_week_class_set', NULL);
+  if ($class_id !== NULL) {
+    $class = \Drupal::entityTypeManager()->getStorage('ssr_school_class')->load($class_id);
+    if ($class) {
+      $class->set('school_week', $entity);
+      $class->save();
+      Cache::invalidateTags(['ssr_school_week_per_class']);
+    }
+    $entity->set('label', 'Skolvecka - Klass ' . $grade);
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_extension_proxy_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'deviations_for_school_week') {
+    $deviations_json = $view->args[0] ?? NULL;
+    $deviation_ids = $deviations_json ? json_decode($deviations_json, TRUE) : NULL;
+    if (empty($deviation_ids)) {
+      return;
+    }
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as $key => &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'school_week_deviation.id' && array_key_exists('value', $condition)) {
+          $condition['operator'] = 'IN';
+          $condition['value'] = $deviation_ids;
+        }
+      }
+    }
+  }
 }

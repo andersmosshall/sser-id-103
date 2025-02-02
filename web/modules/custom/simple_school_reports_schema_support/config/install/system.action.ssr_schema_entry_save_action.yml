@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+id: ssr_schema_entry_save_action
+label: 'Save ssr schema entries'
+type: ssr_schema_entry
+plugin: entity:save_action:ssr_schema_entry
+configuration: {  }

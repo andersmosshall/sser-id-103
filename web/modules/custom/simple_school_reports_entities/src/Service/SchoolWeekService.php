@@ -82,6 +82,23 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       ];
     }
 
+    // Map school weeks to student_schema.
+    $results = $this->connection->select('school_week', 'sw')
+      ->condition('sw.school_week_type', 'student_schema')
+      ->fields('sw', ['id', 'identifier'])
+      ->execute();
+    foreach ($results as $result) {
+      if (!$result->identifier) {
+        continue;
+      }
+
+      $map['ss:' . $result->identifier] = $result->id;
+      $reverse_map[$result->id] = [
+        'type' => 'student_schema',
+        'id' => $result->identifier,
+      ];
+    }
+
     if (empty($map)) {
       return [];
     }
@@ -90,6 +107,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $map[$key] = $this->entityTypeManager->getStorage('school_week')->load($id);
       if (!$map[$key]) {
         unset($map[$key]);
+        unset($reverse_map[$id]);
       }
     }
 
@@ -101,13 +119,12 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL): ?SchoolWeekInterface {
+  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL, bool $only_root_school_weeks = FALSE): ?SchoolWeekInterface {
     $parent_school_week = NULL;
 
     $school_week_map = $this->getSchoolWeekMap();
 
-
-    $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class_support');
+    $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class');
     if ($use_classes) {
       /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
       $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
@@ -122,7 +139,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $parent_school_week = $school_week_map['g:' . $grade];
     }
 
-    if (isset($school_week_map['u:' . $uid])) {
+    if (!$only_root_school_weeks && isset($school_week_map['u:' . $uid])) {
       $school_week = $school_week_map['u:' . $uid];
       if ($parent_school_week) {
         $school_week->setParentSchoolWeek($parent_school_week);
@@ -132,7 +149,77 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $school_week = $parent_school_week;
     }
 
+    if (!$only_root_school_weeks && ssr_use_schema() && \Drupal::hasService('simple_school_reports_schema_support.schema_support')) {
+      if (!$school_week || $school_week->calculateFromSchema()) {
+        /** @var \Drupal\simple_school_reports_schema_support\Service\SchemaSupportServiceInterface $schema_service */
+        $schema_service = \Drupal::service('simple_school_reports_schema_support.schema_support');
+        $student_schema_id = $schema_service->getStudentSchemaId($uid) ?? 'none';
+        $parent_school_week = $school_week;
+
+        if (isset($school_week_map['ss:' . $student_schema_id])) {
+          $school_week = $school_week_map['ss:' . $student_schema_id];
+          $school_week->setParentSchoolWeek($parent_school_week);
+        } elseif ($student_schema_id !== 'none') {
+          $school_week = $this->entityTypeManager->getStorage('school_week')->create([
+            'label' => 'Elevschema',
+            'school_week_type' => 'student_schema',
+            'calculate_from_schema' => TRUE,
+            'identifier' => $student_schema_id,
+          ]);
+          $school_week->save();
+          $school_week->setParentSchoolWeek($parent_school_week);
+        }
+      }
+    }
+
     return $school_week;
+  }
+
+  public function getSchoolWeeksRelevantForUsers(array $uids, ?\DateTime $date = NULL, bool $only_root_school_weeks = TRUE): array {
+    $school_weeks = [];
+    foreach ($uids as $uid) {
+      $school_week = $this->getSchoolWeek($uid, $date, $only_root_school_weeks);
+      if ($school_week) {
+        $school_weeks[$school_week->id()] = $school_week;
+      }
+    }
+    return array_values($school_weeks);
+  }
+
+  public function getStudentIdsRelevantForSchoolWeek(string $school_week_id): array {
+    $reference = $this->getSchoolWeekReference($school_week_id);
+    if ($reference['type'] === 'user') {
+      return [$reference['id']];
+    }
+    if ($reference['type'] === 'class') {
+      $class_id = $reference['id'];
+      $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class');
+      if ($use_classes) {
+        /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
+        $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
+        return $class_service->getStudentIdsByClassId($class_id);
+      }
+    }
+    if ($reference['type'] === 'grade') {
+      $grade = $reference['id'];
+      $uids = $this->entityTypeManager->getStorage('user')->getQuery()
+        ->condition('status', 1)
+        ->condition('roles', 'student')
+        ->condition('field_grade', $grade)
+        ->execute();
+      return array_values($uids);
+    }
+
+    return [];
+  }
+
+  public function getSchoolWeekByClassId(string $class_id): ?SchoolWeekInterface {
+    $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class');
+    if (!$use_classes) {
+      return NULL;
+    }
+    $school_week_map = $this->getSchoolWeekMap();
+    return $school_week_map['c:' . $class_id] ?? NULL;
   }
 
   public function getSchoolWeekReference(string $school_week_id): array {
@@ -259,7 +346,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
 
     // Prio 2 - Deviations from class.
     $class_ids = [];
-    $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class_support');
+    $use_classes = $this->moduleHandler->moduleExists('simple_school_reports_class');
     if ($use_classes) {
       /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
       $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
@@ -316,6 +403,8 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       'school_week_deviation_list',
       'ssr_school_week_per_grade',
       'ssr_school_week_per_class',
+      'ssr_schema_entry_list',
+      'ssr_calendar_event_list',
     ];
 
     $data = [

@@ -23,6 +23,60 @@ class CourseAttendanceReportFormAlter {
     $form['field_class_start']['widget'][0]['value']['#date_increment'] = 60;
     $node = self::courseAttendanceReportNode($form_state);
 
+    if (!empty($form['field_course_sub_group']['widget'][0]['value'])) {
+
+      $sub_group_options = [
+        'default' => t('Full group'),
+      ];
+
+      $default_value = !empty($form['field_course_sub_group']['widget'][0]['value']['#default_value']) ? $form['field_course_sub_group']['widget'][0]['value']['#default_value'] : 'default';
+      if ($default_value !== 'default') {
+        $sub_group_options[$default_value] = '?';
+      }
+
+      $course = self::getCourseNode($form_state);
+      if ($course && !$course->get('field_ssr_schema')->isEmpty()) {
+        /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+        $course_service = \Drupal::service('simple_school_reports_core.course_service');
+
+        /** @var \Drupal\simple_school_reports_schema_support\SSRSchemaEntryInterface $ssr_schema_entry */
+        foreach ($course->get('field_ssr_schema')->referencedEntities() as $ssr_schema_entry) {
+          if (!$ssr_schema_entry->get('deviated')->value) {
+            continue;
+          }
+
+          $relevant_groups = $ssr_schema_entry->get('relevant_groups')->value;
+
+          if ($relevant_groups <= 0) {
+            continue;
+          }
+
+          for ($i = 1; $i <= $relevant_groups; $i++) {
+            if (!$ssr_schema_entry->hasField('display_name_' . $i)) {
+              continue;
+            }
+
+            $sub_group_id = $ssr_schema_entry->id() . ':' . $i;
+            $students = $course_service->getStudentIdsInCourse($course->id(), $sub_group_id);
+            if (!empty($students) || $sub_group_id === $default_value) {
+              $sub_group_options[$sub_group_id] = $ssr_schema_entry->get('display_name_' . $i)->value;
+            }
+          }
+        }
+      }
+
+      if (count($sub_group_options) > 1) {
+        $form['field_course_sub_group']['widget'][0]['value']['#type'] = 'select';
+        unset($form['field_course_sub_group']['widget'][0]['value']['#size']);
+        $form['field_course_sub_group']['widget'][0]['value']['#options'] = $sub_group_options;
+      }
+      else {
+        $form['field_course_sub_group']['widget'][0]['value']['#type'] = 'hidden';
+        unset($form['field_course_sub_group']['widget'][0]['value']['#size']);
+        $form['field_course_sub_group']['widget'][0]['value']['#value'] = array_keys($sub_group_options)[0];
+      }
+    }
+
     if ($form_state->has('step') && $form_state->get('step') === 2) {
       self::formStepTwo($form, $form_state, $node);
       return;
@@ -76,32 +130,19 @@ class CourseAttendanceReportFormAlter {
     return $course;
   }
 
-  public static function getCourseStudents(FormStateInterface $form_state) {
+  public static function getCourseStudents(FormStateInterface $form_state, string $field_course_sub_group = 'default') {
     if (!$form_state->has('course_students')) {
       /** @var NodeInterface $course */
       $course = self::getCourseNode($form_state);
       $course_students = [];
 
+      /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+      $course_service = \Drupal::service('simple_school_reports_core.course_service');
+      $student_ids = $course_service->getStudentIdsInCourse($course->id(), $field_course_sub_group);
 
-
-      if ($course->hasField('field_student') && !$course->get('field_student')
-          ->isEmpty()) {
-        $student_source = [];
-        /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
-        $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-        $user_weight = $user_meta_data->getUserWeights();
-
-        /** @var \Drupal\user\UserInterface $student */
-        foreach ($course->get('field_student')
-                   ->referencedEntities() as $student) {
-          $weight = $user_weight[$student->id()] ?? NULL;
-          if ($weight) {
-            $student_source[$weight] = $student;
-          }
-        }
-
-        ksort($student_source);
-        foreach ($student_source as $student) {
+      if (!empty($student_ids)) {
+        $students = \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($student_ids);
+        foreach ($students as $student) {
           $course_students[$student->id()] =  [
             'user' => $student,
             'paragraph' => NULL,
@@ -114,19 +155,14 @@ class CourseAttendanceReportFormAlter {
       $node = self::courseAttendanceReportNode($form_state);
 
       if (!$node->get('field_student_course_attendance')->isEmpty()) {
-        foreach ($node->get('field_student_course_attendance')
-                   ->referencedEntities() as $paragraph) {
-          if (!$paragraph->get('field_student')->isEmpty()) {
-            $student = $paragraph->get('field_student')->entity;
-            if ($student) {
-              $user_id = $student->id();
-              $course_students[$user_id]['student'] = $student;
-              $course_students[$user_id]['paragraph'] = $paragraph;
-            }
+        foreach ($node->get('field_student_course_attendance')->referencedEntities() as $paragraph) {
+          if ($student = $paragraph->get('field_student')->entity) {
+            $user_id = $student->id();
+            $course_students[$user_id]['student'] = $student;
+            $course_students[$user_id]['paragraph'] = $paragraph;
           }
         }
       }
-
 
       if ($node->isNew()) {
         $step1_values = $form_state->get('step1_values', []);
@@ -201,6 +237,7 @@ class CourseAttendanceReportFormAlter {
 
     $class_start_default = NULL;
     $duration_default = NULL;
+    $sub_group_default  = 'default';
 
     $calendar_event_options = [];
     $today = new \DateTime();
@@ -239,6 +276,8 @@ class CourseAttendanceReportFormAlter {
     $has_calendar_events = !empty($calendar_event_options);
 
     if ($has_calendar_events) {
+      $field_class_start_weight = $form['field_class_start']['#weight'] ?? 1;
+
       $form['input_type'] = [
         '#type' => 'radios',
         '#title' => t('Report method'),
@@ -247,7 +286,7 @@ class CourseAttendanceReportFormAlter {
           'manual' => t('Divergent lesson'),
         ],
         '#default_value' => 'calendar_event',
-        '#weight' => 10,
+        '#weight' => $field_class_start_weight - 0.002,
       ];
 
       $form['calendar_event'] = [
@@ -256,7 +295,7 @@ class CourseAttendanceReportFormAlter {
         '#options' => $calendar_event_options,
         '#empty_option' => t('Select lesson'),
         '#default_value' => array_key_first($calendar_event_options),
-        '#weight' => 11,
+        '#weight' => $field_class_start_weight - 0.001,
       ];
 
       $form['field_class_start']['widget'][0]['value']['#required'] = FALSE;
@@ -296,6 +335,17 @@ class CourseAttendanceReportFormAlter {
           'value' => 'manual',
         ],
       ];
+
+      $form['field_course_sub_group']['#states']['visible'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
+      $form['field_course_sub_group']['widget'][0]['value']['#states']['required'] = [
+        ':input[name="input_type"]' => [
+          'value' => 'manual',
+        ],
+      ];
     }
 
     if (!$has_calendar_events) {
@@ -308,28 +358,32 @@ class CourseAttendanceReportFormAlter {
       $day = $now->format('N');
       $now_time = $now->getTimestamp();
       $smallest_diff = $now_time;
+      $this_day = new \DateTime();
+      $this_day->setTime(0, 0, 0);
 
-      foreach ($course->get('field_schema')
-                 ->referencedEntities() as $schema_paragraphs) {
-        if ($schema_paragraphs->get('field_day')->value === $day) {
-          if (!$schema_paragraphs->get('field_class_start')
-              ->isEmpty() && abs($schema_paragraphs->get('field_class_start')->value - $now_time) < $smallest_diff) {
-            $smallest_diff = abs($schema_paragraphs->get('field_class_start')->value - $now_time);
+      /** @var \Drupal\simple_school_reports_schema_support\SSRSchemaEntryInterface $ssr_schema_entry */
+      foreach ($course->get('field_ssr_schema')->referencedEntities() as $ssr_schema_entry) {
+        if ($ssr_schema_entry->get('week_day')->value !== $day) {
+          continue;
+        }
 
-            $start_time = new DrupalDateTime();
-            $start_time->setTimestamp($schema_paragraphs->get('field_class_start')->value);
-
-            $class_start_default = new DrupalDateTime($now->format('Y-m-d') . ' ' . $start_time->format('H:i:s'));
-            $duration_default = $schema_paragraphs->hasField('field_duration') ? $schema_paragraphs->get('field_duration')->value : NULL;
-          }
+        $lesson_start_ts = $this_day->getTimestamp() + $ssr_schema_entry->get('from')->value;
+        $lesson_diff = abs($lesson_start_ts - $now_time);
+        if ($lesson_diff < $smallest_diff) {
+          $smallest_diff = $lesson_diff;
+          $start_time = new DrupalDateTime();
+          $start_time->setTimestamp($lesson_start_ts);
+          $class_start_default = $start_time;
+          $duration_default = $ssr_schema_entry->get('duration')->value;
+          $sub_group_default = 'default';
         }
       }
     }
 
-    // @ToDo alter the field_sub_group.
-
     $form['field_class_start']['widget'][0]['value']['#default_value'] = $class_start_default;
     $form['field_duration']['widget'][0]['value']['#default_value'] = $duration_default;
+    $form['field_course_sub_group']['widget'][0]['value']['#default_value'] = $sub_group_default;
+    $form['field_course_sub_group']['widget'][0]['value']['#required'] = TRUE;
 
     $form['#validate'][] = [self::class, 'validateStepOne'];
 
@@ -342,7 +396,7 @@ class CourseAttendanceReportFormAlter {
     ];
   }
 
-  public static function validateOccurance($field_class_start, $field_duration, $form, FormStateInterface $form_state) {
+  public static function validateOccurance($field_class_start, $field_duration, $field_course_sub_group, $form, FormStateInterface $form_state) {
     $course = self::getCourseNode($form_state);
     /** @var \Drupal\node\NodeStorage $node_storage */
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
@@ -354,6 +408,7 @@ class CourseAttendanceReportFormAlter {
       ->condition('field_course', $course->id())
       ->condition('field_class_start', $field_class_start->getTimestamp())
       ->condition('field_duration', $field_duration)
+      ->condition('field_course_sub_group', $field_course_sub_group)
       ->execute()
     );
 
@@ -381,6 +436,7 @@ class CourseAttendanceReportFormAlter {
         ->condition('field_course', $course->id())
         ->condition('field_class_start', $field_class_end, '<')
         ->condition('field_class_end', $field_class_start->getTimestamp(), '>')
+        ->condition('field_course_sub_group', $field_course_sub_group)
         ->execute()
       );
 
@@ -404,9 +460,11 @@ class CourseAttendanceReportFormAlter {
         $field_class_start = (new DrupalDateTime())->setTimestamp((int) $calender_event->get('from')->value);
         $field_class_start->setTime($field_class_start->format('H'), $field_class_start->format('i'), 0);
         $field_duration = (int) floor(($calender_event->get('to')->value - $calender_event->get('from')->value) / 60);
+        $field_course_sub_group = $calender_event->get('field_course_sub_group')->value ?? 'default';
 
         $form_state->setValue(['field_class_start', 0, 'value'], $field_class_start);
         $form_state->setValue(['field_duration', 0, 'value'], $field_duration);
+        $form_state->setValue(['field_course_sub_group', 0, 'value'], $field_course_sub_group);
       }
       catch (\Exception $e) {
         $form_state->setError($form, t('Something went wrong. Try again.'));
@@ -422,6 +480,7 @@ class CourseAttendanceReportFormAlter {
       /** @var DrupalDateTime $field_class_start */
       $field_class_start = $form_state->getValue('field_class_start')[0]['value'];
       $field_duration = $form_state->getValue('field_duration')[0]['value'];
+      $field_course_sub_group = $form_state->getValue('field_course_sub_group')[0]['value'];
 
       if (!$field_class_start instanceof DrupalDateTime) {
         $form_state->setErrorByName('field_class_start', t('Invalid date'));
@@ -439,7 +498,7 @@ class CourseAttendanceReportFormAlter {
     if (!is_numeric($field_duration) || $field_duration <= 0) {
       return;
     }
-    self::validateOccurance($field_class_start, $field_duration, $form, $form_state);
+    self::validateOccurance($field_class_start, $field_duration, $field_course_sub_group, $form, $form_state);
   }
 
   public static function submitStepOne(&$form, FormStateInterface $form_state) {
@@ -450,6 +509,7 @@ class CourseAttendanceReportFormAlter {
     $step1_values = [
       'field_class_start' => $form_state->getValue('field_class_start')[0]['value'],
       'field_duration' => $form_state->getValue('field_duration')[0]['value'],
+      'field_course_sub_group' => $form_state->getValue('field_course_sub_group')[0]['value'],
       'calendar_event' => $calendar_event_id,
     ];
 
@@ -463,6 +523,7 @@ class CourseAttendanceReportFormAlter {
     $form['field_course']['widget'][0]['target_id']['#disabled'] = TRUE;
     $form['field_class_start']['widget'][0]['value']['#disabled'] = TRUE;
     $form['field_duration']['widget'][0]['value']['#disabled'] = TRUE;
+    $form['field_course_sub_group']['widget'][0]['value']['#disabled'] = TRUE;
 
     $course = self::getCourseNode($form_state);
 
@@ -472,6 +533,8 @@ class CourseAttendanceReportFormAlter {
       $form['field_course']['widget'][0]['target_id']['#default_value'] = $course;
       $form['field_class_start']['widget'][0]['value']['#default_value'] = $step1_values['field_class_start'];
       $form['field_duration']['widget'][0]['value']['#default_value'] = $step1_values['field_duration'];
+      $form['field_course_sub_group']['widget'][0]['value']['#default_value'] = $step1_values['field_course_sub_group'];
+      $field_course_sub_group = $step1_values['field_course_sub_group'];
 
       $duration = $step1_values['field_duration'];
 
@@ -481,6 +544,7 @@ class CourseAttendanceReportFormAlter {
       ];
     }
     else {
+      $field_course_sub_group = $node->get('field_course_sub_group')->value ?? 'default';
       if ($node->get('field_duration')->value) {
         $duration = $node->get('field_duration')->value;
       }
@@ -522,7 +586,7 @@ class CourseAttendanceReportFormAlter {
       '#weight' => 999,
     ];
 
-    $course_students = self::getCourseStudents($form_state);
+    $course_students = self::getCourseStudents($form_state, $field_course_sub_group);
 
     if (!empty($course_students)) {
       $form['report']['label'] = [
@@ -689,8 +753,9 @@ class CourseAttendanceReportFormAlter {
       /** @var DrupalDateTime $field_class_start */
       $field_class_start = $step1_values['field_class_start'];
       $field_duration = $step1_values['field_duration'];
+      $field_course_sub_group = $step1_values['field_course_sub_group'];
 
-      self::validateOccurance($field_class_start, $field_duration, $form, $form_state);
+      self::validateOccurance($field_class_start, $field_duration, $field_course_sub_group, $form, $form_state);
     }
   }
 
@@ -714,13 +779,17 @@ class CourseAttendanceReportFormAlter {
           $node->set('field_calendar_event', ['target_id' => $step1_values['calendar_event']]);
         }
 
+        $field_course_sub_group = $step1_values['field_course_sub_group'];
+
         $node->set('field_course', $course);
         $node->set('field_duration', $step1_values['field_duration']);
         $node->set('field_class_start', $step1_values['field_class_start']);
+        $node->set('field_course_sub_group', $step1_values['field_course_sub_group']);
         $start_time = isset($step1_values['field_class_start']) ? $step1_values['field_class_start']->getTimestamp() : NULL;
         $duration = $step1_values['field_duration'];
       }
       else {
+        $field_course_sub_group = $node->get('field_course_sub_group')->value ?? 'default';
         if ($node->get('field_duration')->value) {
           $duration = $node->get('field_duration')->value;
         }
@@ -733,7 +802,7 @@ class CourseAttendanceReportFormAlter {
         $node->set('field_class_end', $start_time + $duration * 60);
       }
 
-      $course_students = self::getCourseStudents($form_state);
+      $course_students = self::getCourseStudents($form_state, $field_course_sub_group);
       /** @var \Drupal\Core\Entity\EntityStorageInterface $paragraph_storage */
       $paragraph_storage = \Drupal::entityTypeManager()
         ->getStorage('paragraph');
@@ -872,7 +941,7 @@ class CourseAttendanceReportFormAlter {
                 ReplaceTokenServiceInterface::RECIPIENT_REPLACE_TOKENS => ['target_id' => $caregiver_uid, 'entity_type' => 'user'],
                 ReplaceTokenServiceInterface::CURRENT_USER_REPLACE_TOKENS => ['target_id' => \Drupal::currentUser()->id(), 'entity_type' => 'user'],
                 ReplaceTokenServiceInterface::ATTENDANCE_REPORT_TOKENS => ['target_id' => $node->id(), 'entity_type' => 'node'],
-                ReplaceTokenServiceInterface::INVALID_ABSENCE_TOKENS => $data['invalid_absence']
+                ReplaceTokenServiceInterface::INVALID_ABSENCE_TOKENS => $data['invalid_absence'],
               ];
 
               $options = [

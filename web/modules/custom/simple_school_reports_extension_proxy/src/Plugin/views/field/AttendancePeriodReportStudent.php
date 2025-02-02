@@ -209,7 +209,7 @@ class AttendancePeriodReportStudent extends FieldPluginBase {
 
     $cache = new CacheableMetadata();
     $cache->addCacheContexts(['current_day', 'url.query_args']);
-    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade',]);
+    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade', 'ssr_schema_entry_list', 'ssr_calendar_event_list']);
     $cache->applyTo($build);
     return $build;
   }

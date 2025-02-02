@@ -4,6 +4,8 @@ description: 'Simple School Reports Schema Support'
 package: Simple School Reports
 core_version_requirement: ^10 || ^11
 dependencies:
+  - drupal:options
+  - time_field:time_field
   - simple_school_reports_core:simple_school_reports_core
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
   - simple_school_reports_entities:simple_school_reports_entities

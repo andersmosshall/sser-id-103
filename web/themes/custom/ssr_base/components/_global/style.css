@@ -255,3 +255,7 @@ td.views-field-absence-matrix-info-6 {
 .request-log-table tr:nth-child(6) td:nth-child(2) {
   white-space: pre-line;
 }
+
+sup {
+  top: 0;
+}

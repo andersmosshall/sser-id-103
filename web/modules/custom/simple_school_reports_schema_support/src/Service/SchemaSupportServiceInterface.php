@@ -24,4 +24,9 @@ interface SchemaSupportServiceInterface {
    */
   public function getStudentIds(CalendarEventInterface $calendar_event): array;
 
+  /**
+   * @param string $student_id
+   */
+  public function getStudentSchemaId(string $student_id): ?string;
+
 }

@@ -103,7 +103,7 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
   public function build() {
     $cache = new CacheableMetadata();
     $cache->addCacheContexts(['route', 'current_day', 'url.query_args:from', 'url.query_args:to']);
-    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade',]);
+    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade', 'ssr_schema_entry_list', 'ssr_calendar_event_list']);
     $build = [
       '#markup' => '<em>' . $this->t('No data available.') . '</em>',
     ];
@@ -180,20 +180,8 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
       $row_key = $year . '-' . $week_number;
 
       if (empty($rows[$row_key])) {
-        $first_day_of_week = clone $current_day;
-        $first_day_of_week->modify('monday this week');
-
-        $last_day_of_week = clone $current_day;
-        $last_day_of_week->modify('sunday this week');
-
-        $week_value = $this->t('w.@week (@from - @to)', [
-          '@week' => $week_number,
-          '@from' => $first_day_of_week->format('j/n'),
-          '@to' => $last_day_of_week->format('j/n'),
-        ]);
-
         $rows[$row_key] = [
-          'week' => $week_value,
+          'week' => $week_number,
           1 => [],
           2 => [],
           3 => [],
@@ -206,7 +194,6 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
 
       $day_stat_classes = 'attendance-day-stats';
       $day_stat_value = '';
-      $day_lessons = [];
 
       $data = $per_day_data[$current_day->format('Y-m-d')] ?? [];
 
@@ -241,94 +228,124 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
           '@invalid_absence' => $invalid_absence_percent,
         ]);
         $day_stat_value = str_replace(' %', ' %<br>', $day_stat_value);
+      }
 
-        $day_lessons = [];
+      $day_lessons = [];
 
-        if (!empty($data['lessons'])) {
-          foreach ($data['lessons'] as $lesson_key => $lesson) {
-            $lesson_length = $lesson['length'] ?? 0;
+      if (!empty($data) && !empty($data['lessons'])) {
+        foreach ($data['lessons'] as $lesson_key => $lesson) {
+          $lesson_length = $lesson['length'] ?? 0;
+          if ($lesson_length <= 0) {
+            continue;
+          }
+
+          if (empty($lesson['from']) || empty($lesson['to'])) {
+            continue;
+          }
+
+          $lesson_type = $lesson['type'] ?? '?';
+          if ($lesson_type !== 'reported' && $lesson_type !== 'not_reported') {
+            continue;
+          }
+
+          $name = $lesson['subject'] ?? 'n/a';
+
+          if ($name === 'CBT') {
+            if ($lesson_type === 'not_reported') {
+              continue;
+            }
+            $name = 'BT';
+          }
+
+          // If name included ':' use only the last part of the name.
+          if (str_contains($name, ':')) {
+            $name = explode(':', $name);
+            $name = array_pop($name);
+          }
+
+          $from_time = (new \DateTime())->setTimestamp($lesson['from'])->format('H:i');
+          $to_time = (new \DateTime())->setTimestamp($lesson['to'])->format('H:i');
+
+          $title = $name . ' (' . $from_time . ' - ' . $to_time . ')';
+
+          $attended = $lesson['attended'] ?? 0;
+          $valid_absence = ($lesson['valid_absence'] ?? 0) + ($lesson['leave_absence'] ?? 0) + ($lesson['reported_absence'] ?? 0);
+          $invalid_absence = $lesson['invalid_absence'] ?? 0;
+          $not_reported = 0;
+
+          if ($lesson_type === 'not_reported') {
+            $attended = 0;
+            $valid_absence = 0;
+            $invalid_absence = 0;
+            $not_reported = $lesson_length;
+          }
+
+          if ($attended + $valid_absence + $invalid_absence + $not_reported !== $lesson_length) {
+            $lesson_length = $attended + $valid_absence + $invalid_absence + $not_reported;
             if ($lesson_length <= 0) {
               continue;
             }
-
-            if (empty($lesson['from']) || empty($lesson['to'])) {
-              continue;
-            }
-
-            if (($lesson['type'] ?? '?') !== 'reported') {
-              continue;
-            }
-
-            $name = $lesson['subject'] ?? 'n/a';
-
-            if ($name === 'CBT') {
-              $name = 'BT';
-            }
-
-            // If name included ':' use only the last part of the name.
-            if (str_contains($name, ':')) {
-              $name = explode(':', $name);
-              $name = array_pop($name);
-            }
-
-            $from_time = (new \DateTime())->setTimestamp($lesson['from'])->format('H:i');
-            $to_time = (new \DateTime())->setTimestamp($lesson['to'])->format('H:i');
-
-            $title = $name . ' (' . $from_time . ' - ' . $to_time . ')';
-
-            $attended = $lesson['attended'] ?? 0;
-            $valid_absence = ($lesson['valid_absence'] ?? 0) + ($lesson['leave_absence'] ?? 0) + ($lesson['reported_absence'] ?? 0);
-            $invalid_absence = $lesson['invalid_absence'] ?? 0;
-
-            if ($attended + $valid_absence + $invalid_absence !== $lesson_length) {
-              $lesson_length = $attended + $valid_absence + $invalid_absence;
-            }
-
-            $attended_percent = round(($attended / $lesson_length) * 100, 1);
-            $valid_absence_percent = round(($valid_absence / $lesson_length) * 100, 1);
-            $invalid_absence_percent = round(($invalid_absence / $lesson_length) * 100, 1);
-
-            $title .= ' - ' . $this->t('A: @attended % VA: @valid_absence % IA: @invalid_absence %', [
-              '@attended' => $attended_percent,
-              '@valid_absence' => $valid_absence_percent,
-              '@invalid_absence' => $invalid_absence_percent,
-            ]);
-
-            $day_lessons[$lesson_key]['wrapper'] = [
-              '#type' => 'container',
-              '#attributes' => [
-                'class' => ['attendance-day-lesson-wrapper'],
-                'title' => $title,
-              ],
-            ];
-
-            $day_lessons[$lesson_key]['wrapper']['svg_target'] = [
-              '#type' => 'container',
-              '#attributes' => [
-                'class' => ['attendance-day-lesson-svg'],
-              ],
-            ];
-
-            $day_lessons[$lesson_key]['wrapper']['stat'] = [
-              '#type' => 'container',
-              '#attributes' => [
-                'class' => ['attendance-day-lesson-stat'],
-                'data-attended' => $attended_percent,
-                'data-valid-absence' => $valid_absence_percent,
-                'data-invalid-absence' => $invalid_absence_percent,
-              ],
-              'value' => [
-                '#markup' => $name,
-              ],
-            ];
           }
+
+          $attended_percent = round(($attended / $lesson_length) * 100, 1);
+          $valid_absence_percent = round(($valid_absence / $lesson_length) * 100, 1);
+          $invalid_absence_percent = round(($invalid_absence / $lesson_length) * 100, 1);
+          $not_reported_percent = round(($not_reported / $lesson_length) * 100, 1);
+
+          if ($lesson_type === 'not_reported') {
+            $title .= ' - ' . $this->t('Not reported');
+          }
+          else {
+            $title .= ' - ' . $this->t('A: @attended % VA: @valid_absence % IA: @invalid_absence %', [
+                '@attended' => $attended_percent,
+                '@valid_absence' => $valid_absence_percent,
+                '@invalid_absence' => $invalid_absence_percent,
+              ]);
+          }
+
+          $day_lessons[$lesson_key]['wrapper'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['attendance-day-lesson-wrapper'],
+              'title' => $title,
+            ],
+          ];
+
+          $day_lessons[$lesson_key]['wrapper']['svg_target'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['attendance-day-lesson-svg'],
+            ],
+          ];
+
+          $day_lessons[$lesson_key]['wrapper']['stat'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['attendance-day-lesson-stat'],
+              'data-attended' => $attended_percent,
+              'data-valid-absence' => $valid_absence_percent,
+              'data-invalid-absence' => $invalid_absence_percent,
+              'data-not-reported' => $not_reported_percent,
+            ],
+            'value' => [
+              '#markup' => $name,
+            ],
+          ];
         }
       }
+
+
+      $rows[$row_key][$day]['data']['day_label'] = [
+        '#markup' => '<div><strong>' . $current_day->format('j/n') . '</strong></div>',
+      ];
 
       $rows[$row_key][$day]['data']['day_stats'] = [
         '#markup' => '<div class="' . $day_stat_classes . '">' . $day_stat_value . '</div>',
       ];
       if (!empty($day_lessons)) {
+        if ($day === 6 || $day === 7) {
+          $use_weekend = TRUE;
+        }
         $rows[$row_key][$day]['data']['lessons_wrapper'] = [
           '#type' => 'container',
           '#attributes' => [
@@ -385,7 +402,7 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
   }
 
   public function getCacheTags() {
-    return Cache::mergeTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade',], parent::getCacheTags());
+    return Cache::mergeTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade', 'ssr_schema_entry_list', 'ssr_calendar_event_list'], parent::getCacheTags());
   }
 
   /**
