@@ -17,9 +17,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides a confirmation form for canceling course event.
+ * Provides a confirmation form for undo of canceling course event.
  */
-class CancelCourseEventForm extends ConfirmFormBase {
+class UndoCancelCourseEventForm extends ConfirmFormBase {
 
   protected NodeInterface | null $course = NULL;
 
@@ -49,7 +49,7 @@ class CancelCourseEventForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'cancel_course_event_form';
+    return 'undo_cancel_course_event_form';
   }
 
   /**
@@ -64,7 +64,7 @@ class CancelCourseEventForm extends ConfirmFormBase {
       $t_args['@label'] = $this->schemaSupportService->resolveCalenderEventName($this->calendarEvent);
     }
 
-    return $this->t('Are you sure you want to cancel @label?', $t_args);
+    return $this->t('Are you sure you want to undo cancel @label?', $t_args);
   }
 
   public function getCancelRoute() {
@@ -82,7 +82,7 @@ class CancelCourseEventForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return $this->t('Cancel lesson');
+    return $this->t('Undo cancel lesson');
   }
 
   /**
@@ -138,7 +138,7 @@ class CancelCourseEventForm extends ConfirmFormBase {
     if ($calendar_event && !$calendar_event->get('completed')->value) {
       $calendar_event->set('status', TRUE);
       $calendar_event->set('completed', FALSE);
-      $calendar_event->set('cancelled', TRUE);
+      $calendar_event->set('cancelled', FALSE);
       $calendar_event->save();
       $this->messenger()->addStatus($this->getSuccessMessage());
     }

@@ -330,8 +330,8 @@ display:
         options:
           offset: 0
           pagination_heading_level: h4
-          items_per_page: 25
-          total_pages: null
+          items_per_page: 50
+          total_pages: 50
           id: 0
           tags:
             next: ››
@@ -450,21 +450,29 @@ display:
           operator: '='
           value: '0'
           group: 1
-          exposed: false
+          exposed: true
           expose:
             operator_id: ''
-            label: ''
+            label: 'Inställda lektioner'
             description: ''
             use_operator: false
-            operator: ''
+            operator: cancelled_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
-            required: false
+            identifier: cancelled
+            required: true
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -727,21 +735,29 @@ display:
           operator: '='
           value: '0'
           group: 1
-          exposed: false
+          exposed: true
           expose:
             operator_id: ''
-            label: ''
+            label: 'Inställda lektioner'
             description: ''
             use_operator: false
-            operator: ''
+            operator: cancelled_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
-            required: false
+            identifier: cancelled
+            required: true
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
           is_grouped: false
           group_info:
             label: ''

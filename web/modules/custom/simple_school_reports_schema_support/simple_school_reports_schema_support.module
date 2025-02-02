@@ -85,23 +85,35 @@ function simple_school_reports_schema_support_entity_operation_alter(array &$ope
     if ($entity->bundle() === 'course') {
       $course = $entity->get('field_course')->entity;
       if ($course?->access('update')) {
-        $operations['report'] = [
-          'title' => t('Report'),
-          'url' => \Drupal\Core\Url::fromRoute('node.add', ['node_type' => 'course_attendance_report'], ['query' => ['destination' => \Drupal::service('path.current')->getPath(), 'course_id' => $course->id(), 'calendar_event' => $entity->id()]]),
-          'weight' => -99,
-        ];
+        if (!$entity->get('cancelled')->value) {
+          $operations['report'] = [
+            'title' => t('Report'),
+            'url' => \Drupal\Core\Url::fromRoute('node.add', ['node_type' => 'course_attendance_report'], ['query' => ['destination' => \Drupal::service('path.current')->getPath(), 'course_id' => $course->id(), 'calendar_event' => $entity->id()]]),
+            'weight' => -99,
+          ];
 
-        $operations['fast_report'] = [
-          'title' => t('Fast report'),
-          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.fast_report', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
-          'weight' => -98,
-        ];
+          $operations['fast_report'] = [
+            'title' => t('Fast report'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.fast_report', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -98,
+          ];
 
-        $operations['cancel'] = [
-          'title' => t('Cancel lesson'),
-          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.cancel_event', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
-          'weight' => -97,
-        ];
+          $operations['cancel'] = [
+            'title' => t('Cancel lesson'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.cancel_event', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -97,
+          ];
+        }
+        else {
+          $operations['uncancel'] = [
+            'title' => t('Uncancel lesson'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.undo_cancel_event', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -97,
+          ];
+        }
+
+
+
       }
     }
   }
@@ -154,6 +166,15 @@ function simple_school_reports_schema_support_form_alter(&$form, FormStateInterf
 
       if ($view->id() === 'calendar_events_courses') {
         \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
+
+        if (!empty($form['cancelled'])) {
+          if (!empty($form['cancelled']['#options'][0])) {
+            $form['cancelled']['#options'][0] = t('No');
+          }
+          if (!empty($form['cancelled']['#options'][1])) {
+            $form['cancelled']['#options'][1] = t('Yes');
+          }
+        }
       }
     }
   }
