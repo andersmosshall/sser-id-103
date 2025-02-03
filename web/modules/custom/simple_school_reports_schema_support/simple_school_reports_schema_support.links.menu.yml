@@ -21,3 +21,9 @@ entity.ssr_schema_entry.collection:
   description: 'List of ssr schema entries.'
   route_name: entity.ssr_schema_entry.collection
   parent: system.admin_content
+
+simple_school_reports_schema.sync_config_form:
+  title: 'Lessons to report sync settings'
+  description: 'Configure lessons to report sync settings.'
+  parent: simple_school_reports_core.config
+  route_name: simple_school_reports_schema.sync_config_form

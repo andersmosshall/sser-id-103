@@ -18,4 +18,10 @@ interface CalendarEventsSyncServiceInterface {
 
   public function clearLookup(): void;
 
+  public function syncIsEnabled(): bool;
+
+  public function getEnabledSettings(): array;
+
+  public function setEnabledSettings(array $settings): void;
+
 }

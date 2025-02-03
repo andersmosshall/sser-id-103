@@ -230,6 +230,12 @@ class SyncCourseEventForm extends ConfirmFormBase {
       return AccessResult::forbidden();
     }
 
+    /** @var \Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface $calendar_events_sync_service */
+    $calendar_events_sync_service = \Drupal::service('simple_school_reports_schema_support.calendar_events_sync');
+    if (!$calendar_events_sync_service->syncIsEnabled()) {
+      return AccessResult::forbidden()->addCacheTags(['ssr_calendar_event_list']);
+    }
+
     /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
     $term_service = \Drupal::service('simple_school_reports_core.term_service');
     $active_term = $term_service->getCurrentTermStart(FALSE);

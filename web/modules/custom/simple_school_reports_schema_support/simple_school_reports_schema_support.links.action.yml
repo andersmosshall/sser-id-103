@@ -12,3 +12,13 @@ simple_school_reports_schema.sync_calendar_events:
     - view.courses.all_courses
     - view.calendar_events_courses.my_courses
     - view.calendar_events_courses.all_courses
+
+simple_school_reports_schema.sync_config_form:
+  route_name: simple_school_reports_schema.sync_config_form
+  title: 'Lessons to report sync settings'
+  appears_on:
+    - view.courses.my_courses
+    - view.courses.all_courses
+    - view.calendar_events_courses.my_courses
+    - view.calendar_events_courses.all_courses
+

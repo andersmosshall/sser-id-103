@@ -4,18 +4,12 @@ namespace Drupal\simple_school_reports_schema_ssr\EventSubscriber;
 
 use Drupal\autologout\AutologoutManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\Service\CourseServiceInterface;
 use Drupal\simple_school_reports_entities\CalendarEventInterface;
 use Drupal\simple_school_reports_schema_support\Events\MakeCourseCalendarEvent;
 use Drupal\simple_school_reports_schema_support\Events\SsrSchemaSupportEvents;
+use Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Defines MakeCourseCalendarEventSubscriber Subscriber.
@@ -25,6 +19,7 @@ class MakeCourseCalendarEventSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected CourseServiceInterface $courseService,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected CalendarEventsSyncServiceInterface $calendarEventsSyncService,
   ) {}
 
   protected function supportedSource(): string {
@@ -45,6 +40,10 @@ class MakeCourseCalendarEventSubscriber implements EventSubscriberInterface {
    * @return void
    */
   public function onMakeCourseCalendarEvent(MakeCourseCalendarEvent $event) {
+    if (!$this->calendarEventsSyncService->syncIsEnabled()) {
+      return;
+    }
+
     $is_bulk_action = $event->isBulkAction();
     $days = $event->getDays();
     if (empty($days)) {

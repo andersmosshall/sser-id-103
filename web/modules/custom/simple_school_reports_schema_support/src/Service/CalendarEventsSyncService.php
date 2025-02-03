@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_schema_support\Service;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_core\Service\CourseServiceInterface;
 use Drupal\simple_school_reports_core\Service\TermService;
 use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
@@ -28,8 +29,18 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     protected Connection $connection,
     protected EventDispatcherInterface $dispatcher,
     protected SchoolWeekServiceInterface $schoolWeekService,
+    protected StateInterface $state,
   ) {}
 
+  /**
+   * @param string|int $course_id
+   * @param int $from
+   * @param int $to
+   * @param bool $warm_up_all
+   *
+   * @return string
+   * @throws \Exception
+   */
   protected function warmUpStoredCalendarEventsCache(string|int $course_id, int $from, int $to, bool $warm_up_all): string {
     $cid = 'stored_calendar_events:' . $from . ':' . $to;
     if ($warm_up_all) {
@@ -75,6 +86,9 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     return $cid;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function syncCourseCalendarEvents(string|int $course_id, int $from, int $to, bool $is_bulk_action): void {
     if (!ssr_use_schema()) {
       return;
@@ -230,10 +244,16 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function clearLookup(): void {
     $this->lookup = [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function removeCalendarEventsForCourse(string|int $course_id, int $from, int $to, bool $is_bulk_action): void {
     if (!ssr_use_schema()) {
       return;
@@ -249,5 +269,45 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
         unset($stored_calendar_event_data[$identifier]);
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function syncIsEnabled(): bool {
+    $enabled_settings = $this->getEnabledSettings();
+
+    if (!$enabled_settings['all']) {
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEnabledSettings(): array {
+    $cid = 'ssr_schema_sync_enabled';
+
+    if (!array_key_exists($cid, $this->lookup)) {
+      $state_values = $this->state->get($cid, []);
+      // Set default value.
+      $state_values += [
+        'all' => TRUE,
+      ];
+      $this->lookup[$cid] = $state_values;
+    }
+
+    return $this->lookup[$cid];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setEnabledSettings(array $settings): void {
+    $cid = 'ssr_schema_sync_enabled';
+    unset($this->lookup[$cid]);
+    $this->state->set($cid, $settings);
   }
 }

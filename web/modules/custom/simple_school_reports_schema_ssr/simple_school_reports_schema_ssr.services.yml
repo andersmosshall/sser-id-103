@@ -1,6 +1,6 @@
 services:
   simple_school_reports_schema_ssr.make_calendar_events:
     class: Drupal\simple_school_reports_schema_ssr\EventSubscriber\MakeCourseCalendarEventSubscriber
-    arguments: [ '@simple_school_reports_core.course_service', '@entity_type.manager' ]
+    arguments: [ '@simple_school_reports_core.course_service', '@entity_type.manager','@simple_school_reports_schema_support.calendar_events_sync' ]
     tags:
       - { name: event_subscriber }

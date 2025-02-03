@@ -72,10 +72,10 @@ simple_school_reports_core.config:
   route_name: simple_school_reports_core.admin
 
 simple_school_reports_core.panic_confirm:
-    title: 'Panic!'
-    description: 'Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you shut it down for investigation.'
-    parent: simple_school_reports_core.config
-    route_name: simple_school_reports_core.panic_confirm
+  title: 'Panic!'
+  description: 'Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you shut it down for investigation.'
+  parent: simple_school_reports_core.config
+  route_name: simple_school_reports_core.panic_confirm
 
 simple_school_reports_core.config_terms:
   title: 'Terms'
