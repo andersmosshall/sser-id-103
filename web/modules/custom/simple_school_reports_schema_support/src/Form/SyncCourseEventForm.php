@@ -233,7 +233,7 @@ class SyncCourseEventForm extends ConfirmFormBase {
     /** @var \Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface $calendar_events_sync_service */
     $calendar_events_sync_service = \Drupal::service('simple_school_reports_schema_support.calendar_events_sync');
     if (!$calendar_events_sync_service->syncIsEnabled()) {
-      return AccessResult::forbidden()->addCacheTags(['ssr_calendar_event_list']);
+      return AccessResult::forbidden()->addCacheTags(['ssr_calendar_event_sync_config']);
     }
 
     /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
@@ -242,11 +242,11 @@ class SyncCourseEventForm extends ConfirmFormBase {
     if (!$active_term) {
       return AccessResult::forbidden()
         ->addCacheContexts(['current_day'])
-        ->addCacheTags(['taxonomy_term_list:term']);
+        ->addCacheTags(['taxonomy_term_list:term', 'ssr_calendar_event_sync_config']);
     }
 
     return AccessResult::allowedIfHasPermission($account, 'administer simple school reports settings')
       ->addCacheContexts(['current_day'])
-      ->addCacheTags(['taxonomy_term_list:term']);
+      ->addCacheTags(['taxonomy_term_list:term', 'ssr_calendar_event_sync_config']);
   }
 }

@@ -70,6 +70,14 @@ class CalendarEventSyncConfigForm extends FormBase {
       ],
     ];
 
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Save configuration'),
+    ];
+
     return $form;
   }
 
@@ -112,6 +120,7 @@ class CalendarEventSyncConfigForm extends FormBase {
     }
 
     Cache::invalidateTags(['ssr_calendar_event_list']);
+    Cache::invalidateTags(['ssr_calendar_event_sync_config']);
     $this->messenger()->addStatus($this->t('Configuration has been saved'));
   }
 
