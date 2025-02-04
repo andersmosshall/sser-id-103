@@ -2859,11 +2859,206 @@ msgstr "Ingen undervisning (ledig)"
 msgid "If the school week deviation has teaching hours, it must have a start and end date for the school day."
 msgstr "Om avvikelse för skolveckan har undervisningstider måste den ha ett start- och sluttid för skoldagen."
 
-msgid ""
-msgstr ""
+msgid "Select a lesson"
+msgstr "Välj en lektion"
 
-msgid ""
-msgstr ""
+msgid "Select lesson"
+msgstr "Välj lektion"
+
+msgid "Lesson"
+msgstr "Lektion"
+
+msgid "Divergent lesson"
+msgstr "Avvikande lektion"
+
+msgid "Report method"
+msgstr "Rapporteringsmetod"
+
+msgid "Full group"
+msgstr "Helgrupp"
+
+msgid "Cancel lesson"
+msgstr "Ställ in lektion"
+
+msgid "Undo cancel lesson"
+msgstr "Ångra inställd lektion"
+
+msgid "Fast report"
+msgstr "Snabbrapportera"
+
+msgid "Every fifth week"
+msgstr "Var femte vecka"
+
+msgid "Every fourth week"
+msgstr "Var fjärde vecka"
+
+msgid "Every third week"
+msgstr "Var tredje vecka"
+
+msgid "Every second week"
+msgstr "Varannan vecka"
+
+msgid "Specify periodicity"
+msgstr "Ange periodicitet"
+
+msgid "Even weeks"
+msgstr "Jämna veckor"
+
+msgid "Odd weeks"
+msgstr "Udda veckor"
+
+msgid "Weekly"
+msgstr "Varje vecka"
+
+msgid "Configure lessons to report sync settings."
+msgstr "Konfigurera inställningar för synkronisering av lektioner att rapportera."
+
+msgid "To report all"
+msgstr "Att rapportera alla"
+
+msgid "To report"
+msgstr "Att rapportera"
+
+msgid "Settings for sync of lessons"
+msgstr "Inställningar för synk. av lektioner"
+
+msgid "Sync lessons from schema"
+msgstr "Synkronisera lektioner från schema"
+
+msgid "Cancel of lesson @label has been reverted"
+msgstr "Inställd lektion @label har ångrats"
+
+msgid "Undo cancel lesson"
+msgstr "Ångra ställ in lektion"
+
+msgid "Are you sure you want to undo cancel @label?"
+msgstr "Är du säker på att du vill ångra inställ lektion @label?"
+
+msgid "There is no lessons to report to sync."
+msgstr "Det finns inga 'lektioner att rapportera' för synkronisering."
+
+msgid "Lessons to report are synced every night for the current day. But on this page you can trigger a manual sync for a specific period. Not outside current active term though."
+msgstr "Lektioner att rapportera synkroniseras varje natt för den aktuella dagen. Men på denna sida kan du göra en manuell synkronisering för en specifik period. Dock inte utanför den nuvarande aktiva terminen."
+
+msgid "Synchronize to"
+msgstr "Synkronisera till"
+
+msgid "Synchronize from"
+msgstr "Synkronisera från"
+
+msgid "Synchronize"
+msgstr "Synkronisera"
+
+msgid "No lessons to fast report"
+msgstr "Inga lektioner att snabbrapportera"
+
+msgid "NOTE: Students that has registered absence during any part of the lesson will be set as valid absence from the lesson."
+msgstr "OBS: Elever som har registrerad dagsfrånvaro under någon del av lektionen kommer att anges som giltig frånvaro från lektionen."
+
+msgid "Cancel lesson"
+msgstr "Ställ in lektion"
+
+msgid "Skip lesson (do nothing)"
+msgstr "Hoppa över lektion (gör ingenting)"
+
+msgid "What to do if there is a conflict with the existing reported lessons. Could be due to a previous deviation report or if schema has recently been changed."
+msgstr "Vad ska göras om det finns en konflikt med befintliga rapporterade lektioner. Kan bero på en tidigare avvikande rapportering eller om schemat nyligen har ändrats."
+
+msgid "Conflict behavior"
+msgstr "Beteende vid konflikt"
+
+msgid "Students (@count)"
+msgstr "Elever (@count)"
+
+msgid "Fast report"
+msgstr "Snabbrapportera"
+
+msgid "Fast report lessons"
+msgstr "Snabbrapportera lektioner"
+
+msgid "No lessons has been cancelled."
+msgstr "Inga lektioner har ställts in."
+
+msgid "Cancel lessons"
+msgstr "Ställ in lektioner"
+
+msgid "Are you sure you want to cancel the lessons?"
+msgstr "Är du säker på att du vill ställa in lektionerna?"
+
+msgid "Fast report lesson"
+msgstr "Snabbrapportera lektion"
+
+msgid "@label cancelled"
+msgstr "@label inställd"
+
+msgid "Are you sure you want to cancel the lesson @label?"
+msgstr "Är du säker på att du vill ställa in lektionen @label?"
+
+msgid "this lesson"
+msgstr "denna lektion"
+
+msgid "Remove unreported lessons"
+msgstr "Ta bort icke-rapporterade lektioner"
+
+msgid "Remove all unreported lessons to report"
+msgstr "Ta bort alla icke-rapporterade lektioner att rapportera"
+
+msgid "Remove unreported events"
+msgstr "Ta bort icke-rapporterade händelser"
+
+msgid "Enable or disable syncing of lessons to report"
+msgstr "Aktivera eller inaktivera synkronisering av lektioner att rapportera"
+
+msgid "Sync is enabled"
+msgstr "Synkronisering är aktiv"
+
+msgid "@count days has been synced with lessons to report."
+msgstr "@count dagar har synkroniserats med lektioner att rapportera."
+
+msgid "@count lessons has been cancelled."
+msgstr "@count lektioner har ställts in."
+
+msgid "@count lessons has been skipped."
+msgstr "@count lektioner har hoppats över."
+
+msgid "@count lessons has been reported."
+msgstr "@count lektioner har rapporterats."
+
+msgid "@count unreported lessons has been removed."
+msgstr "@count icke-rapporterade lektioner har tagits bort."
+
+msgid "Students not relevant for the student list for the corresponding course will be ignored."
+msgstr "Elever som inte är relevanta för elevlistan för motsvarande kurs kommer att ignoreras."
+
+msgid "With start at"
+msgstr "Med start vid"
+
+msgid "Specific periodicity for group @number"
+msgstr "Specifik periodicitet för grupp @number"
+
+msgid "Periodicity for group @number"
+msgstr "Periodicitet för grupp @number"
+
+msgid "Group name @number"
+msgstr "Gruppnamn @number"
+
+msgid "Number of groups"
+msgstr "Antal grupper"
+
+msgid "Deviated group or periodicity"
+msgstr "Avvikande grupp eller periodicitet"
+
+msgid "Set lesson length in minutes"
+msgstr "Ange lektionslängd i minuter"
+
+msgid "Lesson duration"
+msgstr "Lektionslängd"
+
+msgid "Lesson start"
+msgstr "Lektionsstart"
+
+msgid "Source"
+msgstr "Källa"
 
 msgid ""
 msgstr ""

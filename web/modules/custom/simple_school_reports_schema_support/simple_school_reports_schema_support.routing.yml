@@ -68,7 +68,7 @@ simple_school_reports_schema.sync_calendar_events:
   path: '/courses/sync-calendar-events'
   defaults:
     _form: '\Drupal\simple_school_reports_schema_support\Form\SyncCourseEventForm'
-    _title: 'Sync lessons to report'
+    _title: 'Sync lessons from schema'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_schema_support\Form\SyncCourseEventForm::access'
 
@@ -76,6 +76,6 @@ simple_school_reports_schema.sync_config_form:
   path: '/admin/config-calendar-events-sync'
   defaults:
     _form: '\Drupal\simple_school_reports_schema_support\Form\CalendarEventSyncConfigForm'
-    _title: 'Lessons to report sync settings'
+    _title: 'Settings for sync of lessons'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_schema_support\Form\CalendarEventSyncConfigForm::access'

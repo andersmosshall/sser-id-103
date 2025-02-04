@@ -207,7 +207,7 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
     $form['conflict_behavior'] = [
       '#type' => 'select',
       '#title' => $this->t('Conflict behavior'),
-      '#description' => $this->t('What to do if there is a conflict with the existing reported lesson. Could be due to a previous deviation report or if schema has recently been changed.'),
+      '#description' => $this->t('What to do if there is a conflict with the existing reported lessons. Could be due to a previous deviation report or if schema has recently been changed.'),
       '#options' => [
         'skip' => $this->t('Skip lesson (do nothing)'),
         'cancel' => $this->t('Cancel lesson'),
@@ -403,7 +403,7 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
       batch_set($batch);
     }
     else {
-      $this->messenger()->addWarning($this->t('No lessons has been cancelled.'));
+      $this->messenger()->addWarning($this->t('No lessons to fast report'));
     }
   }
 

@@ -6,7 +6,7 @@ ssr_schema_entry.add_form:
 
 simple_school_reports_schema.sync_calendar_events:
   route_name: simple_school_reports_schema.sync_calendar_events
-  title: 'Sync lessons to report'
+  title: 'Sync lessons from schema'
   appears_on:
     - view.courses.my_courses
     - view.courses.all_courses
@@ -15,7 +15,7 @@ simple_school_reports_schema.sync_calendar_events:
 
 simple_school_reports_schema.sync_config_form:
   route_name: simple_school_reports_schema.sync_config_form
-  title: 'Lessons to report sync settings'
+  title: 'Settings for sync of lessons'
   appears_on:
     - view.courses.my_courses
     - view.courses.all_courses

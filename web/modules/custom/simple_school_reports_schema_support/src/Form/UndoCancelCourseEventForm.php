@@ -102,7 +102,7 @@ class UndoCancelCourseEventForm extends ConfirmFormBase {
     if ($this->calendarEvent) {
       $t_args['@label'] = $this->schemaSupportService->resolveCalenderEventName($this->calendarEvent);
     }
-    return $this->t('@label cancelled', $t_args);
+    return $this->t('Cancel of lesson @label has been reverted', $t_args);
   }
 
   /**

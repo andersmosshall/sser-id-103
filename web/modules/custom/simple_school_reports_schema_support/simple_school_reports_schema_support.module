@@ -111,9 +111,6 @@ function simple_school_reports_schema_support_entity_operation_alter(array &$ope
             'weight' => -97,
           ];
         }
-
-
-
       }
     }
   }

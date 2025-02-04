@@ -63,7 +63,7 @@ class SyncCourseEventForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Sync lessons to report');
+    return $this->t('Sync lessons from schema');
   }
 
   public function getCancelRoute() {
@@ -81,7 +81,7 @@ class SyncCourseEventForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return $this->t('Sync');
+    return $this->t('Synchronize');
   }
 
   /**
@@ -114,7 +114,7 @@ class SyncCourseEventForm extends ConfirmFormBase {
       : NULL;
 
     $form['sync_from'] = [
-      '#title' => $this->t('Sync from'),
+      '#title' => $this->t('Synchronize from'),
       '#type' => 'date',
       '#default_value' => $default_value?->format('Y-m-d'),
       '#min' => $current_term_start->format('Y-m-d'),
@@ -123,7 +123,7 @@ class SyncCourseEventForm extends ConfirmFormBase {
     ];
 
     $form['sync_to'] = [
-      '#title' => $this->t('Sync from'),
+      '#title' => $this->t('Synchronize to'),
       '#type' => 'date',
       '#default_value' => $default_value?->format('Y-m-d'),
       '#min' => $current_term_start->format('Y-m-d'),
@@ -163,8 +163,8 @@ class SyncCourseEventForm extends ConfirmFormBase {
 
     // Initialize batch (to set title).
     $batch = [
-      'title' => $this->t('Sync lessons to report'),
-      'init_message' => $this->t('Sync lessons to report'),
+      'title' => $this->t('Sync lessons from schema'),
+      'init_message' => $this->t('Sync lessons from schema'),
       'progress_message' => $this->t('Processed @current out of @total.'),
       'operations' => [],
       'finished' => [self::class, 'finished'],

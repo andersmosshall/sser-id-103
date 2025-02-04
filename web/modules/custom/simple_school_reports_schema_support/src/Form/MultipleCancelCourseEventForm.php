@@ -95,13 +95,6 @@ class MultipleCancelCourseEventForm extends ConfirmFormBase {
   }
 
   /**
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
-   */
-  public function getSuccessMessage() {
-    return $this->t('School subject updated.');
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {

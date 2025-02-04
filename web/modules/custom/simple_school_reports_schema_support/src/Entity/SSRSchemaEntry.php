@@ -239,7 +239,7 @@ final class SSRSchemaEntry extends ContentEntityBase implements SSRSchemaEntryIn
         ->setDisplayConfigurable('view', TRUE);
 
       $fields['custom_periodicity_start_' . $i] = BaseFieldDefinition::create('timestamp')
-        ->setLabel(t('With start at, for group @number', ['@number' => $i]))
+        ->setLabel(t('With start at'))
         ->setRequired(TRUE)
         ->setDefaultValue((new \DateTime())->setTime(12, 0, 0)->getTimestamp())
         ->setDisplayConfigurable('form', TRUE)
@@ -247,7 +247,7 @@ final class SSRSchemaEntry extends ContentEntityBase implements SSRSchemaEntryIn
 
       $fields['students_' . $i] = BaseFieldDefinition::create('entity_reference')
         ->setTranslatable(TRUE)
-        ->setLabel(t('Students, group @number', ['@number' => $i]))
+        ->setLabel(t('Students'))
         ->setDescription(t('Students not relevant for the student list for the corresponding course will be ignored.'))
         ->setSetting('target_type', 'user')
         ->setSetting('handler', 'views')

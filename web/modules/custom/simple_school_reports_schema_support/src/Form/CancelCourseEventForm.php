@@ -64,7 +64,7 @@ class CancelCourseEventForm extends ConfirmFormBase {
       $t_args['@label'] = $this->schemaSupportService->resolveCalenderEventName($this->calendarEvent);
     }
 
-    return $this->t('Are you sure you want to cancel @label?', $t_args);
+    return $this->t('Are you sure you want to cancel the lesson @label?', $t_args);
   }
 
   public function getCancelRoute() {
