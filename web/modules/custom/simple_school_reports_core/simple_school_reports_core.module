@@ -103,6 +103,9 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
   if ($form_id === 'views_exposed_form') {
     /** @var \Drupal\views\Entity\View $view */
     if ($view = $form_state->get('view')) {
+      if ($view->id() === 'courses') {
+        UserFormAlter::exposedFilterByClass($form, $form_state);
+      }
       if ($view->id() === 'courses' && $view->current_display === 'all_courses') {
         UserFormAlter::exposedFilterByTeacher($form, $form_state);
       }

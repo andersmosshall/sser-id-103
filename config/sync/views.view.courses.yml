@@ -390,6 +390,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 20
           total_pages: null
           id: 0
@@ -407,12 +408,11 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
           submit_button: Tillämpa
-          reset_button: false
+          reset_button: true
           reset_button_label: Återställ
           exposed_sorts_label: 'Sortera på'
           expose_sort_order: true
@@ -503,6 +503,58 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+        field_class_target_id:
+          id: field_class_target_id
+          table: node__field_class
+          field: field_class_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_class_target_id_op
+            label: Klass
+            description: ''
+            use_operator: false
+            operator: field_class_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_class_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: table
         options:
@@ -571,40 +623,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:core.entity_view_display.node.budget.default'
-        - 'config:core.entity_view_display.node.budget.teaser'
-        - 'config:core.entity_view_display.node.course.default'
-        - 'config:core.entity_view_display.node.course.number_of_students'
-        - 'config:core.entity_view_display.node.course.teaser'
-        - 'config:core.entity_view_display.node.course_attendance_report.default'
-        - 'config:core.entity_view_display.node.course_attendance_report.teaser'
-        - 'config:core.entity_view_display.node.day_absence.default'
-        - 'config:core.entity_view_display.node.day_absence.teaser'
-        - 'config:core.entity_view_display.node.grade_round.default'
-        - 'config:core.entity_view_display.node.grade_round.teaser'
-        - 'config:core.entity_view_display.node.grade_statistics.default'
-        - 'config:core.entity_view_display.node.grade_statistics.teaser'
-        - 'config:core.entity_view_display.node.grade_student_group.default'
-        - 'config:core.entity_view_display.node.grade_student_group.teaser'
-        - 'config:core.entity_view_display.node.grade_subject.default'
-        - 'config:core.entity_view_display.node.grade_subject.teaser'
-        - 'config:core.entity_view_display.node.help_page.default'
-        - 'config:core.entity_view_display.node.help_page.teaser'
-        - 'config:core.entity_view_display.node.iup.default'
-        - 'config:core.entity_view_display.node.iup.teaser'
-        - 'config:core.entity_view_display.node.iup_goal.default'
-        - 'config:core.entity_view_display.node.iup_goal.teaser'
-        - 'config:core.entity_view_display.node.iup_round.default'
-        - 'config:core.entity_view_display.node.iup_round.teaser'
-        - 'config:core.entity_view_display.node.list_template.default'
-        - 'config:core.entity_view_display.node.list_template.teaser'
-        - 'config:core.entity_view_display.node.written_reviews.default'
-        - 'config:core.entity_view_display.node.written_reviews.school_efforts_only'
-        - 'config:core.entity_view_display.node.written_reviews.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_round.default'
-        - 'config:core.entity_view_display.node.written_reviews_round.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.default'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.teaser'
         - 'config:field.storage.node.field_school_subject'
         - 'config:field.storage.node.field_teacher'
   all_courses:
@@ -689,7 +707,7 @@ display:
           exposed: true
           expose:
             operator_id: field_teacher_target_id_op
-            label: Teacher
+            label: Lärare
             description: ''
             use_operator: false
             operator: field_teacher_target_id_op
@@ -707,6 +725,60 @@ display:
               teacher: '0'
               administrator: '0'
               principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_class_target_id:
+          id: field_class_target_id
+          table: node__field_class
+          field: field_class_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_class_target_id_op
+            label: Klass
+            description: ''
+            use_operator: false
+            operator: field_class_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_class_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
@@ -741,40 +813,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:core.entity_view_display.node.budget.default'
-        - 'config:core.entity_view_display.node.budget.teaser'
-        - 'config:core.entity_view_display.node.course.default'
-        - 'config:core.entity_view_display.node.course.number_of_students'
-        - 'config:core.entity_view_display.node.course.teaser'
-        - 'config:core.entity_view_display.node.course_attendance_report.default'
-        - 'config:core.entity_view_display.node.course_attendance_report.teaser'
-        - 'config:core.entity_view_display.node.day_absence.default'
-        - 'config:core.entity_view_display.node.day_absence.teaser'
-        - 'config:core.entity_view_display.node.grade_round.default'
-        - 'config:core.entity_view_display.node.grade_round.teaser'
-        - 'config:core.entity_view_display.node.grade_statistics.default'
-        - 'config:core.entity_view_display.node.grade_statistics.teaser'
-        - 'config:core.entity_view_display.node.grade_student_group.default'
-        - 'config:core.entity_view_display.node.grade_student_group.teaser'
-        - 'config:core.entity_view_display.node.grade_subject.default'
-        - 'config:core.entity_view_display.node.grade_subject.teaser'
-        - 'config:core.entity_view_display.node.help_page.default'
-        - 'config:core.entity_view_display.node.help_page.teaser'
-        - 'config:core.entity_view_display.node.iup.default'
-        - 'config:core.entity_view_display.node.iup.teaser'
-        - 'config:core.entity_view_display.node.iup_goal.default'
-        - 'config:core.entity_view_display.node.iup_goal.teaser'
-        - 'config:core.entity_view_display.node.iup_round.default'
-        - 'config:core.entity_view_display.node.iup_round.teaser'
-        - 'config:core.entity_view_display.node.list_template.default'
-        - 'config:core.entity_view_display.node.list_template.teaser'
-        - 'config:core.entity_view_display.node.written_reviews.default'
-        - 'config:core.entity_view_display.node.written_reviews.school_efforts_only'
-        - 'config:core.entity_view_display.node.written_reviews.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_round.default'
-        - 'config:core.entity_view_display.node.written_reviews_round.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.default'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.teaser'
         - 'config:field.storage.node.field_school_subject'
         - 'config:field.storage.node.field_teacher'
   my_courses:
@@ -838,39 +876,5 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:core.entity_view_display.node.budget.default'
-        - 'config:core.entity_view_display.node.budget.teaser'
-        - 'config:core.entity_view_display.node.course.default'
-        - 'config:core.entity_view_display.node.course.number_of_students'
-        - 'config:core.entity_view_display.node.course.teaser'
-        - 'config:core.entity_view_display.node.course_attendance_report.default'
-        - 'config:core.entity_view_display.node.course_attendance_report.teaser'
-        - 'config:core.entity_view_display.node.day_absence.default'
-        - 'config:core.entity_view_display.node.day_absence.teaser'
-        - 'config:core.entity_view_display.node.grade_round.default'
-        - 'config:core.entity_view_display.node.grade_round.teaser'
-        - 'config:core.entity_view_display.node.grade_statistics.default'
-        - 'config:core.entity_view_display.node.grade_statistics.teaser'
-        - 'config:core.entity_view_display.node.grade_student_group.default'
-        - 'config:core.entity_view_display.node.grade_student_group.teaser'
-        - 'config:core.entity_view_display.node.grade_subject.default'
-        - 'config:core.entity_view_display.node.grade_subject.teaser'
-        - 'config:core.entity_view_display.node.help_page.default'
-        - 'config:core.entity_view_display.node.help_page.teaser'
-        - 'config:core.entity_view_display.node.iup.default'
-        - 'config:core.entity_view_display.node.iup.teaser'
-        - 'config:core.entity_view_display.node.iup_goal.default'
-        - 'config:core.entity_view_display.node.iup_goal.teaser'
-        - 'config:core.entity_view_display.node.iup_round.default'
-        - 'config:core.entity_view_display.node.iup_round.teaser'
-        - 'config:core.entity_view_display.node.list_template.default'
-        - 'config:core.entity_view_display.node.list_template.teaser'
-        - 'config:core.entity_view_display.node.written_reviews.default'
-        - 'config:core.entity_view_display.node.written_reviews.school_efforts_only'
-        - 'config:core.entity_view_display.node.written_reviews.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_round.default'
-        - 'config:core.entity_view_display.node.written_reviews_round.teaser'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.default'
-        - 'config:core.entity_view_display.node.written_reviews_subject_state.teaser'
         - 'config:field.storage.node.field_school_subject'
         - 'config:field.storage.node.field_teacher'
