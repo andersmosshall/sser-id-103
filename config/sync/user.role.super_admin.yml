@@ -1,0 +1,12 @@
+uuid: 4e7410cb-b067-4781-afe8-6f22ae1d5b61
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_core
+id: super_admin
+label: Superadministratör
+weight: 9
+is_admin: null
+permissions:
+  - 'super user permissions'

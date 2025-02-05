@@ -77,3 +77,8 @@ services:
       - { name: event_subscriber }
     arguments: [ '@current_route_match', '@current_user' ]
 
+  access_policy.secondary_super_user:
+    class: Drupal\simple_school_reports_core\SecondarySuperUserAccessPolicy
+    tags:
+      - { name: access_policy }
+

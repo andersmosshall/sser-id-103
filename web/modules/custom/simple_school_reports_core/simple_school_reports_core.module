@@ -397,6 +397,13 @@ function simple_school_reports_core_user_presave(\Drupal\user\UserInterface $use
     $user->set('field_ssn', NULL);
     $user->set('field_birth_date', NULL);
   }
+
+  if ($user->hasRole('super_admin')) {
+    $allowed_super_admins = (int) Settings::get('ssr_allowed_super_admins', 0);
+    if ($allowed_super_admins <= 0) {
+      $user->removeRole('super_admin');
+    }
+  }
 }
 
 /**

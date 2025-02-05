@@ -36,3 +36,8 @@ view protected personal data:
   title: 'View protected personal data'
   description: 'Allow to view protected personal data on user with security marking'
   restrict access: true
+
+super user permissions:
+  title: 'Super user permissions (all permissions)'
+  description: 'Gain access to all permissions'
+  restrict access: true

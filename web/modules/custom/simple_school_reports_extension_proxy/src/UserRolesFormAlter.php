@@ -3,6 +3,7 @@
 namespace Drupal\simple_school_reports_extension_proxy;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 
 class UserRolesFormAlter {
 
@@ -17,6 +18,12 @@ class UserRolesFormAlter {
           unset($form['account']['roles']['#options']['budget_administrator']);
           unset($form['account']['roles']['#options']['budget_reviewer']);
         }
+      }
+
+      // Unset super admin role if not allowed.
+      $allowed_super_admins = (int) Settings::get('ssr_allowed_super_admins', 0);
+      if ($allowed_super_admins <= 0 || !\Drupal::currentUser()->hasPermission('super user permissions')) {
+        unset($form['account']['roles']['#options']['super_admin']);
       }
     }
 
