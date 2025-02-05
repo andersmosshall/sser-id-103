@@ -48,7 +48,6 @@ sser_update_from_ssr() {
   # Check for merge conflicts
   if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
     echo "Merge conflicts detected. Aborting.";
-    git merge --abort;
     return 1;
   fi
 
@@ -113,7 +112,6 @@ sser_update_local() {
   # Check for merge conflicts
   if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
     echo "Merge conflicts detected. Aborting.";
-    git merge --abort;
     return 1;
   fi
 
