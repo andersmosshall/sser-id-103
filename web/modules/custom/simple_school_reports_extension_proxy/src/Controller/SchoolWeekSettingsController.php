@@ -173,7 +173,7 @@ class SchoolWeekSettingsController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    return AccessResult::allowedIfHasPermission($account, 'administer school week settings');
+    return AccessResult::allowedIfHasPermission($account, 'administer simple school reports settings');
   }
 
 }

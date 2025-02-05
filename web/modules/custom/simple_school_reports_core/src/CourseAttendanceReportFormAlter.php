@@ -255,22 +255,24 @@ class CourseAttendanceReportFormAlter {
       }
     }
 
-    $calendar_event_ids = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('bundle', 'course')
-      ->condition('status', 1)
-      ->condition('cancelled', FALSE)
-      ->condition('completed', FALSE)
-      ->condition('field_course', $course->id())
-      ->condition('from', $today->getTimestamp(), '<')
-      ->range(0, 10)
-      ->sort('from', 'DESC')
-      ->execute();
-    foreach ($calendar_event_ids as $calendar_event_id) {
-      /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $calendar_event */
-      $calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calendar_event_id);
-      $calendar_event_options[$calendar_event_id] = $schema_support_service->resolveCalenderEventName($calendar_event, FALSE);
+    if (ssr_use_schema()) {
+      $calendar_event_ids = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('bundle', 'course')
+        ->condition('status', 1)
+        ->condition('cancelled', FALSE)
+        ->condition('completed', FALSE)
+        ->condition('field_course', $course->id())
+        ->condition('from', $today->getTimestamp(), '<')
+        ->range(0, 10)
+        ->sort('from', 'DESC')
+        ->execute();
+      foreach ($calendar_event_ids as $calendar_event_id) {
+        /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $calendar_event */
+        $calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($calendar_event_id);
+        $calendar_event_options[$calendar_event_id] = $schema_support_service->resolveCalenderEventName($calendar_event, FALSE);
+      }
     }
 
     $has_calendar_events = !empty($calendar_event_options);
@@ -353,7 +355,7 @@ class CourseAttendanceReportFormAlter {
       $form['field_duration']['widget'][0]['value']['#required'] = TRUE;
     }
 
-    if (!$has_calendar_events && !$course->get('field_schema')->isEmpty()) {
+    if (!$has_calendar_events && !$course->get('field_ssr_schema')->isEmpty()) {
       $now = new DrupalDateTime();
       $day = $now->format('N');
       $now_time = $now->getTimestamp();
@@ -374,7 +376,7 @@ class CourseAttendanceReportFormAlter {
           $start_time = new DrupalDateTime();
           $start_time->setTimestamp($lesson_start_ts);
           $class_start_default = $start_time;
-          $duration_default = $ssr_schema_entry->get('duration')->value;
+          $duration_default = $ssr_schema_entry->get('length')->value;
           $sub_group_default = 'default';
         }
       }

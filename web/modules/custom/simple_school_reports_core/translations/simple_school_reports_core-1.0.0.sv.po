@@ -3066,17 +3066,14 @@ msgstr "Lektion från schema"
 msgid "Note. It may take several minutes before the student lists are updated in places where class is used."
 msgstr "Obs. Det kan ta flera minuter innan elevlistorna uppdateras på platser där klass används."
 
-msgid ""
-msgstr ""
+msgid "Calculate school days from schema"
+msgstr "Beräkna skoldagar från schema"
 
-msgid ""
-msgstr ""
+msgid "Lesson with diverged periodicity that might not occur every week."
+msgstr "Lektion med avvikande periodicitet som kanske inte inträffar varje vecka."
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "Lesson with diverged student list or periodicity that might not occur every week for all students."
+msgstr "Lektion med avvikande elevlista eller periodicitet som kanske inte inträffar varje vecka för alla elever."
 
 msgid ""
 msgstr ""
