@@ -1,0 +1,20 @@
+uuid: f792548d-c203-4d10-a683-166090d14cbe
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - simple_school_reports_entities
+id: ssr_calendar_event.field_course
+field_name: field_course
+entity_type: ssr_calendar_event
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

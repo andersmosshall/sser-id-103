@@ -21,3 +21,27 @@ simple_school_reports_extension_proxy.toggle_allow_login:
     _title: 'Set allow login'
   requirements:
     _permission: 'school staff permissions'
+
+simple_school_reports_extension_proxy.school_week_settings:
+  path: 'admin/school-week-settings'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_extension_proxy\Controller\SchoolWeekSettingsController::schoolWeekSettings'
+    _title: 'School week settings'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_extension_proxy\Controller\SchoolWeekSettingsController::accessSchoolWeekSettings'
+
+simple_school_reports_extension_proxy.sort_out_school_week_deviation:
+  path: 'admin/school-week-settings/remove-deviations'
+  defaults:
+    _form: '\Drupal\simple_school_reports_extension_proxy\Form\SchoolWeekDeviationsSortOutForm'
+    _title: 'Sort out school week deviations'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_extension_proxy\Controller\SchoolWeekSettingsController::accessSchoolWeekSettings'
+
+simple_school_reports_extension_proxy.school_week_copy:
+  path: 'admin/school-week-settings/copy-school-week'
+  defaults:
+    _form: '\Drupal\simple_school_reports_extension_proxy\Form\SchoolWeekCopyForm'
+    _title: 'Copy school week'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_extension_proxy\Controller\SchoolWeekSettingsController::accessSchoolWeekSettings'

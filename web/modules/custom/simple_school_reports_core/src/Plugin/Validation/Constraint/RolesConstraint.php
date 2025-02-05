@@ -27,4 +27,6 @@ class RolesConstraint extends SymfonyConstraint {
 
   public $onlyStudentRoleMessage = 'User with role student cannot have any other role.';
 
+  public $tooManySuparAdminUsersMessage = 'There can only be @number super admin users.';
+
 }

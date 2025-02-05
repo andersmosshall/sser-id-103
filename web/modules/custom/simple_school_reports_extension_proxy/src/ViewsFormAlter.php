@@ -12,6 +12,11 @@ class ViewsFormAlter {
       $action_module_map = self::getActionModuleMap();
       $options = &$form['header']['user_bulk_form']['action']['#options'];
       foreach ($options as $action_id => $label) {
+        // Disable action for super admin.
+        if ($label === 'user_add_role_action.super_admin' || $label === 'user_remove_role_action.super_admin') {
+          unset($options[$action_id]);
+        }
+
         $module_constraints = $action_module_map[$action_id] ?? [];
         if (empty($module_constraints)) {
           continue;

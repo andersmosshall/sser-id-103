@@ -11,6 +11,8 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface SchoolWeekInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  const CALCULATE_LENGTH = -1;
+
   /**
    * @param bool $show_lessons
    * @param bool $show_deviations
@@ -21,11 +23,11 @@ interface SchoolWeekInterface extends ContentEntityInterface, EntityOwnerInterfa
 
   /**
    * @param \DateTimeInterface|null $date_time
-   * @param bool $include_base_lessons
+   * @param bool $include_day_lessons
    *
    * @return array
    */
-  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_base_lessons = TRUE): array;
+  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_day_lessons = TRUE): array;
 
   /**
    * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
@@ -38,5 +40,20 @@ interface SchoolWeekInterface extends ContentEntityInterface, EntityOwnerInterfa
    * @return \Drupal\simple_school_reports_entities\SchoolWeekInterface|null
    */
   public function getParentSchoolWeek(): ?SchoolWeekInterface;
+
+  /**
+   * @return string
+   */
+  public function getType(): string;
+
+  /**
+   * @return mixed
+   */
+  public function isStudentSchema();
+
+  /**
+   * @return mixed
+   */
+  public function calculateFromSchema();
 
 }

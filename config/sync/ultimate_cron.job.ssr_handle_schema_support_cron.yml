@@ -1,0 +1,29 @@
+uuid: 085c82e1-edf4-4efd-8478-9a2eaf7832e6
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+title: 'Schema support cron'
+id: ssr_handle_schema_support_cron
+weight: 0
+module: simple_school_reports_schema_support
+callback: ssr_handle_schema_support_cron
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0 1 * * *'
+    catch_up: 900
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

@@ -1,0 +1,20 @@
+simple_school_reports_extension_proxy.add_school_week_deviations:
+  title: 'Add school week deviations'
+  route_name: entity.school_week_deviation.add_form
+  weight: 100
+  appears_on:
+    - simple_school_reports_extension_proxy.school_week_settings
+
+simple_school_reports_extension_proxy.sort_out_school_week_deviations:
+  title: 'Sort out school week deviations'
+  route_name: simple_school_reports_extension_proxy.sort_out_school_week_deviation
+  weight: 110
+  appears_on:
+    - simple_school_reports_extension_proxy.school_week_settings
+
+simple_school_reports_extension_proxy.school_week_copy:
+  title: 'Copy school week'
+  route_name: simple_school_reports_extension_proxy.school_week_copy
+  weight: 120
+  appears_on:
+    - simple_school_reports_extension_proxy.school_week_settings

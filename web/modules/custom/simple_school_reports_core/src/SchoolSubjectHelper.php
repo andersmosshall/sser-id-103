@@ -232,7 +232,10 @@ class SchoolSubjectHelper {
 
   }
 
-  public static function getSubjectShortName(string $subject_tid): string {
+  public static function getSubjectShortName(?string $subject_tid): string {
+    if (!$subject_tid) {
+      return 'n/a';
+    }
     if (self::$subjectShortNameMap === NULL) {
       $map = [];
 

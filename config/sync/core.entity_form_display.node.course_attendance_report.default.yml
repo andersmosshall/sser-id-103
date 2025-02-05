@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.course_attendance_report.field_calendar_event
     - field.field.node.course_attendance_report.field_class_end
     - field.field.node.course_attendance_report.field_class_start
     - field.field.node.course_attendance_report.field_course
+    - field.field.node.course_attendance_report.field_course_sub_group
     - field.field.node.course_attendance_report.field_duration
     - field.field.node.course_attendance_report.field_student_course_attendance
     - node.type.course_attendance_report
@@ -30,6 +32,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_course_sub_group:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_duration:
     type: number
     weight: 2
@@ -39,6 +49,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_calendar_event: true
   field_class_end: true
   field_student_course_attendance: true
   langcode: true

@@ -21,7 +21,31 @@ interface SchoolWeekServiceInterface {
    *
    * @return \Drupal\simple_school_reports_entities\SchoolWeekInterface|null
    */
-  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL): ?SchoolWeekInterface;
+  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL, bool $only_root_school_weeks = FALSE): ?SchoolWeekInterface;
+
+  /**
+   * Get school weeks relevant for a group of users.
+   *
+   * @param string[] $uids
+   *   User ids.
+   *
+   * @return SchoolWeekInterface[]
+   */
+  public function getSchoolWeeksRelevantForUsers(array $uids, ?\DateTime $date = NULL, bool $only_root_school_weeks = TRUE): array;
+
+  /**
+   * @param string $school_week_id
+   *
+   * @return \Drupal\simple_school_reports_entities\SchoolWeekInterface|null
+   */
+  public function getStudentIdsRelevantForSchoolWeek(string $school_week_id): array;
+
+  /**
+   * @param string $class_id
+   *
+   * @return \Drupal\simple_school_reports_entities\SchoolWeekInterface|null
+   */
+  public function getSchoolWeekByClassId(string $class_id): ?SchoolWeekInterface;
 
   /**
    * @param string $school_week_id

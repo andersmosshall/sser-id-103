@@ -14,6 +14,7 @@ use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
 use Drupal\time_field\Time;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\views\Views;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\Wizard\DateTime;
 
 /**
  * Defines the school week entity class.
@@ -81,11 +82,42 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getType(): string {
+    return $this->get('school_week_type')->value ?? 'default';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isStudentSchema(): bool {
+    return $this->getType() === 'student_schema';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateFromSchema(): bool {
+    return (bool) $this->get('calculate_from_schema')->value;
+  }
+
+  /**
    * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
    *
    * @return self
    */
   public function setParentSchoolWeek(SchoolWeekInterface|null $school_week): self {
+    if ($this->parentSchoolWeek && $this->parentSchoolWeek->id() === $school_week->id()) {
+      return $this;
+    }
+
+    if ($this->isStudentSchema()) {
+      for ($day_index = 1; $day_index <= 7; $day_index++) {
+        $this->calculateLengthFromLessons($day_index);
+      }
+    }
+
     $this->parentSchoolWeek = $school_week;
     return $this;
   }
@@ -97,66 +129,166 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     return $this->parentSchoolWeek;
   }
 
-  protected function getSchoolDayData(string $date_string, string $day_index): array {
-    $length = $this->get('length_' . $day_index)->value ?? 0;
-    $length *= 60;
-    $from = $this->get('from_' . $day_index)->value ?? NULL;
-    $to = $this->get('to_' . $day_index)->value ?? NULL;
-
-    $map = $this->getSchoolWeekService()->getSchoolWeekDeviationMap($this);
-    if (!empty($map[$date_string])) {
-      $deviation_data = $map[$date_string];
-      if ($deviation_data) {
-        $length = $deviation_data['length'] ?? 0;
-        $length *= 60;
-        $from = $deviation_data['from'] ?? NULL;
-        $to = $deviation_data['to'] ?? NULL;
-      }
+  protected function makeSchoolWeekLessonFromSchemaEntryDataItem(array $schema_entry_data_item, string $day_index): ?array {
+    if ($schema_entry_data_item['week_day'] !== $day_index) {
+      return NULL;
     }
 
-    return [
-      $length,
-      $from,
-      $to,
-    ];
+    $lesson_start = $schema_entry_data_item['from'];
+    $lesson_end = $schema_entry_data_item['to'];
 
+    if ($lesson_start === NULL || $lesson_end === NULL) {
+      return NULL;
+    }
+
+    if ($lesson_start > $lesson_end) {
+      $t = $lesson_start;
+      $lesson_start = $lesson_end;
+      $lesson_end = $t;
+    }
+
+    $length = $lesson_end - $lesson_start;
+    $length = floor($length / $schema_entry_data_item['periodicity_week']);
+
+    if ($schema_entry_data_item['subject'] === 'CBT') {
+      $length = 0;
+    }
+
+    $base_time = new \DateTime('2001-01-0' . $day_index . ' 00:00:00');
+    return [
+      'id' => $schema_entry_data_item['id'],
+      'from' => $base_time->getTimestamp() + $lesson_start,
+      'to' => $base_time->getTimestamp() + $lesson_end,
+      'type' => 'student_schema',
+      'subject' => $schema_entry_data_item['subject'] ?? 'n/a',
+      'diverged_periodicity' => $schema_entry_data_item['periodicity_week'] !== 1,
+      'diverged_student_list' => $schema_entry_data_item['sub_group_id'] !== 'default',
+      'length' => $length,
+      'attended' => $length,
+      'reported_absence' => 0,
+      'leave_absence' => 0,
+      'valid_absence' => 0,
+      'invalid_absence' => 0,
+    ];
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_base_lessons = TRUE): array {
-    if (!$date_time) {
-      $date_time = new \DateTime();
-    }
-    $day_index = $date_time->format('N');
-    $date = $date_time->format('Y-m-d');
-    $cid = 'school_day_info:' . $this->id() . ':' . $date;
-
-    if ($this->getParentSchoolWeek()) {
-      $cid .= ':' . $this->getParentSchoolWeek()->id();
-    }
+  protected function getBaseLessons(string $day_index) {
+    $cid = 'base_lessons:' . $this->id() . ':' . $day_index;
 
     if (array_key_exists($cid, $this->lookup)) {
       return $this->lookup[$cid];
     }
 
-    $date_clone = clone $date_time;
-    $date_clone->setTime(0,0,0);
-    $day_start = $date_clone->getTimestamp();
-    // Make time at 23:59:59.
-    $day_end = $day_start + 86399;
+    $lessons = [];
+    if ($this->isStudentSchema()) {
+      $identifier = $this->get('identifier')->value;
+      if ($identifier && \Drupal::hasService('simple_school_reports_core.course_service')) {
+        /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+        $course_service = \Drupal::service('simple_school_reports_core.course_service');
+        foreach ($course_service->getStudentSchemaEntryDataByHash($identifier) as $schema_entry_data_item) {
+          $lesson = $this->makeSchoolWeekLessonFromSchemaEntryDataItem($schema_entry_data_item, $day_index);
+          if ($lesson) {
+            $lessons[] = $lesson;
+          }
+        }
+      }
 
-    [$length, $from, $to] = $this->getSchoolDayData($date, $day_index);
+      $this->lookup[$cid] = $lessons;
+      return $lessons;
+    }
 
-    if ($length === 0) {
-      $this->lookup[$cid] = [
-        'length' => 0,
-        'from' => NULL,
-        'to' => NULL,
-        'lessons' => [],
-      ];
-      return $this->lookup[$cid];
+    if ($this->calculateFromSchema() && ssr_use_schema()) {
+      if (\Drupal::hasService('simple_school_reports_core.course_service')) {
+        /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+        $course_service = \Drupal::service('simple_school_reports_core.course_service');
+        $school_week_service = $this->getSchoolWeekService();
+        $uids = $school_week_service->getStudentIdsRelevantForSchoolWeek($this->id());
+
+        $identifiers = [];
+        foreach ($uids as $uid) {
+          $identifier = $course_service->getStudentSchemaEntryDataIdentifiersHash($uid);
+          if (!$identifier) {
+            continue;
+          }
+          $identifiers[$identifier] = $identifier;
+        }
+
+        foreach ($identifiers as $identifier) {
+          foreach ($course_service->getStudentSchemaEntryDataByHash($identifier) as $schema_entry_data_item) {
+            if (isset($lessons[$schema_entry_data_item['id']])) {
+              continue;
+            }
+
+            $lesson = $this->makeSchoolWeekLessonFromSchemaEntryDataItem($schema_entry_data_item, $day_index);
+            if ($lesson) {
+              $lessons[$lesson['id']] = $lesson;
+            }
+          };
+        }
+      }
+
+      $lessons = array_values($lessons);
+      $this->lookup[$cid] = $lessons;
+      return $lessons;
+    }
+
+    $lessons = $this->getSchoolDayInfo(new \DateTime('2001-01-0' . $day_index))['lessons'] ?? [];
+    $this->lookup[$cid] = $lessons;
+    return $lessons;
+  }
+
+  protected function calculateLengthFromLessons(string $day_index): void {
+    $length = 0;
+    $from = NULL;
+    $to = NULL;
+    foreach ($this->getBaseLessons($day_index) as $lesson) {
+      if ($lesson['subject'] === 'CBT') {
+        continue;
+      }
+
+
+      $length += floor($lesson['length'] / 60);
+      if ($from === NULL || $lesson['from'] < $from) {
+        $from = $lesson['from'];
+      }
+      if ($to === NULL || $lesson['to'] > $to) {
+        $to = $lesson['to'];
+      }
+    }
+
+    $from_value = $from
+      ? Time::createFromHtml5Format((new \DateTime())->setTimestamp($from)->format('H:i'))
+      : NULL;
+    $to_value = $to
+      ? Time::createFromHtml5Format((new \DateTime())->setTimestamp($to)->format('H:i'))
+      : NULL;
+
+    $this->set('length_' . $day_index, $length);
+    $this->set('from_' . $day_index, $from_value?->getTimestamp());
+    $this->set('to_' . $day_index, $to_value?->getTimestamp());
+  }
+
+  protected function getSchoolDayData(string $date_string, string $day_index, bool $include_deviation = TRUE): array {
+    $length = $this->get('length_' . $day_index)->value ?? 0;
+    $length *= 60;
+    $from = $this->get('from_' . $day_index)->value ?? NULL;
+    $to = $this->get('to_' . $day_index)->value ?? NULL;
+
+    $map = $include_deviation
+      ? $this->getSchoolWeekService()->getSchoolWeekDeviationMap($this)
+      : [];
+    if (!empty($map[$date_string])) {
+      $deviation_data = $map[$date_string];
+      if ($deviation_data['no_teaching']) {
+        $length = 0;
+        $from = NULL;
+        $to = NULL;
+      }
+      if ($deviation_data['from'] && $deviation_data['to']) {
+        $length = self::CALCULATE_LENGTH;
+        $from = $deviation_data['from'];
+        $to = $deviation_data['to'];
+      }
     }
 
     // Sanity check $from and $to.
@@ -176,11 +308,10 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       $to = NULL;
     }
 
-    $base_time = clone $date_time;
-    $base_time->setTime(0,0,0);
+    $base_time = new \DateTime($date_string . ' 00:00:00');
 
     if (!$from) {
-      $from_object = new \DateTime($date . '12:00:00');
+      $from_object = new \DateTime($date_string . ' 12:00:00');
       $from = $from_object->getTimestamp() - ($length / 2) - 60 * 60;
     }
     else {
@@ -188,14 +319,95 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     }
 
     if (!$to) {
-      $to_object = new \DateTime($date . '12:00:00');
+      $to_object = new \DateTime($date_string . ' 12:00:00');
       $to = $to_object->getTimestamp() + ($length / 2) + 60 * 60;
     }
     else {
       $to = $base_time->getTimestamp() + $to;
     }
 
-    $lessons = $include_base_lessons ? $this->makeLessons($from, $to, $length) : [];
+    return [
+      $length,
+      $from,
+      $to,
+    ];
+
+  }
+
+  protected function getParentIds(): array {
+    $ids = [];
+    $parent = $this->getParentSchoolWeek();
+    while ($parent) {
+      if (isset($ids[$parent->id()])) {
+        break;
+      }
+      $ids[$parent->id()] = $parent->id();
+      $parent = $parent->getParentSchoolWeek();
+    }
+    return $ids;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSchoolDayInfo(?\DateTimeInterface $date_time = NULL, bool $include_day_lessons = TRUE): array {
+    if (!$date_time) {
+      $date_time = new \DateTime();
+    }
+    $day_index = $date_time->format('N');
+    $date = $date_time->format('Y-m-d');
+    $cid = 'school_day_info:' . $this->id() . ':' . $date;
+    $cid .= ':' . implode(':', $this->getParentIds());
+
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
+    $is_base_schema = $date_time->format('Y-m') === '2001-01';
+    $include_deviation = $include_day_lessons || !$is_base_schema;
+
+    [
+      $length,
+      $from,
+      $to,
+    ] = $this->getSchoolDayData($date, $day_index, $include_deviation);
+
+    if ($length === 0) {
+      $this->lookup[$cid] = [
+        'length' => 0,
+        'from' => NULL,
+        'to' => NULL,
+        'lessons' => [],
+      ];
+      return $this->lookup[$cid];
+    }
+
+    if ($length === self::CALCULATE_LENGTH) {
+      [
+        $original_length,
+        $original_from,
+        $original_to,
+      ] = $this->getSchoolDayData($date, $day_index, FALSE);
+      $original_lessons = $this->makeLessons($original_from, $original_to, $original_length);
+      $lessons = [];
+
+      $length = 0;
+
+      foreach ($original_lessons as $lesson) {
+        if ($lesson['to'] <= $from || $lesson['from'] >= $to) {
+          continue;
+        }
+
+        $lesson['from'] = max($lesson['from'], $from);
+        $lesson['to'] = min($lesson['to'], $to);
+        $lesson['length'] = $lesson['to'] - $lesson['from'];
+        $length += $lesson['length'];
+        $lessons[] = $lesson;
+      }
+    }
+    else {
+      $lessons = $include_day_lessons ? $this->makeLessons($from, $to, $length) : [];
+    }
 
     $info = [
       'length' => $length,
@@ -209,7 +421,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
   }
 
   protected function makeLessons(int $from, int $to, int $length): array {
-    if ($length === 0) {
+    if ($length <= 0) {
       return [];
     }
 
@@ -245,6 +457,10 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
    * {@inheritdoc}
    */
   public function toTable(bool $show_lessons = FALSE, bool $show_deviations = TRUE): array {
+    if ($this->isStudentSchema() && $this->getParentSchoolWeek() && !$this->getParentSchoolWeek()->calculateFromSchema()) {
+      return $this->getParentSchoolWeek()->toTable($show_lessons, $show_deviations);
+    }
+
     $day_map = [
       1 => t('Monday'),
       2 => t('Tuesday'),
@@ -282,11 +498,16 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     $row_to = [];
 
     foreach ($headers as $day_index => $day_label) {
+
       if ($day_index === 0) {
-        $row_length[] = $this->t('School day');;
-        $row_from[] = $this->t('Day start');
-        $row_to[] = $this->t('Day end');
+        $row_length[0] = $this->t('School day');;
+        $row_from[0] = $this->t('Day start');
+        $row_to[0] = $this->t('Day end');
         continue;
+      }
+
+      if ($this->calculateFromSchema() && ssr_use_schema()) {
+        $this->calculateLengthFromLessons($day_index);
       }
 
       $field = $this->get('length_' . $day_index)->value ?? 0;
@@ -320,16 +541,19 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
 
     $has_lessons = FALSE;
     $row_lessons = [];
+
+    $show_footnote_1 = FALSE;
+    $show_footnote_2 = FALSE;
+    $show_footnote_3 = FALSE;
+
     if ($show_lessons) {
-      // Year 2001 starts with monday so use that as help.
       foreach ($headers as $day_index => $day_label) {
         if ($day_index === 0) {
-          $row_lessons[] = $this->t('Lessons') . '*';
+          $row_lessons[0] = $this->t('Lessons');
           continue;
         }
 
-        $date = new \DateTime('2001-01-0' . $day_index);
-        $lessons = $this->getSchoolDayInfo($date)['lessons'] ?? [];
+        $lessons = $this->getBaseLessons($day_index);
 
         if (empty($lessons)) {
           $row_lessons[$day_index]['data'][] = [
@@ -339,13 +563,45 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
         }
 
         foreach ($lessons as $lesson) {
+
+
           $has_lessons = TRUE;
           $time_from = date('H:i', $lesson['from']);
           $time_to = date('H:i', $lesson['to']);
+
+          $suffix = '';
+          if ($lesson['subject'] !== 'n/a') {
+            $name = $lesson['subject'];
+
+            if ($name === 'CBT') {
+              $name = 'BT';
+            }
+
+            if (str_contains($name, ':')) {
+              $name = explode(':', $name);
+              $name = array_pop($name);
+            }
+            $suffix .= ' ' . $name;
+          }
+
+          if ($lesson['type'] === 'dynamic') {
+            $suffix .= '<sup>1</sup>';
+            $show_footnote_1 = TRUE;
+          }
+
+          if (!empty($lesson['diverged_student_list'])) {
+            $suffix .= '<sup>2</sup>';
+            $show_footnote_2 = TRUE;
+          }
+          elseif (!empty($lesson['diverged_periodicity'])) {
+            $suffix .= '<sup>3</sup>';
+            $show_footnote_3 = TRUE;
+          }
+
           $row_lessons[$day_index]['data'][] = [
             '#type' => 'container',
             'value' => [
-              '#markup' => $time_from . ' - ' . $time_to,
+              '#markup' => $time_from . ' - ' . $time_to . $suffix,
             ],
           ];
         }
@@ -355,7 +611,16 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     if ($has_lessons) {
       $table['#rows'][] = $row_lessons;
 
-      $table['#suffix'] = '<em>* ' . $this->t('The lessons that are assumed unless there are attendance reports defining the lesson time and length.') . '</em>';
+      $table['#suffix'] = '';
+      if ($show_footnote_1) {
+        $table['#suffix'] .= '<div><sup>1</sup><em>' . $this->t('The lessons that are assumed unless there are attendance reports defining the lesson time and length.') . '</em></div>';
+      }
+      if ($show_footnote_2) {
+        $table['#suffix'] .= '<div><sup>2</sup><em> ' . $this->t('Lesson with diverged student list or periodicity that might not occur every week for all students.') . '</em></div>';
+      }
+      if ($show_footnote_3) {
+        $table['#suffix'] .= '<div><sup>2</sup><em> ' . $this->t('Lesson with diverged periodicity that might not occur every week.') . '</em></div>';
+      }
     }
 
     if (!$show_deviations) {
@@ -373,7 +638,6 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     ];
 
     $display_id = $this->getSchoolWeekService()->getDeviationViewsDisplay();
-    $display_t = $this->id();
 
     // Build view of deviations.
     $deviations_view = Views::getView('deviations_for_school_week');
@@ -399,6 +663,10 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
 
     if (!$this->label()) {
       $this->set('label', 'Skolvecka');
+    }
+
+    if (!$this->get('school_week_type')->value) {
+      $this->set('school_week_type', 'default');
     }
   }
 
@@ -499,6 +767,26 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       ->setDescription(t('Specific deviation for this school week only.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'school_week_deviation')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['school_week_type'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('School week type'))
+      ->setRequired(TRUE)
+      ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_week_types')
+      ->setDefaultValue('default')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['calculate_from_schema'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Calculate school days from schema'))
+      ->setDefaultValue(FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['identifier'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Identifier'))
+      ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

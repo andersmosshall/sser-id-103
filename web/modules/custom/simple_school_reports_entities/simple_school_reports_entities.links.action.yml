@@ -39,3 +39,15 @@ ssr_student_leave_application.add_form:
   route_name: entity.ssr_student_leave_application.add_form
   appears_on:
     - entity.ssr_student_leave_application.collection
+
+ssr_calendar_event.type_add:
+  title: 'Add calendar event type'
+  route_name: entity.ssr_calendar_event_type.add_form
+  appears_on:
+    - entity.ssr_calendar_event_type.collection
+
+ssr_calendar_event.add_page:
+  title: 'Add calendar event'
+  route_name: entity.ssr_calendar_event.add_page
+  appears_on:
+    - entity.ssr_calendar_event.collection

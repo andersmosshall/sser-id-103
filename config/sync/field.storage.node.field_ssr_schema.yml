@@ -1,0 +1,20 @@
+uuid: 8853ae20-289c-4a63-bf29-42ae110304cf
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - simple_school_reports_schema_support
+id: node.field_ssr_schema
+field_name: field_ssr_schema
+entity_type: node
+type: entity_reference
+settings:
+  target_type: ssr_schema_entry
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

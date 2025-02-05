@@ -59,6 +59,9 @@ use Drupal\user\EntityOwnerTrait;
  *     "delete-multiple-form" = "/admin/content/school-week-deviation/delete-multiple",
  *   },
  *   field_ui_base_route = "entity.school_week_deviation.settings",
+ *  constraints = {
+ *    "SsrSchoolWeekDeviationConstraint" = {}
+ *  }
  * )
  */
 final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekDeviationInterface {
@@ -77,6 +80,8 @@ final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekD
         $tmp = $from;
         $from = $to;
         $to = $tmp;
+        $this->set('from_date', $from);
+        $this->set('to_date', $to);
       }
 
       $from = (new \DateTime())->setTimestamp((int) $from)->format('Y-m-d');
@@ -90,26 +95,26 @@ final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekD
       }
     }
 
-    $length = $this->get('length')->value;
-
-    if ($length >= 0) {
-      $label .= ' ' . $length . ' ' . $this->t('min');
+    $no_teaching = !!($this->get('no_teaching')->value ?? FALSE);
+    if ($no_teaching) {
+      $label .= ', ' . 'ledig';
     }
+    else {
+      $from_time = $this->get('from')->value ?? NULL;
+      if ($from_time && is_numeric($from_time)) {
+        $time = Time::createFromTimestamp((int) $from_time);
+        $from_time = $time->format('H:i');
+      }
 
-    $from_time = $this->get('from')->value ?? NULL;
-    if ($from_time && is_numeric($from_time)) {
-      $time = Time::createFromTimestamp((int) $from_time);
-      $from_time = $time->format('H:i');
-    }
+      $to_time = $this->get('to')->value ?? NULL;
+      if ($to_time && is_numeric($to_time)) {
+        $time = Time::createFromTimestamp($to_time);
+        $to_time = $time->format('H:i');
+      }
 
-    $to_time = $this->get('to')->value ?? NULL;
-    if ($to_time && is_numeric($to_time)) {
-      $time = Time::createFromTimestamp($to_time);
-      $to_time = $time->format('H:i');
-    }
-
-    if ($from_time && $to_time) {
-      $label .= ', ' . $from_time . ' - ' . $to_time;
+      if ($from_time && $to_time) {
+        $label .= ', skoldag: ' . $from_time . ' - ' . $to_time;
+      }
     }
 
     $deviation_type = $this->get('deviation_type')->entity;
@@ -136,6 +141,12 @@ final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekD
       $this->set('to_date', $from);
     }
     $this->set('label', $this->getLabelBase());
+
+    $no_teaching = !!($this->get('no_teaching')->value ?? FALSE);
+    if ($no_teaching) {
+      $this->set('from', NULL);
+      $this->set('to', NULL);
+    }
 
     parent::preSave($storage);
     if (!$this->getOwnerId()) {
@@ -207,7 +218,6 @@ final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekD
 
     $fields['length'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('School day length'))
-      ->setRequired(TRUE)
       ->setDefaultValue(0)
       ->setSetting('min', 0)
       ->setSetting('max', 1200)
@@ -223,6 +233,14 @@ final class SchoolWeekDeviation extends ContentEntityBase implements SchoolWeekD
 
     $fields['to'] = BaseFieldDefinition::create('time')
       ->setLabel(t('School day end'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['no_teaching'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('No teaching hours (free)'))
+      ->setDefaultValue(FALSE)
+      ->setSetting('on_label', t('Free day'))
+      ->setSetting('off_label', t('School day'))
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

@@ -47,16 +47,22 @@ students.page.caregivers:
   parent: students.page
   route_name: view.caregivers.caregivers
 
-courses.page.my_courses:
+courses.page.courses:
   title: 'Courses'
   weight: 101
   parent: system.admin
   route_name: view.courses.my_courses
 
+courses.page.my_courses:
+  title: 'My Courses'
+  weight: 150
+  parent: courses.page.courses
+  route_name: view.courses.my_courses
+
 courses.page.all_courses:
   title: 'All Courses'
-  weight: 100
-  parent: courses.page.my_courses
+  weight: 160
+  parent: courses.page.courses
   route_name: view.courses.all_courses
 
 simple_school_reports_core.config:
@@ -66,10 +72,10 @@ simple_school_reports_core.config:
   route_name: simple_school_reports_core.admin
 
 simple_school_reports_core.panic_confirm:
-    title: 'Panic!'
-    description: 'Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you shut it down for investigation.'
-    parent: simple_school_reports_core.config
-    route_name: simple_school_reports_core.panic_confirm
+  title: 'Panic!'
+  description: 'Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you shut it down for investigation.'
+  parent: simple_school_reports_core.config
+  route_name: simple_school_reports_core.panic_confirm
 
 simple_school_reports_core.config_terms:
   title: 'Terms'

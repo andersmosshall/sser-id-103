@@ -22,6 +22,7 @@ dependencies:
     - simple_school_reports_core
     - simple_school_reports_entities
     - simple_school_reports_examinations_support
+    - simple_school_reports_schema_support
     - taxonomy
     - views_custom_permissions
 id: teacher
@@ -39,6 +40,7 @@ permissions:
   - 'create school week'
   - 'create school_week_deviation'
   - 'create ssr_assessment_group'
+  - 'create ssr_schema_entry'
   - 'create terms in school_week_deviation_type'
   - 'create terms in special_diet'
   - 'create users'
@@ -47,10 +49,12 @@ permissions:
   - 'delete own files'
   - 'delete school week'
   - 'delete school_week_deviation'
+  - 'delete ssr_schema_entry'
   - 'edit any written_reviews content'
   - 'edit any written_reviews_subject_state content'
   - 'edit school week'
   - 'edit school_week_deviation'
+  - 'edit ssr_schema_entry'
   - 'mail caregivers'
   - 'register absence'
   - 'school staff permissions'
@@ -59,5 +63,6 @@ permissions:
   - 'use text format wordsupported_format'
   - 'view school week'
   - 'view ssr_assessment_group'
+  - 'view ssr_schema_entry'
   - 'view ssr_student_leave_application'
   - 'view user email addresses'

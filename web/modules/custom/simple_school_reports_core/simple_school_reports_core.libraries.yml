@@ -112,6 +112,15 @@ user_bulk_form:
     - core/once
     - core/drupal
 
+bulk_form:
+  version: VERSION
+  js:
+    js/bulk_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
 absence_list_button:
   version: VERSION
   js:

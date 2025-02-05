@@ -103,7 +103,7 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
   public function build() {
     $cache = new CacheableMetadata();
     $cache->addCacheContexts(['route', 'current_day', 'url.query_args:from', 'url.query_args:to']);
-    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade',]);
+    $cache->addCacheTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade', 'ssr_schema_entry_list', 'ssr_calendar_event_list']);
     $build = [];
 
     $user = $this->routeMatch->getParameter('user');
@@ -286,7 +286,7 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
   }
 
   public function getCacheTags() {
-    return Cache::mergeTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade',], parent::getCacheTags());
+    return Cache::mergeTags(['school_week_list', 'node_list:day_absence', 'node_list:course_attendance_report', 'school_week_deviation_list', 'ssr_school_week_per_grade', 'ssr_schema_entry_list', 'ssr_calendar_event_list'], parent::getCacheTags());
   }
 
   /**

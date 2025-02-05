@@ -111,7 +111,7 @@ sser_update_local() {
 
   # Check for merge conflicts
   if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
-    echo "Merge conflicts detected. Aborting.";
+    echo "Merge conflicts detected. FIX IT!";
     return 1;
   fi
 

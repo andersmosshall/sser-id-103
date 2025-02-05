@@ -180,3 +180,124 @@ function simple_school_reports_entities_update_10008() {
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_student_leave_application'));
   }
 }
+
+/**
+ * Install calendar event entity type.
+ */
+function simple_school_reports_entities_update_10009() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_calendar_event')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_calendar_event'));
+  }
+
+  // Install ssr_calendar_event_type.
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  $cl = $entity_update_manager->getChangeList();
+  if (!empty($cl['ssr_calendar_event_type']['entity_type']) && $cl['ssr_calendar_event_type']['entity_type'] === $entity_update_manager::DEFINITION_CREATED && ($ssr_calendar_event_type = \Drupal::entityTypeManager()->getDefinition('ssr_calendar_event_type'))) {
+    $entity_update_manager->installEntityType($ssr_calendar_event_type);
+  }
+}
+
+
+/**
+ * Install missing fields in school week deviation.
+ */
+function simple_school_reports_entities_update_10010() {
+  $fields = [];
+
+  $fields['no_teaching'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('No teaching hours (free)'))
+    ->setDefaultValue(FALSE)
+    ->setSetting('on_label', t('Free day'))
+    ->setSetting('off_label', t('School day'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'school_week_deviation', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+
+/**
+ * Update school week deviation field.
+ */
+function simple_school_reports_entities_update_10011() {
+  $school_week_deviation_storage = \Drupal::entityTypeManager()->getStorage('school_week_deviation');
+  $school_week_deviation_ids = $school_week_deviation_storage->getQuery()->accessCheck(FALSE)->execute();
+
+  if (!empty($school_week_deviation_ids)) {
+    foreach ($school_week_deviation_ids as $school_week_deviation_id) {
+      /** @var \Drupal\simple_school_reports_entities\Entity\SchoolWeekDeviation $school_week_deviation */
+      $school_week_deviation = $school_week_deviation_storage->load($school_week_deviation_id);
+
+      $length = $school_week_deviation->get('length')->value;
+      if ($length > 0) {
+        $school_week_deviation->set('length', 0);
+        $school_week_deviation->set('no_teaching', FALSE);
+
+        $from = $school_week_deviation->get('from')->value;
+        $to = $school_week_deviation->get('to')->value;
+
+        if (!$from || !$to) {
+          $from_object = (new \DateTime())->setTimestamp(0);
+          $from_object->setTime(12, 0, 0);
+          $calculated_from = $from_object->getTimestamp() - ($length / 2) - 60 * 60;
+
+          $to_object = (new \DateTime())->setTimestamp(0);
+          $to_object->setTime(12, 0, 0);
+          $calculated_to = $to_object->getTimestamp() + ($length / 2) + 60 * 60;
+
+          $school_week_deviation->set('from', $calculated_from);
+          $school_week_deviation->set('to', $calculated_to);
+        }
+      }
+      else {
+        $school_week_deviation->set('length', 0);
+        $school_week_deviation->set('no_teaching', TRUE);
+        $school_week_deviation->set('from', NULL);
+        $school_week_deviation->set('to', NULL);
+      }
+      $school_week_deviation->save();
+    }
+  }
+
+}
+
+/**
+ * Install new fields on school week.
+ */
+function simple_school_reports_entities_update_10012() {
+  $fields = [];
+
+  $fields['school_week_type'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('School week type'))
+    ->setRequired(TRUE)
+    ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_week_types')
+    ->setDefaultValue('default')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['calculate_from_schema'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Calculate school days from schema'))
+    ->setDefaultValue(FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['identifier'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Identifier'))
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'school_week', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+

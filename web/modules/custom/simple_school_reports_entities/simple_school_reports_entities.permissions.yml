@@ -71,3 +71,16 @@ handle all ssr_student_leave_application:
   title: 'Handle all student leave applications'
 handle long ssr_student_leave_application:
   title: 'Handle long student leave applications'
+
+administer ssr_calendar_event types:
+  title: 'Administer calendar event types'
+  description: 'Maintain the types of ssr calendar event entity.'
+  restrict access: true
+view ssr_calendar_event:
+  title: 'View calendar event'
+edit ssr_calendar_event:
+  title: 'Edit calendar event'
+delete ssr_calendar_event:
+  title: 'Delete calendar event'
+create ssr_calendar_event:
+  title: 'Create calendar event'

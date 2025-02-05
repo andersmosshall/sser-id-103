@@ -63,3 +63,14 @@ entity.ssr_student_leave_application.delete_form:
   group: ssr_student_leave_application
   title: 'Delete'
   weight: 10
+
+entity.ssr_calendar_event.edit_form:
+  route_name: entity.ssr_calendar_event.edit_form
+  group: ssr_calendar_event
+  title: 'Edit'
+
+entity.ssr_calendar_event.delete_form:
+  route_name: entity.ssr_calendar_event.delete_form
+  group: ssr_calendar_event
+  title: 'Delete'
+  weight: 10

@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.course_attendance_report.field_calendar_event
     - field.field.node.course_attendance_report.field_class_end
     - field.field.node.course_attendance_report.field_class_start
     - field.field.node.course_attendance_report.field_course
+    - field.field.node.course_attendance_report.field_course_sub_group
     - field.field.node.course_attendance_report.field_duration
     - field.field.node.course_attendance_report.field_student_course_attendance
     - node.type.course_attendance_report
@@ -23,9 +25,11 @@ content:
     weight: 100
     region: content
 hidden:
+  field_calendar_event: true
   field_class_end: true
   field_class_start: true
   field_course: true
+  field_course_sub_group: true
   field_duration: true
   field_student_course_attendance: true
   langcode: true

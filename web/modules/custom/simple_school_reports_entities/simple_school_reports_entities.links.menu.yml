@@ -60,3 +60,15 @@ entity.ssr_student_leave_application.collection:
   description: 'List of student leave applications.'
   route_name: entity.ssr_student_leave_application.collection
   parent: system.admin_content
+
+entity.ssr_calendar_event_type.collection:
+  title: 'Calendar Event types'
+  description: 'Manage and CRUD actions on Calendar Event type.'
+  parent: system.admin_structure
+  route_name: entity.ssr_calendar_event_type.collection
+
+entity.ssr_calendar_event.collection:
+  title: 'Calendar Events'
+  description: 'List of calendar events.'
+  route_name: entity.ssr_calendar_event.collection
+  parent: system.admin_content

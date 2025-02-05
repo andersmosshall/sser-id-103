@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\simple_school_reports_attendance_analyse\Controller;
+namespace Drupal\simple_school_reports_extension_proxy\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockManagerInterface;
@@ -125,7 +125,7 @@ class SchoolWeekSettingsController extends ControllerBase {
     $build['actions'] = [
       '#type' => 'actions',
     ];
-    $destination = Url::fromRoute('simple_school_reports_attendance_analyse.school_week_settings')->toString();
+    $destination = Url::fromRoute('simple_school_reports_extension_proxy.school_week_settings')->toString();
 
     if ($school_week) {
       $build['school_week'] = $school_week->toTable(TRUE);
@@ -166,6 +166,14 @@ class SchoolWeekSettingsController extends ControllerBase {
     }
 
     return $build;
+  }
+
+  public function accessSchoolWeekSettings(AccountInterface $account) {
+    if (!ssr_use_schema() && !\Drupal::moduleHandler()->moduleExists('simple_school_reports_attendance_analyse')) {
+      return AccessResult::forbidden();
+    }
+
+    return AccessResult::allowedIfHasPermission($account, 'administer simple school reports settings');
   }
 
 }

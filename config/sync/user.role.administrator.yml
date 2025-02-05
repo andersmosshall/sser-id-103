@@ -41,6 +41,7 @@ dependencies:
     - simple_school_reports_examinations_support
     - simple_school_reports_maillog
     - simple_school_reports_module_info
+    - simple_school_reports_schema_support
     - taxonomy
     - views_custom_permissions
 id: administrator
@@ -72,6 +73,7 @@ permissions:
   - 'create school week'
   - 'create school_week_deviation'
   - 'create ssr_assessment_group'
+  - 'create ssr_schema_entry'
   - 'create ssr_school_class'
   - 'create student_development_interview content'
   - 'create terms in extra_adaptations'
@@ -117,6 +119,7 @@ permissions:
   - 'delete school week'
   - 'delete school_week_deviation'
   - 'delete ssr_assessment_group'
+  - 'delete ssr_schema_entry'
   - 'delete ssr_school_class'
   - 'delete term revisions in extra_adaptations'
   - 'delete terms in extra_adaptations'
@@ -150,6 +153,7 @@ permissions:
   - 'edit own student_development_interview content'
   - 'edit school week'
   - 'edit school_week_deviation'
+  - 'edit ssr_schema_entry'
   - 'edit ssr_school_class'
   - 'edit terms in extra_adaptations'
   - 'edit terms in iup_standard_goal'
@@ -170,5 +174,6 @@ permissions:
   - 'view school week'
   - 'view ssr_assessment_group'
   - 'view ssr_module_info price'
+  - 'view ssr_schema_entry'
   - 'view ssr_student_leave_application'
   - 'view user email addresses'

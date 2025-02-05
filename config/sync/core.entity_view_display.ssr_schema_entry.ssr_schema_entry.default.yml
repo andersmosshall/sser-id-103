@@ -1,0 +1,54 @@
+uuid: 2f2c0355-0aac-42c5-ad66-25665dcfbb6c
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+id: ssr_schema_entry.ssr_schema_entry.default
+targetEntityType: ssr_schema_entry
+bundle: ssr_schema_entry
+mode: default
+content:
+  label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  custom_periodicity_1: true
+  custom_periodicity_2: true
+  custom_periodicity_3: true
+  custom_periodicity_4: true
+  custom_periodicity_5: true
+  custom_periodicity_start_1: true
+  custom_periodicity_start_2: true
+  custom_periodicity_start_3: true
+  custom_periodicity_start_4: true
+  custom_periodicity_start_5: true
+  deviated: true
+  display_name_1: true
+  display_name_2: true
+  display_name_3: true
+  display_name_4: true
+  display_name_5: true
+  from: true
+  length: true
+  periodicity_1: true
+  periodicity_2: true
+  periodicity_3: true
+  periodicity_4: true
+  periodicity_5: true
+  relevant_groups: true
+  source: true
+  status: true
+  students_1: true
+  students_2: true
+  students_3: true
+  students_4: true
+  students_5: true
+  uid: true
+  week_day: true

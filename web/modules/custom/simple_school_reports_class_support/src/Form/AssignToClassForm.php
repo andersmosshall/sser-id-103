@@ -175,10 +175,10 @@ class AssignToClassForm extends ConfirmFormBase {
 
   public static function finished($success, $results) {
     if ($success) {
-      \Drupal::messenger()->addStatus('Class assigned');
+      \Drupal::messenger()->addStatus(t('Class assigned'));
     }
     else {
-      \Drupal::messenger()->addError('Something went wrong.');
+      \Drupal::messenger()->addError(t('Something went wrong.'));
     }
   }
 

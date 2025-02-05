@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\simple_school_reports_attendance_analyse\Form;
+namespace Drupal\simple_school_reports_extension_proxy\Form;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;

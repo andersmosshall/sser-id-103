@@ -1,0 +1,29 @@
+uuid: 061d5c98-d4e5-4728-9d69-ff58756f7b74
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_calendar_event.field_course
+    - node.type.course
+    - simple_school_reports_entities.ssr_calendar_event_type.course
+id: ssr_calendar_event.course.field_course
+field_name: field_course
+entity_type: ssr_calendar_event
+bundle: course
+label: Course
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      course: course
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

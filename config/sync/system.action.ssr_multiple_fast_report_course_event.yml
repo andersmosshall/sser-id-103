@@ -1,0 +1,12 @@
+uuid: 29277e32-bd7f-4c4b-9060-70c609305b27
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+    - simple_school_reports_schema_support
+id: ssr_multiple_fast_report_course_event
+label: 'Fast report lessons'
+type: ssr_calendar_event
+plugin: ssr_multiple_fast_report_course_event
+configuration: {  }

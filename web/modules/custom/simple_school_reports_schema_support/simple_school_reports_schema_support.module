@@ -1,0 +1,319 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Schema Support module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\Core\Form\FormStateInterface;
+
+function ssr_use_schema(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_schema_ssr');
+}
+
+function ssr_views_permission_my_courses_to_report() {
+  $account = \Drupal::currentUser();
+  $access = \Drupal\Core\Access\AccessResult::allowedIf($account->hasPermission('school staff permissions') && ssr_use_schema());
+  $access->cachePerPermissions();
+  return $access;
+}
+
+function ssr_views_permission_all_courses_to_report() {
+  $account = \Drupal::currentUser();
+  $access = \Drupal\Core\Access\AccessResult::allowedIf($account->hasPermission('administer simple school reports settings') && ssr_use_schema());
+  $access->cachePerPermissions();
+  return $access;
+}
+
+function simple_school_reports_schema_support_schema_subgroups() {
+  return [
+    1 => '1',
+    2 => '2',
+//    3 => '3',
+//    4 => '4',
+//    5 => '5',
+  ];
+}
+
+function simple_school_reports_schema_support_schema_periodicity_options() {
+  return [
+    'weekly' => t('Weekly'),
+    'odd_weeks' => t('Odd weeks'),
+    'even_weeks' => t('Even weeks'),
+    'custom' => t('Specify periodicity'),
+  ];
+}
+
+function simple_school_reports_schema_support_schema_custom_periodicity_options() {
+  return [
+    2 => t('Every second week'),
+    3 => t('Every third week'),
+    4 => t('Every fourth week'),
+    5 => t('Every fifth week'),
+  ];
+}
+
+function simple_school_reports_schema_support_schema_source_options() {
+  return [
+    'ssr' => t('Simple School Reports'),
+  ];
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function simple_school_reports_schema_support_menu_links_discovered_alter(&$links) {
+  if (ssr_use_schema()) {
+    if (isset($links['courses.page.courses'])) {
+      $links['courses.page.courses']['route_name'] = 'view.calendar_events_courses.my_courses';
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_schema_support_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if (!ssr_use_schema()) {
+    return;
+  }
+
+  if ($entity instanceof \Drupal\simple_school_reports_entities\CalendarEventInterface) {
+    if ($entity->bundle() === 'course') {
+      $course = $entity->get('field_course')->entity;
+      if ($course?->access('update')) {
+        if (!$entity->get('cancelled')->value) {
+          $operations['report'] = [
+            'title' => t('Report'),
+            'url' => \Drupal\Core\Url::fromRoute('node.add', ['node_type' => 'course_attendance_report'], ['query' => ['destination' => \Drupal::service('path.current')->getPath(), 'course_id' => $course->id(), 'calendar_event' => $entity->id()]]),
+            'weight' => -99,
+          ];
+
+          $operations['fast_report'] = [
+            'title' => t('Fast report'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.fast_report', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -98,
+          ];
+
+          $operations['cancel'] = [
+            'title' => t('Cancel lesson'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.cancel_event', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -97,
+          ];
+        }
+        else {
+          $operations['uncancel'] = [
+            'title' => t('Uncancel lesson'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_schema.undo_cancel_event', ['node' => $course->id(), 'ssr_calendar_event' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+            'weight' => -97,
+          ];
+        }
+      }
+    }
+  }
+}
+
+
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_schema_support_theme(): array {
+  return [
+    'ssr_schema_entry' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for ssr schema entry templates.
+ *
+ * Default template: ssr-schema-entry.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the ssr schema entry information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_schema_entry(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_schema_support_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $forms_to_alter = [
+    'node_course_form',
+    'node_course_edit_form'
+  ];
+  if (in_array($form_id, $forms_to_alter)) {
+    $form['#attached']['library'][] = 'simple_school_reports_schema_support/ssr_schema_entry_form';
+  }
+
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+
+      if ($view->id() === 'calendar_events_courses') {
+        \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
+
+        if (!empty($form['cancelled'])) {
+          if (!empty($form['cancelled']['#options'][0])) {
+            $form['cancelled']['#options'][0] = t('No');
+          }
+          if (!empty($form['cancelled']['#options'][1])) {
+            $form['cancelled']['#options'][1] = t('Yes');
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_schema_support_node_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof \Drupal\node\NodeInterface && $entity->bundle() === 'course') {
+    simple_school_reports_schema_support_node_update($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_schema_support_node_update(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof \Drupal\node\NodeInterface && $entity->bundle() === 'course') {
+    $is_bulk_action = $entity->isSyncing() || \Drupal::currentUser()->isAnonymous();
+    if ($is_bulk_action) {
+      $now = new \DateTime();
+      $now->setTime(0, 0, 0);
+      $from = $now->getTimestamp();
+      $to = $now->setTime(23, 59, 59)->getTimestamp();
+
+      $queue = \Drupal::service('queue')->get('ssr_sync_course_calendar');
+      $queue->createQueue();
+      $queue->createItem(['course_id' => $entity->id(), 'from' => $from, 'to' => $to]);
+    }
+    else {
+      try {
+        /** @var \Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface $calendar_event_sync_service */
+        $calendar_event_sync_service = \Drupal::service('simple_school_reports_schema_support.calendar_events_sync');
+        if ($entity->get('field_ssr_schema')->isEmpty()) {
+          $now = new \DateTime();
+          $now->setTime(0, 0, 0);
+          $from = $now->getTimestamp();
+          $import_days_ahead = \Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface::CALENDAR_EVENT_DAYS_AHEAD;
+          $to = $now->modify("+{$import_days_ahead} days")->getTimestamp();
+          $calendar_event_sync_service->removeCalendarEventsForCourse($entity->id(), $from, $to, FALSE);
+        }
+        else {
+          $now = new \DateTime();
+          $now->setTime(0, 0, 0);
+          $from = $now->getTimestamp();
+          $to = $now->setTime(23, 59, 59)->getTimestamp();
+          $calendar_event_sync_service->syncCourseCalendarEvents($entity->id(), $from, $to, FALSE);
+        }
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('simple_school_reports_schema_support')->error('Failed to sync calendar event: ' . $e->getMessage());
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_schema_support_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
+  if (!empty($entity_form['#entity']) && $entity_form['#entity'] instanceof \Drupal\simple_school_reports_schema_support\SSRSchemaEntryInterface && $entity_form['#entity']->isNew()) {
+    for ($i = 1; $i <= 5; $i++) {
+      if (!empty($entity_form['custom_periodicity_start_' . $i]['widget'][0]['value'])) {
+        $entity_form['custom_periodicity_start_' . $i]['widget'][0]['value']['#default_value'] = (new \DateTime())->setTime(12, 0, 0)->format('Y-m-d');
+      }
+    }
+  }
+}
+
+
+function ssr_handle_schema_support_cron() {
+  try {
+    if (!ssr_use_schema()) {
+      return;
+    }
+
+    // Add course calendar events sync to queue.
+    /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
+    $course_service = \Drupal::service('simple_school_reports_core.course_service');
+    $course_ids_to_sync = $course_service->getActiveCourseIdsWithStudents();
+    if (empty($course_ids_to_sync)) {
+      return;
+    }
+
+    $from = new \DateTime();
+    $from->setTime(0, 0, 0);
+    $from = $from->getTimestamp();
+
+    $to = new \DateTime();
+    $days_ahead = \Drupal\simple_school_reports_schema_support\Service\CalendarEventsSyncServiceInterface::CALENDAR_EVENT_DAYS_AHEAD;
+    $to->modify("+$days_ahead days");
+
+    $to->setTime(23, 59, 59);
+    $to = $to->getTimestamp();
+
+    $queue = \Drupal::service('queue')->get('ssr_sync_course_calendar');
+    $queue->createQueue();
+    foreach ($course_ids_to_sync as $id) {
+      $queue->createItem(['course_id' => $id, 'from' => $from, 'to' => $to]);
+    }
+  }
+  catch (\Exception $e) {
+    // Ignore
+    return;
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_schema_support_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'calendar_events_courses') {
+    if (!ssr_use_schema()) {
+      return;
+    }
+
+    $date = new \DateTime();
+    $date->modify('+1 day');
+    $date->setTime(0,0,0);
+    $calendar_event_max_from = $date->getTimestamp();
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (($condition['field'] ?? NULL) === 'ssr_calendar_event.from < 978303600' && ($condition['operator'] ?? NULL) === 'formula') {
+          $condition['field'] = 'ssr_calendar_event.from < ' . $calendar_event_max_from;
+          $condition['operator'] = 'formula';
+          break 2;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_schema_support_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'calendar_events_courses') {
+    $view->element['#cache']['contexts'][] = 'current_day';
+    $view->element['#cache']['contexts'][] = 'user.node_grants';
+    $view->element['#cache']['contexts'][] = 'user.permissions';
+  }
+}
