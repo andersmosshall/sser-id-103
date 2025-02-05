@@ -3060,14 +3060,11 @@ msgstr "Lektionsstart"
 msgid "Source"
 msgstr "Källa"
 
-msgid ""
-msgstr ""
+msgid "Lesson from schema"
+msgstr "Lektion från schema"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "Note. It may take several minutes before the student lists are updated in places where class is used."
+msgstr "Obs. Det kan ta flera minuter innan elevlistorna uppdateras på platser där klass används."
 
 msgid ""
 msgstr ""
