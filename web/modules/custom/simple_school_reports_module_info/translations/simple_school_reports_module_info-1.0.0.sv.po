@@ -129,8 +129,8 @@ msgstr "Examinationslistor"
 msgid "Extens export (MGBETYG)"
 msgstr "Extensexport (MGBETYG)"
 
-msgid ""
-msgstr ""
+msgid "SSR schema"
+msgstr "SSR-schema"
 
 msgid ""
 msgstr ""

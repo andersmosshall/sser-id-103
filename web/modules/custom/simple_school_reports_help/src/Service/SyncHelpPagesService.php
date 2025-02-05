@@ -101,6 +101,14 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'context' => ['node:course', 'node:course_attendance_report', 'view.courses.my_courses', 'view.courses.all_courses'],
         'module' => ['simple_school_reports_core'],
       ],
+      [
+        'title' => 'Schema för kurs',
+        'roles' => ['administrator', 'teacher'],
+        'body' => 'Denna film går igenom hantering av schema för kurs.',
+        'vimeo' => 'https://vimeo.com/1053720955',
+        'context' => ['node:course', 'view.courses.my_courses', 'view.courses.all_courses'],
+        'module' => ['simple_school_reports_core', 'simple_school_reports_schema_ssr'],
+      ],
       // Day absence
       [
         'title' => 'Dagsfrånvaro',
@@ -527,6 +535,23 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'vimeo' => 'https://vimeo.com/1040468290',
         'context' => ['user', 'simple_school_reports_examinations.examination_list_student_tab'],
         'module' => ['simple_school_reports_examinations']
+      ],
+      // SSR-schema
+      [
+        'title' => 'Att rapporter med SSR-schema',
+        'roles' => ['administrator', 'teacher'],
+        'body' => 'Denna film går igenom hur snabbt och enkelt kan rapporter eller ställa in lektioner med SSR-schema.',
+        'vimeo' => 'https://vimeo.com/1053720905',
+        'context' => ['node:course', 'view.courses.my_courses', 'view.courses.all_courses', 'view.calendar_events_courses.my_courses', 'view.calendar_events_courses.all_courses'],
+        'module' => ['simple_school_reports_schema_ssr'],
+      ],
+      [
+        'title' => 'Administration för SSR-schema',
+        'roles' => ['administrator'],
+        'body' => 'Denna film går igenom hur du administrerar funktioner som kommer med SSR-schema.',
+        'vimeo' => 'https://vimeo.com/1053720930',
+        'context' => ['node:course', 'view.courses.my_courses', 'view.courses.all_courses', 'view.calendar_events_courses.my_courses', 'view.calendar_events_courses.all_courses'],
+        'module' => ['simple_school_reports_schema_ssr'],
       ],
     ];
 

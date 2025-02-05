@@ -314,6 +314,16 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'description' => '<p>Denna modul, Examinationslistor, skapar möjlighet att lista examinationer som elever genomfört eller ska genomföra så att man (persona eller vårdnadshavare) kan få en överblick om det är uppgifter eleven ligger efter med. Modulen lagrar eller presenterar inte resultat från examinationerna.</p><p>Om man har modulen Klasser kan man skapa bedömningsgrupper utifrån klasstillhörighet så att man inte behöver lägga till varje enskild elev i varje bedömningsgrupp.</p>',
     ];
 
+    $map[] = [
+      'module' => 'simple_school_reports_schema_ssr',
+      'label' => 'SSR-schema',
+      'required_modules' => [],
+      'recommended_modules' => ['simple_school_reports_class', 'simple_school_reports_attendance_analyse'],
+      'price' => '[[MODULE_PRICE]]',
+      'annual_fee' => NULL,
+      'description' => '<p>Denna modul, SSR-schema, skapar en lätthanterlig lista över lektioner som lärare förväntas rapportera utifrån schema som skapats på kurserna i Simple School Reports. Om man har modulen närvaroanalys listas lektionerna tydligt i analysen och man kan även se vilka lektioner i vilka ämnen som inte har närvarorapporterats.</p>',
+    ];
+
     $event = new GetHelpPagesEvent();
     $this->dispatcher->dispatch($event, GetHelpPagesEvent::EVENT_NAME);
 
@@ -444,6 +454,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'simple_school_reports_extra_adaptations' => $this->t('Extra adaptations'),
       'simple_school_reports_class' => $this->t('Classes'),
       'simple_school_reports_examinations' => $this->t('Examination lists'),
+      'simple_school_reports_schema_ssr' => $this->t('SSR schema'),
 
       // Mini modules.
       'simple_school_reports_extens_grade_export' => $this->t('Extens export (MGBETYG)'),
