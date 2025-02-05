@@ -75,8 +75,7 @@ ssr_update_local() {
 
   # Check for merge conflicts
   if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
-    echo "Merge conflicts detected. Aborting.";
-    git merge --abort;
+    echo "Merge conflicts detected. FIX IT!";
     return 1;
   fi
 
