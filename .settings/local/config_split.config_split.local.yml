@@ -9,7 +9,7 @@ weight: 0
 folder: ''
 module:
   simple_school_reports_noprod: 10
-  #END SSR CONFIG SPLIT
+  # ENDOF OF SSR LOCAL MODULES
 theme: {  }
 blacklist: {  }
 graylist: {  }

@@ -63,6 +63,7 @@ module:
   simple_school_reports_logging: 0
   simple_school_reports_module_info: 0
   simple_school_reports_post_check: 0
+  simple_school_reports_user_import_support: 0
   sser_base: 0
   symfony_mailer: 0
   system: 0

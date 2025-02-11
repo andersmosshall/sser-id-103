@@ -61,6 +61,13 @@ class SsnConstraintValidator extends ConstraintValidator implements ContainerInj
       return;
     }
 
+    $user = $value->getEntity();
+    if ($user instanceof UserInterface) {
+      if ($user->isSyncing()) {
+        return;
+      }
+    }
+
     $local_values_map = [];
     foreach ($value as $delta => $item) {
       if (!$item instanceof StringItem) {
@@ -97,7 +104,6 @@ class SsnConstraintValidator extends ConstraintValidator implements ContainerInj
       return;
     }
 
-    $user = $value->getEntity();
     $uid = 'local';
 
     if ($user instanceof UserInterface) {

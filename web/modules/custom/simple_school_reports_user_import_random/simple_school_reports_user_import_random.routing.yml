@@ -1,0 +1,7 @@
+simple_school_reports_user_import_random.import_random:
+  path: '/admin/import-users/random'
+  defaults:
+    _form: '\Drupal\simple_school_reports_user_import_random\Form\ImportRandomUsersForm'
+    _title: 'Import random users'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_user_import_support\Form\ImportUsersFormBase::access'
