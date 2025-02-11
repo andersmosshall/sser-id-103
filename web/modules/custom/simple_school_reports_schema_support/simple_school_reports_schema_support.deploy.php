@@ -33,6 +33,10 @@ function simple_school_reports_schema_support_deploy_10001() {
     /** @var \Drupal\node\NodeInterface $course */
     $course = \Drupal::entityTypeManager()->getStorage('node')->load($course_id);
 
+    if (!$course->hasField('field_schema') || !$course->hasField('field_ssr_schema')) {
+      continue;
+    }
+
     $ssr_schema_entries = [];
     if ($course->get('field_schema')->isEmpty()) {
       continue;
@@ -47,7 +51,7 @@ function simple_school_reports_schema_support_deploy_10001() {
         continue;
       }
 
-      $start_date = new \DateTime('now', new \DateTimeZone('UTC'));
+      $start_date = new \DateTime('now');
       $start_date->setTimestamp($start);
 
       $from_time = Time::createFromHtml5Format($start_date->format('H:i:00'));
