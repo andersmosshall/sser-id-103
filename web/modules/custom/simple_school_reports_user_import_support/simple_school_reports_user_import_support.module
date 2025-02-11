@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Schema Support module.
+ */
+
+function ssr_use_user_import(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_user_import_random');
+}

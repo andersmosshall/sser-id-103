@@ -10,12 +10,27 @@ alias ssr_copy_system_theme="if [ -f \".settings/local/system.theme.global.yml\"
   cp .settings/local/system.theme.global.yml config/sync/system.theme.global.yml; \
 fi"
 
+ssr_copy_settings_files() {
+  if [ -f "web/sites/default/settings.local.php" ]; then
+    rm -f "web/sites/default/settings.local.php"
+  fi
+
+  if [ -f "web/sites/default/settings.common-local.php" ]; then
+    rm -f "web/sites/default/settings.common-local.php"
+  fi
+
+  if [ -f ".settings/local/settings.local.php" ]; then
+    cp ".settings/local/settings.local.php" "web/sites/default/settings.local.php" || echo "Failed to copy settings.local.php"
+  fi
+
+  if [ -f ".settings/prod/settings.common-local.php" ]; then
+    cp ".settings/prod/settings.common-local.php" "web/sites/default/settings.common-local.php" || echo "Failed to copy settings.common-local.php"
+  fi
+}
+
 alias ssr_deploy_dev="git pull &&
  chmod +w web/sites/default/ &&
- rm web/sites/default/settings.local.php -f &&
- rm web/sites/default/settings.common-local.php -f &&
- cp .settings/local/settings.local.php web/sites/default/settings.local.php &&
- cp .settings/prod/settings.common-local.php web/sites/default/settings.common-local.php &&
+ ssr_copy_settings_files &&
  ssr_copy_config_split &&
  ssr_copy_system_site &&
  ssr_copy_system_theme &&

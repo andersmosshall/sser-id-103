@@ -34,7 +34,8 @@ module:
   simple_school_reports_examinations: 10
   simple_school_reports_extens_grade_export: 10
   simple_school_reports_schema_ssr: 10
-  #END SSR CONFIG SPLIT
+  simple_school_reports_user_import_random: 10
+  # ENDOF OF SSR LOCAL MODULES
 theme: {  }
 blacklist: {  }
 graylist: {  }

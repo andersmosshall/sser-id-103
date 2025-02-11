@@ -933,9 +933,6 @@ msgstr "Duplicera listmall @name"
 msgid "List template"
 msgstr "Listmallar"
 
-msgid "Something went wrong"
-msgstr "Någonting gick fel"
-
 msgid "Start"
 msgstr "Start"
 
@@ -3077,6 +3074,117 @@ msgstr "Lektion med avvikande elevlista eller periodicitet som kanske inte intr�
 
 msgid "There can only be @number super admin users."
 msgstr "Det kan bara finnas @number superadmin-användare."
+
+msgid "Import users"
+msgstr "Importera användare"
+
+msgid "Select method to import users"
+msgstr "Välj metod för att importera användare"
+
+msgid "Import random users"
+msgstr "Importera slumpmässiga användare"
+
+msgid "ONLY FOR TESTING PURPOSES! Import users by randomizing data."
+msgstr "ENDAST FÖR TESTSYFTE! Importera användare genom att slumpa data."
+
+msgid "Imported @count users"
+msgstr "Importerade @count användare"
+
+msgid "No users to import."
+msgstr "Inga användare att importera."
+
+msgid "Import users"
+msgstr "Importera användare"
+
+msgid "No other users to import"
+msgstr "Inga andra användare att importera"
+
+msgid "Other users to import"
+msgstr "Andra användare att importera"
+
+msgid "No students to import"
+msgstr "Inga elever att importera"
+
+msgid "Students and caregivers to import"
+msgstr "Elever och vårdnadshavare att importera"
+
+msgid "Import and overwrite with @name"
+msgstr "Importera och skriv över med @name"
+
+msgid "Skip @name"
+msgstr "Hoppa över @name"
+
+msgid "Users with validation errors"
+msgstr "Användare med valideringsfel"
+
+msgid "Validate users"
+msgstr "Validera användare"
+
+msgid "The following issues were found in the import source:"
+msgstr "Följande problem hittades i importkällan:"
+
+msgid "No issues were found in the import source."
+msgstr "Inga problem hittades i importkällan."
+
+msgid "There are multiple users with this email in the import source, user will not be imported."
+msgstr "Det finns flera användare med denna e-post i importkällan, användaren kommer inte att importeras."
+
+msgid "There are multiple users with this personal number in the import source, user will not be imported."
+msgstr "Det finns flera användare med detta personnummer i importkällan, användaren kommer inte att importeras."
+
+msgid "Invalid address, user will be imported without address."
+msgstr "Ogiltig adress, användaren kommer att importeras utan adress."
+
+msgid "Missing valid personal number, user will not be imported."
+msgstr "Saknar giltigt personnummer, användaren kommer inte att importeras."
+
+msgid "Import"
+msgstr "Importera"
+
+msgid "Preview"
+msgstr "Förhandsgranska"
+
+msgid "Error importing user: @error"
+msgstr "Fel vid import av användare: @error"
+
+msgid "Unknown error occurred"
+msgstr "Okänt fel inträffade"
+
+msgid "Unknown validation error"
+msgstr "Okänt valideringsfel"
+
+msgid "Unknown user"
+msgstr "Okänd användare"
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
 
 msgid ""
 msgstr ""

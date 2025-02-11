@@ -304,6 +304,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
             $subjects[$block_parent]['children'][] = $subject->id();
           }
           $subjects[$subject->id()]['weight'] = $weight;
+          $subjects[$subject->id()]['id'] = $subject->id();
           $subjects[$subject->id()]['name'] = $code_options[$code];
           $subjects[$subject->id()]['full_name'] = $subject->label();
           $subjects[$subject->id()]['catalog_id'] = $catalog_ids[$code];
@@ -312,6 +313,12 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
           $subjects[$subject->id()]['parent'] = $block_parent;
           $subjects[$subject->id()]['excluded_label'] = isset($excluded_catalog_label[$code]) ? $excluded_catalog_label[$code] : '-';
           $weight++;
+        }
+
+        foreach ($subjects as $subject_id => $subject) {
+          if (!isset($subject['id'])) {
+            unset($subjects[$subject_id]);
+          }
         }
       }
 
