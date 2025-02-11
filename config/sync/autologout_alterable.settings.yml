@@ -10,6 +10,11 @@ use_infinite_session_for_privileged: false
 role_logout: false
 role_logout_max: false
 include_destination: false
+client_activity_mousemove: true
+client_activity_touchmove: true
+client_activity_click: true
+client_activity_keydown: true
+client_activity_scroll: true
 show_dialog: true
 dialog_limit: 60
 dialog_width: 450
