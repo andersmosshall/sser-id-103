@@ -3156,14 +3156,14 @@ msgstr "Okänt valideringsfel"
 msgid "Unknown user"
 msgstr "Okänd användare"
 
-msgid ""
-msgstr ""
+msgid "Teachers to generate"
+msgstr "Lärare att generera"
 
-msgid ""
-msgstr ""
+msgid "Caregivers and mentor will be generated for each student."
+msgstr "Vårdnadshavare och mentor kommer att genereras för varje elev."
 
-msgid ""
-msgstr ""
+msgid "Number of students to generate for grade %grade"
+msgstr "Antal elever att generera för årskurs %grade"
 
 msgid ""
 msgstr ""
