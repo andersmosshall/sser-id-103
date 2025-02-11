@@ -1,0 +1,7 @@
+simple_school_reports_user_import_support.import_methods:
+  path: '/admin/import-users'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Import users'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_user_import_support\Form\ImportUsersFormBase::access'
