@@ -317,21 +317,3 @@ function simple_school_reports_schema_support_views_pre_view(\Drupal\views\ViewE
     $view->element['#cache']['contexts'][] = 'user.permissions';
   }
 }
-
-function ssr_temp_fix_migrated_schema_entries() {
-  $ids = \Drupal::entityQuery('ssr_schema_entry')
-    ->accessCheck(FALSE)
-    ->execute();
-
-  $storage = \Drupal::entityTypeManager()->getStorage('ssr_schema_entry');
-
-  foreach ($ids as $id) {
-    $entry = $storage->load($id);
-    if ($entry instanceof \Drupal\simple_school_reports_schema_support\SSRSchemaEntryInterface) {
-      $from = $entry->get('from')->value;
-      $entry->set('from', $from + 60 * 60);
-      $entry->save();
-    }
-  }
-
-}
