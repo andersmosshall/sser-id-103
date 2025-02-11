@@ -7,8 +7,8 @@ ssr_copy_settings_files() {
     rm -f "web/sites/default/settings.common-local.php"
   fi
 
-  if [ -f ".settings/local/settings.local.php" ]; then
-    cp ".settings/local/settings.local.php" "web/sites/default/settings.local.php" || echo "Failed to copy settings.local.php"
+  if [ -f ".settings/prod/settings.local.php" ]; then
+    cp ".settings/prod/settings.local.php" "web/sites/default/settings.local.php" || echo "Failed to copy settings.local.php"
   fi
 
   if [ -f ".settings/prod/settings.common-local.php" ]; then
