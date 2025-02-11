@@ -30,6 +30,8 @@ alias sser_deploy_dev="git pull &&
 
 # Run only on the sser-base branch. Then run sser_update_local on each sser sites.
 sser_update_from_ssr() {
+  cd ~/Projects/sser || return
+
   # Pull the latest changes
   git pull || { echo "Failed to pull changes."; return 1; }
 
