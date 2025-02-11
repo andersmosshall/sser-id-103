@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.course.field_class
-    - field.field.node.course.field_schema
     - field.field.node.course.field_school_subject
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
@@ -80,7 +79,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_schema: true
   langcode: true
   path: true
   promote: true
