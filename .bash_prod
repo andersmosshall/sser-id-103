@@ -1,10 +1,25 @@
+ssr_copy_settings_files() {
+  if [ -f "web/sites/default/settings.local.php" ]; then
+    rm -f "web/sites/default/settings.local.php"
+  fi
+
+  if [ -f "web/sites/default/settings.common-local.php" ]; then
+    rm -f "web/sites/default/settings.common-local.php"
+  fi
+
+  if [ -f ".settings/prod/settings.local.php" ]; then
+    cp ".settings/prod/settings.local.php" "web/sites/default/settings.local.php" || echo "Failed to copy settings.local.php"
+  fi
+
+  if [ -f ".settings/prod/settings.common-local.php" ]; then
+    cp ".settings/prod/settings.common-local.php" "web/sites/default/settings.common-local.php" || echo "Failed to copy settings.common-local.php"
+  fi
+}
+
 alias ssr_deploy_local="drush state:set system.maintenance_mode 1 --input-format=integer &&
 git pull &&
 chmod +w web/sites/default/ &&
-rm web/sites/default/settings.local.php -f &&
-rm web/sites/default/settings.common-local.php -f &&
-cp .settings/prod/settings.local.php web/sites/default/settings.local.php &&
-cp .settings/prod/settings.common-local.php web/sites/default/settings.common-local.php &&
+ssr_copy_settings_files &&
 chmod -w web/sites/default/settings.local.php &&
 composer install &&
 drush cr &&
