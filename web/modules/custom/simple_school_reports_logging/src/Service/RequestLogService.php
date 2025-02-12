@@ -137,7 +137,11 @@ class RequestLogService implements RequestLogServiceInterface, EventSubscriberIn
         return NULL;
       }
 
-      $message = implode(PHP_EOL, $entries);
+      /** @var \Drupal\simple_school_reports_core\Service\SSRVersionServiceInterface $ssr_version_service */
+      $ssr_version_service = \Drupal::service('simple_school_reports_core.ssr_version');
+
+      $message = 'SSR Version: ' . $ssr_version_service->getSsrVersion() . PHP_EOL;
+      $message .= implode(PHP_EOL, $entries);
 
       if (!$keep_local_log) {
         $this->clearRequestLogItems();

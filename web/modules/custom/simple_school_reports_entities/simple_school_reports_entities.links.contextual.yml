@@ -74,3 +74,14 @@ entity.ssr_calendar_event.delete_form:
   group: ssr_calendar_event
   title: 'Delete'
   weight: 10
+
+entity.ssr_lookup.edit_form:
+  route_name: entity.ssr_lookup.edit_form
+  group: ssr_lookup
+  title: 'Edit'
+
+entity.ssr_lookup.delete_form:
+  route_name: entity.ssr_lookup.delete_form
+  group: ssr_lookup
+  title: 'Delete'
+  weight: 10

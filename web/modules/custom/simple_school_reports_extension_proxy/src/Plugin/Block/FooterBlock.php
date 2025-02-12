@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\Service\SSRVersionServiceInterface;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
 use Drupal\simple_school_reports_grade_stats\Plugin\Block\StudentGradeStatisticsBlock;
 use Drupal\taxonomy\TermInterface;
@@ -53,6 +54,11 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
    */
   protected $currentPath;
 
+  /**
+   * @var \Drupal\simple_school_reports_core\Service\SSRVersionServiceInterface
+   */
+  protected $ssrVersionService;
+
   public function __construct(
     array $configuration,
           $plugin_id,
@@ -60,13 +66,15 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
     ModuleHandlerInterface $module_handler,
     AccountProxyInterface $current_user,
     CurrentPathStack $current_path,
-    RouteMatchInterface $route_match
+    RouteMatchInterface $route_match,
+    SSRVersionServiceInterface $ssr_version_service
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->moduleHandler = $module_handler;
     $this->currentUser = $current_user;
     $this->currentPath = $current_path;
     $this->routeMatch = $route_match;
+    $this->ssrVersionService = $ssr_version_service;
   }
 
   /**
@@ -81,6 +89,7 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $container->get('current_user'),
       $container->get('path.current'),
       $container->get('current_route_match'),
+      $container->get('simple_school_reports_core.ssr_version'),
     );
   }
 
@@ -144,6 +153,7 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#theme' => 'ssr_footer',
       '#bug_report_link' => $bug_report_link,
       '#help_link' => $help_link,
+      '#ssr_version' => $this->ssrVersionService->getSsrVersion(),
     ];
 
     $cache->applyTo($build);

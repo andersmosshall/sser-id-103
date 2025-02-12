@@ -55,6 +55,8 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
   protected bool $useExtentExport;
 
+  protected bool $useSCBExport;
+
   protected $calculatedData;
 
   const LETTER_INDEX = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', ];
@@ -68,6 +70,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     $this->uuid = $uuid;
     $this->pnum = $pnum;
     $this->useExtentExport = $module_handler->moduleExists('simple_school_reports_extens_grade_export');
+    $this->useSCBExport = $module_handler->moduleExists('simple_school_reports_scb_grade_export');
   }
 
   /**
@@ -216,6 +219,40 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
           '#description' => $this->t('NOTE: Contact details for students with protected personal data will not be included.'),
           '#default_value' => TRUE,
         ];
+      }
+
+      if ($this->useSCBExport) {
+        $grade_options = simple_school_reports_core_allowed_user_grade();
+        if (!empty($grade_options[6]) || !empty($grade_options[9])) {
+          $form['scb_export_wrapper'] = [
+            '#type' => 'details',
+            '#title' => $this->t('SCB export'),
+            '#open' => TRUE,
+          ];
+
+          if (!empty($grade_options[6])) {
+            $form['scb_export_wrapper']['scb_export_6'] = [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Include students in grade 6'),
+              '#default_value' => FALSE,
+            ];
+          }
+
+          if (!empty($grade_options[9])) {
+            $form['scb_export_wrapper']['scb_export_9_final'] = [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Include students in grade 9'),
+              '#description' => $this->t('NOTE: Only students with the final grade in grade 9 will be included.'),
+              '#default_value' => FALSE,
+            ];
+          }
+
+          $form['scb_export_wrapper']['disclaimer'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'em',
+            '#value' => $this->t('NOTE: SCB do not support partial imports. It is important that the student list and the grade registration is complete before using the SCB export file.'),
+          ];
+        }
       }
     }
 
@@ -449,6 +486,14 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         $document_date = $date->format('Y-m-d');
       }
 
+      $scb_export_types = [];
+      if ($form_state->getValue('scb_export_6', FALSE)) {
+        $scb_export_types[] = 'scb_export_6';
+      }
+      if ($form_state->getValue('scb_export_9_final', FALSE)) {
+        $scb_export_types[] = 'scb_export_9_final';
+      }
+
       $references = [
         'students' => $students,
         'ordered_student_uids' => $ordered_student_uids,
@@ -462,13 +507,16 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         'base_destination' => $this->uuid->generate(),
         'grade_round_name' => $grade_round->label(),
         'extens_export_grades' => $form_state->getValue('extens_export_grades', []),
-        'extens_include_contact_details' => !!$form_state->getValue('extens_include_contact_details', FALSE),
+        'scb_export_types' => $scb_export_types,
       ];
 
       $external_services = [];
       if ($this->getFormId() === 'generate_grade_catalog_form') {
-        if ($this->useExtentExport) {
+        if ($this->useExtentExport && !empty($references['extens_export_grades'])) {
           $external_services[] = 'simple_school_reports_extens_grade_export.export_service';
+        }
+        if ($this->useSCBExport && !empty($references['scb_export_types'])) {
+          $external_services[] = 'simple_school_reports_scb_grade_export.export_service';
         }
       }
 

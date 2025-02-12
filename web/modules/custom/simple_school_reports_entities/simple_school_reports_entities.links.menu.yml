@@ -72,3 +72,15 @@ entity.ssr_calendar_event.collection:
   description: 'List of calendar events.'
   route_name: entity.ssr_calendar_event.collection
   parent: system.admin_content
+
+entity.ssr_lookup.settings:
+  title: 'SSR Lookup'
+  description: 'Configure a SSR Lookup entity type.'
+  route_name:  entity.ssr_lookup.settings
+  parent: system.admin_structure
+
+entity.ssr_lookup.collection:
+  title: 'SSR Lookups'
+  description: 'List of ssr lookups.'
+  route_name: entity.ssr_lookup.collection
+  parent: system.admin_content

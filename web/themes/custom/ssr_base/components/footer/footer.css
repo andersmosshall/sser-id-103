@@ -61,3 +61,7 @@
 .ssr-footer--inner .ssr-branding > .name {
   padding-top: 2px;
 }
+
+.ssr-footer--inner .ssr-version-info {
+  font-size: 10px;
+}

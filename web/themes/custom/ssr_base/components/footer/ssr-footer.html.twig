@@ -154,5 +154,9 @@
       <div class="separator">|</div>
       <div class="name">Anders Mosshäll</div>
     </div>
+
+    {% if ssr_version %}
+      <div class="ssr-version-info">{{ 'Version'|t }} {{ ssr_version }}</div>
+    {% endif %}
   </div>
 </div>

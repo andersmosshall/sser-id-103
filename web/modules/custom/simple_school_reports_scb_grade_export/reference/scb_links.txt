@@ -1,0 +1,3 @@
+For refernce of the export file spec:
+https://www.scb.se/ak9 => Datafilsbeskrivning (xlsx)
+https://www.scb.se/ak6 => Datafilsbeskrivning (xlsx)

@@ -1,0 +1,315 @@
+System	System från vilket datafilen är uttagen	A	15
+Datum	Datum för uttag av fil, åååå-mm-dd	S och bindestreck	10
+Version	Leverantörens systemversion, fritext	A	15
+PersonNr	Identitetsbegrepp för personer. Består av årtusende, år, månad, dag, löpnummer, checksiffra. 12 siffror, ååååmmddxxxx. Uppgiften omfattar elever med skyddade identiteter.  Uppgiften omfattar även elever med tillfälliga personnummer, ååååmmddTFxx.	BS	12
+Skolenhetskod	Kod för skola dvs en administrativ enhet där lärare och/eller elever finns. Skola speglar inte byggnad/fastighet utan avser en organisatorisk enhet på en adress. 8 siffror.	S	8
+Klass	Klassbeteckning	A	20
+	9999999999 = Uppgift saknas
+Fornamn	Förnamn	B	20
+Efternamn	Efternamn	B	20
+Bl	Betyg, Tillåtna värden i ämnet bild:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+En	Betyg, Tillåtna värden i ämnet engelska:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Hkk	Betyg, Tillåtna värden i ämnet hem- och konsumentkunskap:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Idh	Betyg, Tillåtna värden i ämnet idrott och hälsa:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Ma	Betyg, Tillåtna värden i ämnet matematik:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+M1 (språk)	Moderna språk inom ramen för skolans val (språkkod)	BS	3
+M1 (betyg)	Slutbetyg, Tillåtna värden i ämnet Moderna språk inom ramen för skolans val (betyg):	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = Anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+M2 (språk)	Moderna språk inom ramen för språkval (språkkod)	BS	3
+M2 (betyg)	Slutbetyg, Tillåtna värden i ämnet Moderna språk inom ramen för språkval  (betyg):	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = Anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Modm_anm	Modersmål språk	B	3
+	Anger vilket språk eleven fick betyg i inom ramen för modersmål. Anges som språkkod, format t.ex. ARA
+Modmalbe	Betyg, Tillåtna värden i ämnet modersmål:	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Mu	Betyg, Tillåtna värden i ämnet musik:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+No	Betyg, Tillåtna värden i ämnesblocket naturorienterande ämnen : (2:a får användas bara om betyg finns i Bi,Fy,Ke)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Bi	Betyg, Tillåtna värden i ämnet biologi: (2:a får användas bara om betyg finns i NO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Fy	Betyg, Tillåtna värden i ämnet fysik: (2:a får användas bara om betyg finns i NO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Ke	Betyg, Tillåtna värden i ämnet kemi: (2:a får användas bara om betyg finns i NO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+So	Betyg, Tillåtna värden i ämnesblocket samhällsorienterande ämnen: (2:a får användas bara om betyg finns i Ge,Hi,Re,Sh)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Ge	Betyg, Tillåtna värden i ämnet geografi: (2:a får användas bara om betyg finns i SO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Hi	Betyg, Tillåtna värden i ämnet historia: (2:a får användas bara om betyg finns i SO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Re	Betyg, Tillåtna värden i ämnet religion: (2:a får användas bara om betyg finns i SO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Sh	Betyg, Tillåtna värden i ämnet samhällskunskap: (2:a får användas bara om betyg finns i SO blockbetyg)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Sl	Betyg, Tillåtna värden i ämnet slöjd:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Sv	Betyg, Tillåtna värden i ämnet svenska: (2:a får användas bara om betyg finns i Sva)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Sva	Betyg, Tillåtna värden i ämnet svenska som andraspråk: (2:a får användas bara om betyg finns i SV)	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Tn	Betyg, Tillåtna värden i ämnet teckenspråk:	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Tk	Betyg, Tillåtna värden i ämnet teknik:	BS	1
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
+Ovr	Betyg, Betyg i annat ämne	BS	1
+	2 = Ej betygssatt i ej obligatoriskt ämne.
+	3 = anges när ett ämne inte lästs på grund av anpassad studiegång enligt 3 kap. 12 § skollagen (2010:800)
+	F = ej godkänt betyg,
+	E = betyg E,
+	D = betyg D,
+	C = betyg C,
+	B = betyg B,
+	A = betyg A,
+	9 = Streck (-) i betygskatalogen, dvs. bedömningsunderlag saknas pga. frånvaro.
+	Y = Ej erhållit kunskapsrelaterade betyg
+	(aktuell för waldorfskola och internationella skolor.)
+	Z = Eleven har ej undervisats i ämnet i åk 6. Ämnet är därmed ej angivet i betygskatalogen
