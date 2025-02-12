@@ -126,7 +126,7 @@ class SCBGradeExportService implements GroupGradeExportInterface {
         'scb_export_9_final_fallback' => '2',
       ],
       'SV' => [
-        'scb_export_6_fallback' => 'Z',
+        'scb_export_6_fallback' => '2',
         'scb_export_9_final_fallback' => '2',
       ],
       'SVA' => [
@@ -238,7 +238,7 @@ class SCBGradeExportService implements GroupGradeExportInterface {
       $student_row_parts[] = $this->makeRowPart(Settings::get('ssr_school_unit_code'), 8);
 
       // Add class.
-      $class = $context['results']['ssr_student_doc_class_value'][$student_uid] ?? $context['results']['ssr_student_doc_grade_value'][$student_uid] ??'';
+      $class = $context['results']['ssr_student_doc_class_value'][$student_uid] ?? $context['results']['ssr_student_doc_grade_value'][$student_uid] ?? '';
 
       $student_row_parts[] = $this->makeRowPart($class, 20);
 
