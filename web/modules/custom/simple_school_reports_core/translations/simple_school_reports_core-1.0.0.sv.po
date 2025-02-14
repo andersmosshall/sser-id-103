@@ -3165,6 +3165,21 @@ msgstr "Vårdnadshavare och mentor kommer att genereras för varje elev."
 msgid "Number of students to generate for grade %grade"
 msgstr "Antal elever att generera för årskurs %grade"
 
+msgid "NOTE: SCB do not support partial imports. It is important that the student list and the grade registration is complete before using the SCB export file."
+msgstr "OBSERVERA: SCB stöder inte partiella importer. Det är därför viktigt att elevlistan och betygsregistreringen är komplett innan exporterad SCB-fil används."
+
+msgid "NOTE: Only students with the final grade in grade 9 will be included."
+msgstr "OBSERVERA: Endast elever med slutbetyg i årskurs 9 kommer att inkluderas."
+
+msgid "Include students in grade 9"
+msgstr "Inkludera elever i årskurs 9"
+
+msgid "Include students in grade 6"
+msgstr "Inkludera elever i årskurs 6"
+
+msgid "SCB export"
+msgstr "SCB-export"
+
 msgid ""
 msgstr ""
 
