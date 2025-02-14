@@ -45,6 +45,13 @@
 
         $this.find('.improvedselect_sel').each(function () {
           updateLabel($label, subjectName, $teacherListObject);
+
+          var $selectedList = $(this);
+          var config = { childList: true };
+          var observer = new MutationObserver(function () {
+            updateLabel($label, subjectName, $teacherListObject);
+          });
+          observer.observe($selectedList.get(0), config);
         });
 
         $this.find('.improvedselect_sel').on('DOMSubtreeModified', function () {
