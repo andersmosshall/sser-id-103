@@ -1,5 +1,5 @@
 grade_registration:
-  version: VERSION
+  version: 1.1.0
   css:
     theme:
       css/grade_registration.css: { }
@@ -11,13 +11,13 @@ grade_registration:
     - core/drupal
 
 grade_round:
-  version: VERSION
+  version: 1.1.0
   css:
     theme:
       css/grade_round.css: { }
 
 student_group:
-  version: VERSION
+  version: 1.1.0
   js:
     js/student_group.js: { }
   dependencies:

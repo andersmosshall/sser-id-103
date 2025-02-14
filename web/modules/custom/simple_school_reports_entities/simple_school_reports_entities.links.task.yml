@@ -166,3 +166,26 @@ entity.ssr_calendar_event_type.collection:
   title: 'List'
   route_name: entity.ssr_calendar_event_type.collection
   base_route: entity.ssr_calendar_event_type.collection
+
+entity.ssr_lookup.settings:
+  title: 'Settings'
+  route_name: entity.ssr_lookup.settings
+  base_route: entity.ssr_lookup.settings
+entity.ssr_lookup.view:
+  title: 'View'
+  route_name: entity.ssr_lookup.canonical
+  base_route: entity.ssr_lookup.canonical
+entity.ssr_lookup.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_lookup.edit_form
+  base_route: entity.ssr_lookup.canonical
+entity.ssr_lookup.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_lookup.delete_form
+  base_route: entity.ssr_lookup.canonical
+  weight: 10
+entity.ssr_lookup.collection:
+  title: 'SSR Lookups'
+  route_name: entity.ssr_lookup.collection
+  base_route: system.admin_content
+  weight: 10

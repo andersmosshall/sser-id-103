@@ -1018,6 +1018,7 @@ function simple_school_reports_extension_proxy_theme() {
       'variables' => [
         'help_link' => NULL,
         'bug_report_link' => NULL,
+        'ssr_version' => NULL,
       ],
     ],
   ];

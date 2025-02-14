@@ -37,3 +37,11 @@ entity.ssr_student_leave_application.settings:
     _title: 'Student leave application'
   requirements:
     _permission: 'administer ssr_student_leave_application'
+
+entity.ssr_lookup.settings:
+  path: 'admin/structure/ssr-lookup'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SSRLookupSettingsForm'
+    _title: 'SSR Lookup'
+  requirements:
+    _permission: 'administer ssr_lookup'

@@ -51,3 +51,9 @@ ssr_calendar_event.add_page:
   route_name: entity.ssr_calendar_event.add_page
   appears_on:
     - entity.ssr_calendar_event.collection
+
+ssr_lookup.add_form:
+  title: 'Add ssr lookup'
+  route_name: entity.ssr_lookup.add_form
+  appears_on:
+    - entity.ssr_lookup.collection

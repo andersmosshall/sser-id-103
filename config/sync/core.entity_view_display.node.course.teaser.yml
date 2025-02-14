@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.course.field_class
-    - field.field.node.course.field_schema
     - field.field.node.course.field_school_subject
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
@@ -25,7 +24,6 @@ content:
     region: content
 hidden:
   field_class: true
-  field_schema: true
   field_school_subject: true
   field_ssr_schema: true
   field_student: true

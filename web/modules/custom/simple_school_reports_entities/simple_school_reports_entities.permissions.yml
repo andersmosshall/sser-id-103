@@ -84,3 +84,15 @@ delete ssr_calendar_event:
   title: 'Delete calendar event'
 create ssr_calendar_event:
   title: 'Create calendar event'
+
+administer ssr_lookup:
+  title: 'Administer ssr lookups'
+  restrict access: true
+view ssr_lookup:
+  title: 'View ssr lookup'
+edit ssr_lookup:
+  title: 'Edit ssr lookup'
+delete ssr_lookup:
+  title: 'Delete ssr lookup'
+create ssr_lookup:
+  title: 'Create ssr lookup'

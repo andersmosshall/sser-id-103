@@ -301,3 +301,18 @@ function simple_school_reports_entities_update_10012() {
   }
 }
 
+/**
+ * Install ssr lookup entity type.
+ */
+function simple_school_reports_entities_update_10013() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_lookup')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_lookup'));
+  }
+}
+
+

@@ -82,3 +82,7 @@ services:
     tags:
       - { name: access_policy }
 
+  simple_school_reports_core.ssr_version:
+    class: Drupal\simple_school_reports_core\Service\SSRVersionService
+    arguments: [ '@entity_type.manager', '@cache.default', '@module_handler', '@extension.list.module' ]
+
