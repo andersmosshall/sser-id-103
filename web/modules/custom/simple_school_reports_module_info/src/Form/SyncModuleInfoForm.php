@@ -95,7 +95,7 @@ class SyncModuleInfoForm extends ConfirmFormBase {
     $hide_price_info = !!$form_state->getValue('hide_price_info');
     \Drupal::state()->set('ssr_module_info.hide_price_info', $hide_price_info);
 
-    $this->moduleInfoService->syncModuleInfo();
+    $this->moduleInfoService->syncModuleInfo(TRUE);
     $this->messenger()->addStatus($this->t('Module info item created.'));
     Cache::invalidateTags(['ssr_module_info.settings']);
   }

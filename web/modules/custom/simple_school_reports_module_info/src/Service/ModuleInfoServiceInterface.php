@@ -10,7 +10,8 @@ interface ModuleInfoServiceInterface {
   const CORE_PRICE = 8200;
   const CORE_ANNUAL_FEE = 2700;
   const MODULE_PRICE = 4900;
-  const MODULE_ANNUAL_FEE = 0;
+  const MODULE_ANNUAL_FEE = 500;
+  const MINI_MODULE_ANNUAL_FEE = 150;
   const MINI_MODULE_PRICE = 1900;
 
   public function syncModuleInfo(bool $force = FALSE): bool;
