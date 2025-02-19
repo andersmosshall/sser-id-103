@@ -3180,14 +3180,39 @@ msgstr "Inkludera elever i årskurs 6"
 msgid "SCB export"
 msgstr "SCB-export"
 
-msgid ""
-msgstr ""
+msgid "Refresh"
+msgstr "Uppdatera"
 
-msgid ""
-msgstr ""
+msgid "Sum label"
+msgstr "Summa-etikett"
 
-msgid ""
-msgstr ""
+msgid "Use only sum"
+msgstr "Använd endast summa"
+
+msgid "Monthly fee"
+msgstr "Månadsavgift"
+
+msgid "Invoice settings"
+msgstr "Fakturainställningar"
+
+msgctxt "invoice"
+msgid "Sum"
+msgstr "Summa"
+
+msgid "Invoice support"
+msgstr "Faktureringsstöd"
+
+msgid "List installed modules and their fees for invoicing."
+msgstr "Lista installerade moduler och deras avgifter för fakturering."
+
+msgid "Discount"
+msgstr "Rabatt"
+
+msgid "Annual fee: @label"
+msgstr "Årsavgift: @label"
+
+msgid "Monthly fee: @labal"
+msgstr "Månadsavgift: @label"
 
 msgid ""
 msgstr ""

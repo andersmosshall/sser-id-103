@@ -295,3 +295,11 @@ simple_school_reports_core.panic_confirm:
     _title: 'Panic!'
   requirements:
     _permission: 'administer simple school reports settings'
+
+simple_school_reports_core.invoice_support:
+  path: '/admin/invoice-support'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\InvoiceSupportForm'
+    _title: 'Invoice support'
+  requirements:
+    _permission: 'administer modules'

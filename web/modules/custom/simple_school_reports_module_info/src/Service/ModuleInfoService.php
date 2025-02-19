@@ -43,6 +43,9 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       case 'module_annual':
         $price = self::MODULE_ANNUAL_FEE;
         break;
+      case 'mini_module_annual':
+        $price = self::MINI_MODULE_ANNUAL_FEE;
+        break;
     }
     $value = number_format($price, 0, ',', ' ');
     if ($suffix) {
@@ -55,8 +58,9 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
     $text = str_replace('[[CORE_PRICE]]', $this->getFormattedPrice('core'), $text);
     $text = str_replace('[[MODULE_PRICE]]', $this->getFormattedPrice('module'), $text);
     $text = str_replace('[[MINI_MODULE_PRICE]]', $this->getFormattedPrice('mini_module'), $text);
-    $text = str_replace('[[CORE_ANNUAL_FEE]]', $this->getFormattedPrice('core_annual', 'kr + moms per läsår'), $text);
+    $text = str_replace('[[CORE_ANNUAL_FEE]]', $this->getFormattedPrice('core_annual'), $text);
     $text = str_replace('[[MODULE_ANNUAL_FEE]]', $this->getFormattedPrice('module_annual'), $text);
+    $text = str_replace('[[MINI_MODULE_ANNUAL_FEE]]', $this->getFormattedPrice('mini_module_annual'), $text);
     return $text;
   }
 
@@ -100,7 +104,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I minimodulen Frånvaromatris kan man ange dagsfrånvaro för eleverna i en matrisvy för hela veckor. Detta ger en bättre överblick över registerade frånvarodagar och man kan snabbare registera frånvaro.</p>',
     ];
 
@@ -110,7 +114,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Bonustimme är modul för koncept att kunna återta missad lektionstid på grund av ogiltig frånvaro. Bonustimme är ett ämne som man lägger in på en kurs och närvarotid på dessa lektioner minskar elevens totala ogiltiga frånvaro i statistiken i systemet.</p>',
     ];
 
@@ -120,7 +124,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_iup', 'simple_school_reports_reviews', 'simple_school_reports_leave_application', 'simple_school_reports_consents'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen Login för vårdnadshavare kan man göra det möjligt för vårdnadshavare att logga in på Simple School Reports och t.ex. anmäla frånvaro. Som vårdnadshavare kan man också se statistik för närvaro/frånvaro samt även sammanställning av information från vissa andra moduler. T.ex. betygsstatistik eller IUP.</p><p>Det är möjligt att låsa ner inloggning för enskilda eller alla vårdnashavare även om man har denna modul installerad.</p>',
     ];
 
@@ -130,7 +134,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_grade_stats', 'simple_school_reports_class'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen Betygsregistrering kan man som administratör i Simple School Reports sätta upp omgångar för betygsregistrering. Man anger där betygssättande lärare för de ämnen man vill ha aktiva och lärare kan då själva registrera betyg bara i de angivna ämnena. Genom en enkel knapptryckning kan därefter betygsdokument generas och laddas ner.</p>',
     ];
 
@@ -140,7 +144,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => ['simple_school_reports_grade_registration'],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen Extensexport (MGBETYG) kan man i samband med export av betyg välja elevgrupper som ska inkluderas i en export för betygssystemet Extens (MGBETYG). Man kan välja om elevers kontaktuppgifter ska inkluderas i exportfilen till Extens.</p>',
     ];
 
@@ -150,7 +154,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => ['simple_school_reports_grade_registration'],
       'recommended_modules' => ['simple_school_reports_grade_stats'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Betygsregistrering - omdömen, är en påbyggnad av modulen betygsregistrering och kan inte användas enskilt. I denna modul har man möjlighet att inom omgångar för betygsregistrering även lägga in omdömmen i from av "Godkänd" och "Ej godkänd" och de sammanställs enligt samma princip som betygsdokument, dock utan enskilda elevers betygsdokument. De finns även tillgängliga för betygsstatistik. Är lämpligt att använda i fall man vill dokumentera omdömen för årskurser som inte innefattar krav på betygsdokument.</p>',
     ];
 
@@ -160,7 +164,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => ['simple_school_reports_grade_registration'],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Betygsstatistik, är en påbyggnad av modulen betygsregistrering och kan inte användas enskilt. I denna modul kan man skapa grafer och tabeller för betyg. Man kan jämföra olika årskurser, ämnen och betygsomgångar och man får stora möjligheter att ta fram precis de betygsstatistikunderlag man vill ha. Lämpligt för att ha med som underlag i kvalitetsrapporter eller i samband med skolinspektioner.</p>',
     ];
 
@@ -170,7 +174,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen Registrering av skriftliga omdömen kan man som administratör i Simple School Reports sätta upp omgångar för skriftliga omdömen. Som lärare kan man i sina ämnen registrera omdömmen och skriva kommentarer. Man kan även skriva övergripande information om skolans insatser. Genom en enkel knapptryckning kan dokument för skriftliga omdömen genereras som följer skolverkets mall för skriftliga omdömen.</p><p>Som administratör kan man sätta upp personaliserade standardfraser som man med enkla knapptryckningar kan föra in i dokumenten.</p>',
     ];
 
@@ -180,7 +184,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_class'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen IUP-Registrering kan man som administratör i Simple School Reports sätta upp omgångar för IUP-registrering (Individuell UtvecklingsPlan). Som lärare kan man då lägga till mål och utvärderingar av olika slag. Mål kan återkopplas och sammanställas till nästa omgång av IUP. IUP:er kan man med en enkel knapptryckning generera IUP-dokument som följer skolverkets mall för IUP.</p><p>Som administratör kan man sätta upp personaliserade standardfraser som man med enkla knapptryckningar kan föra in i IUP-dokumenten.</p>',
     ];
 
@@ -190,7 +194,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_special_diet'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Listmallar är en modul för att skapa egna listor för eleverna. Till exempel listor för närvaro som tar hänsyn till inevarande dags frånvaroregisteringar. Eller listor för kontaktuppgifter till elever eller vårdnadshavare utifrån ett visst urval. Flera moduler ger ytterligare val för listmallar.</p>',
     ];
 
@@ -200,7 +204,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I budgetmodulen kan man utfrån antal elever skapa budgetkalkyl för skolans bidrag/intäcker och utgifter. Budgeten kan följas upp och man kan få en aktuell fingervisning över balansen mellan bidrag och utgifter på så specifika budgetposter man önskar.</p>',
     ];
 
@@ -210,7 +214,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_caregiver_login'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen för samtyken kan man skapa och inhämta samtycken för användare i Simple School Reports. Det kan vara interna samtycken för lärare eller annan personal eller samtycken från vårdnadshavare, t.ex. samtycken om att få använda bilder i sociala medier eller samla in samtycken för vaccinationer. Modulen fungerar bra ihop med modulen för login av vårdnadshavare.</p>',
     ];
 
@@ -220,7 +224,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>Med minimodulen E-postbilagor kan man i e-postutskick inkludera en eller flera bilagor</p>',
     ];
 
@@ -230,7 +234,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>Med minimodulen E-postlogg - maillog kan man se logg över alla epost som gått ut ur systemet. På så sätt har man möjlighet att spåra om vårdnadshavare blivit meddelad eller inte. Man kan se vad som meddelats, av vem och till vem. Observera att när epost skickas ut kan man inte garantera att epost kommer fram, t.ex. kan systemet inte veta om epostadressen är rätt stavad.</p><p>Man kan endast se epostlogg för upp till 3 månader bakåt i tiden.</p>',
     ];
 
@@ -240,7 +244,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_list_templates'],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>I minimodulen Specialkost kan man per eleve registrera eventuell specialkost så att skolpersonal lätt kan se den informationen, t.ex. vid skolutflykter. Har man dessutom modulen listmallar kan inkludera specialkost i listor för elevgrupper vilket kan vara användbart får skolbespisning eller liknande.</p>',
     ];
 
@@ -250,7 +254,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_caregiver_login'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen för Utvecklingssamtal för elever kan man skapa omgångar för utvecklingssamtal för att hålla koll och hantera möten. Mail skickas för påminnelser om mötena och man kan ställa in hur lång tid innan mötet påminnelser ska skickas. Om man har modulen för login för vårdnadshavare kan vårdnadshavare själva boka/avboka utvecklingssamtal.</p>',
     ];
 
@@ -260,7 +264,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_class'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>I modulen närvaroanalys kan man definera skolveckor längd och ramtider. Med detta som grund kan man få fram procentuell närvaro/frånvaro för elever utifrån närvarorapporteringarna och registrerade frånvarodagar. Analysen visar närvaro giltig frånvaro samt ogiltig frånvaro.</p>',
     ];
 
@@ -270,7 +274,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => ['simple_school_reports_attendance_analyse'],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Närvaroanalys för period, är en påbyggnad av modulen närvarostatistik och kan inte användas enskilt. I modulen närvaroanalys för period kan man ta fram närvarostatistik för en valfri period alla eller grupper av elever. Frånvaro visas även grupperat utifrån definerade procentuella grupper så att exempelvis man kan ta fram antal elever i perioden som har 15-25% frånvaro. Procentgrupperna kan man ändra själv.</p>',
     ];
 
@@ -280,7 +284,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_caregiver_login'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Ledighetsansökningar, skapar möjlighet att lärare eller vårdnadshavare (om modul för inloggning är aktiv) kan skapa ledighetsansökningar. Dessa kan sedan hanteras av mentor eller rektor och vid godkänd ansökan registreras ledigheten automatiskt i systemet.</p>',
     ];
 
@@ -290,7 +294,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Extra anpassningar, skapar möjlighet att registrera extra anpassningar som en elev har i enskilda ämnen eller generellt. Vilka extra anpassningar som finns att välja mellan hanteras av administratör. Man kan lista och söka bland alla extra anpassningar bland alla elver.</p>',
     ];
 
@@ -300,7 +304,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Klasser, skapar möjlighet att gruppera elever i klasser utöver den inkluderade grupperingen på årskurs. Det passar sig särkskilt väl i fall där man har flera klasser i samma årskurs eller flera årskurser som slås ihop till en klass i skolan. Man kan använda klass för att skapa kurser så att man inte behöver lägga till varje enskild elev i varje kurs.</p>',
     ];
 
@@ -310,7 +314,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_class', 'simple_school_reports_caregiver_login'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, Examinationslistor, skapar möjlighet att lista examinationer som elever genomfört eller ska genomföra så att man (persona eller vårdnadshavare) kan få en överblick om det är uppgifter eleven ligger efter med. Modulen lagrar eller presenterar inte resultat från examinationerna.</p><p>Om man har modulen Klasser kan man skapa bedömningsgrupper utifrån klasstillhörighet så att man inte behöver lägga till varje enskild elev i varje bedömningsgrupp.</p>',
     ];
 
@@ -320,7 +324,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       'required_modules' => [],
       'recommended_modules' => ['simple_school_reports_class', 'simple_school_reports_attendance_analyse'],
       'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => NULL,
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
       'description' => '<p>Denna modul, SSR-schema, skapar en lätthanterlig lista över lektioner som lärare förväntas rapportera utifrån schema som skapats på kurserna i Simple School Reports. Om man har modulen närvaroanalys listas lektionerna tydligt i analysen och man kan även se vilka lektioner i vilka ämnen som inte har närvarorapporterats.</p>',
     ];
 

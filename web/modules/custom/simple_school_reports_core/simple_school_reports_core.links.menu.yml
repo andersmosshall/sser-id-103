@@ -155,3 +155,9 @@ simple_school_reports_core.module_info:
   description: 'Module info'
   parent: simple_school_reports_core.actions
   route_name: view.module_info.list
+
+simple_school_reports_core.invoice_support:
+  title: 'Invoice support'
+  description: 'List installed modules and their fees for invoicing.'
+  parent: simple_school_reports_core.config
+  route_name: simple_school_reports_core.invoice_support
