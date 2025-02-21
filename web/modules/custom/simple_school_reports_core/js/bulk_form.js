@@ -38,7 +38,13 @@
                   }, 500);
                 }
               }
+            });
 
+            // Clear the override input if any checkbox is unchecked.
+            $table.find('tr > td input[type="checkbox"]').on('click', (event) => {
+              if ($(event.target).is('input[type="checkbox"]') && !event.target.checked) {
+                $('input[data-override-id-list]').val('');
+              }
             });
           }, 500);
         }
