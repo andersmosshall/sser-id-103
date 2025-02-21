@@ -273,6 +273,31 @@ function ssr_handle_schema_support_cron() {
     foreach ($course_ids_to_sync as $id) {
       $queue->createItem(['course_id' => $id, 'from' => $from, 'to' => $to]);
     }
+
+    // Clean up invalid calendar events.
+    $existing_course_ids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'course')
+      ->execute();
+
+    if (!empty($existing_course_ids)) {
+      // Check if there are calendar events that are not linked to any existing
+      // course.
+      $calendar_event_ids = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('bundle', 'course')
+        ->condition('field_course', $existing_course_ids, 'NOT IN')
+        ->range(0, 50)
+        ->execute();
+
+      if (!empty($calendar_event_ids)) {
+        $calendar_event_storage = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event');
+        $calendar_events = $calendar_event_storage->loadMultiple($calendar_event_ids);
+        $calendar_event_storage->delete($calendar_events);
+      }
+    }
+
+
   }
   catch (\Exception $e) {
     // Ignore
