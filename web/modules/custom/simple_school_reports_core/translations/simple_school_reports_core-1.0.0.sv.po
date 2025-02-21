@@ -3214,23 +3214,23 @@ msgstr "Årsavgift: @label"
 msgid "Monthly fee: @labal"
 msgstr "Månadsavgift: @label"
 
-msgid ""
-msgstr ""
+msgid "Super user has logged in to @school_name"
+msgstr "Privilegierad användare har loggat in på @school_name"
 
-msgid ""
-msgstr ""
+msgid "Super user @name has logged in to @school_name."
+msgstr "Privilegierad användare @name har loggat in på @school_name."
 
-msgid ""
-msgstr ""
+msgid "Administer options for special diets"
+msgstr "Hantera alternativ för specialkost"
 
-msgid ""
-msgstr ""
+msgid "Special diet options"
+msgstr "Specialkost-alternativ"
 
-msgid ""
-msgstr ""
+msgid "Add special diet option"
+msgstr "Lägg till specialkost-alternativ"
 
-msgid ""
-msgstr ""
+msgid "View @name"
+msgstr "Visa @name"
 
 msgid ""
 msgstr ""

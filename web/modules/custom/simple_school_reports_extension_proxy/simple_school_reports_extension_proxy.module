@@ -1035,12 +1035,12 @@ function simple_school_reports_extension_proxy_entity_field_access($operation, \
     }
     /** @var \Drupal\user\UserInterface $user */
     elseif ($user = $items?->getEntity()) {
-      if (!$user->access('update')) {
+      if (!$user->access('update') || !$account->hasPermission('school staff permissions')) {
         $access = AccessResult::forbidden();
       }
     }
 
-    $access->cachePerUser();
+    $access->cachePerPermissions();
   }
 
   if ($field_definition->getTargetEntityTypeId() === 'user' && $field_definition->getName() === 'field_adapted_studies') {

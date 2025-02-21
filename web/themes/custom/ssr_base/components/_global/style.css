@@ -259,3 +259,7 @@ td.views-field-absence-matrix-info-6 {
 sup {
   top: 0;
 }
+
+.view-cargiver-students .views-row {
+  margin-bottom: 24px;
+}
