@@ -1,7 +1,7 @@
 name: Simple School Reports SCB Grade Export
 type: module
 description: Simple School Reports SCB Grade Export
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 package: 'Simple School Reports Mini'
 dependencies:
   - simple_school_reports_core:simple_school_reports_core

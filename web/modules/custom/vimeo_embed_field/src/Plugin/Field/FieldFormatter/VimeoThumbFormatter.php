@@ -7,6 +7,7 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Utility\Error;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -193,9 +194,10 @@ class VimeoThumbFormatter extends FormatterBase implements ContainerFactoryPlugi
       }
     }
     catch (RequestException $e) {
-      watchdog_exception('vimeo embed field', $e);
+      Error::logException(\Drupal::logger('vimeo embed field'), $e);
       return FALSE;
     }
+    return FALSE;
   }
 
 }

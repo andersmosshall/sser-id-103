@@ -1,8 +1,8 @@
 name: Views Custom Permissions
 description: Allow users to create custom access callback to views.
 type: module
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^10 || ^11
 package: Views
 dependencies:
-  - views
+  - drupal:views
 configure: views_custom_permissions.settings

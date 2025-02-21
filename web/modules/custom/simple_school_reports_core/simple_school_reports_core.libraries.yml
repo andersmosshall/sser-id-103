@@ -104,7 +104,7 @@ range_to_url_autosubmit:
 
 
 user_bulk_form:
-  version: VERSION
+  version: 11.0.1
   js:
     js/user_bulk_form.js: { }
   dependencies:
@@ -113,7 +113,7 @@ user_bulk_form:
     - core/drupal
 
 bulk_form:
-  version: VERSION
+  version: 11.0.1
   js:
     js/bulk_form.js: { }
   dependencies:
