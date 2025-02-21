@@ -3214,11 +3214,11 @@ msgstr "Årsavgift: @label"
 msgid "Monthly fee: @labal"
 msgstr "Månadsavgift: @label"
 
-msgid ""
-msgstr ""
+msgid "Super user has logged in to @school_name"
+msgstr "Privilegierad användare har loggat in på @school_name"
 
-msgid ""
-msgstr ""
+msgid "Super user @name has logged in to @school_name"
+msgstr "Privilegierad användare @name har loggat in på @school_name"
 
 msgid ""
 msgstr ""

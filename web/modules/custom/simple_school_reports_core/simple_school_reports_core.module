@@ -1845,3 +1845,38 @@ function ssr_day_map() {
     7 => t('Sunday'),
   ];
 }
+
+/**
+ * Implements hook_user_login().
+ */
+function simple_school_reports_core_user_login(UserInterface $account) {
+  if ($account->hasPermission('super user permissions')) {
+    // Send email that a super user has logged in.
+    try {
+      \Drupal::logger('simple_school_reports_core')->info('Super user @name has logged in.', ['@name' => $account->getDisplayName()]);
+
+      $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+      if (empty($ssr_bug_report_email)) {
+        return;
+      }
+
+      /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+      $email_service = \Drupal::service('simple_school_reports_core.email_service');
+      $subject = t('Super user has logged in to @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+      $message = t('Super user @name has logged in to @school_name.', ['@name' => $account->getDisplayName(), '@school_name' => Settings::get('ssr_school_name', '?')]);
+
+
+      if ($email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+        'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+        'no_reply_to' => TRUE,
+      ])) {
+        return;
+      };
+
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('simple_school_reports_core')->error($e->getMessage());
+    }
+
+  }
+}
