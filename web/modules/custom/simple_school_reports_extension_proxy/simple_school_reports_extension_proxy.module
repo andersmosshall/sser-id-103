@@ -904,6 +904,21 @@ function clean_up_custom_entities() {
     $student_leave_application_storage->delete($entities);
   }
 
+  // Clean up old expired lookups.
+  $lookup_storage = \Drupal::entityTypeManager()->getStorage('ssr_lookup');
+
+  $ids_to_remove = $lookup_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('expires', $now->getTimestamp(), '<')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($ids_to_remove)) {
+    $lookups = $lookup_storage->loadMultiple($ids_to_remove);
+    $lookup_storage->delete($lookups);
+  }
+
 }
 
 function ssr_meeting_reminder_meeting() {
