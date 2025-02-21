@@ -233,14 +233,10 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_special_diet:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 15
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_ssn:
     type: string_personal_number

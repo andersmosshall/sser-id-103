@@ -1432,6 +1432,25 @@ function simple_school_reports_core_ssr_local_actions_alter(array &$local_action
       '#weight' => 99,
     ];
   }
+
+  // Add view profile to routes with user parameter.
+  if ($context['route_name'] !== 'entity.user.canonical') {
+    /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
+    $route_match = $context['route_match'];
+    $user = $route_match->getParameter('user');
+    if ($user instanceof UserInterface && $user->access('view')) {
+      $cache->addCacheContexts(['user', 'route']);
+      $cache->addCacheableDependency($user);
+      $local_actions['view_profile'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('View @name', ['@name' => $user->getDisplayName()]),
+          'url' => \Drupal\Core\Url::fromRoute('entity.user.canonical', ['user' => $user->id()]),
+        ],
+        '#weight' => -100,
+      ];
+    }
+  }
 }
 
 /**
