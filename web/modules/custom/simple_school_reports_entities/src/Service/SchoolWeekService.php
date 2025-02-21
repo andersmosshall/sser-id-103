@@ -203,6 +203,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
     if ($reference['type'] === 'grade') {
       $grade = $reference['id'];
       $uids = $this->entityTypeManager->getStorage('user')->getQuery()
+        ->accessCheck(FALSE)
         ->condition('status', 1)
         ->condition('roles', 'student')
         ->condition('field_grade', $grade)

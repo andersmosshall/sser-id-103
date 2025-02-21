@@ -6,6 +6,7 @@ use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -163,7 +164,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
     if ($doc_logo) {
       if ($doc_logo_file_path = $this->getFileTemplateRealPath($doc_logo)) {
         $logo_path = $working_path . DIRECTORY_SEPARATOR . 'word' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $doc_logo_name;
-        $this->fileSystem->copy($doc_logo_file_path, $logo_path, FileSystemInterface::EXISTS_REPLACE);
+        $this->fileSystem->copy($doc_logo_file_path, $logo_path, FileExists::Replace);
       }
     }
 
@@ -200,7 +201,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
     if ($doc_logo) {
       if ($doc_logo_file_path = $this->getFileTemplateRealPath($doc_logo)) {
         $logo_path = $working_path . DIRECTORY_SEPARATOR . 'xl' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $doc_logo_name;
-        $this->fileSystem->copy($doc_logo_file_path, $logo_path, FileSystemInterface::EXISTS_REPLACE);
+        $this->fileSystem->copy($doc_logo_file_path, $logo_path, FileExists::Replace);
       }
     }
 

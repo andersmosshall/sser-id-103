@@ -4,13 +4,14 @@ namespace Drupal\simple_school_reports_core\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Html as HtmlUtility;
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 
 /**
+ * Input copy element.
  *
  * @RenderElement("msr_input_copy")
  */
-class InputCopy extends RenderElement {
+class InputCopy extends RenderElementBase {
 
   /**
    * {@inheritdoc}

@@ -1,9 +1,9 @@
 name: Simple School Reports Absence Make Up
 type: module
 description: Simple School Reports Absence Make Up
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 package: 'Simple School Reports'
-version: 1.0.0
+version: 11.0.0
 dependencies:
   - simple_school_reports_core:simple_school_reports_core
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
