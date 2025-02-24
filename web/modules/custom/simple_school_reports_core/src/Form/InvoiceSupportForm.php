@@ -2,21 +2,14 @@
 
 namespace Drupal\simple_school_reports_core\Form;
 
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\file\FileInterface;
-use Drupal\simple_school_reports_core\UserFormAlter;
-use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class InvoiceSupportForm extends FormBase {
-
-
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -123,7 +116,7 @@ class InvoiceSupportForm extends FormBase {
       '#type' => 'table',
       '#header' => [
         $this->t('Item'),
-        $this->t('fee'),
+        $this->t('Fee'),
       ],
     ];
 
