@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.storage.user.field_special_diet
-    - taxonomy.vocabulary.special_diet
   module:
     - user
 id: user.user.field_special_diet
@@ -18,13 +17,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    target_bundles:
-      special_diet: special_diet
-    sort:
-      field: name
-      direction: asc
-    auto_create: false
-    auto_create_bundle: ''
+    view:
+      view_name: special_diet_items
+      display_name: reference
+      arguments: {  }
 field_type: entity_reference
