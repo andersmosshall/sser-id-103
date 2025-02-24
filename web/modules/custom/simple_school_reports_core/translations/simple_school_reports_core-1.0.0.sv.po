@@ -3232,17 +3232,17 @@ msgstr "Lägg till specialkost-alternativ"
 msgid "View @name"
 msgstr "Visa @name"
 
-msgid ""
-msgstr ""
+msgid "Fee"
+msgstr "Avgift"
 
-msgid ""
-msgstr ""
+msgid "Item"
+msgstr "Objekt"
 
-msgid ""
-msgstr ""
+msgid "fee"
+msgstr "avgift"
 
-msgid ""
-msgstr ""
+msgid "item"
+msgstr "objekt"
 
 msgid ""
 msgstr ""
