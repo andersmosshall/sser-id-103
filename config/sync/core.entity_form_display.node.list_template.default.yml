@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.list_template.field_classes
     - field.field.node.list_template.field_grades
     - field.field.node.list_template.field_list_template_field
+    - field.field.node.list_template.field_list_template_filters
     - field.field.node.list_template.field_mark_absence
     - field.field.node.list_template.field_mentoring_students
     - field.field.node.list_template.field_public
@@ -14,7 +15,26 @@ dependencies:
     - field.field.node.list_template.field_use_classes
     - node.type.list_template
   module:
+    - field_group
     - paragraphs
+third_party_settings:
+  field_group:
+    group_fler_filter:
+      children:
+        - field_list_template_filters
+      label: 'Fler filter'
+      region: content
+      parent_name: ''
+      weight: 9
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
 id: node.list_template.default
 targetEntityType: node
 bundle: list_template
@@ -34,7 +54,7 @@ content:
     third_party_settings: {  }
   field_list_template_field:
     type: entity_reference_paragraphs
-    weight: 9
+    weight: 11
     region: content
     settings:
       title: Kolumn
@@ -43,6 +63,12 @@ content:
       add_mode: dropdown
       form_display_mode: default
       default_paragraph_type: list_template_field
+    third_party_settings: {  }
+  field_list_template_filters:
+    type: options_buttons
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_mark_absence:
     type: boolean_checkbox

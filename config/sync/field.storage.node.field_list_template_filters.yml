@@ -1,0 +1,21 @@
+uuid: 1343e225-7194-4c3e-b2bd-17a5bf682e50
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_list_template_filters
+field_name: field_list_template_filters
+entity_type: node
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_extension_proxy_list_template_filter_options
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

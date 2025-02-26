@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.list_template.field_classes
     - field.field.node.list_template.field_grades
     - field.field.node.list_template.field_list_template_field
+    - field.field.node.list_template.field_list_template_filters
     - field.field.node.list_template.field_mark_absence
     - field.field.node.list_template.field_mentoring_students
     - field.field.node.list_template.field_public
@@ -25,6 +26,7 @@ hidden:
   field_classes: true
   field_grades: true
   field_list_template_field: true
+  field_list_template_filters: true
   field_mark_absence: true
   field_mentoring_students: true
   field_public: true

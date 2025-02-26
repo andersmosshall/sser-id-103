@@ -1013,6 +1013,20 @@ function simple_school_reports_proxy_list_template_field_types() {
   return $options;
 }
 
+function simple_school_reports_extension_proxy_list_template_filter_options() {
+  $options = [
+    'male' => t('Male students'),
+    'female' => t('Female students'),
+    'special_diet' => t('Students with special diet'),
+  ];
+
+  if (!\Drupal::moduleHandler()->moduleExists('simple_school_reports_special_diet')) {
+    unset($options['special_diet']);
+  }
+
+  return $options;
+}
+
 function simple_school_reports_proxy_budget_row_types() {
   $module_handler = \Drupal::service('module_handler');
   if ($module_handler->moduleExists('simple_school_reports_budget')) {
