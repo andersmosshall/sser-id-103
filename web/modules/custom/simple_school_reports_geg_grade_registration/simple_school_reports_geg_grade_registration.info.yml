@@ -9,4 +9,4 @@ dependencies:
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
   - simple_school_reports_grade_registration:simple_school_reports_grade_registration
 interface translation project: simple_school_reports_geg_grade_registration
-interface translation server pattern: modules/custom/simple_school_reports_geg_grade_registration/translations/%project-%version.%language.po
+interface translation server pattern: modules/custom/simple_school_reports_geg_grade_registration/translations/%project.%language.po

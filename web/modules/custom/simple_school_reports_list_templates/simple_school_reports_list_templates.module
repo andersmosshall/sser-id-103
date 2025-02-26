@@ -49,15 +49,22 @@ function _simple_school_reports_list_field_type_map(): array {
 function simple_school_reports_list_templates_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
   if ($view->id() === 'list_template_support') {
 
+
+
     $grade_filter = [];
     foreach (simple_school_reports_core_allowed_user_grade() as $key => $label) {
       $grade_filter[$key] = (string) $key;
     }
     $explicit_uids = [];
 
+    $filter_male_students = FALSE;
+    $filter_female_students = FALSE;
+    $filter_special_diet = FALSE;
+
     $template_node = \Drupal::routeMatch()->getParameter('node');
     if ($template_node instanceof \Drupal\node\NodeInterface && $template_node->bundle() === 'list_template') {
       $use_classes = \Drupal::moduleHandler()->moduleExists('simple_school_reports_class');
+      $grade_filter = [];
       if ($template_node->get('field_mentoring_students')->value) {
         /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data_service */
         $user_meta_data_service = \Drupal::service('simple_school_reports_core.user_meta_data');
@@ -83,29 +90,68 @@ function simple_school_reports_list_templates_views_query_alter(ViewExecutable $
         }
       }
       else {
-        $grade_filter = [];
         foreach (array_column($template_node->get('field_grades')->getValue(), 'value') as $grade_key) {
           $grade_filter[(int) $grade_key] = (string) $grade_key;
         }
       }
+
+      $extra_filters = array_column($template_node->get('field_list_template_filters')->getValue(), 'value');
+      foreach ($extra_filters as $extra_filter) {
+        switch ($extra_filter) {
+          case 'male':
+            $filter_male_students = TRUE;
+            break;
+
+          case 'female':
+            $filter_female_students = TRUE;
+            break;
+
+          case 'special_diet':
+            $filter_special_diet = TRUE;
+            break;
+
+          default:
+            // Do nothing.
+        }
+      }
     }
+
+    $uids_query = \Drupal::entityTypeManager()->getStorage('user')->getQuery()->accessCheck(FALSE);
+
+    if (!empty($grade_filter)) {
+      $uids_query->condition('field_grade', array_values($grade_filter), 'IN');
+    }
+
+    if (!empty($explicit_uids)) {
+      $uids_query->condition('uid', $explicit_uids, 'IN');
+    }
+
+    if ($filter_male_students) {
+      $gender_values[] = 'male';
+    }
+    if ($filter_female_students) {
+      $gender_values[] = 'female';
+    }
+    if (!empty($gender_values)) {
+      $uids_query->condition('field_gender', $gender_values, 'IN');
+    }
+
+    if ($filter_special_diet) {
+      $uids_query->condition('field_special_diet', NULL, 'IS NOT NULL');
+    }
+
+    $uids = array_values($uids_query->execute());
+
 
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {
-        // Alter grade filter.
-        if (!empty($condition['field']) && $condition['field'] === 'user__field_grade.field_grade_value IN(:user__field_grade_field_grade_value[])') {
-          if (empty($grade_filter)) {
-            $grade_filter = [
-              -999 => '-999',
-            ];
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid') {
+          if (empty($uids)) {
+            $uids = [-1];
           }
-          $condition['value'][':user__field_grade_field_grade_value[]'] = $grade_filter;
-        }
 
-        if (!empty($explicit_uids)) {
-          if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid') {
-            $condition['value'] = '^' . implode('$|^', array_unique($explicit_uids)) . '$';
-          }
+          $condition['operator'] = 'IN';
+          $condition['value'] = $uids;
         }
       }
     }

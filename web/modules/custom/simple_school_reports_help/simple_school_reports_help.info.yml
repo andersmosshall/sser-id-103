@@ -9,4 +9,4 @@ dependencies:
   - simple_school_reports_module_info:simple_school_reports_module_info
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
 interface translation project: simple_school_reports_help
-interface translation server pattern: modules/custom/simple_school_reports_help/translations/%project-%version.%language.po
+interface translation server pattern: modules/custom/simple_school_reports_help/translations/%project.%language.po
