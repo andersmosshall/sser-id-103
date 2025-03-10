@@ -248,7 +248,9 @@ function clean_up_old_maillog_items() {
     return;
   }
 
-  $time_limit = new DateTime();
+
+  // Clean up maillog items older than 3 months.
+  $time_limit = new \DateTime();
   $time_limit->sub(new \DateInterval('P3M'));
 
   $maillog_storage = \Drupal::entityTypeManager()
@@ -264,5 +266,21 @@ function clean_up_old_maillog_items() {
   if (!empty($maillog_ids)) {
     $maillog_items = $maillog_storage->loadMultiple($maillog_ids);
     $maillog_storage->delete($maillog_items);
+  }
+
+  // Clean up mail count items older than 3 years.
+  $time_limit = new \DateTime();
+  $time_limit->sub(new \DateInterval('P3Y'));
+
+  $mailcount_ids = $mailcount_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('from', $time_limit->getTimestamp(), '<=')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($mailcount_ids)) {
+    $mailcount_items = $mailcount_storage->loadMultiple($mailcount_ids);
+    $mailcount_storage->delete($mailcount_items);
   }
 }
