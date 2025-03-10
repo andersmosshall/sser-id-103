@@ -3,3 +3,9 @@ ssr_maillog.add_form:
   route_name: entity.ssr_maillog.add_form
   appears_on:
     - entity.ssr_maillog.collection
+
+ssr_mail_count.add_form:
+  title: 'Add mail count'
+  route_name: entity.ssr_mail_count.add_form
+  appears_on:
+    - entity.ssr_mail_count.collection

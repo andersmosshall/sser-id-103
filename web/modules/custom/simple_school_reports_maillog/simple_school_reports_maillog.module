@@ -18,6 +18,9 @@ function simple_school_reports_maillog_theme() {
     'ssr_maillog' => [
       'render element' => 'elements',
     ],
+    'ssr_mail_count' => [
+      'render element' => 'elements'
+    ],
   ];
 }
 
@@ -39,6 +42,24 @@ function template_preprocess_ssr_maillog(array &$variables) {
   }
 }
 
+/**
+ * Prepares variables for mail count templates.
+ *
+ * Default template: ssr-mail-count.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the mail count information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_mail_count(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
 function simple_school_reports_maillog_mail_types() {
   return [
     SsrMaillogInterface::MAILLOG_TYPE_COURSE_ATTENDANCE => t('Course attendance'),
@@ -50,6 +71,14 @@ function simple_school_reports_maillog_mail_types() {
     SsrMaillogInterface::MAILLOG_TYPE_MEETING_REMINDER => t('Meeting reminder'),
     SsrMaillogInterface::MAILLOG_TYPE_OTHER => t('Other'),
     SsrMaillogInterface::MAILLOG_TYPE_LEAVE_APPLICATION => t('Leave application'),
+  ];
+}
+
+function simple_school_reports_maillog_send_status_options() {
+  return [
+    SsrMaillogInterface::MAILLOG_SEND_STATUS_SENT => t('Message sent'),
+    SsrMaillogInterface::MAILLOG_SEND_STATUS_FAILED => t('Message transfer failed'),
+    SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED => t('Simulated message'),
   ];
 }
 
@@ -65,6 +94,7 @@ function simple_school_reports_maillog_mail_alter(&$message) {
     /** @var \Drupal\simple_school_reports_maillog\SsrMaillogInterface $maillog */
     $maillog = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->create([
       'label' => 'Maillog',
+      'langcode' => 'sv',
       'status' => TRUE,
     ]);
     $recipient_user = NULL;
@@ -79,6 +109,16 @@ function simple_school_reports_maillog_mail_alter(&$message) {
     if ($recipient_user) {
       $maillog->set('recipient_user', $recipient_user);
     }
+
+    $recipient = '';
+    if (!empty($message['from'])) {
+      $recipient = $message['from'];
+    }
+    if ($recipient_user instanceof \Drupal\Core\Session\AccountInterface) {
+      $recipient = $recipient_user->getEmail();
+    }
+    $is_simulated = str_ends_with(\Drupal::request()->getHost(), '.loc') || str_ends_with($recipient, '@example.com');
+    $maillog->set('send_status', $is_simulated ? SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED : SsrMaillogInterface::MAILLOG_SEND_STATUS_SENT);
 
     if (!empty($message['to'])) {
       $maillog->set('recipient_email', $message['to']);
@@ -98,14 +138,7 @@ function simple_school_reports_maillog_mail_alter(&$message) {
     $maillog->set('changed', time());
     $maillog->save();
 
-    if (!empty($message['from'])) {
-      $recipient = $message['from'];
-    }
-    if ($recipient_user instanceof \Drupal\Core\Session\AccountInterface) {
-      $recipient = $recipient_user->getEmail();
-    }
-    $is_dev = !str_contains(\Drupal::request()->getHost(), 'simpleschoolreports.se') || str_ends_with($recipient, '@example.com');
-    if ($is_dev) {
+    if ($is_simulated) {
       $message['send'] = FALSE;
     }
   }
@@ -114,9 +147,9 @@ function simple_school_reports_maillog_mail_alter(&$message) {
   }
 }
 
-function ssr_views_permission_maillog_active() {
-  $account = \Drupal::currentUser();
-  $has_access = $account->id() == 1
+function ssr_views_permission_maillog_active(?\Drupal\Core\Session\AccountInterface $account = NULL) {
+  $account = $account ?? \Drupal::currentUser();
+  $has_access = $account->hasPermission('super user permissions')
     ? TRUE
     : $account->hasPermission('view maillog') && \Drupal::moduleHandler()->moduleExists('simple_school_reports_maillog_mini');
   $access = AccessResult::allowedIf($has_access);
@@ -139,7 +172,97 @@ function simple_school_reports_maillog_form_alter(&$form, FormStateInterface $fo
         $options = array_merge($options, simple_school_reports_maillog_mail_types());
         $form['mail_type']['#options'] = $options;
         unset($form['mail_type']['#size']);
+
+        $form['send_status']['#type'] = 'select';
+        $options = [
+          '' => t('Select')
+        ];
+        $options = array_merge($options, simple_school_reports_maillog_send_status_options());
+        unset($options[SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED]);
+        $form['send_status']['#options'] = $options;
+        unset($form['send_status']['#size']);
       }
     }
+  }
+}
+
+function clean_up_old_maillog_items() {
+  $mailcount_storage = \Drupal::entityTypeManager()
+    ->getStorage('ssr_mail_count');
+
+  // Handle mailcount state first.
+  $continue_clean_up = TRUE;
+
+  $mailcount_state = \Drupal::state()->get('simple_school_reports_maillog.mailcount', []);
+  $current_date = date('Y-m-d');
+
+  $handled_dates = 0;
+  foreach ($mailcount_state as $mail_count_date => $mail_count) {
+    // Skip future or current dates.
+    if ($mail_count_date >= $current_date) {
+      continue;
+    }
+
+    $mail_count_date_object = new \DateTime($mail_count_date);
+    $mail_count_date_object->setTime(0, 0, 0);
+    $mail_count_from = $mail_count_date_object->getTimestamp();
+    $mail_count_date_object->setTime(23, 59, 59);
+    $mail_count_to = $mail_count_date_object->getTimestamp();
+
+    $sent = $mail_count['sent'] ?? 0;
+    $failed = $mail_count['failed'] ?? 0;
+    $simulated = $mail_count['simulated'] ?? 0;
+
+    if ($sent === 0 && $failed === 0 && $simulated === 0) {
+      unset($mailcount_state[$mail_count_date]);
+      continue;
+    }
+
+    $mail_count = $mailcount_storage->create([
+      'label' => $mail_count_date . ' ' . $sent . '/' . $failed . '/' . $simulated,
+      'langcode' => 'sv',
+      'status' => TRUE,
+      'from' => $mail_count_from,
+      'to' => $mail_count_to,
+      'sent' => $sent,
+      'failed' => $failed,
+      'simulated' => $simulated,
+    ]);
+    $mail_count->save();
+
+    unset($mailcount_state[$mail_count_date]);
+
+    $handled_dates++;
+    // Limit to 50 at the time
+    if ($handled_dates > 50) {
+      $continue_clean_up = FALSE;
+      break;
+    }
+  }
+
+  if ($handled_dates > 0) {
+    \Drupal::state()->set('simple_school_reports_maillog.mailcount', $mailcount_state);
+  }
+
+  if (!$continue_clean_up) {
+    return;
+  }
+
+  $time_limit = new DateTime();
+  $time_limit->sub(new \DateInterval('P3M'));
+
+  $maillog_storage = \Drupal::entityTypeManager()
+    ->getStorage('ssr_maillog');
+
+  $maillog_ids = $maillog_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('created', $time_limit->getTimestamp(), '<=')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($maillog_ids)) {
+    $maillog_items = $maillog_storage->loadMultiple($maillog_ids);
+    $maillog_storage->delete($maillog_items);
   }
 }

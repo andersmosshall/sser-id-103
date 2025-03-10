@@ -1,0 +1,25 @@
+uuid: 8cb9c591-004b-4832-9c93-1ff9c0970d23
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_maillog
+    - system
+  theme:
+    - ssr_base
+id: ssr_base_mailcount
+theme: ssr_base
+region: content
+weight: 0
+provider: null
+plugin: mail_cont_block
+settings:
+  id: mail_cont_block
+  label: 'Mail count'
+  label_display: '0'
+  provider: simple_school_reports_maillog
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /ssr-mail-count

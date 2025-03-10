@@ -1002,7 +1002,7 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     }
   }
 
-  if ($user->id() == 1 && $account->id() != 1 && $operation !== 'view') {
+  if ($user->hasPermission('super user permissions') && $account->id() != 1 && $operation !== 'view') {
     $access = AccessResult::forbidden();
   }
 
@@ -1293,7 +1293,7 @@ function simple_school_reports_core_page_attachments(array &$attachments) {
  * Implements hook_ssr_login_access().
  */
 function simple_school_reports_core_ssr_login_access(\Drupal\user\UserInterface $user) {
-  if ($user->id() == 1 || $user->hasPermission('school staff permissions')) {
+  if ($user->hasPermission('super user permissions') || $user->hasPermission('school staff permissions')) {
     return AccessResult::allowed();
   }
   return AccessResult::neutral();

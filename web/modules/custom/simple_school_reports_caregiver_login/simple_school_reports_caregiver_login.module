@@ -7,7 +7,7 @@ use Drupal\views\ViewExecutable;
  * Implements hook_ssr_start_page_route().
  */
 function simple_school_reports_caregiver_login_ssr_start_page_route(\Drupal\Core\Session\AccountInterface $account) {
-  if ($account->id() == 1 || simple_school_reports_caregiver_login_ssr_login_access($account)->isAllowed()) {
+  if ($account->hasPermission('super user permissions') || simple_school_reports_caregiver_login_ssr_login_access($account)->isAllowed()) {
     return 'simple_school_reports_caregiver_login.start_page_caregiver';
   }
   return NULL;

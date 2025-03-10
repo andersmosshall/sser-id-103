@@ -14,6 +14,7 @@ use Drupal\symfony_mailer\Address;
 use Drupal\symfony_mailer\EmailFactoryInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\UserStorage;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -40,9 +41,9 @@ class EmailService implements EmailServiceInterface {
   protected $entityTypeManager;
 
   /**
-   * @var \Symfony\Component\HttpFoundation\Request
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  protected $currentRequest;
+  protected $requestStack;
 
   /**
    * @var \Drupal\Core\Mail\MailManager
@@ -86,24 +87,28 @@ class EmailService implements EmailServiceInterface {
     RequestStack $request_stack,
     MailManagerInterface $mail_manager,
     AccountInterface $current_user,
-    ?EmailFactoryInterface $email_factory,
+    EmailFactoryInterface $email_factory,
     LoggerChannelFactoryInterface $logger
   ) {
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
-    $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->requestStack = $request_stack;
     $this->mailManager = $mail_manager;
     $this->currentUser = $entity_type_manager->getStorage('user')->load($current_user->id());
     $this->emailFactory = $email_factory ?? NULL;
     $this->logger = $logger;
   }
 
+  protected function currentRequest(): Request {
+    return $this->requestStack->getCurrentRequest();
+  }
+
   public function skipMail(?string $mail) : bool {
     if ($mail) {
       $prefix = 'no-reply-';
-      $is_dev = !str_contains($this->currentRequest->getHost(), 'simpleschoolreports.se');
+      $is_dev = !str_contains($this->currentRequest()->getHost(), 'simpleschoolreports.se');
       $suffix = $is_dev
-        ? str_replace('.', '\.', $this->currentRequest->getHost())
+        ? str_replace('.', '\.', $this->currentRequest()->getHost())
         : '\.simpleschoolreports\.se';
       $preg_match = $prefix . '.+' . $suffix;
       return (bool) preg_match('/' . $preg_match . '/', $mail);
@@ -216,108 +221,139 @@ class EmailService implements EmailServiceInterface {
   }
 
   public function sendMail(string $recipient, string $subject, string $message, array $options = [], $attachments = []) : bool {
-    $include_reply_to = $this->currentUser->id() > 1;
-    if (!empty($options['no_reply_to'])) {
-      $include_reply_to = FALSE;
-    }
+    $send_status = SsrMaillogInterface::MAILLOG_SEND_STATUS_SENT;
+    $send_error = NULL;
+    $mail_message_string = '';
+    $sent = FALSE;
 
-    if ($include_reply_to) {
-      $from = $this->currentUser->getDisplayName();
-      $message_suffix = PHP_EOL . PHP_EOL . $this->t('This mail can not be answered. To reply send mail to @name @mail', ['@name' => $this->currentUser->getDisplayName(), '@mail' => $this->currentUser->getEmail()]);
-    }
-    else {
-      $from = Settings::get('ssr_school_name');
-      $message_suffix = '';
-    }
+    try {
+      $include_reply_to = $this->currentUser->id() > 1;
+      if (!empty($options['no_reply_to'])) {
+        $include_reply_to = FALSE;
+      }
 
-    if ($this->emailFactory === NULL) {
-      return FALSE;
-    }
+      if ($include_reply_to) {
+        $from = $this->currentUser->getDisplayName();
+        $message_suffix = PHP_EOL . PHP_EOL . $this->t('This mail can not be answered. To reply send mail to @name @mail', ['@name' => $this->currentUser->getDisplayName(), '@mail' => $this->currentUser->getEmail()]);
+      }
+      else {
+        $from = Settings::get('ssr_school_name');
+        $message_suffix = '';
+      }
 
-    $email = $this->emailFactory->newTypedEmail('simple_school_reports_core', 'plaintext');
-    $email->setTo($recipient);
+      if ($this->emailFactory === NULL) {
+        return FALSE;
+      }
 
-    $from_adr = new Address('no-reply@simpleschoolreports.se', $from);
-    $email->setFrom($from_adr);
-    $email->setSubject(strip_tags($subject));
+      $email = $this->emailFactory->newTypedEmail('simple_school_reports_core', 'plaintext');
+      $email->setTo($recipient);
 
-    $message = strip_tags($message) . $message_suffix;
+      $from_adr = new Address('no-reply@simpleschoolreports.se', $from);
+      $email->setFrom($from_adr);
+      $email->setSubject(strip_tags($subject));
 
-    $mail_message_string = '<p>' . nl2br($message) . '</p>';
-    $mail_message_string = str_replace(PHP_EOL, '', $mail_message_string);
-    $mail_message = [
-      '#markup' => $mail_message_string,
-    ];
-    $email->setBody($mail_message);
+      $message = strip_tags($message) . $message_suffix;
 
-    $attachments_list_string = [];
-    if (!empty($attachments) && self::supportEmailAttachments()) {
-      foreach ($attachments as $attachment) {
-        try {
-          /** @var \Drupal\file\FileInterface $file */
-          $file = $this->entityTypeManager->getStorage('file')->load($attachment);
+      $mail_message_string = '<p>' . nl2br($message) . '</p>';
+      $mail_message_string = str_replace(PHP_EOL, '', $mail_message_string);
+      $mail_message = [
+        '#markup' => $mail_message_string,
+      ];
+      $email->setBody($mail_message);
+
+      $attachments_list_string = [];
+      if (!empty($attachments) && self::supportEmailAttachments()) {
+        foreach ($attachments as $attachment) {
+          try {
+            /** @var \Drupal\file\FileInterface $file */
+            $file = $this->entityTypeManager->getStorage('file')->load($attachment);
+          }
+          catch (\Exception $e) {
+          }
+
+          if (empty($file)) {
+            return FALSE;
+          }
+          $email->attachFromPath($file->createFileUrl(FALSE), $file->getFilename(), $file->getMimeType());
+          $attachments_list_string[] = $file->getFilename();
         }
-        catch (\Exception $e) {
-        }
+      }
+      // Suppress auto reply.
+      $email->addTextHeader('X-Auto-Response-Suppress', 'OOF, DR, RN, NRN, AutoReply');
+      $this->mailCountIncrement();
+      $is_simulated = str_ends_with($this->currentRequest()->getHost(), '.loc') || str_ends_with($recipient, '@example.com');
 
-        if (empty($file)) {
-          return FALSE;
-        }
-        $email->attachFromPath($file->createFileUrl(FALSE), $file->getFilename(), $file->getMimeType());
-        $attachments_list_string[] = $file->getFilename();
+      if ($is_simulated) {
+        $send_status = SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED;
+        $sent = TRUE;
+      }
+      else {
+        $sent = $email->send();
+      }
+      if (!$sent) {
+        throw new \RuntimeException('Failed to send mail for unknown reason, symfony mailer returned false.');
       }
     }
-    // Suppress auto reply.
-    $email->addTextHeader('X-Auto-Response-Suppress', 'OOF, DR, RN, NRN, AutoReply');
-    $this->mailCountIncrement();
+    catch (\Exception $e) {
+      $send_status = SsrMaillogInterface::MAILLOG_SEND_STATUS_FAILED;
+      $send_error = $e->getMessage();
+      $this->logger->get('simple_school_reports_core')
+        ->error('Failed to send mail %email, attachments: %attachments, error: %error', [
+          '%email' => $recipient,
+          '%attachments' => implode(', ', $attachments_list_string ?? []),
+          '%error' => $e->getMessage(),
+        ]);
+    }
 
-    $is_dev = !str_contains($this->currentRequest->getHost(), 'simpleschoolreports.se') || str_ends_with($recipient, '@example.com');
-    if ($is_dev || $email->send()) {
-      try {
-        /** @var \Drupal\simple_school_reports_maillog\SsrMaillogInterface $maillog */
-        $maillog = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->create([
+    try {
+      $maillog_id = $options['maillog_id'] ?? NULL;
+
+      $maillog = NULL;
+      if ($maillog_id) {
+        $maillog = $this->entityTypeManager->getStorage('ssr_maillog')->load($maillog_id);
+      }
+      if (!$maillog) {
+        $maillog = $this->entityTypeManager->getStorage('ssr_maillog')->create([
           'label' => 'Maillog',
+          'langcode' => 'sv',
           'status' => TRUE,
         ]);
-        $recipient_user = $this->getUserByEmail($recipient);
-        if ($recipient_user) {
-          $maillog->set('recipient_user', $recipient_user);
-        }
-        $maillog->set('recipient_email', $recipient);
-        $maillog->set('field_subject', $email->getSubject());
-        $maillog->set('field_body',  [
-          'value' => $mail_message_string,
-          'format' => 'full_html',
-        ]);
-
-        if (!empty($options['maillog_student_context'])) {
-          $maillog->set('student_context', ['target_id' => $options['maillog_student_context']]);
-        }
-
-        if (!empty($attachments_list_string)) {
-          $maillog->set('attachments', $attachments_list_string);
-        }
-
-        $maillog->set('mail_type', $options['maillog_mail_type'] ?? SsrMaillogInterface::MAILLOG_TYPE_OTHER);
-        $maillog->set('created', time());
-        $maillog->set('changed', time());
-        $maillog->save();
-      }
-      catch (\Exception $e) {
-        // Ignore.
       }
 
-      return TRUE;
-    }
-
-    $this->logger->get('simple_school_reports_core')
-      ->warning('Failed to send mail %email, message: %message, attachments: %attachments', [
-        '%email' => $recipient,
-        '%message' => $message,
-        '%attachments' => implode(', ', $attachments_list_string),
+      $recipient_user = $this->getUserByEmail($recipient);
+      if ($recipient_user) {
+        $maillog->set('recipient_user', $recipient_user);
+      }
+      $maillog->set('recipient_email', $recipient);
+      $maillog->set('field_subject', $email->getSubject());
+      $maillog->set('field_body',  [
+        'value' => $mail_message_string,
+        'format' => 'full_html',
       ]);
 
-    return FALSE;
+      if (!empty($options['maillog_student_context'])) {
+        $maillog->set('student_context', ['target_id' => $options['maillog_student_context']]);
+      }
+
+      if (!empty($attachments_list_string)) {
+        $maillog->set('attachments', $attachments_list_string);
+      }
+
+      $maillog->set('mail_type', $options['maillog_mail_type'] ?? SsrMaillogInterface::MAILLOG_TYPE_OTHER);
+
+      $maillog->set('send_status', $send_status);
+      $maillog->set('error_message', $send_error);
+      $maillog->set('created', time());
+      $maillog->set('changed', time());
+      $maillog->save();
+
+    }
+    catch (\Exception $e) {
+      $this->logger->get('simple_school_reports_core')
+        ->error('Failed to create maillog entry');
+    }
+
+    return $sent;
   }
 
   public static function batchSendMail(string $recipient, string $subject, string $message, array $replace_context, array $attachments, array $options, &$context): bool {

@@ -710,27 +710,6 @@ function clean_up_student_nodes() {
   }
 }
 
-function clean_up_old_maillog_items() {
-  $time_limit = new DateTime();
-  $time_limit->sub(new \DateInterval('P3M'));
-
-  $maillog_storage = \Drupal::entityTypeManager()
-    ->getStorage('ssr_maillog');
-
-  $maillog_ids = $maillog_storage
-    ->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('created', $time_limit->getTimestamp(), '<=')
-    ->range(0, 50)
-    ->execute();
-
-  if (!empty($maillog_ids)) {
-     $maillog_items = $maillog_storage->loadMultiple($maillog_ids);
-     $maillog_storage->delete($maillog_items);
-  }
-
-}
-
 function clean_up_custom_entities() {
   // For now we put the backup last run modification here.
   $now = new \DateTime();

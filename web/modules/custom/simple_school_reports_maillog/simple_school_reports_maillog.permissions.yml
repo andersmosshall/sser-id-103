@@ -9,3 +9,15 @@ view maillog:
   title: View maillog
 edit maillog:
   title: Edit maillog
+
+administer ssr_mail_count:
+  title: 'Administer mail counts'
+  restrict access: true
+view ssr_mail_count:
+  title: 'View mail count'
+edit ssr_mail_count:
+  title: 'Edit mail count'
+delete ssr_mail_count:
+  title: 'Delete mail count'
+create ssr_mail_count:
+  title: 'Create mail count'

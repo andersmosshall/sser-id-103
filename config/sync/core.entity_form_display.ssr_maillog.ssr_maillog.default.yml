@@ -21,6 +21,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  error_message:
+    type: text_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_body:
     type: text_textarea
     weight: 2
@@ -68,6 +76,12 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  send_status:
+    type: options_select
+    weight: 9
+    region: content
+    settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox

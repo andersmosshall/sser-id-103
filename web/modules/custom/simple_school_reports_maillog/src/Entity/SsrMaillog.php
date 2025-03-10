@@ -82,6 +82,26 @@ class SsrMaillog extends ContentEntityBase implements SsrMaillogInterface {
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    $mailcount_state = \Drupal::state()->get('simple_school_reports_maillog.mailcount', []);
+
+    $created = $this->get('created')->value ?? time();
+    $date = date('Y-m-d', $created);
+
+    if (!isset($mailcount_state[$date])) {
+      $mailcount_state[$date] = [
+        'sent' => 0,
+        'failed' => 0,
+        'simulated' => 0,
+      ];
+    }
+    $send_status = $this->get('send_status')->value ?? SsrMaillogInterface::MAILLOG_SEND_STATUS_SENT;
+    if (!isset($mailcount_state[$date][$send_status])) {
+      $mailcount_state[$date][$send_status] = 0;
+    }
+
+    $mailcount_state[$date][$send_status]++;
+    \Drupal::state()->set('simple_school_reports_maillog.mailcount', $mailcount_state);
   }
 
   /**
@@ -253,6 +273,22 @@ class SsrMaillog extends ContentEntityBase implements SsrMaillogInterface {
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
+
+    $fields['send_status'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Send status'))
+      ->setRequired(TRUE)
+      ->setDefaultValue(SsrMaillogInterface::MAILLOG_SEND_STATUS_SENT)
+      ->setSetting('allowed_values_function', 'simple_school_reports_maillog_send_status_options')
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['error_message'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Error message'))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
 
     return $fields;
   }

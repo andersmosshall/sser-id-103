@@ -1,0 +1,83 @@
+uuid: acf92dd4-1155-49f0-ad6a-1b0973220ebc
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_maillog
+id: ssr_mail_count.ssr_mail_count.default
+targetEntityType: ssr_mail_count
+bundle: ssr_mail_count
+mode: default
+content:
+  failed:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i:s'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  sent:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  simulated:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i:s'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  label: true
+  status: true
+  uid: true

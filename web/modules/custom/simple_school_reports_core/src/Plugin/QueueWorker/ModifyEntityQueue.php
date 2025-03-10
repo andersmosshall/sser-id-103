@@ -7,7 +7,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 /**
  * Delete entity queue
  *
@@ -76,16 +75,19 @@ class ModifyEntityQueue extends QueueWorkerBase implements ContainerFactoryPlugi
         $storage = NULL;
       }
 
-      if ($storage) {
-        $entity = $storage->load($data['entity_id']);
-        if ($entity) {
-          foreach ($data['fields'] as $field => $value) {
-            if (method_exists($entity, 'hasField') && $entity->hasField($field)) {
-              $entity->set($field, $value);
-            }
+      if (!$storage) {
+        return;
+      }
+
+
+      $entity = $storage->load($data['entity_id']);
+      if ($entity) {
+        foreach ($data['fields'] as $field => $value) {
+          if (method_exists($entity, 'hasField') && $entity->hasField($field)) {
+            $entity->set($field, $value);
           }
-          $entity->save();
         }
+        $entity->save();
       }
     }
   }
