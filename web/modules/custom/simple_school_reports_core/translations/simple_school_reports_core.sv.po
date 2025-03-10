@@ -3253,38 +3253,44 @@ msgstr "Elever som är flickor"
 msgid "Students with special diet"
 msgstr "Elever med specialkost"
 
-msgid ""
-msgstr ""
+msgid "Send status"
+msgstr "Status"
 
-msgid ""
-msgstr ""
+msgid "Message sent"
+msgstr "Meddelande skickat"
 
-msgid ""
-msgstr ""
+msgid "Message transfer failed"
+msgstr "Misslyckades att skicka"
 
-msgid ""
-msgstr ""
+msgid "Simulated message"
+msgstr "Simulerat meddelande"
 
-msgid ""
-msgstr ""
+msgid "Error message"
+msgstr "Felmeddelande"
 
-msgid ""
-msgstr ""
+msgid "SSR Mail count"
+msgstr "SSR Antal mail"
 
-msgid ""
-msgstr ""
+msgid "SSR Maillog"
+msgstr "SSR Maillog"
 
-msgid ""
-msgstr ""
+msgid "Mail count"
+msgstr "Antal mail"
 
-msgid ""
-msgstr ""
+msgid "Mail log"
+msgstr "Maillog"
 
-msgid ""
-msgstr ""
+msgid "No data available."
+msgstr "Ingen data tillgänglig."
 
-msgid ""
-msgstr ""
+msgid "Data is presented as Sent/Failed/Simulated"
+msgstr "Data presenteras som Skickade/Misslyckade/Simulerade"
+
+msgid "Mail counts per day"
+msgstr "Antal mail per dag"
+
+msgid "Total: @sent sent, @failed failed, @simulated simulated"
+msgstr "Totalt: @sent skickade, @failed misslyckade, @simulated simulerade"
 
 msgid ""
 msgstr ""

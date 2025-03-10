@@ -103,7 +103,7 @@ class CaregiverStartPageBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf($account->id() == 1 || in_array('caregiver', $account->getRoles()));
+    return AccessResult::allowedIf($account->hasPermission('super user permissions') || in_array('caregiver', $account->getRoles()));
   }
 
 }

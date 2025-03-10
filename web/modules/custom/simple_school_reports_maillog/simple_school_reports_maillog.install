@@ -5,6 +5,8 @@
  * Install, update, and uninstall functions for the Forum module.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_install().
  */
@@ -47,5 +49,65 @@ function simple_school_reports_maillog_update_10002() {
         $item->save();
       }
     }
+  }
+}
+
+/**
+ * Install new fields.
+ */
+function simple_school_reports_maillog_update_10003() {
+  $fields = [];
+
+  $fields['send_status'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('Send status'))
+    ->setRequired(TRUE)
+    ->setDefaultValue('sent')
+    ->setSetting('allowed_values_function', 'simple_school_reports_maillog_send_status_options')
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['error_message'] = BaseFieldDefinition::create('text_long')
+    ->setLabel(t('Error message'))
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_maillog', 'simple_school_reports_maillog', $storage_definition);
+  }
+}
+
+/**
+ * Queue population of send_status field.
+ */
+function simple_school_reports_maillog_update_10004() {
+  $maillog_ids = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->getQuery()->accessCheck(FALSE)->execute();
+  if (empty($maillog_ids)) {
+    return;
+  }
+  $queue = \Drupal::service('queue')->get('modify_entity_queue');
+  $queue->createQueue();
+  foreach ($maillog_ids as $id) {
+    $fields_to_modify = [
+      'send_status' => 'sent',
+    ];
+    $queue->createItem(['entity_type' => 'ssr_maillog', 'entity_id' => $id, 'fields' => $fields_to_modify]);
+  }
+}
+
+/**
+ * Install mail count entity type.
+ */
+function simple_school_reports_maillog_update_10005() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_mail_count')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_mail_count'));
   }
 }

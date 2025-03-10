@@ -21,7 +21,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 9
+    weight: 11
     region: content
   created:
     type: timestamp
@@ -43,12 +43,19 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  error_message:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_body:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 10
     region: content
   field_subject:
     type: string
@@ -56,7 +63,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 7
+    weight: 9
     region: content
   label:
     type: string
@@ -71,7 +78,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 8
     region: content
   recipient_email:
     type: string
@@ -79,7 +86,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 4
+    weight: 6
     region: content
   recipient_user:
     type: entity_reference_label
@@ -87,7 +94,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 5
+    region: content
+  send_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   student_context:
     type: entity_reference_label
@@ -95,14 +109,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 7
     region: content
   uid:
     type: author
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 4
     region: content
 hidden:
   body: true

@@ -70,7 +70,7 @@ class CheckCaregiverQueue extends QueueWorkerBase implements ContainerFactoryPlu
     if (!empty($data)) {
       /** @var \Drupal\user\UserInterface|null $caregiver */
       $caregiver = $this->entityTypeManager->getStorage('user')->load($data);
-      if (!$caregiver) {
+      if (!$caregiver || $caregiver->hasPermission('super user permissions')) {
         return;
       }
 

@@ -14,3 +14,15 @@ simple_school_reports_maillog.logg:
   weight: 130
   parent: simple_school_reports_core.statistics
   route_name: view.ssr_maillog.list
+
+entity.ssr_mail_count.settings:
+  title: 'Mail count'
+  description: 'Configure a Mail count entity type.'
+  route_name:  entity.ssr_mail_count.settings
+  parent: system.admin_structure
+
+entity.ssr_mail_count.collection:
+  title: 'Mail counts'
+  description: 'List of mail counts.'
+  route_name: entity.ssr_mail_count.collection
+  parent: system.admin_content

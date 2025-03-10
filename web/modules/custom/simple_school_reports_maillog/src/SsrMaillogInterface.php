@@ -22,5 +22,8 @@ interface SsrMaillogInterface extends ContentEntityInterface, EntityOwnerInterfa
   const MAILLOG_TYPE_MAIL_USER = 'mail_user';
   const MAILLOG_TYPE_OTHER = 'other';
 
+  const MAILLOG_SEND_STATUS_SENT = 'sent';
+  const MAILLOG_SEND_STATUS_FAILED = 'failed';
+  const MAILLOG_SEND_STATUS_SIMULATED = 'simulated';
 
 }

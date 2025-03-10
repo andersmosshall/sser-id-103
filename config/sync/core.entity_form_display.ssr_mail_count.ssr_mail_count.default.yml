@@ -1,0 +1,56 @@
+uuid: acbef8f7-69c6-494d-b50e-545a42d37d1e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_maillog
+id: ssr_mail_count.ssr_mail_count.default
+targetEntityType: ssr_mail_count
+bundle: ssr_mail_count
+mode: default
+content:
+  failed:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: datetime_timestamp
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  sent:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  simulated:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  to:
+    type: datetime_timestamp
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uid: true

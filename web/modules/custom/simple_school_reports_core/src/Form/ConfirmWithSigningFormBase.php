@@ -218,7 +218,7 @@ abstract class ConfirmWithSigningFormBase extends ConfirmFormBase {
         $this->messenger()->addError($this->t('Something went wrong.'));
         return;
       }
-      if ($this->currentUser->id() == 1) {
+      if ($this->currentUser->hasPermission('super user permissions')) {
         $this->messenger()->addStatus($sign_key);
       }
     }

@@ -1,0 +1,5 @@
+mail_count:
+  version: VERSION
+  css:
+    theme:
+      css/mail_count.css: { }

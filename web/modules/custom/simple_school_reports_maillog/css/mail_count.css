@@ -1,0 +1,27 @@
+.mail-count-block table td {
+  vertical-align: top;
+}
+
+.mail-count-block .mail-count {
+  font-size: 0.75rem;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 75%;
+  text-wrap: nowrap;
+}
+
+.mail-count-block .mail-count.mail-count--ok {
+  background: #2cc036bf;
+}
+
+.mail-count-block .mail-count.mail-count--warning {
+  background: #f9ab35;
+}
+
+.mail-count-block .mail-count.mail-count--danger {
+  background: #d72222bf
+}
+
+.mail-count-block table {
+  table-layout: fixed;
+}

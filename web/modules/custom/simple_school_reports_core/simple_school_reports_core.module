@@ -986,10 +986,6 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     }
   }
 
-  if ($user->id() == 1 && $account->id() != 1 && $operation !== 'view') {
-    $access = AccessResult::forbidden();
-  }
-
   if ($user->hasRole('student') && $operation === 'caregiver_access') {
     if ($account->hasPermission('school staff permissions')) {
       $access = AccessResult::allowed();
@@ -1006,9 +1002,27 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     }
   }
 
+  if ($user->hasPermission('super user permissions') && $account->id() != 1 && $operation !== 'view') {
+    $access = AccessResult::forbidden();
+  }
+
+  if ($user->hasPermission('super user permissions') && $operation === 'delete') {
+    $access = AccessResult::forbidden();
+  }
+
   $access->cachePerUser();
   $access->addCacheableDependency($user);
   return $access;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function simple_school_reports_core_user_predelete(UserInterface $user) {
+  // Prevent deletion of super user.
+  if ($user->hasPermission('super user permissions')) {
+    throw new \Exception('Super user cannot be deleted.');
+  }
 }
 
 /**
@@ -1279,7 +1293,7 @@ function simple_school_reports_core_page_attachments(array &$attachments) {
  * Implements hook_ssr_login_access().
  */
 function simple_school_reports_core_ssr_login_access(\Drupal\user\UserInterface $user) {
-  if ($user->id() == 1 || $user->hasPermission('school staff permissions')) {
+  if ($user->hasPermission('super user permissions') || $user->hasPermission('school staff permissions')) {
     return AccessResult::allowed();
   }
   return AccessResult::neutral();
