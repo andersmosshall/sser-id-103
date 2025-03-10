@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\State\State;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -31,6 +32,7 @@ class MailCountBlock extends BlockBase implements ContainerFactoryPluginInterfac
           $plugin_definition,
     protected Connection $connection,
     protected RequestStack $requestStack,
+    protected State $state,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -45,6 +47,7 @@ class MailCountBlock extends BlockBase implements ContainerFactoryPluginInterfac
       $plugin_definition,
       $container->get('database'),
       $container->get('request_stack'),
+      $container->get('state'),
     );
   }
 
@@ -62,7 +65,7 @@ class MailCountBlock extends BlockBase implements ContainerFactoryPluginInterfac
   public function build() {
     $cache = new CacheableMetadata();
     $cache->addCacheContexts(['route', 'current_day', 'url.query_args:from', 'url.query_args:to']);
-    $cache->addCacheTags(['ssr_mail_count_list']);
+    $cache->addCacheTags(['ssr_mail_count_list', 'ssr_maillog_list']);
     $build = [
       '#markup' => '<em>' . $this->t('No data available.') . '</em>',
     ];
@@ -100,6 +103,11 @@ class MailCountBlock extends BlockBase implements ContainerFactoryPluginInterfac
         'failed' => $result->failed ?? 0,
         'simulated' => $result->simulated ?? 0,
       ];
+    }
+
+    $current_day_string = $this_to->format('Y-m-d');
+    if (empty($per_day_data[$current_day_string])) {
+      $per_day_data[$current_day_string] = $this->state->get('simple_school_reports_maillog.mailcount', [])[$current_day_string] ?? [];
     }
 
     $headers = [
@@ -253,7 +261,7 @@ class MailCountBlock extends BlockBase implements ContainerFactoryPluginInterfac
   }
 
   public function getCacheTags() {
-    return Cache::mergeTags(['ssr_mail_count_list'], parent::getCacheTags());
+    return Cache::mergeTags(['ssr_mail_count_list', 'ssr_maillog_list'], parent::getCacheTags());
   }
 
   /**
