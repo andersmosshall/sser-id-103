@@ -26,8 +26,8 @@ class ExaminationService implements ExaminationServiceInterface {
       return $this->lookup[$cid];
     }
 
-    $state_not_completed_state = Settings::get('ssr_examination_result_not_completed');
-    $state_not_applicable = Settings::get('ssr_examination_result_not_applicable');
+    $state_not_completed_state = Settings::get('ssr_abstract_hash_2');
+    $state_not_applicable = Settings::get('ssr_abstract_hash_1');
     if (!$state_not_completed_state) {
       $this->lookup[$cid] = [];
       return [];
@@ -104,8 +104,8 @@ class ExaminationService implements ExaminationServiceInterface {
   public function getProgress(int $examinationId): string {
     $examination_stats = $this->getExaminationResultStats($examinationId);
 
-    $state_not_applicable = Settings::get('ssr_examination_result_not_applicable');
-    $state_not_completed_state = Settings::get('ssr_examination_result_not_completed');
+    $state_not_applicable = Settings::get('ssr_abstract_hash_1');
+    $state_not_completed_state = Settings::get('ssr_abstract_hash_2');
     if (!$state_not_applicable || !$state_not_completed_state) {
       return '0';
     }
@@ -145,7 +145,7 @@ class ExaminationService implements ExaminationServiceInterface {
     $has_caregiver_access = $student->access('caregiver_access', $this->currentUser);
     $is_school_staff = $this->currentUser->hasPermission('school staff permissions');
 
-    $state_not_applicable = Settings::get('ssr_examination_result_not_applicable');
+    $state_not_applicable = Settings::get('ssr_abstract_hash_1');
     if (!$state_not_applicable || (!$has_caregiver_access && !$is_school_staff)) {
       $this->lookup[$cid] = [];
       return [];

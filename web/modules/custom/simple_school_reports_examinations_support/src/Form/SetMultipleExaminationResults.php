@@ -159,7 +159,7 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
       '#required' => TRUE,
     ];
 
-    $state_not_applicable = Settings::get('ssr_examination_result_not_applicable', 'no_value');
+    $state_not_applicable = Settings::get('ssr_abstract_hash_1', 'no_value');
 
     $form['examination_status'] = [
       '#type' => 'checkbox',
@@ -228,9 +228,9 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
       $examination_result = current($examination_result_storage->loadByProperties([
         'student' => $uid,
         'examination' => $examination_id,
-      ]));
+      ])) ?: NULL;
 
-      $state_not_applicable = Settings::get('ssr_examination_result_not_applicable');
+      $state_not_applicable = Settings::get('ssr_abstract_hash_1');
       if (!$examination_result && $examination_state !== $state_not_applicable) {
         $examination_result = $examination_result_storage->create([
           'student' => ['target_id' => $uid],

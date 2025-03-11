@@ -67,7 +67,7 @@ class ExaminationResultForStudent extends FieldPluginBase {
   }
 
   protected function makeResultBuild(string $student_uid, string $examination_id, ?string $assessment_group_id = NULL, bool $suffix_ungrouped = FALSE): array {
-    $state_not_completed = Settings::get('ssr_examination_result_not_completed', 'no_value');
+    $state_not_completed = Settings::get('ssr_abstract_hash_2', 'no_value');
     $value = $state_not_completed;
     $in_group = TRUE;
     if ($this->moduleHandler->moduleExists('simple_school_reports_examinations')) {
