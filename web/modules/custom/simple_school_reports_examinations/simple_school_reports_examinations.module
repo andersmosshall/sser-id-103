@@ -218,6 +218,47 @@ function simple_school_reports_examinations_form_alter(&$form, \Drupal\Core\Form
           $form['subject_target_id']['#options'] = $subjects_options;
         }
       }
+
+      if ($view->id() === 'student_examination_list') {
+        \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
+
+        if (!empty($form['subject_target_id'])) {
+          $vid = 'school_subject';
+          /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+          $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+          $subjects = $termStorage->loadTree($vid);
+          $subjects_options = [
+            '' => t('All subjects'),
+          ];
+          foreach ($subjects as $subject) {
+            $subjects_options[$subject->tid] = $subject->name;
+          }
+          unset($form['subject_target_id']['#size']);
+          $form['subject_target_id']['#type'] = 'select';
+          $form['subject_target_id']['#options'] = $subjects_options;
+        }
+
+        if (!empty($form['state'])) {
+          $examination_result_options = [
+            '' => t('All results'),
+          ];
+
+          $state_not_applicable = Settings::get('ssr_abstract_hash_1');
+          $numeric_key = -1;
+          foreach (assessment_group_user_examination_result_state_options() as $state => $label) {
+            $numeric_key++;
+            if ($state === $state_not_applicable) {
+              continue;
+            }
+
+            $examination_result_options[$numeric_key] = $label;
+          }
+
+          unset($form['state']['#size']);
+          $form['state']['#type'] = 'select';
+          $form['state']['#options'] = $examination_result_options;
+        }
+      }
     }
   }
 }
