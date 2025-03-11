@@ -240,7 +240,7 @@ function simple_school_reports_examinations_form_alter(&$form, \Drupal\Core\Form
 
         if (!empty($form['state'])) {
           $examination_result_options = [
-            '' => t('All results'),
+            '' => t('All'),
           ];
 
           $state_not_applicable = Settings::get('ssr_abstract_hash_1');
