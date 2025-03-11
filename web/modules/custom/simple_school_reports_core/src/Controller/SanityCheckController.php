@@ -43,10 +43,15 @@ class SanityCheckController extends ControllerBase {
     }
 
     $secret_value_settings = [
-      'ssr_examination_result_not_applicable',
-      'ssr_examination_result_not_completed',
-      'ssr_examination_result_completed',
-      'ssr_examination_result_failed',
+      'ssr_abstract_hash_1',
+      'ssr_abstract_hash_2',
+      'ssr_abstract_hash_3',
+      'ssr_abstract_hash_4',
+      'ssr_abstract_hash_5',
+      'ssr_abstract_hash_6',
+      'ssr_abstract_hash_7',
+      'ssr_abstract_hash_8',
+      'ssr_abstract_hash_9',
       'ssr_common_salt',
     ];
     foreach ($secret_value_settings as $setting) {

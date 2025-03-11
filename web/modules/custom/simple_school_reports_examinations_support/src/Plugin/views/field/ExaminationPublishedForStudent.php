@@ -76,7 +76,7 @@ class ExaminationPublishedForStudent extends FieldPluginBase {
       $result_published = TRUE;
     }
 
-    if ($status === Settings::get('ssr_examination_result_not_applicable')) {
+    if ($status === Settings::get('ssr_abstract_hash_1')) {
       $result_published = FALSE;
     }
 

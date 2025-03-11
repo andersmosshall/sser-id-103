@@ -74,20 +74,31 @@ function template_preprocess_ssr_examination_result(array &$variables): void {
 }
 
 function assessment_group_user_examination_result_state_options(): array {
-  $state_not_applicable = Settings::get('ssr_examination_result_not_applicable');
-  $state_not_completed = Settings::get('ssr_examination_result_not_completed');
-  $state_completed = Settings::get('ssr_examination_result_completed');
-  $state_failed = Settings::get('ssr_examination_result_failed');
+  $state_not_applicable = Settings::get('ssr_abstract_hash_1');
+  $state_not_completed = Settings::get('ssr_abstract_hash_2');
+  $state_completed = Settings::get('ssr_abstract_hash_3');
+  $state_failed = Settings::get('ssr_abstract_hash_4');
+  $state_passed = Settings::get('ssr_abstract_hash_5');
+  $state_passed_plus = Settings::get('ssr_abstract_hash_6');
 
-  if (!$state_not_applicable || !$state_not_completed || !$state_completed || !$state_failed) {
+  if (
+    !$state_not_applicable ||
+    !$state_not_completed ||
+    !$state_completed ||
+    !$state_failed ||
+    !$state_passed ||
+    !$state_passed_plus
+  ) {
     return [];
   }
 
   return [
     $state_not_applicable => t('Skip for this student'),
     $state_not_completed => t('Not completed'),
-    $state_completed => t('Completed'),
-//    $state_failed => t('Completed but not passed'),
+    $state_failed => t('Insufficient knowledge'),
+    $state_passed => t('Acceptable knowledge'),
+    $state_passed_plus => t('More then acceptable knowledge'),
+//    $state_completed => t('Completed'),
   ];
 }
 
