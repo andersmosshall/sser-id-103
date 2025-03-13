@@ -1888,6 +1888,14 @@ function simple_school_reports_core_user_login(UserInterface $account) {
     try {
       \Drupal::logger('simple_school_reports_core')->info('Super user @name has logged in.', ['@name' => $account->getDisplayName()]);
 
+      // Throttle the mail notice to reduce spam.
+      $now = \Drupal::time()->getRequestTime();
+      $last_mail_time = \Drupal::state()->get('ssr_super_user_login_mail_last_time_' . $account->id(), 0);
+      if ($now - $last_mail_time < 60 * 60 * 2) {
+        return;
+      }
+      \Drupal::state()->set('ssr_super_user_login_mail_last_time_' . $account->id(), $now);
+
       $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
       if (empty($ssr_bug_report_email)) {
         return;
@@ -1897,7 +1905,6 @@ function simple_school_reports_core_user_login(UserInterface $account) {
       $email_service = \Drupal::service('simple_school_reports_core.email_service');
       $subject = t('Super user has logged in to @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
       $message = t('Super user @name has logged in to @school_name.', ['@name' => $account->getDisplayName(), '@school_name' => Settings::get('ssr_school_name', '?')]);
-
 
       if ($email_service->sendMail($ssr_bug_report_email, $subject, $message, [
         'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
