@@ -228,9 +228,16 @@ function simple_school_reports_examinations_support_views_query_alter(\Drupal\vi
     $student_uid = \Drupal::routeMatch()->getRawParameter('user');
 
     $examination_ids = [];
+    $examination_ids_by_state = [];
     if ($student_uid) {
       /** @var \Drupal\simple_school_reports_examinations_support\Service\ExaminationServiceInterface $examination_service */
       $examination_service = \Drupal::service('simple_school_reports_examinations_support.examination_service');
+
+      foreach ($examination_service->getExaminationResultValuesForUser($student_uid, TRUE, TRUE) as $examination_id => $state) {
+        $examination_ids[] = $examination_id;
+        $examination_ids_by_state[$state][] = $examination_id;
+      }
+
       $examination_ids = array_keys($examination_service->getExaminationResultValuesForUser($student_uid, TRUE, TRUE));
     }
 
@@ -240,9 +247,29 @@ function simple_school_reports_examinations_support_views_query_alter(\Drupal\vi
 
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {
-        if (!empty($condition['field']) && $condition['field'] === 'ssr_examination_field_data.id') {
+        if (!empty($condition['field']) && $condition['field'] === 'ssr_examination_field_data.id' && $condition['value'] == '-1') {
           $condition['operator'] = 'IN';
           $condition['value'] = $examination_ids;
+        }
+
+        if (!empty($condition['field']) && $condition['field'] === 'ssr_examination_field_data.id' && $condition['value'] != '-1') {
+          $state_examination_ids = $examination_ids;
+
+          if (!empty($condition['value'] && is_numeric($condition['value']))) {
+            $key = (int) $condition['value'];
+            $options = array_keys(assessment_group_user_examination_result_state_options());
+            $state_value = $options[$key] ?? NULL;
+            if ($state_value) {
+              $state_examination_ids = $examination_ids_by_state[$state_value] ?? [];
+            }
+          }
+
+          if (empty($state_examination_ids)) {
+            $state_examination_ids = [-1];
+          }
+
+          $condition['operator'] = 'IN';
+          $condition['value'] = $state_examination_ids;
         }
       }
     }

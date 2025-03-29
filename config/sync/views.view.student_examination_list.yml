@@ -361,8 +361,8 @@ display:
         type: basic
         options:
           submit_button: Tillämpa
-          reset_button: false
-          reset_button_label: Reset
+          reset_button: true
+          reset_button_label: Återställ
           exposed_sorts_label: 'Sortera på'
           expose_sort_order: true
           sort_asc_label: Ökande
@@ -451,6 +451,120 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        subject:
+          id: subject
+          table: ssr_assessment_group_field_data
+          field: subject
+          relationship: assessment_group
+          group_type: group
+          admin_label: ''
+          entity_type: ssr_assessment_group
+          entity_field: subject
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: subject_op
+            label: Ämne
+            description: ''
+            use_operator: false
+            operator: subject_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: subject_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
+              super_admin: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        id_1:
+          id: id_1
+          table: ssr_examination_field_data
+          field: id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: ssr_examination
+          entity_field: id
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: id_1_op
+            label: Status
+            description: ''
+            use_operator: false
+            operator: id_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: state
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              student: '0'
+              caregiver: '0'
+              teacher: '0'
+              administrator: '0'
+              principle: '0'
+              budget_reviewer: '0'
+              budget_administrator: '0'
+              super_admin: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: table
         options:
@@ -510,6 +624,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }
   list:
@@ -525,5 +640,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }
