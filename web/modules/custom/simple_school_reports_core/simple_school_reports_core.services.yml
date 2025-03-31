@@ -22,7 +22,7 @@ services:
 
   simple_school_reports_core.email_service:
     class: Drupal\simple_school_reports_core\Service\EmailService
-    arguments: [ '@database', '@entity_type.manager', '@request_stack', '@plugin.manager.mail', '@current_user', '@?email_factory', '@logger.factory' ]
+    arguments: [ '@database', '@entity_type.manager', '@request_stack', '@plugin.manager.mail', '@current_user', '@?email_factory', '@module_handler', '@logger.factory' ]
 
   simple_school_reports_core.replace_token_service:
     class: Drupal\simple_school_reports_core\Service\ReplaceTokenService
