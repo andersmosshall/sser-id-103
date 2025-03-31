@@ -82,7 +82,6 @@ module:
   simple_school_reports_extension_proxy: 5
   simple_school_reports_maillog: 6
   password_policy: 10
-  simple_school_reports_demo: 10
   simple_school_reports_help: 10
   simple_school_reports_schema_support: 10
   views: 10
