@@ -3292,8 +3292,8 @@ msgstr "Antal mail per dag"
 msgid "Total: @sent sent, @failed failed, @simulated simulated"
 msgstr "Totalt: @sent skickade, @failed misslyckade, @simulated simulerade"
 
-msgid ""
-msgstr ""
+msgid "Demo mode is active. No messages are sent to real email addresses. This is a demonstration site and data can be removed at any time. Do not use real personal information."
+msgstr "Demoläge är aktivt. Inga meddelanden skickas till riktiga e-postadresser. Detta är en demonstrationswebbplats och data kan tas bort när som helst. Använd inte riktiga personuppgifter."
 
 msgid ""
 msgstr ""

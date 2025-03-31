@@ -87,7 +87,10 @@ function simple_school_reports_maillog_send_status_options() {
  */
 function simple_school_reports_maillog_mail_alter(&$message) {
   try {
-    if (empty($message['send'])) {
+    $send = !empty($message['send']);
+    $blocked_by_demo = !empty($message['blocked_by_demo']);
+
+    if (!$send && !$blocked_by_demo) {
       return;
     }
 

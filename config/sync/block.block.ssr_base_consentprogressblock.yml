@@ -10,7 +10,7 @@ dependencies:
 id: ssr_base_consentprogressblock
 theme: ssr_base
 region: highlighted
-weight: -14
+weight: -19
 provider: null
 plugin: consent_progres_block
 settings:

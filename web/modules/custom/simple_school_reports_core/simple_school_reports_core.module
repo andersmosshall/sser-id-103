@@ -1333,6 +1333,14 @@ function simple_school_reports_core_mail_alter(&$message) {
   }
 
   if (!empty($message['send'])) {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    if ($module_handler->moduleExists('simple_school_reports_demo')) {
+      $message['send'] = FALSE;
+      $message['blocked_by_demo'] = TRUE;
+      return;
+    }
+
     /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
     $email_service = \Drupal::service('simple_school_reports_core.email_service');
     $email_service->mailCountIncrement();

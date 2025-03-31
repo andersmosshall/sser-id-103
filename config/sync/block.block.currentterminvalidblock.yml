@@ -10,7 +10,7 @@ dependencies:
 id: currentterminvalidblock
 theme: ssr_base
 region: highlighted
-weight: -16
+weight: -20
 provider: null
 plugin: current_term_invalid_block
 settings:

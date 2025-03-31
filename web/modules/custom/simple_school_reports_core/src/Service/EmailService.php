@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_core\Service;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -56,6 +57,11 @@ class EmailService implements EmailServiceInterface {
   protected $currentUser;
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * @var \Drupal\symfony_mailer\EmailFactoryInterface|null
    */
   protected $emailFactory;
@@ -88,6 +94,7 @@ class EmailService implements EmailServiceInterface {
     MailManagerInterface $mail_manager,
     AccountInterface $current_user,
     EmailFactoryInterface $email_factory,
+    ModuleHandlerInterface $module_handler,
     LoggerChannelFactoryInterface $logger
   ) {
     $this->connection = $connection;
@@ -96,6 +103,7 @@ class EmailService implements EmailServiceInterface {
     $this->mailManager = $mail_manager;
     $this->currentUser = $entity_type_manager->getStorage('user')->load($current_user->id());
     $this->emailFactory = $email_factory ?? NULL;
+    $this->moduleHandler = $module_handler;
     $this->logger = $logger;
   }
 
@@ -281,7 +289,7 @@ class EmailService implements EmailServiceInterface {
       // Suppress auto reply.
       $email->addTextHeader('X-Auto-Response-Suppress', 'OOF, DR, RN, NRN, AutoReply');
       $this->mailCountIncrement();
-      $is_simulated = str_ends_with($this->currentRequest()->getHost(), '.loc') || str_ends_with($recipient, '@example.com');
+      $is_simulated = str_ends_with($this->currentRequest()->getHost(), '.loc') || str_ends_with($recipient, '@example.com') || $this->moduleHandler->moduleExists('simple_school_reports_demo');
 
       if ($is_simulated) {
         $send_status = SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED;
