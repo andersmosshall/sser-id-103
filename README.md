@@ -31,3 +31,4 @@
 20. Do a rebuild permissions just in case.
 21. Check grade terms and sort them.
 23. Add new branch to ssr_update_all alias on dev machine + new dir on server ssr_deploy_all
+24. Setup cron jobs. See what crul address to use as super user on /admin/config/system/cron
