@@ -10,7 +10,7 @@ dependencies:
 id: writtenreviewsroundprogressblock
 theme: ssr_base
 region: highlighted
-weight: -12
+weight: -17
 provider: null
 plugin: written_reviews_round_progress_block
 settings:

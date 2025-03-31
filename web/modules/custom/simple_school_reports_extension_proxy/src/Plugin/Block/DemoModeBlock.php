@@ -50,21 +50,14 @@ class DemoModeBlock extends BlockBase implements ContainerFactoryPluginInterface
     $build = [];
 
     $messages = [
-      'status' => [
+      'warning' => [
         $this->t('Demo mode is active. No messages are sent to real email addresses. This is a demonstration site and data can be removed at any time. Do not use real personal information.'),
       ],
-      'error' => [],
-      'warning' => [],
     ];
 
     $build['message'] = [
       '#theme' => 'status_messages',
       '#message_list' => $messages,
-      '#status_headings' => [
-        'status' => $this->t('Status message'),
-        'error' => $this->t('Error message'),
-        'warning' => $this->t('Warning message'),
-      ],
     ];
 
     return $build;

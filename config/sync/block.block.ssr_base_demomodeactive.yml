@@ -1,0 +1,20 @@
+uuid: 1e55d2e4-d9c4-4b7a-874b-fb82203a205e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+  theme:
+    - ssr_base
+id: ssr_base_demomodeactive
+theme: ssr_base
+region: highlighted
+weight: -21
+provider: null
+plugin: ssr_demo_mode_block
+settings:
+  id: ssr_demo_mode_block
+  label: 'Demo mode active'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility: {  }

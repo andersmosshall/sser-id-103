@@ -10,7 +10,7 @@ dependencies:
 id: graderoundprogressblock
 theme: ssr_base
 region: highlighted
-weight: -13
+weight: -18
 provider: null
 plugin: grade_round_progress_block
 settings:
