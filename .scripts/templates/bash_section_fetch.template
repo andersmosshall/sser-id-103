@@ -1,0 +1,14 @@
+### Verify [URL_NAME].
+if [ ! -d \"[URL_NAME]\" ]; then \
+  mkdir [URL_NAME]; \
+  git clone [GIT_CLONE_URL] [URL_NAME]; \
+  cd [URL_NAME]; \
+  git checkout main; \
+  echo \"Add ssr-base remote\"; \
+  git remote add ssr-base git@github.com:andersmosshall/ssr.git; \
+  cd ..;
+fi
+cd [URL_NAME] &&
+git pull &&
+echo \"Fetched [URL_NAME]\" &&
+cd ..;
