@@ -69,4 +69,4 @@ $settings['ssr_grade_to'] = [SSR_GRADE_TO];
 $settings['ssr_bug_report_email'] = '[SSR_BUG_REPORT_EMAIL]';
 
 // Fallback toolbar color #0f0f0f.
-$settings['ssr_toolbar_color'] = [SSR_TOOLBAR_COLOR];
+$settings['ssr_toolbar_color'] = '[SSR_TOOLBAR_COLOR]';

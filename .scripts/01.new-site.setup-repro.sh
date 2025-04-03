@@ -16,24 +16,28 @@ BASE_CORE_EXTENSION_FILE="config/sync/core.extension.yml" # Path to base module 
 SETTINGS_TEMPLATE_SOURCE=".scripts/templates/settings.local.template"
 SYSTEM_SITE_TEMPLATE_SOURCE=".scripts/templates/system.site.template"
 CONFIG_SPLIT_TEMPLATE_SOURCE=".scripts/templates/config_split.config_split.local.template"
-FETCH_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_section_fetch.template"
-UPDATE_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_section_update.template"
+FETCH_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_local_section_fetch.template"  # Renamed
+UPDATE_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_local_section_update.template" # Renamed
+DEPLOY_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_server_section_deploy.template" # New
+
 # Default values
 DEFAULT_NO_REPLY_EMAIL="no-reply@simpleschoolreports.se"
 DEFAULT_TOOLBAR_COLOR="#0f0f0f"
 DEFAULT_MODULE_WEIGHT=10
 
-# Modules to always exclude from selection (in addition to _support and base)
+# Modules to always exclude from selection (in addition to _support modules)
 declare -a ALWAYS_EXCLUDE_MODULES=(
-    "some_other_module_to_exclude"
+    "simple_school_reports_logging"
     # Add more modules here later if needed
 )
 
 # Specific weight overrides for modules (Key = module_name, Value = weight)
 # Needs Bash 4+
 declare -A MODULE_WEIGHT_OVERRIDES=(
+    ["simple_school_reports_constrained_user_list"]=20
     ["simple_school_reports_geg_grade_registration"]=20
     ["simple_school_reports_grade_stats"]=30
+    ["simple_school_reports_maillog"]=6
     # Add more overrides here later if needed
 )
 
@@ -54,26 +58,38 @@ escape_sed_replacement() {
 
 echo "--- SSR Site Setup Script ---"
 echo "This script will guide you through setting up a new SSR site."
-echo "Please ensure the following prerequisites are met before proceeding:"
-echo "  - You are running this from the root of an SSR base repository."
+
+# 1. Confirm Prerequisites & Base Repo
+echo "Checking prerequisites..."
+# Check for .git directory
+if [[ ! -d ".git" ]]; then
+    error_exit "No .git directory found. Please run this script from the root of the SSR base repository."
+fi
+# Get base repo origin URL
+SSR_BASE_GIT_URL=$(git config --get remote.origin.url)
+if [[ -z "$SSR_BASE_GIT_URL" ]]; then
+    error_exit "Could not determine remote origin URL for the base repository. Is 'origin' remote configured?"
+fi
+echo "Base repository detected: ${SSR_BASE_GIT_URL}"
+echo
+echo "Please ensure the following prerequisites are also met before proceeding:"
 echo "  - You have an empty Git repository prepared for the new site."
 echo "  - You have a server prepared, pointing the expected URL to the web root, with SSL configured."
 echo "  - You have a database created on the server and the access credentials ready."
 echo
 
-# 1. Confirm Prerequisites
-read -p "Do you confirm all the above prerequisites are met? (y/n): " confirm_prereqs
+read -p "Do you confirm you are in the correct base repo (${SSR_BASE_GIT_URL}) and other prerequisites are met? (y/n): " confirm_prereqs
 confirm_prereqs_lower=$(echo "$confirm_prereqs" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$confirm_prereqs_lower" != "y" ]]; then
-  error_exit "Aborting. Please ensure all prerequisites are met before running the script."
+  error_exit "Aborting. Prerequisites not confirmed."
 fi
 echo # Add a newline for readability
 
 # --- Site Configuration ---
 echo "--- Site Configuration ---"
 
-# 2. Get SSR_ID (Expanded)
+# 2. Get SSR_ID
 while true; do
   read -p "Enter SSR_ID (must be a number between 1 and 99): " SSR_ID
   if [[ "$SSR_ID" =~ ^[0-9]+$ && "$SSR_ID" -gt 0 && "$SSR_ID" -lt 100 ]]; then
@@ -84,15 +100,38 @@ while true; do
 done
 echo # Add a newline
 
-# 3. Get Git Clone URL (Expanded)
+# 3. Get URL Name, Full URL and Check Target Directory (Moved Up + Early Exit)
+while true; do
+  read -p "Enter URL Name (lowercase a-z, 0-9, - only): " URL_NAME
+  if [[ -n "$URL_NAME" && "$URL_NAME" =~ ^[a-z0-9-]+$ ]]; then
+    break
+  else
+    echo "Invalid input. URL Name must contain only lowercase letters (a-z), numbers (0-9), or hyphens (-), and cannot be empty." >&2
+  fi
+done
+
+# Define target directory early for check
+TARGET_SITE_DIR="${SITES_BASE_DIR}/${URL_NAME}"
+# Early exit if directory already exists
+if [[ -e "$TARGET_SITE_DIR" ]]; then
+  error_exit "Target directory or file '${TARGET_SITE_DIR}' already exists. Aborting early."
+fi
+
+DEFAULT_FULL_URL="${URL_NAME}.simpleschoolreports.se"
+read -p "Enter Full URL [${DEFAULT_FULL_URL}]: " FULL_URL
+FULL_URL=${FULL_URL:-$DEFAULT_FULL_URL} # Use default if empty
+echo "Using Full URL: ${FULL_URL}"
+echo # Add a newline
+
+# 4. Get Git Clone URL (Renumbered)
 DEFAULT_GIT_URL="git@github.com:andersmosshall/ssr-id-${SSR_ID}.git"
-read -p "Enter Git clone URL [${DEFAULT_GIT_URL}]: " GIT_CLONE_URL
+read -p "Enter Git clone URL for the NEW site [${DEFAULT_GIT_URL}]: " GIT_CLONE_URL
 # Use Bash parameter expansion for default if input is empty
 GIT_CLONE_URL=${GIT_CLONE_URL:-$DEFAULT_GIT_URL}
 echo "Using Git URL: ${GIT_CLONE_URL}"
 echo # Add a newline
 
-# 4. Get School Details (Expanded)
+# 5. Get School Details (Renumbered & Expanded)
 echo "--- School Details ---"
 while true; do
     read -p "Enter School Name (required): " SCHOOL_NAME
@@ -148,23 +187,7 @@ while true; do
 done
 echo # Add a newline
 
-# 5. Get URL and SSR Settings (Expanded)
-echo "--- URL and SSR Settings ---"
-while true; do
-  read -p "Enter URL Name (lowercase a-z, 0-9, - only): " URL_NAME
-  if [[ -n "$URL_NAME" && "$URL_NAME" =~ ^[a-z0-9-]+$ ]]; then
-    break
-  else
-    echo "Invalid input. URL Name must contain only lowercase letters (a-z), numbers (0-9), or hyphens (-), and cannot be empty." >&2
-  fi
-done
-
-DEFAULT_FULL_URL="${URL_NAME}.simpleschoolreports.se"
-read -p "Enter Full URL [${DEFAULT_FULL_URL}]: " FULL_URL
-FULL_URL=${FULL_URL:-$DEFAULT_FULL_URL} # Use default if empty
-echo "Using Full URL: ${FULL_URL}"
-echo # Add a newline
-
+# 6. Get SSR Grade Range (Renumbered & Expanded)
 while true; do
   read -p "Enter starting grade (0-9): " SSR_GRADE_FROM
   if [[ "$SSR_GRADE_FROM" =~ ^[0-9]$ ]]; then # Check for single digit 0-9
@@ -184,7 +207,7 @@ while true; do
 done
 echo # Add a newline
 
-# 6. Email and Customization Settings (Expanded)
+# 7. Email and Customization Settings (Renumbered & Expanded)
 echo "--- Email and Customization ---"
 while true; do
     read -p "Enter Bug Report Email address (required): " SSR_BUG_REPORT_EMAIL
@@ -213,7 +236,7 @@ echo "Using Toolbar Color: ${SSR_TOOLBAR_COLOR}"
 echo # Add a newline
 
 
-# --- Module Selection ---
+# 8. Module Selection (Renumbered & Expanded)
 echo "--- Optional Module Selection ---"
 declare -a available_modules=()
 declare -a selected_module_indices=()
@@ -245,7 +268,6 @@ else
         echo "No custom modules found within 4 levels."
     else
         echo "Filtering potential modules:"
-        available_index=0
         # Temp array to hold modules before listing them for selection
         declare -a candidate_modules=()
         for module_file in "${module_files[@]}"; do
@@ -349,6 +371,7 @@ ESCAPED_SCHOOL_ORGANISER=$(escape_sed_replacement "$SCHOOL_ORGANISER")
 ESCAPED_SCHOOL_MUNICIPALITY=$(escape_sed_replacement "$SCHOOL_MUNICIPALITY")
 ESCAPED_SSR_NO_REPLY_EMAIL=$(escape_sed_replacement "$SSR_NO_REPLY_EMAIL")
 ESCAPED_GIT_CLONE_URL=$(escape_sed_replacement "$GIT_CLONE_URL")
+ESCAPED_SSR_BASE_GIT_URL=$(escape_sed_replacement "$SSR_BASE_GIT_URL") # Escape Base Git URL
 ESCAPED_FULL_URL=$(escape_sed_replacement "$FULL_URL")
 
 # --- Replacement Function ---
@@ -359,8 +382,12 @@ apply_all_replacements() {
 
   echo "Applying common replacements to ${filename}..."
 
+  # Each sed command on its own line, using '\' for line continuation
+  # if needed, and '|| error_exit' for error checking.
   sed -i "s/\\[SSR_ID\\]/${SSR_ID}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_ID] in ${filename}"
+  sed -i "s/\\[SSR_BASE_GIT_URL\\]/${ESCAPED_SSR_BASE_GIT_URL}/g" "$target_file" \
+    || error_exit "Failed replacing [SSR_BASE_GIT_URL] in ${filename}"
   sed -i "s/\\[SCHOOL_NAME\\]/${ESCAPED_SCHOOL_NAME}/g" "$target_file" \
     || error_exit "Failed replacing [SCHOOL_NAME] in ${filename}"
   sed -i "s/\\[SCHOOL_NAME_SHORT\\]/${SCHOOL_NAME_SHORT}/g" "$target_file" \
@@ -397,7 +424,7 @@ apply_all_replacements() {
 echo "--- Setting up Filesystem ---"
 
 # Define target directory paths
-TARGET_SITE_DIR="${SITES_BASE_DIR}/${URL_NAME}"
+# TARGET_SITE_DIR defined earlier for check
 TARGET_SETTINGS_DIR="${TARGET_SITE_DIR}/.settings/prod"
 TARGET_CONFIG_SYNC_DIR="${TARGET_SITE_DIR}/config/sync"
 TARGET_BASH_HELPERS_DIR="${TARGET_SITE_DIR}/.bash_helpers"
@@ -406,8 +433,9 @@ TARGET_BASH_HELPERS_DIR="${TARGET_SITE_DIR}/.bash_helpers"
 TARGET_SETTINGS_FILE="${TARGET_SETTINGS_DIR}/settings.local.php"
 TARGET_SYSTEM_SITE_FILE="${TARGET_CONFIG_SYNC_DIR}/system.site.yml"
 TARGET_CONFIG_SPLIT_FILE="${TARGET_CONFIG_SYNC_DIR}/config_split.config_split.local.yml"
-TARGET_FETCH_HELPER_FILE="${TARGET_BASH_HELPERS_DIR}/bash_section_fetch.txt"
-TARGET_UPDATE_HELPER_FILE="${TARGET_BASH_HELPERS_DIR}/bash_section_update.txt"
+TARGET_FETCH_HELPER_FILE="${TARGET_BASH_HELPERS_DIR}/bash_local_section_fetch.txt"   # Renamed
+TARGET_UPDATE_HELPER_FILE="${TARGET_BASH_HELPERS_DIR}/bash_local_section_update.txt" # Renamed
+TARGET_DEPLOY_HELPER_FILE="${TARGET_BASH_HELPERS_DIR}/bash_server_section_deploy.txt" # New
 
 # Define marker file name and path
 MARKER_FILENAME="THIS_IS_${URL_NAME^^}" # Convert URL_NAME to uppercase
@@ -416,10 +444,8 @@ TARGET_MARKER_FILE="${TARGET_SITE_DIR}/${MARKER_FILENAME}"
 
 echo "Preparing to create site structure in: ${TARGET_SITE_DIR}"
 
-# 7. Create Target Directories (Expanded)
-if [[ -e "$TARGET_SITE_DIR" ]]; then
-  error_exit "Target directory or file '${TARGET_SITE_DIR}' already exists."
-fi
+# 9. Create Target Directories (Renumbered & Expanded)
+# Initial check for directory existence moved earlier (Section #3)
 mkdir -p "$TARGET_SETTINGS_DIR" \
   || error_exit "Failed to create directory '${TARGET_SETTINGS_DIR}'."
 mkdir -p "$TARGET_CONFIG_SYNC_DIR" \
@@ -430,7 +456,7 @@ echo "Created base directories:"
 ls -d "$TARGET_SETTINGS_DIR" "$TARGET_CONFIG_SYNC_DIR" "$TARGET_BASH_HELPERS_DIR"
 
 
-# 8. Process settings.local.php (Expanded)
+# 10. Process settings.local.php (Renumbered & Expanded)
 echo "Processing ${TARGET_SETTINGS_FILE}..."
 if [[ ! -f "$SETTINGS_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${SETTINGS_TEMPLATE_SOURCE}' not found."
@@ -440,7 +466,7 @@ cp "$SETTINGS_TEMPLATE_SOURCE" "$TARGET_SETTINGS_FILE" \
 apply_all_replacements "$TARGET_SETTINGS_FILE"
 
 
-# 9. Process system.site.yml (Expanded)
+# 11. Process system.site.yml (Renumbered & Expanded)
 echo "Processing ${TARGET_SYSTEM_SITE_FILE}..."
 if [[ ! -f "$SYSTEM_SITE_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${SYSTEM_SITE_TEMPLATE_SOURCE}' not found."
@@ -450,7 +476,7 @@ cp "$SYSTEM_SITE_TEMPLATE_SOURCE" "$TARGET_SYSTEM_SITE_FILE" \
 apply_all_replacements "$TARGET_SYSTEM_SITE_FILE"
 
 
-# 10. Generate config_split.config_split.local.yml (Expanded)
+# 12. Generate config_split.config_split.local.yml (Renumbered & Expanded)
 echo "Processing ${TARGET_CONFIG_SPLIT_FILE}..."
 if [[ ! -f "$CONFIG_SPLIT_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${CONFIG_SPLIT_TEMPLATE_SOURCE}' not found."
@@ -459,7 +485,7 @@ fi
 # Prepare module list replacement string
 MODULES_REPLACEMENT_STRING=""
 if [ ${#SELECTED_MODULES[@]} -eq 0 ]; then
-    MODULES_REPLACEMENT_STRING="module: {  }"
+    MODULES_REPLACEMENT_STRING="module: {  }" # Added spaces inside {} for YAML validity
     echo "  No modules selected, using empty module list."
 else
     MODULES_REPLACEMENT_STRING="module:"
@@ -484,7 +510,7 @@ printf "%s" "$CONFIG_SPLIT_CONTENT" > "$TARGET_CONFIG_SPLIT_FILE" \
 apply_all_replacements "$TARGET_CONFIG_SPLIT_FILE"
 
 
-# 11. Process bash_section_fetch.txt (Renumbered & Expanded)
+# 13. Process bash_local_section_fetch.txt (Renumbered & Renamed & Expanded)
 echo "Processing ${TARGET_FETCH_HELPER_FILE}..."
 if [[ ! -f "$FETCH_HELPER_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${FETCH_HELPER_TEMPLATE_SOURCE}' not found."
@@ -495,7 +521,7 @@ apply_all_replacements "$TARGET_FETCH_HELPER_FILE"
 echo "INFO: Content of ${TARGET_FETCH_HELPER_FILE} should be added to your ssr_fetch_all() bash function."
 
 
-# 12. Process bash_section_update.txt (Renumbered & Expanded)
+# 14. Process bash_local_section_update.txt (Renumbered & Renamed & Expanded)
 echo "Processing ${TARGET_UPDATE_HELPER_FILE}..."
 if [[ ! -f "$UPDATE_HELPER_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${UPDATE_HELPER_TEMPLATE_SOURCE}' not found."
@@ -506,24 +532,35 @@ apply_all_replacements "$TARGET_UPDATE_HELPER_FILE"
 echo "INFO: Content of ${TARGET_UPDATE_HELPER_FILE} should be added to your ssr_update_all() bash function."
 
 
-# 13. Create Marker File (Renumbered & Expanded)
+# 15. Process bash_server_section_deploy.txt (New Section & Expanded)
+echo "Processing ${TARGET_DEPLOY_HELPER_FILE}..."
+if [[ ! -f "$DEPLOY_HELPER_TEMPLATE_SOURCE" ]]; then
+  error_exit "Template file '${DEPLOY_HELPER_TEMPLATE_SOURCE}' not found."
+fi
+cp "$DEPLOY_HELPER_TEMPLATE_SOURCE" "$TARGET_DEPLOY_HELPER_FILE" \
+  || error_exit "Failed to copy template to '${TARGET_DEPLOY_HELPER_FILE}'."
+apply_all_replacements "$TARGET_DEPLOY_HELPER_FILE"
+echo "INFO: Content of ${TARGET_DEPLOY_HELPER_FILE} contains server deployment helpers."
+
+
+# 16. Create Marker File (Renumbered & Expanded)
 echo "Creating marker file ${TARGET_MARKER_FILE}..."
 touch "${TARGET_MARKER_FILE}" \
   || error_exit "Failed to create marker file '${TARGET_MARKER_FILE}'."
 echo "Finished creating marker file."
 
 
-# 14. Create Symlinks in .settings/prod (New Section & Expanded)
+# 17. Create Symlinks in .settings/prod (Renumbered & Expanded)
 echo "Creating symlinks in ${TARGET_SETTINGS_DIR}..."
 
 # Symlink for system.site.yml
 SYMLINK_TARGET_SYSTEM_SITE="../../config/sync/system.site.yml"
 SYMLINK_PATH_SYSTEM_SITE="${TARGET_SETTINGS_DIR}/system.site.yml"
 if [[ -e "$SYMLINK_PATH_SYSTEM_SITE" ]]; then
-  echo "Warning: Symlink already exists at ${SYMLINK_PATH_SYSTEM_SITE}. Skipping." >&2
+  echo "Warning: Symlink exists: ${SYMLINK_PATH_SYSTEM_SITE}. Skipping." >&2
 else
   ln -s "$SYMLINK_TARGET_SYSTEM_SITE" "$SYMLINK_PATH_SYSTEM_SITE" \
-    || error_exit "Failed to create symlink for system.site.yml."
+    || error_exit "Failed creating symlink for system.site.yml."
   echo "  Created symlink: ${SYMLINK_PATH_SYSTEM_SITE} -> ${SYMLINK_TARGET_SYSTEM_SITE}"
 fi
 
@@ -531,28 +568,141 @@ fi
 SYMLINK_TARGET_CONFIG_SPLIT="../../config/sync/config_split.config_split.local.yml"
 SYMLINK_PATH_CONFIG_SPLIT="${TARGET_SETTINGS_DIR}/config_split.config_split.local.yml"
 if [[ -e "$SYMLINK_PATH_CONFIG_SPLIT" ]]; then
-  echo "Warning: Symlink already exists at ${SYMLINK_PATH_CONFIG_SPLIT}. Skipping." >&2
+  echo "Warning: Symlink exists: ${SYMLINK_PATH_CONFIG_SPLIT}. Skipping." >&2
 else
   ln -s "$SYMLINK_TARGET_CONFIG_SPLIT" "$SYMLINK_PATH_CONFIG_SPLIT" \
-    || error_exit "Failed to create symlink for config_split.local.yml."
+    || error_exit "Failed creating symlink for config_split.local.yml."
   echo "  Created symlink: ${SYMLINK_PATH_CONFIG_SPLIT} -> ${SYMLINK_TARGET_CONFIG_SPLIT}"
 fi
 echo "Finished creating symlinks."
+
+# --- Optional Git Setup (Expanded) ---
+echo
+read -p "Initialize Git and sync with base repo for '${TARGET_SITE_DIR}' now? (y/n) [n]: " confirm_git
+if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" == "y" ]]; then
+    echo "Attempting Git setup for ${TARGET_SITE_DIR}..."
+
+    # Store current directory
+    original_dir=$(pwd)
+
+    # Change into the new site directory
+    echo "Changing directory to ${TARGET_SITE_DIR}..."
+    cd "$TARGET_SITE_DIR" \
+      || error_exit "Could not change to target directory '$TARGET_SITE_DIR'"
+    echo "Current directory: $(pwd)"
+
+    # 1. Init and Initial Commit
+    echo "Initializing Git repository..."
+    git init \
+      || error_exit "Failed to initialize git repository."
+    echo "Staging files..."
+    git add . \
+      || error_exit "Failed to stage files."
+    echo "Committing initial files..."
+    git commit -m "init ${SCHOOL_NAME}" \
+      || error_exit "Failed to perform initial commit."
+
+    # 2. Set main branch and add origin remote
+    echo "Ensuring branch is 'main'..."
+    git branch -M main \
+      || error_exit "Failed to rename branch to 'main'."
+    echo "Adding remote origin '${GIT_CLONE_URL}'..."
+    git remote add origin "$GIT_CLONE_URL" \
+      || error_exit "Failed to add remote origin '$GIT_CLONE_URL'."
+
+    # 3. Push initial commit
+    echo "Pushing initial commit to origin..."
+    git push -u origin main \
+      || error_exit "Failed to push initial commit to origin main."
+
+    # 4. Add ssr-base remote and merge
+    echo "Adding remote ssr-base '${SSR_BASE_GIT_URL}'..."
+    git remote add ssr-base "$SSR_BASE_GIT_URL" \
+      || error_exit "Failed to add remote ssr-base '$SSR_BASE_GIT_URL'."
+    echo "Fetching from ssr-base..."
+    git fetch ssr-base main \
+      || error_exit "Failed to fetch from ssr-base main."
+    echo "Merging ssr-base/main (no-commit)..."
+    # Allow merge to potentially fail (e.g., conflicts) but proceed
+    git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+    merge_exit_status=$?
+    if [[ $merge_exit_status -ne 0 ]]; then
+        echo "Warning: git merge command exited with status ${merge_exit_status}. There might be merge conflicts to resolve manually." >&2
+    fi
+
+    # 5. Modify .gitignore
+    GITIGNORE_FILE=".gitignore"
+    if [[ -f "$GITIGNORE_FILE" ]]; then
+        echo "Modifying .gitignore..."
+        # Use # as sed delimiter to avoid escaping /
+        sed -i '\#^/config/sync/config_split\.config_split\.local\.yml#d' "$GITIGNORE_FILE" \
+            || echo "Warning: Failed to modify .gitignore (remove config_split line)." >&2
+        sed -i '\#^/config/sync/system\.site\.yml#d' "$GITIGNORE_FILE" \
+            || echo "Warning: Failed to modify .gitignore (remove system.site line)." >&2
+        sed -i '\#^/config/sync/system\.theme\.global\.yml#d' "$GITIGNORE_FILE" \
+            || echo "Warning: Failed to modify .gitignore (remove system.theme line)." >&2 # Changed to Warning
+        echo ".gitignore modified (or attempt failed)."
+    else
+        echo "Warning: .gitignore file not found after merge. Skipping modification." >&2
+    fi
+
+    # 6. Stage changes and commit merge
+    echo "Staging changes after merge..."
+    git add . \
+      || error_exit "Failed to stage files after merge."
+    echo "Committing merge (resolve conflicts first if merge failed)..."
+    # Quote commit message
+    git commit -m "sync with ssr-base" \
+      || error_exit "Failed to commit ssr-base merge. Resolve conflicts if necessary."
+
+    # 7. Push merge commit
+    echo "Pushing merge commit to origin..."
+    git push origin main \
+      || error_exit "Failed to push merge commit to origin main."
+
+    echo "Git setup and ssr-base merge completed successfully."
+
+    # Go back to original directory
+    echo "Returning to original directory..."
+    cd "$original_dir" \
+      || error_exit "Could not change back to original directory '$original_dir'."
+    echo "Current directory: $(pwd)"
+
+else
+    # Output instructions for manual setup
+    echo "Skipping Git setup for now."
+    echo "To set up Git manually later:"
+    echo "  cd \"${TARGET_SITE_DIR}\""
+    echo "  git init && git remote add origin \"${GIT_CLONE_URL}\""
+    echo "  git add . && git commit -m \"init ${SCHOOL_NAME}\""
+    echo "  git branch -M main"
+    echo "  # Manually push if origin is ready: git push -u origin main"
+    echo "  git remote add ssr-base \"${SSR_BASE_GIT_URL}\""
+    echo "  git fetch ssr-base main && git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff"
+    echo "  # Resolve conflicts if any, then edit .gitignore:"
+    echo "  # Remove /config/sync/config_split.config_split.local.yml"
+    echo "  # Remove /config/sync/system.site.yml"
+    echo "  git add . && git commit -m 'sync with ssr-base'"
+    echo "  # Manually push: git push origin main"
+    echo "  cd -"
+fi
 
 
 # --- Final Summary ---
 echo
 echo "--- Setup Summary ---"
+echo "Base Git Repo:          ${SSR_BASE_GIT_URL}"
 echo "Site Directory:         ${TARGET_SITE_DIR}"
 echo "Marker File:            ${TARGET_MARKER_FILE}"
 echo "Settings File:          ${TARGET_SETTINGS_FILE}"
 echo "System Site Config:     ${TARGET_SYSTEM_SITE_FILE}"
 echo "Config Split Local:     ${TARGET_CONFIG_SPLIT_FILE}"
-echo "Bash Fetch Helper:      ${TARGET_FETCH_HELPER_FILE}"
-echo "Bash Update Helper:     ${TARGET_UPDATE_HELPER_FILE}"
+echo "Local Fetch Helper:     ${TARGET_FETCH_HELPER_FILE}"
+echo "Local Update Helper:    ${TARGET_UPDATE_HELPER_FILE}"
+echo "Server Deploy Helper:   ${TARGET_DEPLOY_HELPER_FILE}"
 echo "Selected Modules:       ${SELECTED_MODULES[*]:-(None)}"
 echo "SSR ID:                 ${SSR_ID}"
-echo "Git URL:                ${GIT_CLONE_URL}"
+echo "New Site Git URL:       ${GIT_CLONE_URL}"
 echo "URL Name:               ${URL_NAME}"
 echo "Full URL:               ${FULL_URL}"
 echo "School Name:            ${SCHOOL_NAME}"
@@ -566,12 +716,21 @@ echo "Bug Report Email:       ${SSR_BUG_REPORT_EMAIL}"
 echo "No-Reply Email:         ${SSR_NO_REPLY_EMAIL}"
 echo "Toolbar Color:          ${SSR_TOOLBAR_COLOR}"
 echo
-echo "Script completed successfully!"
+# Check Git setup confirmation status for final message
+if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" == "y" ]]; then
+    echo "Script completed successfully! Git setup was attempted."
+else
+    echo "Script completed successfully! Git setup was skipped."
+fi
+echo "Review the 'Next steps' below."
+echo
 echo "Next steps typically involve:"
-echo "  - Reviewing generated files for correctness (esp. settings, config files)."
+echo "  - Reviewing generated files for correctness."
 echo "  - Integrating helper sections from ${TARGET_BASH_HELPERS_DIR} into your bash functions."
 echo "  - Setting up database credentials in ${TARGET_SETTINGS_FILE} (if not templated)"
-echo "  - Committing the initial site structure to its Git repository: ${GIT_CLONE_URL}"
+if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" != "y" ]]; then
+    echo "  - Manually performing Git setup steps (see instructions above)."
+fi
 echo "  - Deploying the code to the server"
 echo "  - Running initial setup/database migrations (consider selected modules: ${SELECTED_MODULES[*]:-(None)})"
 
