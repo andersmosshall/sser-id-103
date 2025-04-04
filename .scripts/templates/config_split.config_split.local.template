@@ -1,0 +1,15 @@
+uuid: 5ab312d2-05b5-46a7-9df4-cee914efc572
+langcode: en
+status: false
+dependencies: {  }
+id: local
+label: local
+description: ''
+weight: 0
+folder: ''
+[MODULES]
+theme: {  }
+blacklist: {  }
+graylist: {  }
+graylist_dependents: true
+graylist_skip_equal: false
