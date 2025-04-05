@@ -15,6 +15,7 @@ content:
     weight: 0
     region: content
 hidden:
+  calculate_from_schema: true
   created: true
   deviation: true
   from_1: true
@@ -24,6 +25,7 @@ hidden:
   from_5: true
   from_6: true
   from_7: true
+  identifier: true
   label: true
   length_1: true
   length_2: true
@@ -32,6 +34,7 @@ hidden:
   length_5: true
   length_6: true
   length_7: true
+  school_week_type: true
   to_1: true
   to_2: true
   to_3: true
