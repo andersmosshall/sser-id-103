@@ -6,7 +6,7 @@
 # Purpose: Automates the initial setup and deployment of a specific Drupal
 #          site structure on a server. Includes checks, user confirmations
 #          for manual steps, configuration management, and deployment commands.
-# Version: 6.0 (Moved git pull after initial confirmation)
+# Version: 6.1 (Fixed quotes in default command paths for composer/drush)
 # ==============================================================================
 
 # --- Configuration Variables ---
@@ -89,270 +89,229 @@ echo "---"
 
 # --- Step 1: Verify Git Repository ---
 echo "[Step 1/35] Verifying Git repository..."
-# Check if the .git directory exists
-if [ ! -d ".git" ]; then
-    error_exit "Current directory is not a Git repository ('.git' directory not found)."
-fi
-
-# Attempt to get the URL of the 'origin' remote
-git_url=$(git remote get-url origin 2>/dev/null) # Suppress git errors
-if [ $? -ne 0 ] || [ -z "$git_url" ]; then
-    error_exit "Could not determine Git repository URL. Is 'origin' remote configured?"
-fi
+if [ ! -d ".git" ]; then error_exit "Not a Git repository."; fi
+git_url=$(git remote get-url origin 2>/dev/null)
+if [ $? -ne 0 ] || [ -z "$git_url" ]; then error_exit "Cannot get Git remote URL."; fi
 echo "Git repository found: $git_url"
 echo "---"
 
-# --- Step 2: Verify Source Settings File Exists --- # Moved earlier, renumbered
+# --- Step 2: Verify Source Settings File Exists ---
 echo "[Step 2/35] Verifying source settings file: $SETTINGS_FILE..."
-# Check if the main settings template file exists initially
-if [ ! -f "$SETTINGS_FILE" ]; then
-    error_exit "Source settings file not found at '$SETTINGS_FILE'. Cannot proceed."
-fi
+if [ ! -f "$SETTINGS_FILE" ]; then error_exit "Source settings file '$SETTINGS_FILE' not found."; fi
 echo "Source settings file found."
 echo "---"
 
-# --- Step 3: Extract Variables from Settings File --- # Moved earlier, renumbered
+# --- Step 3: Extract Variables from Settings File ---
 echo "[Step 3/35] Extracting required settings from $SETTINGS_FILE..."
-# Extract key configuration values needed later in the script
 school_name=$(extract_setting 'ssr_school_name' "$SETTINGS_FILE")
 bug_email=$(extract_setting 'ssr_bug_report_email' "$SETTINGS_FILE")
 noreply_email=$(extract_setting 'ssr_no_reply_email' "$SETTINGS_FILE")
 ssr_id=$(extract_setting_unquoted 'ssr_id' "$SETTINGS_FILE")
-
-# Validate extraction results
 error_flag=0
 if [ -z "$school_name" ]; then echo "ERROR: Cannot find ssr_school_name" >&2; error_flag=1; fi
 if [ -z "$bug_email" ]; then echo "ERROR: Cannot find ssr_bug_report_email" >&2; error_flag=1; fi
 if [ -z "$noreply_email" ]; then echo "ERROR: Cannot find ssr_no_reply_email" >&2; error_flag=1; fi
-if [ -z "$ssr_id" ] && [ "$ssr_id" != "0" ]; then echo "ERROR: Cannot find ssr_id" >&2; error_flag=1; fi # Allow '0'
-if [ $error_flag -ne 0 ]; then
-    error_exit "Failed extracting required settings from '$SETTINGS_FILE'."
-fi
+if [ -z "$ssr_id" ] && [ "$ssr_id" != "0" ]; then echo "ERROR: Cannot find ssr_id" >&2; error_flag=1; fi
+if [ $error_flag -ne 0 ]; then error_exit "Failed extracting required settings."; fi
+echo "Extracted settings: Name='$school_name', BugEmail='$bug_email', NoReply='$noreply_email', ID='$ssr_id'"; echo "---"
 
-# Display extracted settings for confirmation
-echo "Successfully extracted settings:"
-echo "  School Name:      $school_name"
-echo "  Bug Report Email: $bug_email"
-echo "  No Reply Email:   $noreply_email"
-echo "  SSR ID:           $ssr_id"
-echo "---"
-
-# --- Step 4: Initial Confirmation Prompt --- # Renumbered
+# --- Step 4: Initial Confirmation Prompt ---
 echo "[Step 4/35] Requesting initial setup confirmation..."
-# Confirm prerequisites and context with the user BEFORE pulling code
-echo "========================================================================"
-echo "PLEASE CONFIRM THE FOLLOWING BEFORE PROCEEDING:"
-echo "========================================================================"
-echo "1. Correct Directory: Script is running in the intended deployment directory:"
-echo "   '$(pwd)'"
-echo "2. Correct Association: This directory/repo ('$git_url')"
-echo "   is for the school: '$school_name'"
-echo "3. Database Ready: A database with credentials has been prepared on this server."
-echo "4. Parallel Terminal: You have another SSH terminal open to this directory"
-echo "   ('$(pwd)') ready for potential parallel tasks."
-echo "========================================================================"
-
-# Loop for y/n confirmation
-confirm_setup=""
-while [[ "$confirm_setup" != "y" && "$confirm_setup" != "n" ]]; do
-    read -p "Proceed with setup based on these confirmations? (y/n): " confirm_setup
-    confirm_setup=$(echo "$confirm_setup" | tr '[:upper:]' '[:lower:]')
-done
+echo "================ CONFIRM BEFORE PROCEEDING ================"
+echo "1. Correct Dir:    '$(pwd)'"
+echo "2. Correct School: '$school_name' (Repo: '$git_url')"
+echo "3. DB Prepared:    Database ready on this server?"
+echo "4. SSH Ready:      Parallel SSH terminal open to '$(pwd)'?"
+echo "==========================================================="
+confirm_setup=""; while [[ "$confirm_setup" != "y" && "$confirm_setup" != "n" ]]; do read -p "? (y/n): " confirm_setup; confirm_setup=$(echo "$confirm_setup" | tr '[:upper:]' '[:lower:]'); done
 if [[ "$confirm_setup" != "y" ]]; then error_exit "Setup aborted by user."; fi
 echo "Setup confirmation received."
 echo "---"
 
-# --- Step 5: Git Pull --- <<< MOVED HERE >>> # Renumbered
+# --- Step 5: Git Pull ---
 echo "[Step 5/35] Pulling latest changes from Git repository..."
-# Get the latest code from the default remote/branch AFTER user confirmed directory
 git pull
-# Check the exit status of the git pull command
-if [ $? -ne 0 ]; then
-    error_exit "git pull failed. Check your connection, permissions, and any local uncommitted changes conflicting with upstream."
-fi
+if [ $? -ne 0 ]; then error_exit "git pull failed."; fi
+# Verify settings file STILL exists after pull
+if [ ! -f "$SETTINGS_FILE" ]; then error_exit "Source settings file '$SETTINGS_FILE' missing after git pull."; fi
 echo "Git pull successful."
-# Verify settings file STILL exists after pull, in case it was removed upstream
-if [ ! -f "$SETTINGS_FILE" ]; then
-    error_exit "Source settings file '$SETTINGS_FILE' no longer found after git pull. Check repository."
-fi
 echo "---"
 
-# --- Step 6: Confirm Extracted SSR ID --- # Renumbered
+# --- Step 6: Confirm Extracted SSR ID ---
 echo "[Step 6/35] Confirming extracted SSR ID '$ssr_id'..."
-# Specifically confirm the extracted school ID (already extracted before pull)
-confirm_ssr_id=""
-while [[ "$confirm_ssr_id" != "y" && "$confirm_ssr_id" != "n" ]]; do
-    read -p "Is the extracted SSR ID '$ssr_id' correct? [Y/n]: " confirm_ssr_id_input
-    confirm_ssr_id=${confirm_ssr_id_input:-y} # Default to 'y'
-    confirm_ssr_id=$(echo "$confirm_ssr_id" | tr '[:upper:]' '[:lower:]')
-done
-if [[ "$confirm_ssr_id" != "y" ]]; then error_exit "SSR ID confirmation denied by user."; fi
+confirm_ssr_id=""; while [[ "$confirm_ssr_id" != "y" && "$confirm_ssr_id" != "n" ]]; do read -p "? [Y/n]: " confirm_ssr_id_input; confirm_ssr_id=${confirm_ssr_id_input:-y}; confirm_ssr_id=$(echo "$confirm_ssr_id" | tr '[:upper:]' '[:lower:]'); done
+if [[ "$confirm_ssr_id" != "y" ]]; then error_exit "SSR ID confirmation denied."; fi
 echo "SSR ID confirmed."
 echo "---"
 
-# --- Step 7: Check Lando Env & Determine Composer/Drush Commands --- # Renumbered
+# --- Step 7: Check Lando Env & Determine Composer/Drush Commands ---
 echo "[Step 7/35] Checking for Lando environment & confirming commands..."
-# ... (Lando check and command confirmation logic remains the same) ...
 is_lando=""; while [[ "$is_lando" != "y" && "$is_lando" != "n" ]]; do read -p "Lando env? [y/N]: " is_lando_input; is_lando=${is_lando_input:-n}; is_lando=$(echo "$is_lando" | tr '[:upper:]' '[:lower:]'); done
 COMPOSER_CMD=""; DRUSH_CMD=""
 if [[ "$is_lando" == "y" ]]; then
-    COMPOSER_CMD="lando composer"; DRUSH_CMD="lando drush"
+    # --- Lando Environment ---
+    COMPOSER_CMD="lando composer"
+    DRUSH_CMD="lando drush"
     echo "Lando mode enabled. Using: '$COMPOSER_CMD', '$DRUSH_CMD'."
 else
+    # --- Standard Environment ---
     echo "Standard env. Confirm commands (check .bashrc/which/alias)..."; echo ""
-    DEFAULT_COMPOSER_CMD="/usr/bin/php \"$HOME/composer.phar\""; DEFAULT_DRUSH_CMD="/usr/bin/php \"$HOME/.config/composer/vendor/bin/drush\""
-    read -e -p "Composer cmd: " -i "$DEFAULT_COMPOSER_CMD" COMPOSER_CMD_INPUT; COMPOSER_CMD=$(echo "$COMPOSER_CMD_INPUT" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//"); if [ -z "$COMPOSER_CMD" ]; then error_exit "Composer cmd empty."; fi; echo "Using Composer: '$COMPOSER_CMD'"; echo ""
-    read -e -p "Drush cmd: " -i "$DEFAULT_DRUSH_CMD" DRUSH_CMD_INPUT; DRUSH_CMD=$(echo "$DRUSH_CMD_INPUT" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//"); if [ -z "$DRUSH_CMD" ]; then error_exit "Drush cmd empty."; fi; echo "Using Drush: '$DRUSH_CMD'"
+    # Define defaults WITHOUT internal quotes around the $HOME path
+    DEFAULT_COMPOSER_CMD="/usr/bin/php $HOME/composer.phar"
+    DEFAULT_DRUSH_CMD="/usr/bin/php $HOME/.config/composer/vendor/bin/drush"
+
+    # Confirm Composer command
+    read -e -p "Enter Composer command: " -i "$DEFAULT_COMPOSER_CMD" COMPOSER_CMD_INPUT
+    # Trim potential surrounding quotes from user input
+    COMPOSER_CMD=$(echo "$COMPOSER_CMD_INPUT" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+    if [ -z "$COMPOSER_CMD" ]; then error_exit "Composer cmd empty."; fi
+    echo "Using Composer: '$COMPOSER_CMD'"; echo ""
+
+    # Confirm Drush command
+    read -e -p "Enter Drush command: " -i "$DEFAULT_DRUSH_CMD" DRUSH_CMD_INPUT
+    # Trim potential surrounding quotes
+    DRUSH_CMD=$(echo "$DRUSH_CMD_INPUT" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+     if [ -z "$DRUSH_CMD" ]; then error_exit "Drush cmd empty."; fi
+    echo "Using Drush: '$DRUSH_CMD'"
 fi; echo "---"
 
 # ==============================================================================
 # --- Use $COMPOSER_CMD and $DRUSH_CMD for all subsequent calls ---
 # ==============================================================================
 
-# --- Step 8: Run Composer Install --- # Renumbered
+# --- Step 8: Run Composer Install ---
 echo "[Step 8/35] Running Composer install..."
-# Use the determined $COMPOSER_CMD variable
 $COMPOSER_CMD install --no-dev --optimize-autoloader
 if [ $? -ne 0 ]; then error_exit "Composer install failed using: '$COMPOSER_CMD'."; fi
-echo "Composer install completed successfully."
-echo "---"
+echo "Composer install complete."; echo "---"
 
-# --- Step 9: Ensure Private Files Directory Exists --- # Renumbered
+# --- Step 9: Ensure Private Files Directory Exists ---
 echo "[Step 9/35] Ensuring private files directory exists..."
 mkdir -p "$DEFAULT_SITES_DIR/private-files"
 if [ $? -ne 0 ]; then error_exit "Failed creating directory '$DEFAULT_SITES_DIR/private-files'."; fi
 echo "Directory ensured: '$DEFAULT_SITES_DIR/private-files'."
 echo "---"
 
-# --- Step 10: Generate/Verify Encryption Key --- # Renumbered
+# --- Step 10: Generate/Verify Encryption Key ---
 echo "[Step 10/35] Checking encryption key: $KEY_FILE..."
-# ... (Key generation/check logic as before) ...
-if [ -f "$KEY_FILE" ]; then echo "Key exists."; if [ ! -s "$KEY_FILE" ]; then error_exit "Existing key empty."; fi; else echo "Generating new key..."; mkdir -p "$KEY_DIR"; if [ $? -ne 0 ]; then error_exit "Failed key dir create."; fi; temp_key_file=$(mktemp "${KEY_DIR}/encrypt.key.XXXXXX"); if ! dd if=/dev/urandom bs=32 count=1 2>/dev/null | base64 -i - > "$temp_key_file"; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Failed key gen."; fi; if [ ! -s "$temp_key_file" ]; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Generated key empty."; fi; if ! mv "$temp_key_file" "$KEY_FILE"; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Failed key move."; fi; echo "New key generated: '$KEY_FILE'."; fi; echo "---"
+if [ -f "$KEY_FILE" ]; then echo "Key exists."; if [ ! -s "$KEY_FILE" ]; then error_exit "Existing key empty."; fi
+else echo "Generating new key..."; mkdir -p "$KEY_DIR"; if [ $? -ne 0 ]; then error_exit "Failed key dir create."; fi; temp_key_file=$(mktemp "${KEY_DIR}/encrypt.key.XXXXXX"); if ! dd if=/dev/urandom bs=32 count=1 2>/dev/null | base64 -i - > "$temp_key_file"; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Failed key gen."; fi; if [ ! -s "$temp_key_file" ]; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Generated key empty."; fi; if ! mv "$temp_key_file" "$KEY_FILE"; then rm -f "$temp_key_file" >/dev/null 2>&1; error_exit "Failed key move."; fi; echo "New key generated: '$KEY_FILE'."; fi
+echo "Encryption key handling complete."; echo "---"
 
-# --- Step 11: Prompt User to Backup Encryption Key --- # Renumbered
+# --- Step 11: Prompt User to Backup Encryption Key ---
 echo "[Step 11/35] Prompting for key backup confirmation..."
-# ... (Key display and backup prompt logic as before) ...
-echo "=== KEY BACKUP REQUIRED ==="; echo "Key Content:"; echo ""; cat "$KEY_FILE"; echo ""; echo "IMPORTANT: Backup this key securely NOW!"; echo "=========================="; confirm_backup=""; while [[ "$confirm_backup" != "y" && "$confirm_backup" != "n" ]]; do read -p "Backed up? (y/n): " confirm_backup; confirm_backup=$(echo "$confirm_backup" | tr '[:upper:]' '[:lower:]'); done; if [[ "$confirm_backup" != "y" ]]; then error_exit "Aborted. Please back up the key."; fi; echo "Key backup confirmed."; echo "---"
+echo "=== KEY BACKUP REQUIRED ==="; echo "Key Content:"; echo ""; cat "$KEY_FILE"; echo ""; echo "IMPORTANT: Backup this key securely NOW!"; echo "=========================="
+confirm_backup=""; while [[ "$confirm_backup" != "y" && "$confirm_backup" != "n" ]]; do read -p "Backed up? (y/n): " confirm_backup; confirm_backup=$(echo "$confirm_backup" | tr '[:upper:]' '[:lower:]'); done
+if [[ "$confirm_backup" != "y" ]]; then error_exit "Aborted. Please back up the key."; fi
+echo "Key backup confirmed."; echo "---"
 
-# --- Step 12: Manual Step - Configure Web Server Document Root --- # Renumbered
+# --- Step 12: Manual Step - Configure Web Server Document Root ---
 echo "[Step 12/35] Instructing user on Document Root config..."
-# ... (Instructions as before) ...
 echo "=== MANUAL: Configure Web Server ==="; echo "Set DocRoot for '$school_name' to: $(pwd)/web"; echo "(Script does not do this)"; echo "===================================="; echo "---"
 
-# --- Step 13: Manual Step - Perform Drupal Web Installation --- # Renumbered
+# --- Step 13: Manual Step - Perform Drupal Web Installation ---
 echo "[Step 13/35] Instructing user on Drupal web install..."
-# ... (Instructions as before) ...
 echo "=== MANUAL: Drupal Web Install ==="; echo "Go to site URL. Use: Lang=En, Profile=Minimal, Prefix='ss${ssr_id}_', Site='$school_name', Emails='$noreply_email'/'$bug_email', User1Pass=STRONG"; echo "(Script does not do this)"; echo "================================"; echo "---"
 
-# --- Step 14: Confirmation of Manual Docroot/Install Steps --- # Renumbered
+# --- Step 14: Confirmation of Manual Docroot/Install Steps ---
 echo "[Step 14/35] Confirming manual steps completion..."
-# ... (Confirmation logic as before) ...
-echo "Confirm: 1. DocRoot set? 2. Drupal install done?"; echo "---"; confirm_manual=""; while [[ "$confirm_manual" != "y" && "$confirm_manual" != "n" ]]; do read -p "Both steps complete? (y/n): " confirm_manual; confirm_manual=$(echo "$confirm_manual" | tr '[:upper:]' '[:lower:]'); done; if [[ "$confirm_manual" != "y" ]]; then error_exit "Aborted. Please complete manual steps."; fi; echo "Manual steps confirmed."; echo "---"
+echo "Confirm: 1. DocRoot set? 2. Drupal install done?"; echo "---"
+confirm_manual=""; while [[ "$confirm_manual" != "y" && "$confirm_manual" != "n" ]]; do read -p "Both steps complete? (y/n): " confirm_manual; confirm_manual=$(echo "$confirm_manual" | tr '[:upper:]' '[:lower:]'); done
+if [[ "$confirm_manual" != "y" ]]; then error_exit "Aborted. Please complete manual steps."; fi
+echo "Manual steps confirmed."; echo "---"
 
-# --- Step 15: Make Settings Directory/File Writable --- # Renumbered
-echo "[Step 15/35] Temporarily making settings directory/file writable..."
-# ... (chmod +w logic as before) ...
-chmod +w "$DEFAULT_SITES_DIR" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed chmod +w."; fi; echo "Permissions updated temporarily."; echo "---"
+# --- Step 15: Make Settings Directory/File Writable ---
+echo "[Step 15/35] Temporarily making settings writable..."
+chmod +w "$DEFAULT_SITES_DIR" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed chmod +w."; fi
+echo "Permissions updated."; echo "---"
 
-# --- Step 16: Manual Step - Edit Drupal settings.php --- # Renumbered
+# --- Step 16: Manual Step - Edit Drupal settings.php ---
 echo "[Step 16/35] Instructing user to edit settings.php..."
-# ... (Instructions as before) ...
 echo "=== MANUAL: Edit settings.php ==="; echo "Edit $DEFAULT_SETTINGS_PHP:"; echo " - Add charset/collation to DB"; echo " - Backup DB array"; echo " - Remove config_sync line"; echo " - Uncomment settings.local include"; echo "(Script does not do this)"; echo "================================="; echo "---"
 
-# --- Step 17: Confirmation for settings.php Edits --- # Renumbered
+# --- Step 17: Confirmation for settings.php Edits ---
 echo "[Step 17/35] Confirming settings.php edits..."
-# ... (Confirmation logic as before) ...
-confirm_settings_edit=""; while [[ "$confirm_settings_edit" != "y" && "$confirm_settings_edit" != "n" ]]; do read -p "Completed edits? (y/n): " confirm_settings_edit; confirm_settings_edit=$(echo "$confirm_settings_edit" | tr '[:upper:]' '[:lower:]'); done; if [[ "$confirm_settings_edit" != "y" ]]; then error_exit "Aborted. Please complete edits."; fi; echo "settings.php edits confirmed."; echo "---"
+confirm_settings_edit=""; while [[ "$confirm_settings_edit" != "y" && "$confirm_settings_edit" != "n" ]]; do read -p "Completed edits? (y/n): " confirm_settings_edit; confirm_settings_edit=$(echo "$confirm_settings_edit" | tr '[:upper:]' '[:lower:]'); done
+if [[ "$confirm_settings_edit" != "y" ]]; then error_exit "Aborted. Please complete edits."; fi
+echo "settings.php edits confirmed."; echo "---"
 
-# --- Step 18: Copy Production Settings Files --- # Renumbered
+# --- Step 18: Copy Production Settings Files ---
 echo "[Step 18/35] Copying production settings files..."
-# ... (cp logic as before) ...
 echo "Copying local settings..."; cp "$PROD_SETTINGS_LOCAL_SRC" "$DEFAULT_SETTINGS_LOCAL_DEST"; if [ $? -ne 0 ]; then error_exit "Failed copy local settings."; fi
 echo "Copying common local settings..."; cp "$PROD_SETTINGS_COMMON_LOCAL_SRC" "$DEFAULT_SETTINGS_COMMON_LOCAL_DEST"; if [ $? -ne 0 ]; then error_exit "Failed copy common local settings."; fi
 echo "Settings files copied."; echo "---"
 
-# --- Step 19: Ensure Secrets Files Exist --- # Renumbered
+# --- Step 19: Ensure Secrets Files Exist ---
 echo "[Step 19/35] Ensuring secrets files exist..."
-# ... (Secrets file check/create logic as before) ...
 echo "Checking/creating '$DEFAULT_SETTINGS_COMMON_SECRETS_DEST'..."; if [ -f "$DEFAULT_SETTINGS_COMMON_SECRETS_DEST" ]; then echo "Exists."; else printf "<?php\n\n" > "$DEFAULT_SETTINGS_COMMON_SECRETS_DEST"; if [ $? -ne 0 ]; then error_exit "Failed create common secrets."; fi; echo "Created."; fi; echo ""
 echo "Checking/creating '$DEFAULT_SETTINGS_LOCAL_SECRETS_DEST'..."; if [ -f "$DEFAULT_SETTINGS_LOCAL_SECRETS_DEST" ]; then echo "Exists."; else printf "<?php\n\n" > "$DEFAULT_SETTINGS_LOCAL_SECRETS_DEST"; if [ $? -ne 0 ]; then error_exit "Failed create local secrets."; fi; echo "Created."; fi
 echo "Secrets files ensured."; echo "---"
 
-# --- Step 20: Manual Step - Populate Secrets Files --- # Renumbered
-echo "[Step 20/35] Instructing user to populate secrets files..."
-# ... (Instructions as before) ...
+# --- Step 20: Manual Step - Populate Secrets Files ---
+echo "[Step 20/35] Instructing user to populate secrets..."
 echo "=== MANUAL: Populate Secrets ==="; echo "Edit common & local secrets files. Add DB creds, API keys etc."; echo "(Script does not do this)"; echo "=============================="; echo "---"
 
-# --- Step 21: Confirmation for Secret File Population --- # Renumbered
+# --- Step 21: Confirmation for Secret File Population ---
 echo "[Step 21/35] Confirming secrets population..."
-# ... (Confirmation logic as before) ...
-confirm_secrets=""; while [[ "$confirm_secrets" != "y" && "$confirm_secrets" != "n" ]]; do read -p "Populated secrets? (y/n): " confirm_secrets; confirm_secrets=$(echo "$confirm_secrets" | tr '[:upper:]' '[:lower:]'); done; if [[ "$confirm_secrets" != "y" ]]; then error_exit "Aborted. Please populate secrets."; fi; echo "Secrets population confirmed."; echo "---"
+confirm_secrets=""; while [[ "$confirm_secrets" != "y" && "$confirm_secrets" != "n" ]]; do read -p "Populated secrets? (y/n): " confirm_secrets; confirm_secrets=$(echo "$confirm_secrets" | tr '[:upper:]' '[:lower:]'); done
+if [[ "$confirm_secrets" != "y" ]]; then error_exit "Aborted. Please populate secrets."; fi
+echo "Secrets population confirmed."; echo "---"
 
-# --- Step 22: Drush Config Export --- # Renumbered
+# --- Step 22: Drush Config Export ---
 echo "[Step 22/35] Exporting configuration (drush cex)..."
-# Use $DRUSH_CMD
 $DRUSH_CMD cex -y
 if [ $? -ne 0 ]; then error_exit "Drush cex failed using: '$DRUSH_CMD'"; fi
 echo "Config export complete."; echo "---"
 
-# --- Step 23: Selective Git Add, Checkout, Clean --- # Renumbered
+# --- Step 23: Selective Git Add, Checkout, Clean ---
 echo "[Step 23/35] Staging core config & cleaning workdir..."
-# ... (git add/checkout/clean logic as before) ...
 echo "Staging core files..."; git add "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed git add $CONFIG_SITE_FILE."; fi; git add "$CONFIG_THEME_FILE"; if [ $? -ne 0 ]; then error_exit "Failed git add $CONFIG_THEME_FILE."; fi
 echo "Resetting other changes & untracked files..."; git checkout .; if [ $? -ne 0 ]; then error_exit "Failed checkout."; fi; git clean -fd; if [ $? -ne 0 ]; then error_exit "Failed clean."; fi
 echo "Workdir cleaned."; echo "---"
 
-# --- Step 24: Modify system.site.yml Language Codes --- # Renumbered
+# --- Step 24: Modify system.site.yml Language Codes ---
 echo "[Step 24/35] Modifying lang codes in $CONFIG_SITE_FILE to sv..."
-# ... (sed logic as before) ...
 if [ ! -f "$CONFIG_SITE_FILE" ]; then error_exit "'$CONFIG_SITE_FILE' not found."; fi
 sed -i -E "s/^(langcode:[[:space:]]*)en/\1sv/" "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed update langcode."; fi
 sed -i -E "s/^(default_langcode:[[:space:]]*)en/\1sv/" "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed update default_langcode."; fi
 echo "Lang codes updated."; echo "---"
 
-# --- Step 25: Git Add Modified system.site.yml --- # Renumbered
+# --- Step 25: Git Add Modified system.site.yml ---
 echo "[Step 25/35] Staging updated $CONFIG_SITE_FILE..."
-# ... (git add logic as before) ...
 git add "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed git add updated $CONFIG_SITE_FILE."; fi
 echo "File staged."; echo "---"
 
-# --- Step 26: Show Git Diff and Confirm --- # Renumbered
+# --- Step 26: Show Git Diff and Confirm ---
 echo "[Step 26/35] Displaying staged changes for review..."
-# ... (git diff and confirmation logic as before) ...
 echo "=== DIFF START ==="; git diff --cached; echo "=== DIFF END ==="; echo "Review staged diff (should show lang changes)."
 confirm_diff=""; while [[ "$confirm_diff" != "y" && "$confirm_diff" != "n" ]]; do read -p "Staged changes OK? (y/n): " confirm_diff; confirm_diff=$(echo "$confirm_diff" | tr '[:upper:]' '[:lower:]'); done
 if [[ "$confirm_diff" != "y" ]]; then error_exit "Aborted based on diff review."; fi
 echo "Diff confirmed."; echo "---"
 
-# --- Step 27: Git Commit and Push --- # Renumbered
+# --- Step 27: Git Commit and Push ---
 echo "[Step 27/35] Committing and pushing config changes..."
-# ... (git commit/push logic as before) ...
 echo "Committing..."; git commit -m "site config updates"; if [ $? -ne 0 ]; then error_exit "Commit failed."; fi
 echo "Pushing..."; git push origin HEAD; if [ $? -ne 0 ]; then error_exit "Push failed."; fi
 echo "Commit and Push successful."; echo "---"
 
-# --- Step 28: Manual Step - Database Backup Prompt --- # Renumbered
+# --- Step 28: Manual Step - Database Backup Prompt ---
 echo "[Step 28/35] Instructing user on database backup..."
-# ... (Instructions as before) ...
 echo "=== MANUAL: Database Backup ==="; echo "Backup DB NOW before updates/imports!"; echo "(e.g., '$DRUSH_CMD sql-dump > backup.sql')"; echo "============================="; echo "---"
 
-# --- Step 29: Confirmation for Database Backup --- # Renumbered
+# --- Step 29: Confirmation for Database Backup ---
 echo "[Step 29/35] Confirming database backup..."
-# ... (Confirmation logic as before) ...
 confirm_db_dump=""; while [[ "$confirm_db_dump" != "y" && "$confirm_db_dump" != "n" ]]; do read -p "Backup taken? (y/n): " confirm_db_dump; confirm_db_dump=$(echo "$confirm_db_dump" | tr '[:upper:]' '[:lower:]'); done
 if [[ "$confirm_db_dump" != "y" ]]; then error_exit "Aborted. Please take backup."; fi
 echo "DB backup confirmed."; echo "---"
 
-# --- Step 30: Run Drush Updatedb (First Time) --- # Renumbered
+# --- Step 30: Run Drush Updatedb (First Time) ---
 echo "[Step 30/35] Running database updates (1st)..."
-# Use $DRUSH_CMD
 $DRUSH_CMD updb -y
 if [ $? -ne 0 ]; then error_exit "First drush updb failed using: '$DRUSH_CMD'"; fi
 echo "DB updates complete."; echo "---"
 
-# --- Step 31: Run Drush Config Import (Twice) --- # Renumbered
+# --- Step 31: Run Drush Config Import (Twice) ---
 echo "[Step 31/35] Running config import (1st)..."
-# Use $DRUSH_CMD
 $DRUSH_CMD cim -y
 if [ $? -ne 0 ]; then echo "WARNING: First drush cim reported errors. Continuing..."; else echo "First cim complete."; fi
 echo "---"
@@ -361,16 +320,14 @@ $DRUSH_CMD cim -y
 if [ $? -ne 0 ]; then error_exit "Second drush cim failed using: '$DRUSH_CMD'"; fi
 echo "Second cim complete."; echo "---"
 
-# --- Step 32: Run Drush Updatedb (Second Time) --- # Renumbered
+# --- Step 32: Run Drush Updatedb (Second Time) ---
 echo "[Step 32/35] Running database updates (2nd)..."
-# Use $DRUSH_CMD
 $DRUSH_CMD updb -y
 if [ $? -ne 0 ]; then error_exit "Second drush updb failed using: '$DRUSH_CMD'"; fi
 echo "DB updates complete."; echo "---"
 
-# --- Step 33: Configuration Sanity Check --- # Renumbered
+# --- Step 33: Configuration Sanity Check ---
 echo "[Step 33/35] Running configuration sanity check..."
-# Use $DRUSH_CMD
 echo "Running drush cex for check..."; $DRUSH_CMD cex -y; if [ $? -ne 0 ]; then echo "WARNING: drush cex during check reported errors."; fi
 echo "Checking for config diffs in '$CONFIG_SYNC_DIR' vs HEAD..."
 if ! git diff --quiet HEAD -- "$CONFIG_SYNC_DIR"; then
@@ -390,10 +347,9 @@ fi
 echo "Sanity check complete."
 echo "---"
 
-# --- Step 34: Full Deployment Steps --- # Renumbered
+# --- Step 34: Full Deployment Steps ---
 echo "[Step 34/35] Performing final deployment steps (Standard Sequence)..."
 # This block runs the standard deployment sequence.
-# Uses $DRUSH_CMD and $COMPOSER_CMD determined earlier.
 
 echo "Deploy Step 1/13: Enabling maintenance mode..."
 $DRUSH_CMD state:set system.maintenance_mode 1 --input-format=integer; if [ $? -ne 0 ]; then error_exit "Deploy: Failed maint mode ON."; fi
