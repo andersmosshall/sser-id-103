@@ -502,10 +502,13 @@ fi
 # Read template content, replace placeholder using Bash substitution, write to target
 TEMPLATE_CONTENT=$(<"$CONFIG_SPLIT_TEMPLATE_SOURCE") \
   || error_exit "Failed to read template '${CONFIG_SPLIT_TEMPLATE_SOURCE}'."
+
 CONFIG_SPLIT_CONTENT="${TEMPLATE_CONTENT//\[MODULES\]/$MODULES_REPLACEMENT_STRING}"
-# Use printf instead of echo -n to handle potential backslashes in replacement better
-printf "%s" "$CONFIG_SPLIT_CONTENT" > "$TARGET_CONFIG_SPLIT_FILE" \
+
+# Use printf with \n to ensure trailing newline
+printf "%s\n" "$CONFIG_SPLIT_CONTENT" > "$TARGET_CONFIG_SPLIT_FILE" \
   || error_exit "Failed to write processed content to '${TARGET_CONFIG_SPLIT_FILE}'."
+
 # Also apply common replacements (in case template uses any others)
 apply_all_replacements "$TARGET_CONFIG_SPLIT_FILE"
 
