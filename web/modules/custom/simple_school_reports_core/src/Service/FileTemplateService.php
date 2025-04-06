@@ -81,6 +81,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'doc_logo_left' => NULL,
       'doc_logo_center' => NULL,
       'doc_logo_right' => NULL,
+      'logo_header' => NULL,
     ];
 
     $file_storage = $this->entityTypeManager->getStorage('file');
