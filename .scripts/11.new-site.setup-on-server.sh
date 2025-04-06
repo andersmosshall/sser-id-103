@@ -481,8 +481,6 @@ echo "------------------------------------------------------------"
 echo "[Step 24/35] Modifying site config ($CONFIG_SITE_FILE) for lang & front page..."
 if [ ! -f "$CONFIG_SITE_FILE" ]; then error_exit "'$CONFIG_SITE_FILE' not found."; fi
 
-echo "   Updating langcode to 'sv'..."
-sed -i -E "s/^(langcode:[[:space:]]*)en/\1sv/" "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed update langcode."; fi
 echo "   Updating default_langcode to 'sv'..."
 sed -i -E "s/^(default_langcode:[[:space:]]*)en/\1sv/" "$CONFIG_SITE_FILE"; if [ $? -ne 0 ]; then error_exit "Failed update default_langcode."; fi
 echo "   Updating front page to '/start/resolve'..."
