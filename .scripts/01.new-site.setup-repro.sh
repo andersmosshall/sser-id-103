@@ -725,16 +725,13 @@ if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" == "y" ]]; then
 else
     echo "Script completed successfully! Git setup was skipped."
 fi
-echo "Review the 'Next steps' below."
 echo
-echo "Next steps typically involve:"
+echo
+echo "Next steps are:"
 echo "  - Reviewing generated files for correctness."
-echo "  - Integrating helper sections from ${TARGET_BASH_HELPERS_DIR} into your bash functions."
-echo "  - Setting up database credentials in ${TARGET_SETTINGS_FILE} (if not templated)"
-if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" != "y" ]]; then
-    echo "  - Manually performing Git setup steps (see instructions above)."
-fi
-echo "  - Deploying the code to the server"
-echo "  - Running initial setup/database migrations (consider selected modules: ${SELECTED_MODULES[*]:-(None)})"
+echo "  - Integrating helper sections from ${TARGET_BASH_HELPERS_DIR} into your bash aliases (optionally)."
+echo "  - Login to the server and make sure the docroot for the site url i empty."
+echo "  - Clone the new site repository to the server with \"git clone ${GIT_CLONE_URL} .\""
+echo "  - Run \"bash .scripts/11.new-site.setup-on-server.sh\" on the server to install the new site."
 
 exit 0 # Success

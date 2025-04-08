@@ -69,5 +69,9 @@ $settings['ssr_grade_to'] = [SSR_GRADE_TO];
 $settings['ssr_bug_report_email'] = '[SSR_BUG_REPORT_EMAIL]';
 $settings['ssr_no_reply_email'] = '[SSR_NO_REPLY_EMAIL]';
 
+// Number of extra super admins (user 1 not included). 0 = only user 1 is super
+// admin.
+$settings['ssr_allowed_super_admins'] = [SSR_EXTRA_SUPER_ADMINS];
+
 // Fallback toolbar color #0f0f0f.
 $settings['ssr_toolbar_color'] = '[SSR_TOOLBAR_COLOR]';

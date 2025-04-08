@@ -109,3 +109,5 @@ $settings['ssr_toolbar_color'] = '#3a5ebd';
 
 $settings['ssr_bug_report_email'] = 'anders@mosshall.se';
 $settings['ssr_no_reply_email'] = 'anders@mosshall.se';
+
+$settings['ssr_allowed_super_admins'] = 1;
