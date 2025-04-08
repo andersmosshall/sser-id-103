@@ -7,8 +7,8 @@ if (( BASH_VERSINFO[0] < 4 )); then
 fi
 
 # --- Configuration ---
-# Base directory where ssr-sites will be created
-SITES_BASE_DIR="ssr-sites"
+# Base directory where sser-sites will be created
+SITES_BASE_DIR="sser-sites"
 CUSTOM_MODULES_DIR="web/modules/custom" # Relative path to custom modules
 BASE_CORE_EXTENSION_FILE="config/sync/core.extension.yml" # Path to base module list
 
@@ -57,14 +57,14 @@ escape_sed_replacement() {
 
 # --- Main Script ---
 
-echo "--- SSR Site Setup Script ---"
-echo "This script will guide you through setting up a new SSR site."
+echo "--- SSER Site Setup Script ---"
+echo "This script will guide you through setting up a new SSER site."
 
 # 1. Confirm Prerequisites & Base Repo
 echo "Checking prerequisites..."
 # Check for .git directory
 if [[ ! -d ".git" ]]; then
-    error_exit "No .git directory found. Please run this script from the root of the SSR base repository."
+    error_exit "No .git directory found. Please run this script from the root of the SSER base repository."
 fi
 # Get base repo origin URL
 SSR_BASE_GIT_URL=$(git config --get remote.origin.url)
@@ -90,13 +90,13 @@ echo # Add a newline for readability
 # --- Site Configuration ---
 echo "--- Site Configuration ---"
 
-# 2. Get SSR_ID (Expanded)
+# 2. Get SSER_ID (Expanded)
 while true; do
-  read -p "Enter SSR_ID (must be a number between 1 and 99): " SSR_ID
-  if [[ "$SSR_ID" =~ ^[0-9]+$ && "$SSR_ID" -gt 0 && "$SSR_ID" -lt 100 ]]; then
+  read -p "Enter SSER_ID (must be a number over 100): " SSER_ID
+  if [[ "$SSER_ID" =~ ^[0-9]+$ && "$SSER_ID" -gt 100 && "$SSER_ID" -lt 1000000000 ]]; then
     break # Exit loop if valid
   else
-    echo "Invalid input. Please enter a number between 1 and 99." >&2
+    echo "Invalid input. Please enter a number over 100." >&2
   fi
 done
 echo # Add a newline
@@ -125,7 +125,7 @@ echo "Using Full URL: ${FULL_URL}"
 echo # Add a newline
 
 # 4. Get Git Clone URL (Renumbered)
-DEFAULT_GIT_URL="git@github.com:andersmosshall/ssr-id-${SSR_ID}.git"
+DEFAULT_GIT_URL="git@github.com:andersmosshall/sser-id-${SSER_ID}.git"
 read -p "Enter Git clone URL for the NEW site [${DEFAULT_GIT_URL}]: " GIT_CLONE_URL
 # Use Bash parameter expansion for default if input is empty
 GIT_CLONE_URL=${GIT_CLONE_URL:-$DEFAULT_GIT_URL}
@@ -402,7 +402,7 @@ apply_all_replacements() {
 
   # Each sed command on its own line, using '\' for line continuation
   # if needed, and '|| error_exit' for error checking.
-  sed -i "s/\\[SSR_ID\\]/${SSR_ID}/g" "$target_file" \
+  sed -i "s/\\[SSR_ID\\]/${SSER_ID}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_ID] in ${filename}"
   sed -i "s/\\[SSR_BASE_GIT_URL\\]/${ESCAPED_SSR_BASE_GIT_URL}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_BASE_GIT_URL] in ${filename}"
@@ -541,7 +541,7 @@ fi
 cp "$FETCH_HELPER_TEMPLATE_SOURCE" "$TARGET_FETCH_HELPER_FILE" \
   || error_exit "Failed to copy template to '${TARGET_FETCH_HELPER_FILE}'."
 apply_all_replacements "$TARGET_FETCH_HELPER_FILE"
-echo "INFO: Content of ${TARGET_FETCH_HELPER_FILE} should be added to your ssr_fetch_all() bash function."
+echo "INFO: Content of ${TARGET_FETCH_HELPER_FILE} should be added to your sser_fetch_all() bash function."
 
 
 # 14. Process bash_local_section_update.txt (Renumbered & Renamed & Expanded)
@@ -552,7 +552,7 @@ fi
 cp "$UPDATE_HELPER_TEMPLATE_SOURCE" "$TARGET_UPDATE_HELPER_FILE" \
   || error_exit "Failed to copy template to '${TARGET_UPDATE_HELPER_FILE}'."
 apply_all_replacements "$TARGET_UPDATE_HELPER_FILE"
-echo "INFO: Content of ${TARGET_UPDATE_HELPER_FILE} should be added to your ssr_update_all() bash function."
+echo "INFO: Content of ${TARGET_UPDATE_HELPER_FILE} should be added to your sser_update_all() bash function."
 
 
 # 15. Process bash_server_section_deploy.txt (New Section & Expanded)
@@ -638,16 +638,16 @@ if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" == "y" ]]; then
     git push -u origin main \
       || error_exit "Failed to push initial commit to origin main."
 
-    # 4. Add ssr-base remote and merge
-    echo "Adding remote ssr-base '${SSR_BASE_GIT_URL}'..."
-    git remote add ssr-base "$SSR_BASE_GIT_URL" \
-      || error_exit "Failed to add remote ssr-base '$SSR_BASE_GIT_URL'."
-    echo "Fetching from ssr-base..."
-    git fetch ssr-base main \
-      || error_exit "Failed to fetch from ssr-base main."
-    echo "Merging ssr-base/main (no-commit)..."
+    # 4. Add sser-base remote and merge
+    echo "Adding remote sser-base '${SSR_BASE_GIT_URL}'..."
+    git remote add sser-base "$SSR_BASE_GIT_URL" \
+      || error_exit "Failed to add remote sser-base '$SSR_BASE_GIT_URL'."
+    echo "Fetching from sser-base..."
+    git fetch sser-base main \
+      || error_exit "Failed to fetch from sser-base main."
+    echo "Merging sser-base/main (no-commit)..."
     # Allow merge to potentially fail (e.g., conflicts) but proceed
-    git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+    git merge sser-base/main --allow-unrelated-histories --no-commit --no-ff
     merge_exit_status=$?
     if [[ $merge_exit_status -ne 0 ]]; then
         echo "Warning: git merge command exited with status ${merge_exit_status}. There might be merge conflicts to resolve manually." >&2
@@ -675,15 +675,15 @@ if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" == "y" ]]; then
       || error_exit "Failed to stage files after merge."
     echo "Committing merge (resolve conflicts first if merge failed)..."
     # Quote commit message
-    git commit -m "sync with ssr-base" \
-      || error_exit "Failed to commit ssr-base merge. Resolve conflicts if necessary."
+    git commit -m "sync with sser-base" \
+      || error_exit "Failed to commit sser-base merge. Resolve conflicts if necessary."
 
     # 7. Push merge commit
     echo "Pushing merge commit to origin..."
     git push origin main \
       || error_exit "Failed to push merge commit to origin main."
 
-    echo "Git setup and ssr-base merge completed successfully."
+    echo "Git setup and sser-base merge completed successfully."
 
     # Go back to original directory
     echo "Returning to original directory..."
@@ -700,12 +700,12 @@ else
     echo "  git add . && git commit -m \"init ${SCHOOL_NAME}\""
     echo "  git branch -M main"
     echo "  # Manually push if origin is ready: git push -u origin main"
-    echo "  git remote add ssr-base \"${SSR_BASE_GIT_URL}\""
-    echo "  git fetch ssr-base main && git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff"
+    echo "  git remote add sser-base \"${SSR_BASE_GIT_URL}\""
+    echo "  git fetch sser-base main && git merge sser-base/main --allow-unrelated-histories --no-commit --no-ff"
     echo "  # Resolve conflicts if any, then edit .gitignore:"
     echo "  # Remove /config/sync/config_split.config_split.local.yml"
     echo "  # Remove /config/sync/system.site.yml"
-    echo "  git add . && git commit -m 'sync with ssr-base'"
+    echo "  git add . && git commit -m 'sync with sser-base'"
     echo "  # Manually push: git push origin main"
     echo "  cd -"
 fi
@@ -724,7 +724,7 @@ echo "Local Fetch Helper:     ${TARGET_FETCH_HELPER_FILE}"
 echo "Local Update Helper:    ${TARGET_UPDATE_HELPER_FILE}"
 echo "Server Deploy Helper:   ${TARGET_DEPLOY_HELPER_FILE}"
 echo "Selected Modules:       ${SELECTED_MODULES[*]:-(None)}"
-echo "SSR ID:                 ${SSR_ID}"
+echo "SSER ID:                 ${SSER_ID}"
 echo "New Site Git URL:       ${GIT_CLONE_URL}"
 echo "URL Name:               ${URL_NAME}"
 echo "Full URL:               ${FULL_URL}"

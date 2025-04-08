@@ -112,14 +112,14 @@ echo "[Step 3/35] Extracting required settings from $SETTINGS_FILE..."
 school_name=$(extract_setting 'ssr_school_name' "$SETTINGS_FILE")
 bug_email=$(extract_setting 'ssr_bug_report_email' "$SETTINGS_FILE")
 noreply_email=$(extract_setting 'ssr_no_reply_email' "$SETTINGS_FILE")
-ssr_id=$(extract_setting_unquoted 'ssr_id' "$SETTINGS_FILE")
+sser_id=$(extract_setting_unquoted 'ssr_id' "$SETTINGS_FILE")
 
 # Validate extraction results
 error_flag=0
 if [ -z "$school_name" ]; then echo "   ❌ ERROR: Cannot find ssr_school_name" >&2; error_flag=1; fi
 if [ -z "$bug_email" ]; then echo "   ❌ ERROR: Cannot find ssr_bug_report_email" >&2; error_flag=1; fi
 if [ -z "$noreply_email" ]; then echo "   ❌ ERROR: Cannot find ssr_no_reply_email" >&2; error_flag=1; fi
-if [ -z "$ssr_id" ] && [ "$ssr_id" != "0" ]; then echo "   ❌ ERROR: Cannot find ssr_id" >&2; error_flag=1; fi
+if [ -z "$sser_id" ] && [ "$sser_id" != "0" ]; then echo "   ❌ ERROR: Cannot find ssr_id" >&2; error_flag=1; fi
 if [ $error_flag -ne 0 ]; then
     error_exit "Failed extracting required settings from '$SETTINGS_FILE'."
 fi
@@ -128,7 +128,7 @@ echo "   ✅ Successfully extracted settings:"
 echo "      School Name:      $school_name"
 echo "      Bug Report Email: $bug_email"
 echo "      No Reply Email:   $noreply_email"
-echo "      SSR ID:           $ssr_id"
+echo "      SSER ID:           $sser_id"
 echo "------------------------------------------------------------"
 
 # --- Step 4: Initial Confirmation Prompt ---
@@ -170,16 +170,16 @@ if [ ! -f "$SETTINGS_FILE" ]; then
 fi
 echo "------------------------------------------------------------"
 
-# --- Step 6: Confirm Extracted SSR ID ---
-echo "[Step 6/35] Confirming extracted SSR ID..."
-confirm_ssr_id=""
-while [[ "$confirm_ssr_id" != "y" && "$confirm_ssr_id" != "n" ]]; do
-    read -p "   Is the extracted SSR ID '$ssr_id' correct? [Y/n]: " confirm_ssr_id_input
-    confirm_ssr_id=${confirm_ssr_id_input:-y} # Default 'y'
-    confirm_ssr_id=$(echo "$confirm_ssr_id" | tr '[:upper:]' '[:lower:]')
+# --- Step 6: Confirm Extracted SSER ID ---
+echo "[Step 6/35] Confirming extracted SSER ID..."
+confirm_sser_id=""
+while [[ "$confirm_sser_id" != "y" && "$confirm_sser_id" != "n" ]]; do
+    read -p "   Is the extracted SSER ID '$sser_id' correct? [Y/n]: " confirm_sser_id_input
+    confirm_sser_id=${confirm_sser_id_input:-y} # Default 'y'
+    confirm_sser_id=$(echo "$confirm_sser_id" | tr '[:upper:]' '[:lower:]')
 done
-if [[ "$confirm_ssr_id" != "y" ]]; then error_exit "SSR ID confirmation denied."; fi
-echo "   ✅ SSR ID confirmed."
+if [[ "$confirm_sser_id" != "y" ]]; then error_exit "SSER ID confirmation denied."; fi
+echo "   ✅ SSER ID confirmed."
 echo "------------------------------------------------------------"
 
 # --- Step 7: Check Lando Env & Determine Composer/Drush Commands ---
@@ -310,7 +310,7 @@ echo "   1. Visit the site URL for '$school_name' in your browser."
 echo "   2. Follow Drupal installation steps using:"
 echo "      - Language: English"
 echo "      - Profile: Minimal"
-echo "      - DB Prefix: 'ss${ssr_id}_' (In Advanced Options)"
+echo "      - DB Prefix: 'ss${sser_id}_' (In Advanced Options)"
 echo "      - Site Name: '$school_name'"
 echo "      - Site Email: '$noreply_email'"
 echo "      - User 1 Email: '$bug_email' (Suggested)"
@@ -388,7 +388,7 @@ if (file_exists(\$app_root . '/' . \$site_path . '/settings.local.php')) {
   'database' => 'your_db_name',
   'username' => 'your_db_user',
   'password' => 'your_db_password',
-  'prefix' => 'ss${ssr_id}_', // Example prefix
+  'prefix' => 'ss${sser_id}_', // Example prefix
   'host' => 'localhost',
   'port' => '3306',
   'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
