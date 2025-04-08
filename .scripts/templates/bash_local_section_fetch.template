@@ -4,7 +4,7 @@ if [ ! -d \"[URL_NAME]\" ]; then \
   git clone [GIT_CLONE_URL] [URL_NAME]; \
   cd [URL_NAME]; \
   git checkout main; \
-  echo \"Add ssr-base remote\"; \
+  echo \"Add sser-base remote\"; \
   git remote add ssr-base [SSR_BASE_GIT_URL]; \
   cd ..;
 fi

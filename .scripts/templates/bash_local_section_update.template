@@ -1,4 +1,4 @@
 # Update [URL_NAME]
 cd [URL_NAME] || return
-ssr_update_local
+sser_update_local
 cd ~/Projects/ssr/ssr-sites || return

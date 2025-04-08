@@ -1,6 +1,6 @@
-# Example of ssr_deploy_local bash helper.
+# Example of sser_deploy_local bash helper.
 
-ssr_copy_settings_files() {
+sser_copy_settings_files() {
   if [ -f "web/sites/default/settings.local.php" ]; then
     rm -f "web/sites/default/settings.local.php"
   fi
@@ -18,10 +18,10 @@ ssr_copy_settings_files() {
   fi
 }
 
-alias ssr_deploy_local="drush state:set system.maintenance_mode 1 --input-format=integer &&
+alias sser_deploy_local="drush state:set system.maintenance_mode 1 --input-format=integer &&
 git pull &&
 chmod +w web/sites/default/ &&
-ssr_copy_settings_files &&
+sser_copy_settings_files &&
 chmod -w web/sites/default/settings.local.php &&
 composer install &&
 drush cr &&

@@ -1,14 +1,14 @@
-# Example of ssr_deploy_all bash helper.
+# Example of sser_deploy_all bash helper.
 
-alias ssr_deploy_all="
+alias sser_deploy_all="
 echo -e 'DEPLOY DEMO1' &&
 cd ~/public_html/simpleschoolreports.se/demo1/ &&
-ssr_deploy_local &&
+sser_deploy_local &&
 echo -e 'DEPLOY DEMO1 DONE' &&
 cd ~/ &&
 echo -e 'DEPLOY DEMO2' &&
 cd ~/public_html/simpleschoolreports.se/demo2/ &&
-ssr_deploy_local &&
+sser_deploy_local &&
 echo -e 'DEPLOY DEMO2 DONE' &&
 cd ~/ &&
 echo -e 'FULL DEPLOY DONE'
