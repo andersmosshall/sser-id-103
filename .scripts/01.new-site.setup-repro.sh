@@ -24,6 +24,7 @@ DEPLOY_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_server_section_deploy.tem
 DEFAULT_NO_REPLY_EMAIL="no-reply@simpleschoolreports.se"
 DEFAULT_TOOLBAR_COLOR="#0f0f0f"
 DEFAULT_MODULE_WEIGHT=10
+DEFAULT_EXTRA_ADMINS=0
 
 # Modules to always exclude from selection (in addition to _support modules)
 declare -a ALWAYS_EXCLUDE_MODULES=(
@@ -89,7 +90,7 @@ echo # Add a newline for readability
 # --- Site Configuration ---
 echo "--- Site Configuration ---"
 
-# 2. Get SSR_ID
+# 2. Get SSR_ID (Expanded)
 while true; do
   read -p "Enter SSR_ID (must be a number between 1 and 99): " SSR_ID
   if [[ "$SSR_ID" =~ ^[0-9]+$ && "$SSR_ID" -gt 0 && "$SSR_ID" -lt 100 ]]; then
@@ -131,7 +132,7 @@ GIT_CLONE_URL=${GIT_CLONE_URL:-$DEFAULT_GIT_URL}
 echo "Using Git URL: ${GIT_CLONE_URL}"
 echo # Add a newline
 
-# 5. Get School Details (Renumbered & Expanded)
+# 5. Get School Details
 echo "--- School Details ---"
 while true; do
     read -p "Enter School Name (required): " SCHOOL_NAME
@@ -187,7 +188,7 @@ while true; do
 done
 echo # Add a newline
 
-# 6. Get SSR Grade Range (Renumbered & Expanded)
+# 6. Get SSR Grade Range
 while true; do
   read -p "Enter starting grade (0-9): " SSR_GRADE_FROM
   if [[ "$SSR_GRADE_FROM" =~ ^[0-9]$ ]]; then # Check for single digit 0-9
@@ -207,7 +208,7 @@ while true; do
 done
 echo # Add a newline
 
-# 7. Email and Customization Settings (Renumbered & Expanded)
+# 7. Email and Customization Settings
 echo "--- Email and Customization ---"
 while true; do
     read -p "Enter Bug Report Email address (required): " SSR_BUG_REPORT_EMAIL
@@ -221,6 +222,23 @@ done
 read -p "Enter No-Reply Email address [${DEFAULT_NO_REPLY_EMAIL}]: " SSR_NO_REPLY_EMAIL
 SSR_NO_REPLY_EMAIL=${SSR_NO_REPLY_EMAIL:-$DEFAULT_NO_REPLY_EMAIL} # Use default if empty
 echo "Using No-Reply Email: ${SSR_NO_REPLY_EMAIL}"
+
+
+while true; do
+  # Prompt includes suggestion to keep low and shows default
+  read -p "Enter number of EXTRA super admins (0-5, default: ${DEFAULT_EXTRA_ADMINS} - keep low): " SSR_EXTRA_SUPER_ADMINS_INPUT
+  # Apply default if input is empty
+  SSR_EXTRA_SUPER_ADMINS=${SSR_EXTRA_SUPER_ADMINS_INPUT:-$DEFAULT_EXTRA_ADMINS}
+  # Validate input is a single digit between 0 and 5
+  if [[ "$SSR_EXTRA_SUPER_ADMINS" =~ ^[0-5]$ ]]; then
+    break # Exit loop if valid
+  else
+    echo "Invalid input. Please enter a number between 0 and 5." >&2
+    # Reset variable if invalid input was given (forces re-entry or taking default again)
+    SSR_EXTRA_SUPER_ADMINS=""
+  fi
+done
+echo "Using Extra Super Admins count: ${SSR_EXTRA_SUPER_ADMINS}"
 
 while true; do
     read -p "Enter Toolbar Color (hex format, e.g., #aabbcc) [${DEFAULT_TOOLBAR_COLOR}]: " SSR_TOOLBAR_COLOR_INPUT
@@ -236,7 +254,7 @@ echo "Using Toolbar Color: ${SSR_TOOLBAR_COLOR}"
 echo # Add a newline
 
 
-# 8. Module Selection (Renumbered & Expanded)
+# 8. Module Selection
 echo "--- Optional Module Selection ---"
 declare -a available_modules=()
 declare -a selected_module_indices=()
@@ -408,6 +426,8 @@ apply_all_replacements() {
     || error_exit "Failed replacing [SSR_BUG_REPORT_EMAIL] in ${filename}"
   sed -i "s/\\[SSR_NO_REPLY_EMAIL\\]/${ESCAPED_SSR_NO_REPLY_EMAIL}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_NO_REPLY_EMAIL] in ${filename}"
+  sed -i "s/\\[SSR_EXTRA_SUPER_ADMINS\\]/${SSR_EXTRA_SUPER_ADMINS}/g" "$target_file" \
+    || error_exit "Failed replacing [SSR_EXTRA_SUPER_ADMINS] in ${filename}"
   sed -i "s/\\[SSR_TOOLBAR_COLOR\\]/${SSR_TOOLBAR_COLOR}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_TOOLBAR_COLOR] in ${filename}"
   sed -i "s/\\[FULL_URL\\]/${ESCAPED_FULL_URL}/g" "$target_file" \
@@ -444,7 +464,7 @@ TARGET_MARKER_FILE="${TARGET_SITE_DIR}/${MARKER_FILENAME}"
 
 echo "Preparing to create site structure in: ${TARGET_SITE_DIR}"
 
-# 9. Create Target Directories (Renumbered & Expanded)
+# 9. Create Target Directories
 # Initial check for directory existence moved earlier (Section #3)
 mkdir -p "$TARGET_SETTINGS_DIR" \
   || error_exit "Failed to create directory '${TARGET_SETTINGS_DIR}'."
@@ -456,7 +476,7 @@ echo "Created base directories:"
 ls -d "$TARGET_SETTINGS_DIR" "$TARGET_CONFIG_SYNC_DIR" "$TARGET_BASH_HELPERS_DIR"
 
 
-# 10. Process settings.local.php (Renumbered & Expanded)
+# 10. Process settings.local.php
 echo "Processing ${TARGET_SETTINGS_FILE}..."
 if [[ ! -f "$SETTINGS_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${SETTINGS_TEMPLATE_SOURCE}' not found."
@@ -466,7 +486,7 @@ cp "$SETTINGS_TEMPLATE_SOURCE" "$TARGET_SETTINGS_FILE" \
 apply_all_replacements "$TARGET_SETTINGS_FILE"
 
 
-# 11. Process system.site.yml (Renumbered & Expanded)
+# 11. Process system.site.yml
 echo "Processing ${TARGET_SYSTEM_SITE_FILE}..."
 if [[ ! -f "$SYSTEM_SITE_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${SYSTEM_SITE_TEMPLATE_SOURCE}' not found."
@@ -476,7 +496,7 @@ cp "$SYSTEM_SITE_TEMPLATE_SOURCE" "$TARGET_SYSTEM_SITE_FILE" \
 apply_all_replacements "$TARGET_SYSTEM_SITE_FILE"
 
 
-# 12. Generate config_split.config_split.local.yml (Renumbered & Expanded)
+# 12. Generate config_split.config_split.local.yml
 echo "Processing ${TARGET_CONFIG_SPLIT_FILE}..."
 if [[ ! -f "$CONFIG_SPLIT_TEMPLATE_SOURCE" ]]; then
   error_exit "Template file '${CONFIG_SPLIT_TEMPLATE_SOURCE}' not found."
@@ -546,14 +566,14 @@ apply_all_replacements "$TARGET_DEPLOY_HELPER_FILE"
 echo "INFO: Content of ${TARGET_DEPLOY_HELPER_FILE} contains server deployment helpers."
 
 
-# 16. Create Marker File (Renumbered & Expanded)
+# 16. Create Marker File
 echo "Creating marker file ${TARGET_MARKER_FILE}..."
 touch "${TARGET_MARKER_FILE}" \
   || error_exit "Failed to create marker file '${TARGET_MARKER_FILE}'."
 echo "Finished creating marker file."
 
 
-# 17. Create Symlinks in .settings/prod (Renumbered & Expanded)
+# 17. Create Symlinks in .settings/prod
 echo "Creating symlinks in ${TARGET_SETTINGS_DIR}..."
 
 # Symlink for system.site.yml
@@ -717,6 +737,7 @@ echo "Municipality Code:      ${SCHOOL_MUNICIPALITY_CODE}"
 echo "Grade Range:            ${SSR_GRADE_FROM}-${SSR_GRADE_TO}"
 echo "Bug Report Email:       ${SSR_BUG_REPORT_EMAIL}"
 echo "No-Reply Email:         ${SSR_NO_REPLY_EMAIL}"
+echo "Extra Super Admins:     ${SSR_EXTRA_SUPER_ADMINS}" # Added
 echo "Toolbar Color:          ${SSR_TOOLBAR_COLOR}"
 echo
 # Check Git setup confirmation status for final message
@@ -726,12 +747,14 @@ else
     echo "Script completed successfully! Git setup was skipped."
 fi
 echo
-echo
 echo "Next steps are:"
 echo "  - Reviewing generated files for correctness."
 echo "  - Integrating helper sections from ${TARGET_BASH_HELPERS_DIR} into your bash aliases (optionally)."
 echo "  - Login to the server and make sure the docroot for the site url i empty."
 echo "  - Clone the new site repository to the server with \"git clone ${GIT_CLONE_URL} .\""
 echo "  - Run \"bash .scripts/11.new-site.setup-on-server.sh\" on the server to install the new site."
+if [[ "$(echo "$confirm_git" | tr '[:upper:]' '[:lower:]')" != "y" ]]; then
+    echo "  - Manually performing Git setup steps (see instructions above)."
+fi
 
 exit 0 # Success
