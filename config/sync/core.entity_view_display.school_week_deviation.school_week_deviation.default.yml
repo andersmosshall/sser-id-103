@@ -27,6 +27,7 @@ hidden:
   from_date: true
   grade: true
   length: true
+  no_teaching: true
   status: true
   to: true
   to_date: true

@@ -1,5 +1,33 @@
 <?php
 
+/**
+ * Location of the site configuration files.
+ *
+ * The $settings['config_sync_directory'] specifies the location of file system
+ * directory used for syncing configuration data. On install, the directory is
+ * created. This is used for configuration imports.
+ *
+ * The default location for this directory is inside a randomly-named
+ * directory in the public files path. The setting below allows you to set
+ * its location.
+ */
+$settings['config_sync_directory'] = '../config/sync';
+
+/**
+ * Private file path:
+ *
+ * A local file system path where private files will be stored. This directory
+ * must be absolute, outside of the Drupal installation directory and not
+ * accessible over the web.
+ *
+ * Note: Caches need to be cleared when this value is changed to make the
+ * private:// stream wrapper available to the system.
+ *
+ * See https://www.drupal.org/documentation/modules/file for more information
+ * about securing private files.
+ */
+$settings['file_private_path'] = 'sites/default/private-files';
+
 if (file_exists($app_root . '/' . $site_path . '/settings.common-secrets.php')) {
   include $app_root . '/' . $site_path . '/settings.common-secrets.php';
 }
@@ -55,3 +83,5 @@ $settings['ssr_excluded_catalog_label'] = [
 ];
 
 $settings['ssr_max_grade_student_group_size'] = 32;
+
+$settings['ssr_max_written_reviews_subject_list'] = 18;

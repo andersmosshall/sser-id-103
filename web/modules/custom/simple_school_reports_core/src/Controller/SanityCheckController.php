@@ -64,6 +64,101 @@ class SanityCheckController extends ControllerBase {
       '#rows' => $rows,
     ];
 
+    // Logo check.
+    $build['logos_label'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h2',
+      '#value' => $this->t('Logos'),
+    ];
+
+    /** @var \Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface $file_template_service */
+    $file_template_service = \Drupal::service('simple_school_reports_core.file_template_service');
+    $templates_base_path = DIRECTORY_SEPARATOR . $this->moduleHandler()->getModule('simple_school_reports_core')->getPath() . DIRECTORY_SEPARATOR . 'ssr-file-templates' . DIRECTORY_SEPARATOR;
+    // Header logo.
+    $build['header_logo_label'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Header logo'),
+    ];
+    $header_logo = $file_template_service->getFileTemplate('logo_header');
+    if ($header_logo) {
+      $build['header_logo'] = [
+        '#theme' => 'image',
+        '#uri' => $header_logo->getFileUri(),
+        '#alt' => $this->t('Header logo'),
+        '#title' => $this->t('Header logo'),
+        '#attributes' => [
+          'style' => 'height: 90px; width: auto;',
+        ],
+      ];
+    }
+    else {
+      $build['header_logo'] = [
+        '#markup' => $this->t('No header logo found.'),
+      ];
+    }
+
+    // Document logo left.
+    $build['doc_logo_l'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Document logo left'),
+    ];
+    $doc_logo_left = $file_template_service->getFileTemplate('doc_logo_left')?->getFileUri();
+    if (!$doc_logo_left) {
+      $doc_logo_left = $templates_base_path . 'logo_example_l.jpeg';
+    }
+    $build['doc_logo_left'] = [
+      '#theme' => 'image',
+      '#uri' => $doc_logo_left,
+      '#alt' => $this->t('Document logo left'),
+      '#title' => $this->t('Document logo left'),
+      '#attributes' => [
+        'style' => 'height: 90px; width: auto;',
+      ],
+    ];
+
+    // Document logo center.
+    $build['doc_logo_c'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Document logo center'),
+    ];
+    $doc_logo_center = $file_template_service->getFileTemplate('doc_logo_center')?->getFileUri();
+    if (!$doc_logo_center) {
+      $doc_logo_center = $templates_base_path . 'logo_example_c.jpeg';
+    }
+    $build['doc_logo_center'] = [
+      '#theme' => 'image',
+      '#uri' => $doc_logo_center,
+      '#alt' => $this->t('Document logo center'),
+      '#title' => $this->t('Document logo center'),
+      '#attributes' => [
+        'style' => 'height: 90px; width: auto;',
+      ],
+    ];
+
+    // Document logo right.
+    $build['doc_logo_r'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Document logo right'),
+    ];
+    $doc_logo_right = $file_template_service->getFileTemplate('doc_logo_right')?->getFileUri();
+    if (!$doc_logo_right) {
+      $doc_logo_right = $templates_base_path . 'logo_example_r.jpeg';
+    }
+    $build['doc_logo_right'] = [
+      '#theme' => 'image',
+      '#uri' => $doc_logo_right,
+      '#alt' => $this->t('Document logo right'),
+      '#title' => $this->t('Document logo right'),
+      '#attributes' => [
+        'style' => 'height: 90px; width: auto;',
+      ],
+    ];
+
+
     $build['modules_list_label'] = [
       '#type' => 'html_tag',
       '#tag' => 'h2',
@@ -87,8 +182,6 @@ class SanityCheckController extends ControllerBase {
       '#header' => $headers,
       '#rows' => $rows,
     ];
-
-    // ToDo check files...
 
     return $build;
   }

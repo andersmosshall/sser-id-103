@@ -347,6 +347,8 @@ class CourseService implements CourseServiceInterface {
     }
     else {
       $identifiers_map = [];
+      $this->lookup[$cid_hash] = [];
+      $this->lookup[$cid_hash_reverse] = [];
 
       $map = $this->getStudentIdsInCourseMap();
       foreach ($map as $course_id => $sub_groups) {

@@ -1,0 +1,31 @@
+### Example of "ssr_fetch_all" && "ssr_update_all" bash helper.
+### NOTE there is also a ssr_deploy_dev alias in the .bash_local file.
+
+alias ssr_fetch_all="cd ~/Projects/ssr &&
+  if [ ! -d \"ssr-sites\" ]; then \
+    mkdir ssr-sites; \
+    echo \"Created ssr-sites folder\"; \
+  fi
+  cd ssr-sites &&
+
+  ### Verify stage.
+  ### [PUT THE LOCAL SECTION FETCHERS HERE]
+
+  ### Go back to ssr root.
+  cd ~/Projects/ssr;
+"
+
+
+### Make sure everything is up to date and then update all sites.
+ssr_update_all() {
+  ssr_fetch_all
+  echo "Go to ssr sites"
+  cd ~/Projects/ssr/ssr-sites || return
+
+  # Update stage
+  ### [PUT THE LOCAL SECTION UPDATERS HERE]
+
+  # Go back to ssr root
+  cd ~/Projects/ssr || return
+}
+

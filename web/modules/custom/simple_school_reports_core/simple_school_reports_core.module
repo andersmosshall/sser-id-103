@@ -1928,3 +1928,21 @@ function simple_school_reports_core_user_login(UserInterface $account) {
 
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function simple_school_reports_core_preprocess_block(&$variables) {
+  if (!empty($variables['plugin_id']) && $variables['plugin_id'] === 'system_branding_block') {
+    if (!empty($variables['content']['site_logo']['#uri'])) {
+      /** @var \Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface $file_template_service */
+      $file_template_service = \Drupal::service('simple_school_reports_core.file_template_service');
+      $custom_logo_header = $file_template_service->getFileTemplate('logo_header');
+      if ($custom_logo_header) {
+        /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+        $file_url_generator = \Drupal::service('file_url_generator');
+        $variables['content']['site_logo']['#uri'] = $file_url_generator->generateAbsoluteString($custom_logo_header->getFileUri());
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Put this in the ssr_deploy_all bash helper.
+
+echo -e 'DEPLOY [URL_NAME]' &&
+cd ~/public_html/simpleschoolreports.se/[URL_NAME]/ &&
+ssr_deploy_local &&
+echo -e 'DEPLOY [URL_NAME] DONE' &&

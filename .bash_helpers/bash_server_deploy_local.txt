@@ -1,3 +1,5 @@
+# Example of ssr_deploy_local bash helper.
+
 ssr_copy_settings_files() {
   if [ -f "web/sites/default/settings.local.php" ]; then
     rm -f "web/sites/default/settings.local.php"

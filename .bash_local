@@ -30,10 +30,10 @@ sser_copy_settings_files() {
 
 alias sser_deploy_dev="git pull &&
  chmod +w web/sites/default/ &&
- ssr_copy_settings_files &&
- ssr_copy_config_split &&
- ssr_copy_system_site &&
- ssr_copy_system_theme &&
+ sser_copy_settings_files &&
+ sser_copy_config_split &&
+ sser_copy_system_site &&
+ sser_copy_system_theme &&
  lando composer install &&
  lando drush cr &&
  lando drush deploy &&
@@ -42,73 +42,6 @@ alias sser_deploy_dev="git pull &&
  lando drush locale-update &&
  lando drush cr &&
  lando drush php-eval 'if (function_exists(\"simple_school_reports_module_info_deploy\")) { simple_school_reports_module_info_deploy(); }'"
-
-# Run only on the sser-base branch. Then run sser_update_local on each sser sites.
-sser_update_from_ssr() {
-  cd ~/Projects/sser || return
-
-  # Pull the latest changes
-  git pull || { echo "Failed to pull changes."; return 1; }
-
-  # Fetch the latest main branch from ssr-base
-  git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
-
-  # Attempt to merge ssr-base/main into the current branch
-  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
-
-  # Check if there is nothing to merge
-  if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
-    echo "Nothing to merge. Already up to date.";
-    return 0;
-  fi
-
-  # Check for merge conflicts
-  if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
-    echo "Merge conflicts detected. Aborting.";
-    return 1;
-  fi
-
-  # Ignore changes to .gitignore
-  git checkout .gitignore || { echo "Failed to reset .gitignore."; return 1; }
-
-  # Stage changes and commit
-  git add . &&
-  git commit -m "Auto merged ssr-base" || { echo "Commit failed."; return 1; }
-
-  # Push changes
-  git push || { echo "Push failed."; return 1; }
-
-  echo "Updated successfully."
-}
-
-### LOCAL SECRET PROJECT STUFF
-### In this file alias for "sser_fetch_all" && "sser_update_all" is places that is aware of all sser projects and their git locations.
-### Example:
-: <<'END_COMMENT'
-alias sser_fetch_all="cd ~/Projects/sser &&
-  if [ ! -d \"sser-sites\" ]; then \
-    mkdir sser-sites; \
-    echo \"Created sser-sites folder\"; \
-  fi
-  cd sser-sites &&
-
-  ### Verify stage.
-  if [ ! -d \"stage\" ]; then \
-    mkdir stage; \
-    git clone [git stage site url] stage; \
-    cd stage; \
-    git checkout main; \
-    echo \"Add sser-base remote\"; \
-    git remote add sser-base [git sser base url]; \
-    cd ..;
-  fi
-  cd stage &&
-  git pull &&
-  echo \"Fetched stage\";
-
-  ### Go back to sser root.
-  cd ~/Projects/sser;
-"
 
 sser_update_local() {
   # Pull the latest changes
@@ -144,22 +77,6 @@ sser_update_local() {
 
   echo "Updated successfully."
 }
-
-
-### Make sure everything is up to date and then update all sites.
-sser_update_all() {
-  sser_fetch_all
-  echo "Go to sser sites"
-  cd ~/Projects/sser/sser-sites || return
-
-  # Update stage
-  cd stage || return
-  sser_update_local
-
-  # Go back to sser root
-  cd ~/Projects/sser || return
-}
-END_COMMENT
 
 if [ -f ~/Projects/sser/private/.sser_private_bash_local ]; then
     . ~/Projects/sser/private/.sser_private_bash_local
