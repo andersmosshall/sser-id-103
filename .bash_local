@@ -78,6 +78,44 @@ sser_update_local() {
   echo "Updated successfully."
 }
 
+# Run only on the sser-base branch. Then run sser_update_local on each sser sites.
+sser_update_from_ssr() {
+  cd ~/Projects/sser || return
+
+  # Pull the latest changes
+  git pull || { echo "Failed to pull changes."; return 1; }
+
+  # Fetch the latest main branch from ssr-base
+  git fetch ssr-base main || { echo "Failed to fetch ssr-base/main."; return 1; }
+
+  # Attempt to merge ssr-base/main into the current branch
+  git merge ssr-base/main --allow-unrelated-histories --no-commit --no-ff
+
+  # Check if there is nothing to merge
+  if [[ $(git diff --cached --name-only | wc -l) -eq 0 ]]; then
+    echo "Nothing to merge. Already up to date.";
+    return 0;
+  fi
+
+  # Check for merge conflicts
+  if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
+    echo "Merge conflicts detected. Aborting.";
+    return 1;
+  fi
+
+  # Ignore changes to .gitignore
+  git checkout .gitignore || { echo "Failed to reset .gitignore."; return 1; }
+
+  # Stage changes and commit
+  git add . &&
+  git commit -m "Auto merged ssr-base" || { echo "Commit failed."; return 1; }
+
+  # Push changes
+  git push || { echo "Push failed."; return 1; }
+
+  echo "Updated successfully."
+}
+
 if [ -f ~/Projects/sser/private/.sser_private_bash_local ]; then
     . ~/Projects/sser/private/.sser_private_bash_local
 fi
