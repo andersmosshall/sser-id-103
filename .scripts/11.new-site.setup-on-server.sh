@@ -212,8 +212,8 @@ else
     echo ""
 
     # Define defaults WITHOUT internal quotes around the $HOME path
-    DEFAULT_COMPOSER_CMD="/usr/bin/php $HOME/composer.phar"
-    DEFAULT_DRUSH_CMD="/usr/bin/php $HOME/.config/composer/vendor/bin/drush"
+    DEFAULT_COMPOSER_CMD="php $HOME/composer.phar"
+    DEFAULT_DRUSH_CMD="php ./vendor/bin/drush"
 
     # Confirm Composer command
     read -e -p "   Enter Composer command: " -i "$DEFAULT_COMPOSER_CMD" COMPOSER_CMD_INPUT
