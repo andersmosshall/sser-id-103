@@ -247,8 +247,8 @@ else
     echo ""
 
     # Define defaults WITHOUT internal quotes around the $HOME path
-    DEFAULT_COMPOSER_CMD="php $HOME/composer.phar"
-    DEFAULT_DRUSH_CMD="php ./vendor/bin/drush" # Defaulting to project local drush via php
+    DEFAULT_COMPOSER_CMD="$HOME/composer.phar"
+    DEFAULT_DRUSH_CMD="./vendor/bin/drush" # Defaulting to project local drush via php
 
     # Confirm Composer command
     read -e -p "   Enter Composer command: " -i "$DEFAULT_COMPOSER_CMD" COMPOSER_CMD_INPUT
@@ -633,11 +633,6 @@ echo ""
 if [ ! -f "$CONFIG_SITE_FILE" ]; then
     error_exit "'$CONFIG_SITE_FILE' not found after git operations. Cannot modify."
 fi
-echo ""
-
-echo "   Updating langcode to 'sv'..."
-sed -i -E "s/^(langcode:[[:space:]]*)en/\1sv/" "$CONFIG_SITE_FILE"
-if [ $? -ne 0 ]; then error_exit "Failed update langcode in $CONFIG_SITE_FILE."; fi
 echo ""
 
 echo "   Updating default_langcode to 'sv'..."
