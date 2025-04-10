@@ -74,7 +74,7 @@ class ExaminationService implements ExaminationServiceInterface {
       $in_group = isset($stats[$examination_id]['states'][$state_not_completed_state]['students'][$student_uid]);
 
       $state = $result->state ?: $state_not_completed_state;
-      $examination_result_published = $examination_published && !!$result->er_status;
+      $examination_result_published = $examination_published && !!$result->er_status && $state !== $state_not_applicable;
 
       if ($state !== $state_not_completed_state) {
         unset($stats[$examination_id]['states'][$state_not_completed_state]['students'][$student_uid]);

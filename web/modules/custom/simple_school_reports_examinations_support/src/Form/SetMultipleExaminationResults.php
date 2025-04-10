@@ -159,7 +159,7 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
       '#required' => TRUE,
     ];
 
-    $state_not_applicable = Settings::get('ssr_abstract_hash_1', 'no_value');
+    $state_not_completed = Settings::get('ssr_abstract_hash_1', 'no_value');
 
     $form['examination_status'] = [
       '#type' => 'checkbox',
@@ -169,7 +169,7 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
       '#access' => !!$ssr_examination->get('status')->value,
       '#states' => [
         'invisible' => [
-          ':input[name="examination_state"]' => ['value' => $state_not_applicable],
+          ':input[name="examination_state"]' => ['value' => $state_not_completed],
         ],
       ],
     ];
@@ -230,18 +230,13 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
         'examination' => $examination_id,
       ])) ?: NULL;
 
-      $state_not_applicable = Settings::get('ssr_abstract_hash_1');
-      if (!$examination_result && $examination_state !== $state_not_applicable) {
+      $state_not_completed = Settings::get('ssr_abstract_hash_2');
+      if (!$examination_result && $examination_state !== $state_not_completed) {
         $examination_result = $examination_result_storage->create([
           'student' => ['target_id' => $uid],
           'examination' => ['target_id' => $examination_id],
           'langcode' => 'sv',
         ]);
-      }
-      if ($examination_state === $state_not_applicable) {
-        $examination_result?->delete();
-        $context['results']['saved'][] = $uid;
-        return;
       }
       $examination_result->set('state', $examination_state);
       $examination_result->set('status', $examination_status);
