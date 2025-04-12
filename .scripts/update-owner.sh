@@ -2,12 +2,17 @@
 
 # --- Configuration ---
 # List of target DIRECTORIES. These will be created if they don't exist.
-# Permissions (-R) will be applied recursively.
+# Permissions will not be applied recursively.
 TARGET_DIRS=(
   ".encryption_key"
   "web"
-  "web/sites"           # Parent needed for 'default'
+  "web/sites"
   "web/sites/default"
+)
+
+TARGET_DIRS_ALWAYS_WRITABLE=(
+  "web/sites/default/files"
+  "web/sites/default/private-files"
 )
 
 # List of target FILES. These will be SKIPPED if they don't exist.
@@ -135,6 +140,8 @@ echo "3. Set permissions '$chmod_perms' for targets."
 echo
 echo "Target Directories:"
 printf "  %s\n" "${TARGET_DIRS[@]}"
+echo "Target Directories (always writable):"
+printf "  %s\n" "${TARGET_DIRS_ALWAYS_WRITABLE[@]}"
 echo "Target Files (skipped if non-existent):"
 printf "  %s\n" "${TARGET_FILES[@]}"
 echo
@@ -174,7 +181,7 @@ for dir_item in "${TARGET_DIRS[@]}"; do
   fi
 
   # Apply chown (recursively)
-  echo "  Setting owner to ${target_user}:${target_group}..."
+  echo "  Setting owner (recursively) to ${target_user}:${target_group}..."
   if ! ${sudo_cmd}chown -R "${target_user}:${target_group}" "$dir_item"; then
       echo "  ERROR: Failed to chown $dir_item" >&2
       ((error_count++))
@@ -185,6 +192,37 @@ for dir_item in "${TARGET_DIRS[@]}"; do
   # Apply chmod
   echo "  Setting permissions to ${chmod_perms}..."
    if ! ${sudo_cmd}chmod "${chmod_perms}" "$dir_item"; then
+      echo "  ERROR: Failed to chmod $dir_item" >&2
+      ((error_count++))
+   else
+       # Only count as fully changed if both succeed (or adjust logic)
+       ((change_count++))
+   fi
+done
+
+# Process Directories
+echo "--- Processing Directories Always writable (Skip if not exists) ---"
+for dir_item in "${TARGET_DIRS_ALWAYS_WRITABLE[@]}"; do
+  echo "Processing Directory: $dir_item"
+
+  # Ensure target directory exists
+  if [[ ! -d "$dir_item" ]]; then
+      echo "  Skipped target directory as it does not exists: $dir_item"
+      continue
+  fi
+
+  # Apply chown (recursively)
+  echo "  Setting owner (recursively) to ${target_user}:${target_group}..."
+  if ! ${sudo_cmd}chown -R "${target_user}:${target_group}" "$dir_item"; then
+      echo "  ERROR: Failed to chown $dir_item" >&2
+      ((error_count++))
+      # Decide whether to continue with chmod or skip
+      # continue
+  fi
+
+  # Apply chmod
+  echo "  Setting permissions (recursively) to ug+w"
+   if ! ${sudo_cmd}chmod -R ug+w "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else
