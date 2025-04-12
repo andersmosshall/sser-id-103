@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Default Configuration ---
-DEFAULT_PROFILE="ssr"
+DEFAULT_PROFILE="sser"
 PROFILE="$DEFAULT_PROFILE"
 DRUSH_CMD=""
 
