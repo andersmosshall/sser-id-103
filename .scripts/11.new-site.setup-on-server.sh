@@ -128,7 +128,7 @@ echo "   ✅ Successfully extracted settings:"
 echo "      School Name:      $school_name"
 echo "      Bug Report Email: $bug_email"
 echo "      No Reply Email:   $noreply_email"
-echo "      SSER ID:           $ssr_id"
+echo "      SSER ID:          $ssr_id"
 echo "------------------------------------------------------------"
 
 # --- Step 4: Initial Confirmation Prompt ---
