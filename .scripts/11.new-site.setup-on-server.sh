@@ -12,8 +12,8 @@
 # --- Configuration Variables ---
 
 UPDATE_OWNER_SCRIPT=".scripts/update-owner.sh"
-OWNER_USER="current"
-OWNER_GROUP="www-data"
+OWNER_USER="www-data"
+OWNER_GROUP="current"
 
 FINAL_DEPLOY_SCRIPT=".scripts/deploy-local.sh"
 DEPLOY_PROFILE="ssr"
