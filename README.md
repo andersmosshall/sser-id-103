@@ -1,4 +1,4 @@
-## How to setup new site
+## How to setup new site (TODO: update readme)
 
 1. Locally remove -- from scoped lando file
 2. Run composer install
