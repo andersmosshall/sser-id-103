@@ -21,10 +21,6 @@ TARGET_FILES=(
 )
 
 # --- Script Logic ---
-# Exit immediately if a command exits with a non-zero status.
-set -e
-# Consider 'set -u' carefully if needed, check variable usage first.
-# set -u
 # Ensure pipeline commands fail if any part fails
 set -o pipefail
 
@@ -186,9 +182,9 @@ for dir_item in "${TARGET_DIRS[@]}"; do
       # continue
   fi
 
-  # Apply chmod (recursively)
+  # Apply chmod
   echo "  Setting permissions to ${chmod_perms}..."
-   if ! ${sudo_cmd}chmod -R "${chmod_perms}" "$dir_item"; then
+   if ! ${sudo_cmd}chmod "${chmod_perms}" "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else

@@ -11,6 +11,13 @@
 
 # --- Configuration Variables ---
 
+UPDATE_OWNER_SCRIPT=".scripts/update-owner.sh"
+OWNER_USER="current"
+OWNER_GROUP="current"
+
+FINAL_DEPLOY_SCRIPT=".scripts/deploy-local.sh"
+DEPLOY_PROFILE="ssr"
+
 # Path to the main production settings file used as a source/template
 SETTINGS_FILE=".settings/prod/settings.local.php"
 
@@ -240,9 +247,10 @@ echo "------------------------------------------------------------"
 # ==============================================================================
 
 # --- Step 8: Run Composer Install ---
-echo "[Step 8/35] Running Composer install..."
+echo "[Step 8/35] Running Composer install and inital owner setup"
 $COMPOSER_CMD install --no-dev --optimize-autoloader
 if [ $? -ne 0 ]; then error_exit "Composer install failed using: '$COMPOSER_CMD'."; fi
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo "   ✅ Composer install completed successfully."
 echo "------------------------------------------------------------"
 

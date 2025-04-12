@@ -94,7 +94,7 @@ case "$PROFILE" in
     DRUSH_CMD=("$PROJECT_ROOT/vendor/bin/drush")
     COMPOSER_CMD=("composer")
     SETTINGS_SOURCE_DIR="$PROJECT_ROOT/.settings/prod"
-    OWNER_USER="www-data"   # Specific user/group for SSER
+    OWNER_USER="current"
     OWNER_GROUP="www-data"
     ;;
   *)
