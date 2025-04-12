@@ -2,13 +2,13 @@
 
 alias sser_deploy_all="
 echo -e 'DEPLOY DEMO1' &&
-cd ~/public_html/simpleschoolreports.se/demo1/ &&
-sser_deploy_local &&
+cd ~/var/www/demo1/ &&
+bash .scripts/deploy-local.sh -profile='ssr &&
 echo -e 'DEPLOY DEMO1 DONE' &&
 cd ~/ &&
 echo -e 'DEPLOY DEMO2' &&
-cd ~/public_html/simpleschoolreports.se/demo2/ &&
-sser_deploy_local &&
+cd ~/var/www/demo2/ &&
+bash .scripts/deploy-local.sh -profile='ssr' &&
 echo -e 'DEPLOY DEMO2 DONE' &&
 cd ~/ &&
 echo -e 'FULL DEPLOY DONE'

@@ -2,5 +2,5 @@
 
 echo -e 'DEPLOY [URL_NAME]' &&
 cd ~/public_html/simpleschoolreports.se/[URL_NAME]/ &&
-sser_deploy_local &&
+bash .scripts/deploy-local.sh -profile='ssr' &&
 echo -e 'DEPLOY [URL_NAME] DONE' &&
