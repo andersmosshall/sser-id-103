@@ -23,6 +23,8 @@ TARGET_FILES=(
   "web/sites/default/settings.common-secrets.php"
   "web/sites/default/settings.local.php"
   "web/sites/default/settings.php"
+  "web/sites/default/default.services.yml"
+  "web/sites/default/default.settings.php"
 )
 
 # --- Script Logic ---
