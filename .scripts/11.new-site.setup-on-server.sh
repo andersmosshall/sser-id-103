@@ -13,7 +13,7 @@
 
 UPDATE_OWNER_SCRIPT=".scripts/update-owner.sh"
 OWNER_USER="current"
-OWNER_GROUP="current"
+OWNER_GROUP="www-data"
 
 FINAL_DEPLOY_SCRIPT=".scripts/deploy-local.sh"
 DEPLOY_PROFILE="ssr"

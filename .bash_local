@@ -2,7 +2,7 @@ alias sser_deploy_dev="bash .scripts/deploy-local.sh -profile='lando' && bash .s
 
 alias sser_update_local="bash .scripts/update-from-base.sh"
 
-alias sser_update_from_ssr="bash .scripts/update-from-ssr-base.sh"
+alias sser_update_from_ssr="cd ~/Projects/sser && bash .scripts/update-from-ssr-base.sh"
 
 if [ -f ~/Projects/sser/private/.sser_private_bash_local ]; then
     . ~/Projects/sser/private/.sser_private_bash_local
