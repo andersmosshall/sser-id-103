@@ -296,7 +296,7 @@ echo "   ✅ Key backup confirmed."
 echo "------------------------------------------------------------"
 
 # --- Step 12: Manual Step - Configure Web Server Document Root ---
-echo "[Step 12/35] Instructing user on Document Root config..."
+echo "[Step 12/35] Instructing user on Document Root config and update file owners"
 echo ""
 echo "   ================ Manual Step 1: Configure Web Server ================"
 echo "   ACTION REQUIRED:"
@@ -307,6 +307,7 @@ echo ""
 echo "   NOTE: This script will NOT perform this step."
 echo "   ====================================================================="
 echo ""
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo "------------------------------------------------------------"
 
 # --- Step 13: Manual Step - Perform Drupal Web Installation ---
@@ -343,8 +344,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 15: Make Settings Directory/File Writable ---
 echo "[Step 15/35] Temporarily making settings directory/file writable..."
-chmod +w "$DEFAULT_SITES_DIR" "$DEFAULT_SETTINGS_PHP"
-if [ $? -ne 0 ]; then error_exit "Failed making settings dir/file writable."; fi
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo "   ✅ Permissions updated temporarily."
 echo "------------------------------------------------------------"
 
@@ -616,63 +616,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 34: Full Deployment Steps ---
 echo "[Step 34/35] Performing final deployment steps (Standard Sequence)..."
-# This block runs the standard deployment sequence.
-
-echo "   Deploy Step 1/13: Enabling maintenance mode..."
-$DRUSH_CMD state:set system.maintenance_mode 1 --input-format=integer; if [ $? -ne 0 ]; then error_exit "Deploy: Failed maint mode ON."; fi
-echo ""
-
-echo "   Deploy Step 2/13: Pulling latest code..."
-git pull; if [ $? -ne 0 ]; then error_exit "Deploy: Git pull failed."; fi
-echo ""
-
-echo "   Deploy Step 3/13: Setting permissions & Copying Settings..."
-chmod +w "$DEFAULT_SITES_DIR/"; if [ $? -ne 0 ]; then error_exit "Deploy: Failed chmod +w sites."; fi
-echo "     Copying settings files..."
-cp "$PROD_SETTINGS_LOCAL_SRC" "$DEFAULT_SETTINGS_LOCAL_DEST"; if [ $? -ne 0 ]; then error_exit "Deploy: Failed copy local settings."; fi
-cp "$PROD_SETTINGS_COMMON_LOCAL_SRC" "$DEFAULT_SETTINGS_COMMON_LOCAL_DEST"; if [ $? -ne 0 ]; then error_exit "Deploy: Failed copy common local settings."; fi
-chmod -w "$DEFAULT_SETTINGS_LOCAL_DEST"; if [ $? -ne 0 ]; then error_exit "Deploy: Failed chmod -w local settings."; fi
-echo ""
-
-echo "   Deploy Step 4/13: Running composer install..."
-$COMPOSER_CMD install --no-dev --optimize-autoloader; if [ $? -ne 0 ]; then error_exit "Deploy: Composer install failed."; fi
-echo ""
-
-echo "   Deploy Step 5/13: Clearing caches (post-composer)..."
-$DRUSH_CMD cr; if [ $? -ne 0 ]; then error_exit "Deploy: drush cr failed."; fi
-echo ""
-
-echo "   Deploy Step 6/13: Running drush deploy (1st time)..."
-$DRUSH_CMD deploy -y; if [ $? -ne 0 ]; then error_exit "Deploy: First deploy failed."; fi
-echo ""
-
-echo "   Deploy Step 7/13: Running drush deploy (2nd time)..."
-$DRUSH_CMD deploy -y; if [ $? -ne 0 ]; then error_exit "Deploy: Second deploy failed."; fi
-echo ""
-
-echo "   Deploy Step 8/13: Checking/Updating translations..."
-$DRUSH_CMD locale-check; $DRUSH_CMD locale-update; if [ $? -ne 0 ]; then echo "   ⚠️ WARNING: locale-update reported issues."; fi
-echo ""
-
-echo "   Deploy Step 9/13: Clearing caches (post-deploy)..."
-$DRUSH_CMD cr; if [ $? -ne 0 ]; then error_exit "Deploy: drush cr failed."; fi
-echo ""
-
-echo "   Deploy Step 10/13: Running custom PHP evaluation..."
-$DRUSH_CMD php-eval 'if (function_exists("simple_school_reports_module_info_deploy")) { simple_school_reports_module_info_deploy(); echo "[PHP Eval] Executed.\n"; } else { echo "[PHP Eval] Func not found.\n"; }'
-echo ""
-
-echo "   Deploy Step 11/13: Disabling maintenance mode..."
-$DRUSH_CMD state:set system.maintenance_mode 0 --input-format=integer; if [ $? -ne 0 ]; then error_exit "Deploy: Failed maint mode OFF."; fi
-echo ""
-
-echo "   Deploy Step 12/13: Clearing caches (final)..."
-$DRUSH_CMD cr; if [ $? -ne 0 ]; then error_exit "Deploy: Final drush cr failed."; fi
-echo ""
-
-echo "   Deploy Step 13/13: Restoring directory permissions..."
-chmod -w "$DEFAULT_SITES_DIR/"; if [ $? -ne 0 ]; then echo "   ⚠️ WARNING: Failed chmod -w $DEFAULT_SITES_DIR/."; fi
-echo ""
+bash "$FINAL_DEPLOY_SCRIPT" -profile="$DEPLOY_PROFILE"
 
 echo "   ✅ Standard deployment sequence completed."
 echo "   ✅ Final deployment steps finished."
