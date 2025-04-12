@@ -16,7 +16,7 @@ OWNER_USER="www-data"
 OWNER_GROUP="current"
 
 FINAL_DEPLOY_SCRIPT=".scripts/deploy-local.sh"
-DEPLOY_PROFILE="ssr"
+DEPLOY_PROFILE="sser"
 
 # Path to the main production settings file used as a source/template
 SETTINGS_FILE=".settings/prod/settings.local.php"
