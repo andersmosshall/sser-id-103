@@ -119,10 +119,10 @@ echo "----------------------------------------"
 # --- Determine chmod Permissions ---
 chmod_perms=""
 if $writable; then
-  chmod_perms="ug+w"
+  chmod_perms="ug+r+w"
   echo "Permissions to set: User/Group WRITE enabled ($chmod_perms)"
 else
-  chmod_perms="ug-w"
+  chmod_perms="ug+r-w"
   echo "Permissions to set: User/Group WRITE disabled ($chmod_perms)"
 fi
 echo "----------------------------------------"
@@ -217,8 +217,8 @@ for dir_item in "${TARGET_DIRS_ALWAYS_WRITABLE[@]}"; do
   fi
 
   # Apply chmod
-  echo "  Setting permissions (recursively) to ug+w"
-   if ! ${sudo_cmd}chmod -R ug+w "$dir_item"; then
+  echo "  Setting permissions (recursively) to ug+r+w"
+   if ! ${sudo_cmd}chmod -R ug+r+w "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else

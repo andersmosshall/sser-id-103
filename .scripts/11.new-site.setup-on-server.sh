@@ -280,6 +280,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 11: Prompt User to Backup Encryption Key ---
 echo "[Step 11/35] Prompting for key backup confirmation..."
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo ""
 echo "   ================ Encryption Key Backup Required ================"
 echo "   Key Content:"
