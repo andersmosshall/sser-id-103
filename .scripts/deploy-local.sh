@@ -117,15 +117,15 @@ echo "Copy extra Lando files: $COPY_EXTRA_LANDO_FILES"
 cd "$PROJECT_ROOT" || exit 1
 echo "Changed directory to project root: $(pwd)"
 
+print_step "Update owner/permissions (writable)"
+# Note: Corrected user/user-group typo from original request
+bash "$UPDATE_OWNER_SCRIPT" -user="current" -user-group="current" --writable
+
 print_step "Enable Maintenance Mode"
 "${DRUSH_CMD[@]}" state:set system.maintenance_mode 1 --input-format=integer
 
 print_step "Pull latest changes from Git"
 git pull
-
-print_step "Update owner/permissions (writable)"
-# Note: Corrected user/user-group typo from original request
-bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 
 print_step "Copy configuration files for profile '$PROFILE'"
 cp "$SETTINGS_SOURCE_DIR/settings.local.php" "$TARGET_SETTINGS_DIR/settings.local.php"
