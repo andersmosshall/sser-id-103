@@ -77,14 +77,8 @@ if [[ "$target_user" == "current" ]]; then
   echo "INFO: Using current user ($CURRENT_USER) for target user."
 fi
 if [[ "$target_group" == "current" ]]; then
-  # Decide if "current" group means user's primary group or the user's name as group
-  # Using the user's name is often simpler and matches the previous default
-  target_group="$target_user" # Use the *determined* target user name
+  target_group="$CURRENT_USER" # Use the *determined* target user name
   echo "INFO: Using target user name ($target_group) for target group."
-  # Alternatively, get primary group ID and then name:
-  # current_gid=$(id -g "$CURRENT_USER")
-  # target_group=$(getent group "$current_gid" | cut -d: -f1)
-  # echo "INFO: Using current user's primary group ($target_group) for target group."
 fi
 
 # --- Get User/Group if not provided ---
