@@ -87,12 +87,12 @@ else
 fi
 
 echo "[4/5] Running deploy-local.sh with profile $PROFILE..."
-if [ -f ".script/deploy-local.sh" ]; then
-    bash .script/deploy-local.sh -profile="$PROFILE"
+if [ -f ".scripts/deploy-local.sh" ]; then
+    bash .scripts/deploy-local.sh -profile="$PROFILE"
     # If deploy-local.sh fails, set -e will cause the script to exit here.
     # Maintenance mode will remain ENABLED. Manual intervention required.
 else
-    echo "Error: .script/deploy-local.sh not found." >&2
+    echo "Error: .scripts/deploy-local.sh not found." >&2
     echo "Maintenance mode remains ENABLED. Manual intervention required." >&2
     exit 1 # Exit, leaving mode enabled
 fi
