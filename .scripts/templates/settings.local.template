@@ -40,6 +40,9 @@ $settings['trusted_host_patterns'] = array(
   '^ssr-[URL_NAME].loc$',
   '^ssr.loc$',
   '^ssr-debug.loc$',
+  '^sser-[URL_NAME].loc$',
+  '^sser.loc$',
+  '^sser-debug.loc$',
   '^www.[FULL_URL]$',
   '^[FULL_URL]$',
 );

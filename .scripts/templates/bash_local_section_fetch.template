@@ -5,7 +5,7 @@ if [ ! -d \"[URL_NAME]\" ]; then \
   cd [URL_NAME]; \
   git checkout main; \
   echo \"Add sser-base remote\"; \
-  git remote add ssr-base [SSR_BASE_GIT_URL]; \
+  git remote add sser-base [SSR_BASE_GIT_URL]; \
   cd ..;
 fi
 cd [URL_NAME] &&

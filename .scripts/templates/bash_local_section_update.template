@@ -2,4 +2,4 @@
 echo "Update [URL_NAME]"
 cd [URL_NAME] || return
 bash .scripts/update-from-base.sh
-cd ~/Projects/ssr/ssr-sites || return
+cd ~/Projects/sser/sser-sites || return
