@@ -23,6 +23,7 @@
    * Testa markera alla i elevlistan (ska vara samtliga sidor)
    * Kolla att personummer kontra födelsedatum states fungerar på elever och vårdnadshavare
    * Kolla att det går att spara en anteckning på en elev
+   * Kolla att man kan spara pnum med TF10/TF20 som kontrollsiffror.
    * Kolla logg efter errors
 10. Commit and push update.
 11. On dev machine run ssr_update_all

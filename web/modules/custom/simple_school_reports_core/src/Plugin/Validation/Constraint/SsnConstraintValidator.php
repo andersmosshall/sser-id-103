@@ -166,7 +166,13 @@ class SsnConstraintValidator extends ConstraintValidator implements ContainerInj
 
     foreach ($uids as $uid) {
       $user = $this->entityTypeManager->getStorage('user')->load($uid);
+      if (!$user instanceof UserInterface) {
+        continue;
+      }
       $ssn = $user->get('field_ssn')->value;
+      if (!$ssn) {
+        continue;
+      }
       $long_ssn = $this->pnum->normalizeIfValid($ssn, TRUE);
       if (!$long_ssn) {
         continue;
