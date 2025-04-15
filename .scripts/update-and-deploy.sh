@@ -66,7 +66,7 @@ $DRUSH_CMD state:set system.maintenance_mode 1 --input-format=integer
 
 echo "[2/5] Running update-owner.sh..."
 if [ -f ".scripts/update-owner.sh" ]; then
-    bash .scripts/update-owner.sh -user="current" -user-group="current"
+    bash .scripts/update-owner.sh -user="current" -user-group="current" --writable
     # If update-owner.sh fails, set -e will cause the script to exit here.
     # Maintenance mode will remain ENABLED. Manual intervention required.
 else
