@@ -1002,7 +1002,7 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     }
   }
 
-  if ($user->hasPermission('super user permissions') && $account->id() != 1 && $operation !== 'view') {
+  if ($user->hasPermission('super user permissions') && $account->id() != $user->id() && $operation !== 'view') {
     $access = AccessResult::forbidden();
   }
 
