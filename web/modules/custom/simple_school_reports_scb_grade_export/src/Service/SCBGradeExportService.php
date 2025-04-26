@@ -186,7 +186,9 @@ class SCBGradeExportService implements GroupGradeExportInterface {
         continue;
       }
 
-      $school_grade = (string) $context['results']['ssr_student_doc_grade_value'][$student_uid] ?? '999';
+      $school_grade = !empty($context['results']['ssr_student_doc_grade_value'][$student_uid])
+        ? (string) $context['results']['ssr_student_doc_grade_value'][$student_uid]
+        : '999';
 
       if ($school_grade !== '6' && $school_grade !== '9') {
         continue;
