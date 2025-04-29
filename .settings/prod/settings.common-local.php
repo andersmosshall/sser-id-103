@@ -85,3 +85,10 @@ $settings['ssr_excluded_catalog_label'] = [
 $settings['ssr_max_grade_student_group_size'] = 32;
 
 $settings['ssr_max_written_reviews_subject_list'] = 18;
+
+// Ssr written reviews catalog list.
+$settings['ssr_written_reviews_catalog_id'] = $settings['ssr_catalog_id'] + [
+  // NO/SO is still supported in written reviews.
+  'NO' => 24,
+  'SO' => 25,
+];

@@ -147,7 +147,7 @@ class WrittenReviewRoundFormAlter {
 
     $subjects = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'status' => 1]);
     /** @var \Drupal\taxonomy\TermInterface $subject */
-    $catalog_ids = Settings::get('ssr_catalog_id');
+    $catalog_ids = Settings::get('ssr_written_reviews_catalog_id');
 
     $default_subjects_to_unset = [];
 
