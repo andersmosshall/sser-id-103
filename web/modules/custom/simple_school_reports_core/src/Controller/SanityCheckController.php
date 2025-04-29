@@ -106,6 +106,14 @@ class SanityCheckController extends ControllerBase {
     ];
     $doc_logo_left = $file_template_service->getFileTemplate('doc_logo_left')?->getFileUri();
     if (!$doc_logo_left) {
+      $build['doc_logo_left_warning'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('No document logo found. THIS IS AN EXAMPLE OF A DOC LOGO:'),
+        '#attributes' => [
+          'class' => ['warning'],
+        ],
+      ];
       $doc_logo_left = $templates_base_path . 'logo_example_l.jpeg';
     }
     $build['doc_logo_left'] = [
@@ -126,6 +134,14 @@ class SanityCheckController extends ControllerBase {
     ];
     $doc_logo_center = $file_template_service->getFileTemplate('doc_logo_center')?->getFileUri();
     if (!$doc_logo_center) {
+      $build['doc_logo_center_warning'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('No document logo found. THIS IS AN EXAMPLE OF A DOC LOGO:'),
+        '#attributes' => [
+          'class' => ['warning'],
+        ],
+      ];
       $doc_logo_center = $templates_base_path . 'logo_example_c.jpeg';
     }
     $build['doc_logo_center'] = [
@@ -146,6 +162,14 @@ class SanityCheckController extends ControllerBase {
     ];
     $doc_logo_right = $file_template_service->getFileTemplate('doc_logo_right')?->getFileUri();
     if (!$doc_logo_right) {
+      $build['doc_logo_right_warning'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('No document logo found. THIS IS AN EXAMPLE OF A DOC LOGO:'),
+        '#attributes' => [
+          'class' => ['warning'],
+        ],
+      ];
       $doc_logo_right = $templates_base_path . 'logo_example_r.jpeg';
     }
     $build['doc_logo_right'] = [
