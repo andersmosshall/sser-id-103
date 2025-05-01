@@ -248,7 +248,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 8: Run Composer Install ---
 echo "[Step 8/35] Running Composer install and inital owner setup"
-bash "$UPDATE_OWNER_SCRIPT" -user="current" -user-group="current" --writable
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 $COMPOSER_CMD install --no-dev --optimize-autoloader
 if [ $? -ne 0 ]; then error_exit "Composer install failed using: '$COMPOSER_CMD'."; fi
 echo "   ✅ Composer install completed successfully."
@@ -280,7 +280,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 11: Prompt User to Backup Encryption Key ---
 echo "[Step 11/35] Prompting for key backup confirmation..."
-bash "$UPDATE_OWNER_SCRIPT" -user="current" -user-group="current" --writable
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo ""
 echo "   ================ Encryption Key Backup Required ================"
 echo "   Key Content:"
@@ -345,7 +345,7 @@ echo "------------------------------------------------------------"
 
 # --- Step 15: Make Settings Directory/File Writable ---
 echo "[Step 15/35] Temporarily making settings directory/file writable..."
-bash "$UPDATE_OWNER_SCRIPT" -user="current" -user-group="current" --writable
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
 echo "   ✅ Permissions updated temporarily."
 echo "------------------------------------------------------------"
 
