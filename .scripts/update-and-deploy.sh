@@ -4,6 +4,8 @@
 DEFAULT_PROFILE="sser"
 PROFILE="$DEFAULT_PROFILE"
 DRUSH_CMD=""
+OWNER_USER="current"    # Default user for update-owner.sh
+OWNER_GROUP="current"   # Default group for update-owner.sh
 
 # --- Argument Parsing ---
 # Simple loop to find the -profile flag
@@ -57,6 +59,42 @@ case "$PROFILE" in
     ;;
 esac
 
+case "$PROFILE" in
+  lando)
+    # Assuming 'lando drush' is available in the PATH when profile is lando
+    if ! command -v lando &> /dev/null; then
+        echo "Error: 'lando' command not found. Is Lando running and configured?" >&2
+        exit 1
+    fi
+    DRUSH_CMD="lando drush"
+    ;;
+  ssr)
+    # Check if vendor/bin/drush exists and is executable for ssr/sser profiles
+    if [ ! -x "./vendor/bin/drush" ]; then
+        echo "Error: ./vendor/bin/drush not found or not executable for profile '$PROFILE'." >&2
+        echo "Make sure you are in the project root and have run 'composer install'." >&2
+        exit 1
+    fi
+    DRUSH_CMD="./vendor/bin/drush"
+    ;;
+  sser)
+    # Check if vendor/bin/drush exists and is executable for ssr/sser profiles
+    if [ ! -x "./vendor/bin/drush" ]; then
+        echo "Error: ./vendor/bin/drush not found or not executable for profile '$PROFILE'." >&2
+        echo "Make sure you are in the project root and have run 'composer install'." >&2
+        exit 1
+    fi
+    DRUSH_CMD="./vendor/bin/drush"
+    OWNER_USER="current"
+    OWNER_GROUP="www-data"
+    ;;
+  *)
+    print_error "Unknown profile: '$PROFILE'"
+    print_usage
+    exit 1
+    ;;
+esac
+
 echo "--- Determined Drush command: $DRUSH_CMD ---"
 
 # --- Execution Steps ---
@@ -66,7 +104,7 @@ $DRUSH_CMD state:set system.maintenance_mode 1 --input-format=integer
 
 echo "[2/5] Running update-owner.sh..."
 if [ -f ".scripts/update-owner.sh" ]; then
-    bash .scripts/update-owner.sh -user="current" -user-group="current" --writable
+    bash .scripts/update-owner.sh -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
     # If update-owner.sh fails, set -e will cause the script to exit here.
     # Maintenance mode will remain ENABLED. Manual intervention required.
 else
