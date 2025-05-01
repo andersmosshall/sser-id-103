@@ -29,6 +29,7 @@ PROD_SETTINGS_COMMON_LOCAL_SRC=".settings/prod/settings.common-local.php"
 DEFAULT_SITES_DIR="web/sites/default"
 
 # Destination paths for core Drupal and custom settings files within sites/default
+DEFAULT_SETTINGS_PHP_SRC="$DEFAULT_SITES_DIR/default.settings.php"
 DEFAULT_SETTINGS_PHP="$DEFAULT_SITES_DIR/settings.php"
 DEFAULT_SETTINGS_LOCAL_DEST="$DEFAULT_SITES_DIR/settings.local.php"
 DEFAULT_SETTINGS_COMMON_LOCAL_DEST="$DEFAULT_SITES_DIR/settings.common-local.php"
@@ -297,7 +298,7 @@ echo "   ✅ Key backup confirmed."
 echo "------------------------------------------------------------"
 
 # --- Step 12: Manual Step - Configure Web Server Document Root ---
-echo "[Step 12/35] Instructing user on Document Root config and update file owners"
+echo "[Step 12/35] Instructing user on Document Root config and perpare for the installer"
 echo ""
 echo "   ================ Manual Step 1: Configure Web Server ================"
 echo "   ACTION REQUIRED:"
@@ -308,7 +309,13 @@ echo ""
 echo "   NOTE: This script will NOT perform this step."
 echo "   ====================================================================="
 echo ""
+echo "   Copying '$DEFAULT_SETTINGS_PHP_SRC' -> '$DEFAULT_SETTINGS_PHP' for the installer..."
+cp "$DEFAULT_SETTINGS_PHP_SRC" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed default.settings.php"; fi
+echo ""
+echo ""
 bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
+echo ""
+echo ""
 echo "------------------------------------------------------------"
 
 # --- Step 13: Manual Step - Perform Drupal Web Installation ---
