@@ -8,6 +8,7 @@ TARGET_DIRS=(
   "web"
   "web/sites"
   "web/sites/default"
+  "vendor"
 )
 
 TARGET_DIRS_ALWAYS_WRITABLE=(
@@ -89,7 +90,7 @@ if [[ -z "$target_user" ]]; then
 fi
 
 # Determine default group (often same as username) *after* user is finalized
-DEFAULT_GROUP="$target_user"
+DEFAULT_GROUP="www-data"
 # Prompt for group name if not supplied via argument or "current"
 if [[ -z "$target_group" ]]; then
   read -p "Enter group name [$DEFAULT_GROUP]: " -e -i "$DEFAULT_GROUP" target_group
@@ -117,13 +118,16 @@ echo "User and group validation successful."
 echo "----------------------------------------"
 
 # --- Determine chmod Permissions ---
-chmod_perms=""
+chmod_perms_dirs=""
+chmod_perms_files=""
 if $writable; then
-  chmod_perms="ug+r+w"
-  echo "Permissions to set: User/Group WRITE enabled ($chmod_perms)"
+  chmod_perms_dirs="2770" //
+  chmod_perms_files="2660"
+  echo "Permissions to set: User/Group WRITE enabled ($chmod_perms_dirs / $chmod_perms_files)"
 else
-  chmod_perms="ug+r-w"
-  echo "Permissions to set: User/Group WRITE disabled ($chmod_perms)"
+  chmod_perms_dirs="2750"
+  chmod_perms_files="2640"
+  echo "Permissions to set: User/Group WRITE disabled ($chmod_perms_dirs / $chmod_perms_files)"
 fi
 echo "----------------------------------------"
 
@@ -132,7 +136,7 @@ echo "----------------------------------------"
 echo "Will attempt the following actions:"
 echo "1. Ensure target directories exist (creating if necessary)."
 echo "2. Set owner to '$target_user:$target_group' for targets."
-echo "3. Set permissions '$chmod_perms' for targets."
+echo "3. Set permissions '$chmod_perms_dirs / $chmod_perms_files' for targets."
 echo
 echo "Target Directories:"
 printf "  %s\n" "${TARGET_DIRS[@]}"
@@ -186,8 +190,8 @@ for dir_item in "${TARGET_DIRS[@]}"; do
   fi
 
   # Apply chmod
-  echo "  Setting permissions to ${chmod_perms}..."
-   if ! ${sudo_cmd}chmod "${chmod_perms}" "$dir_item"; then
+  echo "  Setting permissions to ${chmod_perms_dirs}..."
+   if ! ${sudo_cmd}chmod "${chmod_perms_dirs}" "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else
@@ -217,8 +221,8 @@ for dir_item in "${TARGET_DIRS_ALWAYS_WRITABLE[@]}"; do
   fi
 
   # Apply chmod
-  echo "  Setting permissions (recursively) to ug+r+w"
-   if ! ${sudo_cmd}chmod -R ug+r+w "$dir_item"; then
+  echo "  Setting permissions to 2770"
+   if ! ${sudo_cmd}chmod 2770 "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else
@@ -254,8 +258,8 @@ for file_item in "${TARGET_FILES[@]}"; do
     fi
 
     # Apply chmod (non-recursively)
-    echo "  Setting permissions to ${chmod_perms}..."
-    if ! ${sudo_cmd}chmod "${chmod_perms}" "$file_item"; then
+    echo "  Setting permissions to ${chmod_perms_files}..."
+    if ! ${sudo_cmd}chmod "${chmod_perms_files}" "$file_item"; then
       echo "  ERROR: Failed to chmod $file_item" >&2
       ((error_count++))
     else

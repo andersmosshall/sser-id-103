@@ -94,8 +94,8 @@ case "$PROFILE" in
     DRUSH_CMD=("$PROJECT_ROOT/vendor/bin/drush")
     COMPOSER_CMD=("composer")
     SETTINGS_SOURCE_DIR="$PROJECT_ROOT/.settings/prod"
-    OWNER_USER="www-data"
-    OWNER_GROUP="current"
+    OWNER_USER="current"
+    OWNER_GROUP="www-data"
     ;;
   *)
     print_error "Unknown profile: '$PROFILE'"
@@ -119,7 +119,7 @@ echo "Changed directory to project root: $(pwd)"
 
 print_step "Update owner/permissions (writable)"
 # Note: Corrected user/user-group typo from original request
-bash "$UPDATE_OWNER_SCRIPT" -user="current" -user-group="current" --writable
+bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP"
 
 print_step "Enable Maintenance Mode"
 "${DRUSH_CMD[@]}" state:set system.maintenance_mode 1 --input-format=integer
