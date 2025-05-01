@@ -122,11 +122,11 @@ chmod_perms_dirs=""
 chmod_perms_files=""
 if $writable; then
   chmod_perms_dirs="2770" //
-  chmod_perms_files="266"
+  chmod_perms_files="660"
   echo "Permissions to set: User/Group WRITE enabled ($chmod_perms_dirs / $chmod_perms_files)"
 else
   chmod_perms_dirs="2750"
-  chmod_perms_files="264"
+  chmod_perms_files="640"
   echo "Permissions to set: User/Group WRITE disabled ($chmod_perms_dirs / $chmod_perms_files)"
 fi
 echo "----------------------------------------"
