@@ -121,12 +121,12 @@ echo "----------------------------------------"
 chmod_perms_dirs=""
 chmod_perms_files=""
 if $writable; then
-  chmod_perms_dirs="2777"
-  chmod_perms_files="666"
+  chmod_perms_dirs="2770"
+  chmod_perms_files="660"
   echo "Permissions to set: User/Group WRITE enabled ($chmod_perms_dirs / $chmod_perms_files)"
 else
-  chmod_perms_dirs="2755"
-  chmod_perms_files="644"
+  chmod_perms_dirs="2750"
+  chmod_perms_files="640"
   echo "Permissions to set: User/Group WRITE disabled ($chmod_perms_dirs / $chmod_perms_files)"
 fi
 echo "----------------------------------------"
@@ -221,8 +221,8 @@ for dir_item in "${TARGET_DIRS_ALWAYS_WRITABLE[@]}"; do
   fi
 
   # Apply chmod
-  echo "  Setting permissions to 2777"
-   if ! ${sudo_cmd}chmod 2777 "$dir_item"; then
+  echo "  Setting permissions to 2770"
+   if ! ${sudo_cmd}chmod 2770 "$dir_item"; then
       echo "  ERROR: Failed to chmod $dir_item" >&2
       ((error_count++))
    else
