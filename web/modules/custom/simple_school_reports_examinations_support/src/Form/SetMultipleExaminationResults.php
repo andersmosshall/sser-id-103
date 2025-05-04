@@ -230,8 +230,7 @@ class SetMultipleExaminationResults extends ConfirmFormBase {
         'examination' => $examination_id,
       ])) ?: NULL;
 
-      $state_not_completed = Settings::get('ssr_abstract_hash_2');
-      if (!$examination_result && $examination_state !== $state_not_completed) {
+      if (!$examination_result && $examination_state !== 'not_registered') {
         $examination_result = $examination_result_storage->create([
           'student' => ['target_id' => $uid],
           'examination' => ['target_id' => $examination_id],

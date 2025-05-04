@@ -26,12 +26,15 @@ class ExaminationService implements ExaminationServiceInterface {
       return $this->lookup[$cid];
     }
 
+    $state_not_registered = 'not_registered';
     $state_not_completed_state = Settings::get('ssr_abstract_hash_2');
     $state_not_applicable = Settings::get('ssr_abstract_hash_1');
     if (!$state_not_completed_state) {
       $this->lookup[$cid] = [];
       return [];
     }
+
+    $default_state = $state_not_registered;
 
     $students_map = [];
     $results = $this->connection->select('ssr_assessment_group__students', 'as')
@@ -59,8 +62,8 @@ class ExaminationService implements ExaminationServiceInterface {
         $assessment_group_id = $result->assessment_group;
         $student_uids = $students_map[$assessment_group_id] ?? [];
         foreach ($student_uids as $student_uid) {
-          $stats[$examination_id]['states'][$state_not_completed_state]['students'][$student_uid] = [
-            'published' => $examination_published,
+          $stats[$examination_id]['states'][$default_state]['students'][$student_uid] = [
+            'published' => FALSE,
             'in_group' => TRUE,
           ];
         }
@@ -71,15 +74,15 @@ class ExaminationService implements ExaminationServiceInterface {
         continue;
       }
 
-      $in_group = isset($stats[$examination_id]['states'][$state_not_completed_state]['students'][$student_uid]);
+      $in_group = isset($stats[$examination_id]['states'][$default_state]['students'][$student_uid]);
 
-      $state = $result->state ?: $state_not_completed_state;
+      $state = $result->state ?: $default_state;
       $examination_result_published = $examination_published && !!$result->er_status && $state !== $state_not_applicable;
 
-      if ($state !== $state_not_completed_state) {
-        unset($stats[$examination_id]['states'][$state_not_completed_state]['students'][$student_uid]);
+      if ($state !== $default_state) {
+        unset($stats[$examination_id]['states'][$default_state]['students'][$student_uid]);
       }
-      if ($state === $state_not_applicable && !$in_group) {
+      if (($state === $state_not_registered || $state === $state_not_applicable) && !$in_group) {
         continue;
       }
 

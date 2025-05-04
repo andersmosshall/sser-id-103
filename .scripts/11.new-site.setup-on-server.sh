@@ -298,7 +298,7 @@ echo "   ✅ Key backup confirmed."
 echo "------------------------------------------------------------"
 
 # --- Step 12: Manual Step - Configure Web Server Document Root ---
-echo "[Step 12/35] Instructing user on Document Root config and perpare for the installer"
+echo "[Step 12/35] Instructing user on Document Root config and prepare for the installer"
 echo ""
 echo "   ================ Manual Step 1: Configure Web Server ================"
 echo "   ACTION REQUIRED:"

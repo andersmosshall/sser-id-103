@@ -78,7 +78,7 @@ class ExaminationResultForStudent extends FieldPluginBase {
       }
     }
 
-    $label = assessment_group_user_examination_result_state_options()[$value] ?? '';
+    $label = assessment_group_user_examination_result_state_options()[$value] ?? $this->t('Not registered');
     if (!$in_group && $suffix_ungrouped) {
       $label .= ' (' . t('Not in assessment group') . ')';
     }
