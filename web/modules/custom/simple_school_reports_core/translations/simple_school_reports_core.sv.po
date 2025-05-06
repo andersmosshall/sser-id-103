@@ -3298,11 +3298,11 @@ msgstr "Demoläge är aktivt. Inga meddelanden skickas till riktiga e-postadress
 msgid "Not registered"
 msgstr "Ej registrerad"
 
-msgid ""
-msgstr ""
+msgid "Mail count report -  @school_name"
+msgstr "Mailräkningsrapport - @school_name"
 
-msgid ""
-msgstr ""
+msgid "Current mail count stats for @school_name. Sent - @sent. Failed - @failed"
+msgstr "Nuvarande mailräkningsstatistik för @school_name. Skickade - @sent. Misslyckade - @failed"
 
 msgid ""
 msgstr ""
