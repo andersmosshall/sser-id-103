@@ -3301,8 +3301,8 @@ msgstr "Ej registrerad"
 msgid "Mail count report -  @school_name"
 msgstr "Mailräkningsrapport - @school_name"
 
-msgid "Current mail count stats for @school_name. Sent - @sent. Failed - @failed"
-msgstr "Nuvarande mailräkningsstatistik för @school_name. Skickade - @sent. Misslyckade - @failed"
+msgid "Current mail count stats last @days days for @school_name. Sent - @sent. Failed - @failed"
+msgstr "Nuvarande mailräkningsstatistik senaste @days dagarna för @school_name. Skickade - @sent. Misslyckade - @failed"
 
 msgid ""
 msgstr ""
