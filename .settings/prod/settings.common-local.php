@@ -95,3 +95,5 @@ $settings['ssr_written_reviews_catalog_id'] = $settings['ssr_catalog_id'] + [
 
 // On what batch interval to report mail count last 30 days.
 $settings['mail_count_notify_batch'] = 500;
+// Mails included in fee per month (1000 + 40 for system mails).
+$settings['mails_included'] = 1040;
