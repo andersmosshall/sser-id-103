@@ -163,7 +163,7 @@ display:
           type: boolean
           settings:
             format: custom
-            format_custom_false: Ej publicerad
+            format_custom_false: 'Ej publicerad'
             format_custom_true: Publicerad
         changed:
           id: changed
@@ -413,7 +413,7 @@ display:
                 operator: '='
                 value: '1'
               2:
-                title: Ej publicerad
+                title: 'Ej publicerad'
                 operator: '='
                 value: '0'
         langcode:
