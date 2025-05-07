@@ -3304,6 +3304,45 @@ msgstr "Mailräkningsrapport - @school_name"
 msgid "Current mail count stats last @days days for @school_name. Sent - @sent. Failed - @failed"
 msgstr "Nuvarande mailräkningsstatistik senaste @days dagarna för @school_name. Skickade - @sent. Misslyckade - @failed"
 
+msgid "Extra mail count batch size"
+msgstr "Extra e-postmeddelanden per batch"
+
+msgid "Mail count fee"
+msgstr "Avgift för e-postmeddelanden"
+
+msgid "This month"
+msgstr "Denna månad"
+
+msgid "This school year"
+msgstr "Detta läsår"
+
+msgid "Last month"
+msgstr "Förra månaden"
+
+msgid "Last school year"
+msgstr "Förra läsåret"
+
+msgid "No mail count fee"
+msgstr "Ingen avgift för e-postmeddelanden"
+
+msgid "Module sum label"
+msgstr "Modulsummans etikett"
+
+msgid "Use only sum for modules"
+msgstr "Använd endast summan för moduler"
+
+msgid "á Fee"
+msgstr "á Avgift"
+
+msgid "Extra messages"
+msgstr "Extra meddelanden"
+
+msgid "Module sum"
+msgstr "Modulsumma"
+
+msgid "Count"
+msgstr "Antal"
+
 msgid ""
 msgstr ""
 

@@ -245,7 +245,7 @@ class InvoiceSupportForm extends FormBase {
       '#header' => [
         $this->t('Item'),
         $this->t('Count'),
-        $this->t('á fee'),
+        $this->t('á Fee'),
         $this->t('Fee'),
       ],
     ];
@@ -313,7 +313,7 @@ class InvoiceSupportForm extends FormBase {
 
     $form['invoice_settings']['module_sum_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Sum label'),
+      '#title' => $this->t('Module sum label'),
       '#default_value' => $module_sum_label,
       '#states' => [
         'visible' => [
@@ -331,7 +331,7 @@ class InvoiceSupportForm extends FormBase {
     ];
     $form['invoice_settings']['mail_count_extra'] = [
       '#type' => 'select',
-      '#title' => $this->t('Monthly fee'),
+      '#title' => $this->t('Mail count fee'),
       '#options' => $mail_count_extra_options,
       '#default_value' => $mail_count_extra,
     ];
