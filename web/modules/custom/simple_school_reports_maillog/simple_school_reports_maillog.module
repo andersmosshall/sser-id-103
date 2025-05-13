@@ -292,6 +292,11 @@ function notify_mail_count() {
   $connection = \Drupal::database();
   $state = \Drupal::state();
 
+  // Ignore in maintenance mode.
+  if ($state->get('system.maintenance_mode')) {
+    return;
+  }
+
   $to = new \DateTime();
   $to->setTime(23, 59, 59);
   $from = new \DateTime();
@@ -327,6 +332,31 @@ function notify_mail_count() {
   $batch_size = Settings::get('mail_count_notify_batch', 500);
 
   if ($sent_count < $batch_size) {
+    return;
+  }
+
+  // Check if we should put site in maintenance panic mode.
+  $ssr_suspicious_mail_count = Settings::get('ssr_suspicious_mail_count', 6000);
+  if ($sent_count >= $ssr_suspicious_mail_count) {
+    try {
+      $state->set('system.maintenance_mode', TRUE);
+      $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+      if ($ssr_bug_report_email) {
+        /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+        $email_service = \Drupal::service('simple_school_reports_core.email_service');
+        $subject = t('PANIC! - suspicious mail count activity - @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+        $message = t('Suspicious mail count detected, (@sent/@failed) for @school_name. Site is put in maintenance mode', ['@days' => 30, '@sent' => $sent_count, '@failed' => $failed_count, '@school_name' => Settings::get('ssr_school_name', '?')]);
+        $email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+          'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+          'no_reply_to' => TRUE,
+          'ignore_maintenance_mode' => TRUE,
+        ]);
+      }
+      \Drupal::logger('simple_school_reports_maillog')->error('Suspicious mail count detected, (@sent/@failed). Site is put in maintenance mode.', ['@sent' => $sent_count, '@failed' => $failed_count]);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('simple_school_reports_maillog')->error($e->getMessage());
+    }
     return;
   }
 

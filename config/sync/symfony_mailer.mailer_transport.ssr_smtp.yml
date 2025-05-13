@@ -1,0 +1,18 @@
+uuid: 56beca48-8833-464e-b18a-f166b726e83e
+langcode: en
+status: true
+dependencies: {  }
+id: ssr_smtp
+label: SMTP
+plugin: smtp
+configuration:
+  user: SECRET
+  pass: SECRET
+  host: SECRET
+  port: 123
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: 50
+    restart_threshold_sleep: 1
+    ping_threshold: 1

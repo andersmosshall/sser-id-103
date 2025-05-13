@@ -7,8 +7,6 @@ _core:
 id: _
 configuration:
   mailer_inline_css: {  }
-  email_transport:
-    value: native
   email_theme:
     theme: _active_fallback
   mailer_url_to_absolute: {  }
