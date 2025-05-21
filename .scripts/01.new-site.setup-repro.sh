@@ -21,7 +21,7 @@ UPDATE_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_local_section_update.temp
 DEPLOY_HELPER_TEMPLATE_SOURCE=".scripts/templates/bash_server_section_deploy.template" # New
 
 # Default values
-DEFAULT_NO_REPLY_EMAIL="no-reply@simpleschoolreports.se"
+DEFAULT_NO_REPLY_EMAIL="no-reply@sser.se"
 DEFAULT_TOOLBAR_COLOR="#0f0f0f"
 DEFAULT_MODULE_WEIGHT=10
 DEFAULT_EXTRA_ADMINS=0
@@ -119,7 +119,7 @@ if [[ -e "$TARGET_SITE_DIR" ]]; then
   error_exit "Target directory or file '${TARGET_SITE_DIR}' already exists. Aborting early."
 fi
 
-DEFAULT_FULL_URL="${URL_NAME}.simpleschoolreports.se"
+DEFAULT_FULL_URL="${URL_NAME}.sser.se"
 read -p "Enter Full URL [${DEFAULT_FULL_URL}]: " FULL_URL
 FULL_URL=${FULL_URL:-$DEFAULT_FULL_URL} # Use default if empty
 echo "Using Full URL: ${FULL_URL}"
