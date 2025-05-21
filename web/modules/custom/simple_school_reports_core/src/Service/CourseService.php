@@ -150,6 +150,20 @@ class CourseService implements CourseServiceInterface {
     return array_keys($map);
   }
 
+  public function getStudentActiveCourseIds(int|string $student_id): array {
+    $map = $this->getStudentIdsInCourseMap();
+    $course_ids = [];
+    foreach ($map as $course_id => $sub_groups) {
+      foreach ($sub_groups as $sub_group => $student_ids) {
+        if (in_array($student_id, $student_ids)) {
+          $course_ids[] = $course_id;
+          break;
+        }
+      }
+    }
+    return array_unique($course_ids);
+  }
+
   /**
    * {@inheritdoc}
    */

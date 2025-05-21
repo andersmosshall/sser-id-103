@@ -3343,14 +3343,14 @@ msgstr "Modulsumma"
 msgid "Count"
 msgstr "Antal"
 
-msgid ""
-msgstr ""
+msgid "No schema to show."
+msgstr "Inget schema att visa."
 
-msgid ""
-msgstr ""
+msgid "Schema"
+msgstr "Schema"
 
-msgid ""
-msgstr ""
+msgid "Deviations from schema may occur."
+msgstr "Avvikelser från schema kan förekomma."
 
 msgid ""
 msgstr ""

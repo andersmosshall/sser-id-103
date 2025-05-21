@@ -10,6 +10,12 @@ simple_school_reports_schema_support.all_courses:
   base_route: view.courses.my_courses
   weight: 6
 
+simple_school_reports_schema.student_schema:
+  title: 'Schema'
+  route_name: simple_school_reports_schema.student_schema
+  base_route: entity.user.canonical
+  weight: 25
+
 entity.ssr_schema_entry.settings:
   title: 'Settings'
   route_name: entity.ssr_schema_entry.settings

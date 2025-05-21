@@ -67,10 +67,22 @@ final class CalendarEvent extends ContentEntityBase implements CalendarEventInte
   use EntityChangedTrait;
   use EntityOwnerTrait;
 
+  protected bool $preventSave = FALSE;
+
+  public function setPreventSave(bool $value = TRUE): self {
+    $this->preventSave = $value;
+    return $this;
+  }
+
   /**
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage): void {
+    if ($this->preventSave) {
+      throw new \RuntimeException('Not allowed to save a calendar event.');
+    }
+
+
     parent::preSave($storage);
     if (!$this->getOwnerId()) {
       // If no owner has been set explicitly, make the anonymous user the owner.

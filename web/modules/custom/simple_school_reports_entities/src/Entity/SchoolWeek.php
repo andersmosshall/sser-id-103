@@ -172,6 +172,13 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     ];
   }
 
+  protected function sortLessons(array $lessons): array {
+    usort($lessons, function ($a, $b) {
+      return $a['from'] <=> $b['from'];
+    });
+    return $lessons;
+  }
+
   protected function getBaseLessons(string $day_index) {
     $cid = 'base_lessons:' . $this->id() . ':' . $day_index;
 
@@ -228,6 +235,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       }
 
       $lessons = array_values($lessons);
+      $lessons = $this->sortLessons($lessons);
       $this->lookup[$cid] = $lessons;
       return $lessons;
     }
@@ -245,7 +253,6 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       if ($lesson['subject'] === 'CBT') {
         continue;
       }
-
 
       $length += floor($lesson['length'] / 60);
       if ($from === NULL || $lesson['from'] < $from) {
@@ -409,6 +416,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
       $lessons = $include_day_lessons ? $this->makeLessons($from, $to, $length) : [];
     }
 
+    $lessons = $this->sortLessons($lessons);
     $info = [
       'length' => $length,
       'from' => $from,
@@ -563,8 +571,6 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
         }
 
         foreach ($lessons as $lesson) {
-
-
           $has_lessons = TRUE;
           $time_from = date('H:i', $lesson['from']);
           $time_to = date('H:i', $lesson['to']);

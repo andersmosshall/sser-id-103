@@ -13,4 +13,9 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface CalendarEventInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  /**
+   * @return self
+   */
+  public function setPreventSave(bool $value = TRUE): self;
+
 }
