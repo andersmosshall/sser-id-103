@@ -304,10 +304,18 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
       }
     }
 
+    $cid = $this->warmUpStoredCalendarEventsCache(1, $from, $to, TRUE);
+    $stored_calendar_event_data = [];
+
     foreach ($course_ids as $course_id) {
       $event = new MakeCourseCalendarEvent($course_id, $from, $to, FALSE);
       $this->dispatcher->dispatch($event, SsrSchemaSupportEvents::MAKE_COURSE_CALENDAR_EVENTS);
       $calendar_events = array_merge($calendar_events, $event->getCalendarEvents());
+      $stored_calendar_event_data = array_merge($stored_calendar_event_data, $this->lookup[$cid][$course_id] ?? []);
+    }
+
+    if (empty($calendar_events)) {
+      return [];
     }
 
     $schema_data_identifiers = $this->courseService->getStudentSchemaEntryDataIdentifiers($student_uid);
@@ -338,6 +346,17 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
       $calendar_event = $this->adjustCalendarEventsFromDeviations($calendar_event, $deviation_list[$event_from_date_string] ?? []);
       if (!$calendar_event) {
         unset($calendar_events[$key]);
+        continue;
+      }
+
+      // Remove cancelled events.
+      $calendar_event_identifier = $this->calculateCourseCalendarEventIdentifier($calendar_event);
+      if (isset($stored_calendar_event_data[$calendar_event_identifier])) {
+        $stored_calendar_event = $stored_calendar_event_data[$calendar_event_identifier];
+        if ($stored_calendar_event['cancelled']) {
+          unset($calendar_events[$key]);
+          continue;
+        }
       }
     }
     $calendar_events = array_values($calendar_events);
