@@ -136,7 +136,7 @@ echo "   ✅ Successfully extracted settings:"
 echo "      School Name:      $school_name"
 echo "      Bug Report Email: $bug_email"
 echo "      No Reply Email:   $noreply_email"
-echo "      SSER ID:          $ssr_id"
+echo "      SSR ID:           $ssr_id"
 echo "------------------------------------------------------------"
 
 # --- Step 4: Initial Confirmation Prompt ---
@@ -178,16 +178,16 @@ if [ ! -f "$SETTINGS_FILE" ]; then
 fi
 echo "------------------------------------------------------------"
 
-# --- Step 6: Confirm Extracted SSER ID ---
-echo "[Step 6/35] Confirming extracted SSER ID..."
+# --- Step 6: Confirm Extracted SSR ID ---
+echo "[Step 6/35] Confirming extracted SSR ID..."
 confirm_ssr_id=""
 while [[ "$confirm_ssr_id" != "y" && "$confirm_ssr_id" != "n" ]]; do
-    read -p "   Is the extracted SSER ID '$ssr_id' correct? [Y/n]: " confirm_ssr_id_input
+    read -p "   Is the extracted SSR ID '$ssr_id' correct? [Y/n]: " confirm_ssr_id_input
     confirm_ssr_id=${confirm_ssr_id_input:-y} # Default 'y'
     confirm_ssr_id=$(echo "$confirm_ssr_id" | tr '[:upper:]' '[:lower:]')
 done
-if [[ "$confirm_ssr_id" != "y" ]]; then error_exit "SSER ID confirmation denied."; fi
-echo "   ✅ SSER ID confirmed."
+if [[ "$confirm_ssr_id" != "y" ]]; then error_exit "SSR ID confirmation denied."; fi
+echo "   ✅ SSR ID confirmed."
 echo "------------------------------------------------------------"
 
 # --- Step 7: Check Lando Env & Determine Composer/Drush Commands ---
@@ -220,7 +220,7 @@ else
     echo ""
 
     # Define defaults WITHOUT internal quotes around the $HOME path
-    DEFAULT_COMPOSER_CMD="composer"
+    DEFAULT_COMPOSER_CMD="$HOME/composer.phar"
     DEFAULT_DRUSH_CMD="./vendor/bin/drush"
 
     # Confirm Composer command
@@ -310,7 +310,12 @@ echo "   NOTE: This script will NOT perform this step."
 echo "   ====================================================================="
 echo ""
 echo "   Copying '$DEFAULT_SETTINGS_PHP_SRC' -> '$DEFAULT_SETTINGS_PHP' for the installer..."
-cp "$DEFAULT_SETTINGS_PHP_SRC" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed default.settings.php"; fi
+# Check if settings file already exists.
+if [ -f "$DEFAULT_SETTINGS_PHP" ]; then
+    echo "   WARNING: '$DEFAULT_SETTINGS_PHP' already exists. Skip copying..."
+else
+  cp "$DEFAULT_SETTINGS_PHP_SRC" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed default.settings.php"; fi
+fi
 echo ""
 echo ""
 bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
