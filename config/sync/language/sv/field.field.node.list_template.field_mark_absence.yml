@@ -1,0 +1,5 @@
+label: 'Märk frånvaro'
+description: 'Stryk över elever som är frånvaroregistrerade'
+settings:
+  on_label: Ja
+  off_label: Nej

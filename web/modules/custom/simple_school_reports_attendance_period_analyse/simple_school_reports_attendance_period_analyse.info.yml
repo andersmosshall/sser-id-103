@@ -1,0 +1,11 @@
+name: Simple School Reports Attendance Period Analyze
+type: module
+description: Simple School Reports Attendance Period Analyze
+core_version_requirement: ^10 || ^11
+package: 'Simple School Reports'
+version: 11.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+interface translation project: simple_school_reports_attendance_period_analyse
+interface translation server pattern: modules/custom/simple_school_reports_attendance_period_analyse/translations/%project.%language.po

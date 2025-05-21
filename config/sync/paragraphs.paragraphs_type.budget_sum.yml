@@ -1,0 +1,10 @@
+uuid: 1a2cdbc2-559e-4381-85db-6b056502dace
+langcode: en
+status: true
+dependencies: {  }
+id: budget_sum
+label: Sum
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

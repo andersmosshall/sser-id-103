@@ -1,0 +1,257 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Digital National Test Support module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\user\UserInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_dnp_support_theme(): array {
+  return [
+    'dnp_provisioning' => ['render element' => 'elements'],
+    'dnp_prov_settings' => ['render element' => 'elements'],
+    'dnp_prov_test_settings' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for dnp provisioning settings templates.
+ *
+ * Default template: dnp-provisioning-settings.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the dnp provisioning settings information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_dnp_prov_settings(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for dnp provisioning templates.
+ *
+ * Default template: dnp-provisioning.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the dnp provisioning information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_dnp_provisioning(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for dnp_prov_test_settings templates.
+ *
+ * Default template: dnp_prov_test_settings.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the dnp_prov_test_settings information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_dnp_prov_test_settings(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+function format_with_leading_zeros(int $number, $total_digits) {
+  $number_str = (string) $number;
+  if (strlen($number_str) < $total_digits) {
+    return str_pad($number_str, $total_digits, '0', STR_PAD_LEFT);
+  }
+  return $number_str;
+}
+
+function calculate_dnp_username(UserInterface $user): string {
+  if (!$user->id()) {
+    throw new \InvalidArgumentException('User must have an ID.');
+  }
+
+  $ssr_id = Settings::get('ssr_id', '');
+  if ($ssr_id === '') {
+    throw new \RuntimeException('Failed to calculate DNP user name.');
+  }
+
+  $school_name = mb_strtolower(Settings::get('ssr_school_name', 'SsrSchool'));
+
+  // Take the first 3 characters of the school name.
+  $school_name = mb_substr($school_name, 0, 3);
+  $school_name = simple_school_reports_core_character_normalise_word($school_name);
+
+  $first_name = simple_school_reports_core_character_normalise_word(mb_strtolower($user->get('field_first_name')->value ?? 'A'));
+  if (!$first_name) {
+    $first_name = 'A';
+  }
+  $last_name = simple_school_reports_core_character_normalise_word(mb_strtolower($user->get('field_last_name')->value ?? 'A'));
+  if (!$last_name) {
+    $last_name = 'A';
+  }
+
+  // Take the first character of the first name and the first and last character
+  // of the last name.
+  $user_fragment = mb_substr($first_name, 0, 1) . mb_substr($last_name, 0, 1) . mb_substr($last_name, -1);
+
+  $user_id_fragment = format_with_leading_zeros($user->id(), 6);
+
+  return $school_name . '-' . $user_fragment . '-' . $ssr_id . $user_id_fragment;
+}
+
+function simple_school_reports_dnp_support_allowed_tests(): array {
+  /** @var \Drupal\simple_school_reports_dnp_support\Service\DnpSupportServiceInterface $dnp_support_service */
+  $dnp_support_service = \Drupal::service('simple_school_reports_dnp_support.dnp_support_service');
+  return $dnp_support_service->getDnpTestOptions();
+}
+
+function simple_school_reports_dnp_support_list_behavior_options(): array {
+  /** @var \Drupal\simple_school_reports_dnp_support\Service\DnpSupportServiceInterface $dnp_support_service */
+  $dnp_support_service = \Drupal::service('simple_school_reports_dnp_support.dnp_support_service');
+  return $dnp_support_service->getStudentListBehaviourOptions();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function simple_school_reports_dnp_support_dnp_prov_test_settings_view_alter(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+  if (!empty($build['#fieldgroups']['group_collapsed_test_settings'])) {
+    $build['#fieldgroups']['group_collapsed_test_settings']->label = $entity->label();
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function simple_school_reports_dnp_support_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, ?\Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  if ($field_definition->getTargetEntityTypeId() === 'user' && $field_definition->getName() === 'field_eduid_username') {
+    $module_handler = \Drupal::moduleHandler();
+    if (!$module_handler->moduleExists('simple_school_reports_dnp_provisioning')) {
+      return AccessResult::forbidden();
+    }
+
+    $user = $items?->getEntity();
+    if (!$user instanceof UserInterface) {
+      return AccessResult::neutral();
+    }
+
+    if (!$user->hasPermission('school staff permissions')) {
+      return AccessResult::forbidden()->addCacheableDependency($user);
+    }
+
+    return AccessResult::forbiddenIf(!$account->hasPermission('view dnp_provisioning'))->addCacheContexts(['user.permissions']);
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function simple_school_reports_dnp_support_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
+  if ($entity_type->id() === 'user') {
+    if (!empty($fields['field_eduid_username'])) {
+      $fields['field_eduid_username']->addConstraint('UniqueField');
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_dnp_support_user_presave(\Drupal\user\UserInterface $user) {
+  if (!$user->isNew() && $user->get('field_dnp_username')->isEmpty()) {
+    $user->set('field_dnp_username', calculate_dnp_username($user));
+  }
+}
+
+function clean_up_dnp_entities() {
+  /** @var \Drupal\Core\Database\Connection $connection */
+  $connection = \Drupal::service('database');
+
+  $dnp_provisioning_storage = \Drupal::entityTypeManager()->getStorage('dnp_provisioning');
+  /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
+  $term_service = \Drupal::service('simple_school_reports_core.term_service');
+
+  $now = new \DateTime();
+
+  // Delete old dnp provisioning entities. Older than 18 months,
+  // 47304000 seconds.
+  $delete_limit = $now->getTimestamp() - 47304000;
+  $dnp_provisioning_ids = $dnp_provisioning_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('created', $delete_limit, '<')
+    ->range(0, 50)
+    ->execute();
+
+  if (!empty($dnp_provisioning_ids)) {
+    $dnp_provisionings = $dnp_provisioning_storage->loadMultiple($dnp_provisioning_ids);
+    $dnp_provisioning_storage->delete($dnp_provisionings);
+  }
+
+  // Set old dnp provisioning entities as unpublished.
+  $school_year_start = $term_service->getDefaultSchoolYearStart(FALSE);
+
+  // Add a grace period of 2 months. (5184000 seconds) before removing all
+  // created before default school year start.
+  if ($now->getTimestamp() > $school_year_start + 5184000) {
+    $dnp_provisioning_ids = $dnp_provisioning_storage
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('created', $school_year_start, '<')
+      ->condition('status', TRUE)
+      ->range(0, 50)
+      ->execute();
+
+    if (!empty($dnp_provisioning_ids)) {
+      $dnp_provisionings = $dnp_provisioning_storage->loadMultiple($dnp_provisioning_ids);
+      foreach ($dnp_provisionings as $dnp_provisioning) {
+        $dnp_provisioning->set('status', FALSE);
+        $dnp_provisioning->save();
+      }
+    }
+  }
+
+  // Clean up orphaned dnp_prov_test_settings entities.
+  $subquery = $connection->select('dnp_prov_settings__tests', 't')
+    ->fields('t', ['tests_target_id'])
+    ->where('[t].[tests_target_id] = [ts].[id]');
+
+  $results = $connection->select('dnp_prov_test_settings', 'ts')
+    ->notExists($subquery)
+    ->fields('ts', ['id'])
+    ->range(0, 50)
+    ->execute();
+
+  $ids = [];
+  foreach ($results as $result) {
+    $ids[] = $result->id;
+  }
+
+  if (!empty($ids)) {
+    $dnp_test_settings_storage = \Drupal::entityTypeManager()->getStorage('dnp_prov_test_settings');
+    $test_settings = $dnp_test_settings_storage->loadMultiple($ids);
+    $dnp_test_settings_storage->delete($test_settings);
+  }
+}
+
+

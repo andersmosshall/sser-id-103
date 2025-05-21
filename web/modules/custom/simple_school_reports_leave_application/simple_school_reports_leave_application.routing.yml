@@ -1,0 +1,37 @@
+simple_school_reports_leave_application.handle:
+  path: '/leave-application-student/{ssr_student_leave_application}/handle'
+  defaults:
+    _form: '\Drupal\simple_school_reports_leave_application\Form\HandleStudentLeaveApplicationForm'
+    _title: 'Handle leave application'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_leave_application\Form\HandleStudentLeaveApplicationForm::access'
+
+simple_school_reports_leave_application.create:
+  path: '/user/{user}/leave-applications/create'
+  defaults:
+    _form: '\Drupal\simple_school_reports_leave_application\Form\CreateStudentLeaveApplicationForm'
+    _title: 'Create leave application'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_leave_application\Form\CreateStudentLeaveApplicationForm::access'
+
+simple_school_reports_leave_application.leave_application_student_tab:
+  path: '/user/{user}/leave-applications'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_leave_application\Controller\LeaveApplicationController::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_leave_application\Controller\LeaveApplicationController::getStudentTabTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_leave_application\Controller\LeaveApplicationController::accessStudentTab'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+simple_school_reports_leave_application.student_leave_application_settings:
+  path: 'admin/structure/ssr-student-leave-application-settings'
+  defaults:
+    _form: '\Drupal\simple_school_reports_leave_application\Form\StudentLeaveApplicationConfigForm'
+    _title: 'Leave application settings'
+  requirements:
+    _permission: 'administer simple school reports settings'
+

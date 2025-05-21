@@ -1,0 +1,24 @@
+uuid: 4c8d72e1-f566-44bc-ae70-7ed27a30d8fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.name_only
+    - field.field.taxonomy_term.extra_adaptations.field_extra_adaptation
+    - taxonomy.vocabulary.extra_adaptations
+id: taxonomy_term.extra_adaptations.name_only
+targetEntityType: taxonomy_term
+bundle: extra_adaptations
+mode: name_only
+content:
+  field_extra_adaptation:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  description: true
+  langcode: true

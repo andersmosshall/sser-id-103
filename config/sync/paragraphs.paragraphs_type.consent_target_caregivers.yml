@@ -1,0 +1,10 @@
+uuid: bb39f126-a17e-4039-959d-db84fa382595
+langcode: en
+status: true
+dependencies: {  }
+id: consent_target_caregivers
+label: 'Target group: caregivers'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

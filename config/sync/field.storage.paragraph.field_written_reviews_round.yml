@@ -1,0 +1,20 @@
+uuid: dca11533-09da-4611-8cc5-c4ea0c2b5791
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - paragraphs
+id: paragraph.field_written_reviews_round
+field_name: field_written_reviews_round
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

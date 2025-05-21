@@ -1,0 +1,100 @@
+uuid: daff6a9c-971f-42a2-9310-21ec5869de6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_round.field_anonymized
+    - field.field.node.grade_round.field_document_date
+    - field.field.node.grade_round.field_invalid_absence_from
+    - field.field.node.grade_round.field_invalid_absence_to
+    - field.field.node.grade_round.field_locked
+    - field.field.node.grade_round.field_student_groups
+    - field.field.node.grade_round.field_term_type
+    - node.type.grade_round
+  module:
+    - options
+    - user
+id: node.grade_round.default
+targetEntityType: node
+bundle: grade_round
+mode: default
+content:
+  field_document_date:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_invalid_absence_from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_invalid_absence_to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_locked:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_term_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_anonymized: true
+  field_student_groups: true
+  langcode: true
+  links: true

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_reviews_install() {
+  module_set_weight('simple_school_reports_reviews', 10);
+}
+
+/**
+ * Fix written reviews subject labels.
+ */
+function simple_school_reports_reviews_update_9001() {
+  $node_storage = \Drupal::entityTypeManager()
+    ->getStorage('node');
+
+  $nids = $node_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'written_reviews_subject_state')
+    ->execute();
+
+  foreach ($nids as $nid) {
+    $node = $node_storage->load($nid);
+    if ($node) {
+      // The presave hook fixes the labels.
+      $node->save();
+    }
+  }
+}

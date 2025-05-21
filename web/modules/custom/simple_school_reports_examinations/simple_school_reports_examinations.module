@@ -1,0 +1,264 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Examinations module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\simple_school_reports_examinations_support\Service\AssessmentGroupServiceInterface;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_examinations_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'entity.ssr_assessment_group.canonical') {
+    $cache->addCacheContexts(['user.permissions', 'route']);
+    $assessment_group = $context['route_match']->getParameter('ssr_assessment_group');
+    if ($assessment_group instanceof \Drupal\simple_school_reports_examinations_support\AssessmentGroupInterface) {
+      $access_to_add_examination = $assessment_group->access('add_examination', \Drupal::currentUser(), TRUE);
+      $cache->addCacheableDependency($access_to_add_examination);
+      if ($access_to_add_examination->isAllowed()) {
+
+        $query = [];
+        $query['destination'] = $assessment_group->toUrl(NULL,['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl();
+        $query['assessment_group'] = $assessment_group->id();
+        $local_actions['add_examination'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Add examination'),
+            'url' => \Drupal\Core\Url::fromRoute('entity.ssr_examination.add_form', [], ['query' => $query]),
+          ],
+          '#weight' => 10,
+        ];
+      }
+    }
+  }
+
+  if ($context['route_name'] === 'entity.node.canonical') {
+    $course_node = $context['current_request']->get('node');
+    if ($course_node instanceof \Drupal\node\NodeInterface && $course_node->bundle() === 'course') {
+      $cache->addCacheContexts(['user.permissions']);
+      if ($course_node->access('update') && \Drupal::currentUser()->hasPermission('create ssr_assessment_group')) {
+        $local_actions['copy_to_assessment_group'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Create assessment group from course'),
+            'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_examinations.course_to_assessment_group', ['node' => $course_node->id()]),
+          ],
+          '#weight' => 20,
+        ];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function simple_school_reports_examinations_block_access(\Drupal\block\Entity\Block $block, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  $access = \Drupal\Core\Access\AccessResult::neutral();
+  if ($block->id() === 'ssr_base_views_block__assessment_group_examinations_list_list') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name !== 'entity.ssr_assessment_group.canonical') {
+      $access = \Drupal\Core\Access\AccessResult::forbidden();
+    }
+    $access->addCacheContexts(['route']);
+  }
+  return $access;
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_examinations_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'ssr_examination') {
+    $assessment_group_id = $entity->get('assessment_group')->target_id;
+
+    if ($assessment_group_id) {
+      $query = ['back_destination' => \Drupal::service('path.current')->getPath()];
+      $cache = new \Drupal\Core\Cache\CacheableMetadata();
+      $cache->addCacheContexts(['route']);
+      $view_access = $entity->access('view', \Drupal::currentUser(), TRUE);
+      $cache->addCacheableDependency($view_access);
+
+      if ($view_access->isAllowed()) {
+        $operations['view_results'] = [
+          'title' => t('View/Handle examination results'),
+          'url' => \Drupal\Core\Url::fromRoute('view.examination_results.list', ['ssr_examination' => $entity->id(), 'ssr_assessment_group' => $assessment_group_id], ['query' => $query]),
+          'weight' => -99,
+        ];
+      }
+    }
+  }
+
+  if ($entity->getEntityTypeId() === 'user') {
+    $cache = new \Drupal\Core\Cache\CacheableMetadata();
+    $cache->addCacheContexts(['route']);
+
+    foreach ($operations as $key => &$operation) {
+      $cache->applyTo($operation);
+    }
+
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    $ssr_assessment_group_id = \Drupal::routeMatch()->getRawParameter('ssr_assessment_group');
+    $ssr_examination_id = \Drupal::routeMatch()->getRawParameter('ssr_examination');
+
+    $ssr_examination = $ssr_examination_id ? \Drupal::entityTypeManager()->getStorage('ssr_examination')->load($ssr_examination_id) : NULL;
+    if ($ssr_examination instanceof \Drupal\simple_school_reports_examinations_support\Entity\Examination) {
+      if ($ssr_examination->get('assessment_group')->target_id !== $ssr_assessment_group_id) {
+        $ssr_examination = NULL;
+      }
+    }
+
+    if ($route_name === 'view.examination_results.list' && $ssr_assessment_group_id && $ssr_examination) {
+      $operations = [];
+      $ssr_assessment_group = \Drupal::entityTypeManager()->getStorage('ssr_assessment_group')->load($ssr_assessment_group_id);
+
+      if ($ssr_assessment_group?->access('handle_all_results')) {
+        $query = ['destination' => \Drupal::service('path.current')->getPath()];
+        $cache->addCacheContexts(['user']);
+        $cache->addCacheableDependency($ssr_examination);
+        $cache->addCacheableDependency($ssr_examination->get('assessment_group')->entity);
+
+        $operations['edit_result'] = [
+          'title' => t('Edit result'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_examinations.handle_examination_result', [
+            'ssr_assessment_group' => $ssr_assessment_group_id,
+            'ssr_examination' => $ssr_examination_id,
+            'user' => $entity->id(),
+          ], ['query' => $query]),
+          'weight' => -99,
+        ];
+        $cache->applyTo($operations['edit_result']);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_examinations_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'examination_results' && $view->current_display === 'list') {
+    $assessment_group_id = \Drupal::routeMatch()->getRawParameter('ssr_assessment_group');
+    $examination_id = \Drupal::routeMatch()->getRawParameter('ssr_examination');
+    $examination = $examination_id ? \Drupal::entityTypeManager()->getStorage('ssr_examination')->load($examination_id) : NULL;
+
+    $student_uids = [];
+    if ($examination instanceof \Drupal\simple_school_reports_examinations_support\Entity\Examination) {
+      if ($examination->get('assessment_group')->target_id === $assessment_group_id) {
+        /** @var \Drupal\simple_school_reports_examinations_support\Service\ExaminationServiceInterface $examination_service */
+        $examination_service = \Drupal::service('simple_school_reports_examinations_support.examination_service');
+        $student_uids = $examination_service->getStudentsRelevantForExamination($examination_id);
+      }
+    }
+
+    if (empty($student_uids)) {
+      $student_uids = [-1];
+    }
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid') {
+          $condition['operator'] = 'IN';
+          $condition['value'] = $student_uids;
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'assessment_groups' && $view->current_display === 'list') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (($condition['field'] ?? NULL) === 'ssr_assessment_group_field_data.id' && ($condition['operator'] ?? NULL) === '=' && !empty($condition['value'])) {
+          $teacher_uid = (int) $condition['value'];
+
+          /** @var \Drupal\simple_school_reports_examinations_support\Service\AssessmentGroupServiceInterface $assessment_group_service */
+          $assessment_group_service = \Drupal::service('simple_school_reports_examinations_support.assessment_group_service');
+          $assessment_group_ids = $assessment_group_service->getRelatedAssessmentGroupsByTeacher($teacher_uid);
+
+          if (empty($assessment_group_ids)) {
+            $assessment_group_ids = [-1];
+          }
+          $condition['operator'] = 'IN';
+          $condition['value'] = $assessment_group_ids;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_examinations_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+
+      if ($view->id() === 'assessment_groups') {
+        \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
+
+        if (!empty($form['subject_target_id'])) {
+          $vid = 'school_subject';
+          /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+          $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+          $subjects = $termStorage->loadTree($vid);
+          $subjects_options = [
+            '' => t('All subjects'),
+          ];
+          foreach ($subjects as $subject) {
+            $subjects_options[$subject->tid] = $subject->name;
+          }
+          unset($form['subject_target_id']['#size']);
+          $form['subject_target_id']['#type'] = 'select';
+          $form['subject_target_id']['#options'] = $subjects_options;
+        }
+      }
+
+      if ($view->id() === 'student_examination_list') {
+        \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
+
+        if (!empty($form['subject_target_id'])) {
+          $vid = 'school_subject';
+          /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+          $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+          $subjects = $termStorage->loadTree($vid);
+          $subjects_options = [
+            '' => t('All subjects'),
+          ];
+          foreach ($subjects as $subject) {
+            $subjects_options[$subject->tid] = $subject->name;
+          }
+          unset($form['subject_target_id']['#size']);
+          $form['subject_target_id']['#type'] = 'select';
+          $form['subject_target_id']['#options'] = $subjects_options;
+        }
+
+        if (!empty($form['state'])) {
+          $examination_result_options = [
+            '' => t('All'),
+          ];
+
+          $state_not_applicable = Settings::get('ssr_abstract_hash_1');
+          $numeric_key = -1;
+          foreach (assessment_group_user_examination_result_state_options() as $state => $label) {
+            $numeric_key++;
+            if ($state === $state_not_applicable) {
+              continue;
+            }
+
+            $examination_result_options[$numeric_key] = $label;
+          }
+
+          unset($form['state']['#size']);
+          $form['state']['#type'] = 'select';
+          $form['state']['#options'] = $examination_result_options;
+        }
+      }
+    }
+  }
+}

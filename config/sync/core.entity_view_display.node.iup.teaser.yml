@@ -1,0 +1,41 @@
+uuid: 6e0f2377-ed31-43a7-8007-0daca6dd0330
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.iup.field_class
+    - field.field.node.iup.field_document_date
+    - field.field.node.iup.field_grade
+    - field.field.node.iup.field_hdig
+    - field.field.node.iup.field_hdwdi_caregiver
+    - field.field.node.iup.field_hdwdi_school
+    - field.field.node.iup.field_hdwdi_student
+    - field.field.node.iup.field_iup_goal_list
+    - field.field.node.iup.field_iup_round
+    - field.field.node.iup.field_state
+    - field.field.node.iup.field_student
+    - field.field.node.iup.field_waw
+    - node.type.iup
+  module:
+    - user
+id: node.iup.teaser
+targetEntityType: node
+bundle: iup
+mode: teaser
+content: {  }
+hidden:
+  field_class: true
+  field_document_date: true
+  field_grade: true
+  field_hdig: true
+  field_hdwdi_caregiver: true
+  field_hdwdi_school: true
+  field_hdwdi_student: true
+  field_iup_goal_list: true
+  field_iup_round: true
+  field_state: true
+  field_student: true
+  field_waw: true
+  langcode: true
+  links: true

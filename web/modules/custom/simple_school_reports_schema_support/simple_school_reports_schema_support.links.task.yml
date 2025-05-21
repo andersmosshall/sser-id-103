@@ -1,0 +1,40 @@
+simple_school_reports_schema_support.my_courses:
+  title: 'To report'
+  route_name: view.calendar_events_courses.my_courses
+  base_route: view.courses.my_courses
+  weight: 5
+
+simple_school_reports_schema_support.all_courses:
+  title: 'To report all'
+  route_name: view.calendar_events_courses.all_courses
+  base_route: view.courses.my_courses
+  weight: 6
+
+simple_school_reports_schema.student_schema:
+  title: 'Schema'
+  route_name: simple_school_reports_schema.student_schema
+  base_route: entity.user.canonical
+  weight: 25
+
+entity.ssr_schema_entry.settings:
+  title: 'Settings'
+  route_name: entity.ssr_schema_entry.settings
+  base_route: entity.ssr_schema_entry.settings
+entity.ssr_schema_entry.view:
+  title: 'View'
+  route_name: entity.ssr_schema_entry.canonical
+  base_route: entity.ssr_schema_entry.canonical
+entity.ssr_schema_entry.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_schema_entry.edit_form
+  base_route: entity.ssr_schema_entry.canonical
+entity.ssr_schema_entry.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_schema_entry.delete_form
+  base_route: entity.ssr_schema_entry.canonical
+  weight: 10
+entity.ssr_schema_entry.collection:
+  title: 'SSR schema entries'
+  route_name: entity.ssr_schema_entry.collection
+  base_route: system.admin_content
+  weight: 10

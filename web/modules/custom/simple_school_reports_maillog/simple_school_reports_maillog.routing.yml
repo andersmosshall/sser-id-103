@@ -1,0 +1,23 @@
+entity.ssr_maillog.settings:
+  path: 'admin/structure/ssr-maillog'
+  defaults:
+    _form: '\Drupal\simple_school_reports_maillog\Form\SsrMaillogSettingsForm'
+    _title: 'Maillog'
+  requirements:
+    _permission: 'administer maillog'
+
+entity.ssr_mail_count.settings:
+  path: 'admin/structure/ssr-mail-count'
+  defaults:
+    _form: '\Drupal\simple_school_reports_maillog\Form\SsrMailCountSettingsForm'
+    _title: 'Mail count'
+  requirements:
+    _permission: 'administer ssr_mail_count'
+
+simple_school_reports_maillog.mail_count_page:
+  path: '/ssr-mail-count'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\RangeToUrlForm'
+    _title: 'Mail count'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_maillog\Controller\MailCountController::mailCountPageAccess'

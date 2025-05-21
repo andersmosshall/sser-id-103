@@ -1,0 +1,38 @@
+.attendance-statistics-block .attendance-stats:not(.show-details) .stats-details {
+  display: none;
+}
+
+.attendance-statistics-block table.attendance-stats:not(.show-details) th {
+  display: none;
+}
+
+.attendance-statistics-block table.attendance-stats:not(.show-details) .stats-total {
+  display: none;
+}
+
+.attendance-statistics-block table.attendance-stats .stats-details {
+  font-style: italic;
+}
+
+.attendance-statistics-block .attendance-stats.stats-table.show-details tr:not(.stats-details) {
+  font-weight: bold;
+}
+
+.attendance-statistics-block table.attendance-stats .stats-details td:first-child {
+  padding-left: 40px;
+}
+
+.attendance-statistics-block table.attendance-stats:not(.show-details) tr td:last-child {
+  display: none;
+}
+
+.attendance-statistics-block table.attendance-stats:not(.show-details) tr td:not(:first-child) {
+  text-align: right;
+}
+
+.attendance-statistics-block .ssr-details-toggle {
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -40px;
+}

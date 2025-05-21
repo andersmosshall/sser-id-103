@@ -1,0 +1,47 @@
+uuid: 7455b55c-046a-4d2e-b51e-170e14941ecc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_subject.field_default_grade_round
+    - field.field.node.grade_subject.field_grade_registration
+    - field.field.node.grade_subject.field_school_subject
+    - field.field.node.grade_subject.field_state
+    - field.field.node.grade_subject.field_teacher
+    - node.type.grade_subject
+  module:
+    - options
+    - user
+id: node.grade_subject.default
+targetEntityType: node
+bundle: grade_subject
+mode: default
+content:
+  field_school_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_teacher:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_default_grade_round: true
+  field_grade_registration: true
+  langcode: true
+  links: true

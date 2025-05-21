@@ -1,0 +1,6 @@
+# Put this in the sser_deploy_all bash helper.
+
+echo -e 'DEPLOY [URL_NAME]' &&
+cd ~/var/www/[URL_NAME]/ &&
+bash .scripts/deploy-local.sh -profile='sser' &&
+echo -e 'DEPLOY [URL_NAME] DONE' &&

@@ -1,0 +1,5 @@
+label: 'Låst för vårdnadshavare'
+description: 'Om låst kan vårdnadshavare inte boka några möten. OBSERVERA: även om denna inställning inte är låst krävs ändå att utvecklingssamtalsomgången är olåst för att vårdnashavara ska få boka möten.'
+settings:
+  on_label: Låst
+  off_label: Olåst

@@ -1,0 +1,335 @@
+diff --git a/lib/Drupal/Component/EventDispatcher/ContainerAwareEventDispatcher.php b/lib/Drupal/Component/EventDispatcher/ContainerAwareEventDispatcher.php
+index 09a1d4e4..1ad219ec 100644
+--- a/lib/Drupal/Component/EventDispatcher/ContainerAwareEventDispatcher.php
++++ b/lib/Drupal/Component/EventDispatcher/ContainerAwareEventDispatcher.php
+@@ -83,6 +83,17 @@ class ContainerAwareEventDispatcher implements EventDispatcherInterface {
+     $this->unsorted = [];
+   }
+
++  protected function getCallableName(callable $callable) {
++    return match (TRUE) {
++      is_string($callable) && strpos($callable, '::') => '[static] ' . $callable,
++      is_string($callable) => '[function] ' . $callable,
++      is_array($callable) && is_object($callable[0]) => '[method] ' . get_class($callable[0]) . '->' . $callable[1],
++      is_array($callable) => '[static] ' . $callable[0] . '::' . $callable[1],
++      is_object($callable) => '[invokable] ' . get_class($callable),
++      default => '[unknown]',
++    };
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -108,8 +119,18 @@ class ContainerAwareEventDispatcher implements EventDispatcherInterface {
+             $definition['callable'][0] = $definition['callable'][0]();
+           }
+
++          \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++            'callable' => $this->getCallableName($definition['callable']),
++            '$event_name' => $event_name,
++          ]);
++
+           call_user_func($definition['callable'], $event, $event_name, $this);
+           if ($stoppable && $event->isPropagationStopped()) {
++            \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++              'propagation_stopped' => TRUE,
++              'callable' => $this->getCallableName($definition['callable']),
++              '$event_name' => $event_name,
++            ]);
+             return $event;
+           }
+         }
+diff --git a/lib/Drupal/Core/Controller/FormController.php b/lib/Drupal/Core/Controller/FormController.php
+index 51d0388f..0e5036dc 100644
+--- a/lib/Drupal/Core/Controller/FormController.php
++++ b/lib/Drupal/Core/Controller/FormController.php
+@@ -57,6 +57,10 @@ abstract class FormController {
+     $form_arg = $this->getFormArgument($route_match);
+     $form_object = $this->getFormObject($route_match, $form_arg);
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'form_arg' => $form_arg,
++    ]);
++
+     // Add the form and form_state to trick the getArguments method of the
+     // controller resolver.
+     $form_state = new FormState();
+@@ -70,6 +74,10 @@ abstract class FormController {
+     unset($args[0], $args[1]);
+     $form_state->addBuildInfo('args', array_values($args));
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'args' => $args,
++    ]);
++
+     return $this->formBuilder->buildForm($form_object, $form_state);
+   }
+
+diff --git a/lib/Drupal/Core/DrupalKernel.php b/lib/Drupal/Core/DrupalKernel.php
+index c6f0b984..7656773e 100644
+--- a/lib/Drupal/Core/DrupalKernel.php
++++ b/lib/Drupal/Core/DrupalKernel.php
+@@ -702,13 +702,25 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
+         $this->boot();
+       }
+       $response = $this->getHttpKernel()->handle($request, $type, $catch);
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'request_response' => (string) $response,
++        'exception_trace' => (new \Exception())->getTraceAsString(),
++      ]);
+     }
+     catch (\Exception $e) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'exception' => $e->getMessage(),
++        'exception_trace' => $e->getTraceAsString(),
++      ]);
++
+       if ($catch === FALSE) {
+         throw $e;
+       }
+
+       $response = $this->handleException($e, $request, $type);
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'exception_response' => (string) $response,
++      ]);
+     }
+
+     // Adapt response headers to the current request.
+diff --git a/lib/Drupal/Core/EventSubscriber/RedirectLeadingSlashesSubscriber.php b/lib/Drupal/Core/EventSubscriber/RedirectLeadingSlashesSubscriber.php
+index 7c03ba26..7c0e5deb 100644
+--- a/lib/Drupal/Core/EventSubscriber/RedirectLeadingSlashesSubscriber.php
++++ b/lib/Drupal/Core/EventSubscriber/RedirectLeadingSlashesSubscriber.php
+@@ -34,6 +34,9 @@ class RedirectLeadingSlashesSubscriber implements EventSubscriberInterface {
+       if ($qs) {
+         $qs = '?' . $qs;
+       }
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'path' => $path,
++      ]);
+       $event->setResponse(new CacheableRedirectResponse($request->getUriForPath($path) . $qs));
+     }
+   }
+diff --git a/lib/Drupal/Core/EventSubscriber/RedirectResponseSubscriber.php b/lib/Drupal/Core/EventSubscriber/RedirectResponseSubscriber.php
+index e950eae1..562785e8 100644
+--- a/lib/Drupal/Core/EventSubscriber/RedirectResponseSubscriber.php
++++ b/lib/Drupal/Core/EventSubscriber/RedirectResponseSubscriber.php
+@@ -58,6 +58,10 @@ class RedirectResponseSubscriber implements EventSubscriberInterface {
+       // If $response is already a SecuredRedirectResponse, it might reject the
+       // new target as invalid, in which case proceed with the old target.
+       $destination = $request->query->get('destination');
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'o_target' => $response->getTargetUrl(),
++        'destination_q' => $destination,
++      ]);
+       if ($destination) {
+         // The 'Location' HTTP header must always be absolute.
+         $destination = $this->getDestinationAsAbsoluteUrl($destination, $request->getSchemeAndHttpHost());
+@@ -71,6 +75,9 @@ class RedirectResponseSubscriber implements EventSubscriberInterface {
+       // Regardless of whether the target is the original one or the overridden
+       // destination, ensure that all redirects are safe.
+       if (!($response instanceof SecuredRedirectResponse)) {
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'secure' => TRUE,
++        ]);
+         try {
+           // SecuredRedirectResponse is an abstract class that requires a
+           // concrete implementation. Default to LocalRedirectResponse, which
+diff --git a/lib/Drupal/Core/Form/FormBuilder.php b/lib/Drupal/Core/Form/FormBuilder.php
+index d7c4bf93..4ab7908c 100644
+--- a/lib/Drupal/Core/Form/FormBuilder.php
++++ b/lib/Drupal/Core/Form/FormBuilder.php
+@@ -233,6 +233,10 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+
+     $request = $this->requestStack->getCurrentRequest();
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'request_m' => $request->getMethod(),
++    ]);
++
+     // Inform $form_state about the request method that's building it, so that
+     // it can prevent persisting state changes during HTTP methods for which
+     // that is disallowed by HTTP: GET and HEAD.
+@@ -251,7 +255,14 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+       $form_state->setUserInput($input);
+     }
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'user_input' => $form_state->getUserInput(),
++    ]);
++
+     if (isset($_SESSION['batch_form_state'])) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'batch_is_set' => TRUE,
++      ]);
+       // We've been redirected here after a batch processing. The form has
+       // already been processed, but needs to be rebuilt. See _batch_finished().
+       $form_state = $_SESSION['batch_form_state'];
+@@ -267,6 +278,10 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     $check_cache = isset($input['form_id']) && $input['form_id'] == $form_id && !empty($input['form_build_id']);
+     if ($check_cache) {
+       $form = $this->getCache($input['form_build_id'], $form_state);
++
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'after_cache' => $form,
++      ]);
+     }
+
+     // If the previous bit of code didn't result in a populated $form object, we
+@@ -283,6 +298,10 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+       $form = $this->retrieveForm($form_id, $form_state);
+       $this->prepareForm($form_id, $form, $form_state);
+
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'after_prepare_form' => $form,
++      ]);
++
+       // self::setCache() removes uncacheable $form_state keys (see properties
+       // in \Drupal\Core\Form\FormState) in order for multi-step forms to work
+       // properly. This means that form processing logic for single-step forms
+@@ -303,11 +322,18 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+         $cache_form_state['temporary'] = $form_state->getTemporary();
+         $form_state = $form_state_before_retrieval;
+         $form_state->setFormState($cache_form_state);
++
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'cache_form_state' => $cache_form_state,
++        ]);
+       }
+     }
+
+     // If this form is an AJAX request, disable all form redirects.
+     if ($ajax_form_request = $request->query->has(static::AJAX_FORM_REQUEST)) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'is_ajax_form' => TRUE,
++      ]);
+       $form_state->disableRedirect();
+     }
+
+@@ -324,10 +350,17 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     // can use it to know or update information about the state of the form.
+     $response = $this->processForm($form_id, $form, $form_state);
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'response_after_process' => $response,
++    ]);
++
+     // In case the post request exceeds the configured allowed size
+     // (post_max_size), the post request is potentially broken. Add some
+     // protection against that and at the same time have a nice error message.
+     if ($ajax_form_request && !$request->request->has('form_id')) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'BrokenPostRequestException' => TRUE,
++      ]);
+       throw new BrokenPostRequestException($this->getFileUploadMaxSize());
+     }
+
+@@ -341,6 +374,9 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     // Only do this when the form ID matches, since there is no guarantee from
+     // $ajax_form_request that it's an AJAX request for this particular form.
+     if ($ajax_form_request && $form_state->isProcessingInput() && $request->request->get('form_id') == $form_id) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'FormAjaxException' => TRUE,
++      ]);
+       throw new FormAjaxException($form, $form_state);
+     }
+
+@@ -354,6 +390,9 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     //   completely separate form submission from rendering.
+     //   @see https://www.drupal.org/node/2367555
+     if ($response instanceof Response) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'EnforcedResponseException' => (string) $response,
++      ]);
+       throw new EnforcedResponseException($response);
+     }
+
+@@ -533,7 +572,16 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     // passed explicitly.
+     $args = array_merge([$form, &$form_state], $args);
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'form_pre_build' => $form,
++    ]);
++
+     $form = call_user_func_array($callback, $args);
++
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'form_after_build' => $form,
++    ]);
++
+     // If the form returns a response, skip subsequent page construction by
+     // throwing an exception.
+     // @see Drupal\Core\EventSubscriber\EnforcedFormResponseSubscriber
+@@ -543,6 +591,9 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     //   response.
+     //   @see https://www.drupal.org/node/2363189
+     if ($form instanceof Response) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'throw_redirect' => (string) $form,
++      ]);
+       throw new EnforcedResponseException($form);
+     }
+     $form['#form_id'] = $form_id;
+@@ -578,6 +629,10 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+     $unprocessed_form = $form;
+     $form = $this->doBuildForm($form_id, $form, $form_state);
+
++    \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++      'after_do_build' => $form,
++    ]);
++
+     // Only process the input if we have a correct form submission.
+     if ($form_state->isProcessingInput()) {
+       // Form values for programmed form submissions typically do not include a
+@@ -592,9 +647,18 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+       }
+       $this->formValidator->validateForm($form_id, $form, $form_state);
+
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'any_arrors_after_validate' => FormState::hasAnyErrors(),
++      ]);
++
+       // If there are no errors and the form is not rebuilding, submit the form.
+       if (!$form_state->isRebuilding() && !FormState::hasAnyErrors()) {
+         $submit_response = $this->formSubmitter->doSubmitForm($form, $form_state);
++
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'submit_response' => (string) $submit_response,
++        ]);
++
+         // If this form was cached, delete it from the cache after submission.
+         if ($form_state->isCached()) {
+           $this->deleteCache($form['#build_id']);
+@@ -607,6 +671,9 @@ class FormBuilder implements FormBuilderInterface, FormValidatorInterface, FormS
+
+       // Don't rebuild or cache form submissions invoked via self::submitForm().
+       if ($form_state->isProgrammed()) {
++        \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++          'is_programmed' => TRUE,
++        ]);
+         return;
+       }
+
+diff --git a/modules/dynamic_page_cache/src/EventSubscriber/DynamicPageCacheSubscriber.php b/modules/dynamic_page_cache/src/EventSubscriber/DynamicPageCacheSubscriber.php
+index 2f75ccfa..e9978fcb 100644
+--- a/modules/dynamic_page_cache/src/EventSubscriber/DynamicPageCacheSubscriber.php
++++ b/modules/dynamic_page_cache/src/EventSubscriber/DynamicPageCacheSubscriber.php
+@@ -130,12 +130,18 @@ class DynamicPageCacheSubscriber implements EventSubscriberInterface {
+     $request_policy_result = $this->requestPolicy->check($request);
+     $this->requestPolicyResults[$request] = $request_policy_result;
+     if ($request_policy_result === RequestPolicyInterface::DENY) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'no_page_cache' => TRUE,
++      ]);
+       return;
+     }
+
+     // Sets the response for the current route, if cached.
+     $cached = $this->renderCache->get($this->dynamicPageCacheRedirectRenderArray);
+     if ($cached) {
++      \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
++        'has_page_cache' => TRUE,
++      ]);
+       $response = $this->renderArrayToResponse($cached);
+       $response->headers->set(self::HEADER, 'HIT');
+       $event->setResponse($response);

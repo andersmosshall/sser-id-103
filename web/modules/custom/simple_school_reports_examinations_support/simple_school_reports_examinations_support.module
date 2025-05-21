@@ -1,0 +1,336 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Examinations Support module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_examinations_support_theme(): array {
+  return [
+    'ssr_assessment_group' => ['render element' => 'elements'],
+    'ssr_examination' => ['render element' => 'elements'],
+    'ssr_examination_result' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for assessment group templates.
+ *
+ * Default template: ssr-assessment-group.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the assessment group information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_assessment_group(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for examination templates.
+ *
+ * Default template: ssr-examination.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the examination information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_examination(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for examination result templates.
+ *
+ * Default template: ssr-examination-result.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the examination result information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_examination_result(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+function assessment_group_user_examination_result_state_options(): array {
+  $state_not_applicable = Settings::get('ssr_abstract_hash_1');
+  $state_not_completed = Settings::get('ssr_abstract_hash_2');
+  $state_completed = Settings::get('ssr_abstract_hash_3');
+  $state_failed = Settings::get('ssr_abstract_hash_4');
+  $state_passed = Settings::get('ssr_abstract_hash_5');
+  $state_passed_plus = Settings::get('ssr_abstract_hash_6');
+
+  if (
+    !$state_not_applicable ||
+    !$state_not_completed ||
+    !$state_completed ||
+    !$state_failed ||
+    !$state_passed ||
+    !$state_passed_plus
+  ) {
+    return [];
+  }
+
+  return [
+    $state_not_applicable => t('Skip for this student'),
+    $state_not_completed => t('Not completed'),
+    $state_failed => t('Insufficient knowledge'),
+    $state_passed => t('Acceptable knowledge'),
+    $state_passed_plus => t('More then acceptable knowledge'),
+//    $state_completed => t('Completed'),
+  ];
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_examinations_support_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'ssr_assessment_group') {
+    $operations['view'] = [
+      'title' => t('View'),
+      'url' => \Drupal\Core\Url::fromRoute('entity.ssr_assessment_group.canonical', ['ssr_assessment_group' => $entity->id()]),
+      'weight' => -99,
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_examinations_support_views_data_alter(array &$data) {
+  if (!empty($data['ssr_examination_field_data']['id'])) {
+    // Copy id data to grade_round_progress.
+    $data['ssr_examination_field_data']['examination_result_progress'] = $data['ssr_examination_field_data']['id'];
+    // Override title and override views field.
+    $data['ssr_examination_field_data']['examination_result_progress']['title'] = t('Examination results progress');
+    $data['ssr_examination_field_data']['examination_result_progress']['help'] = t('Show progress of examination results handling.');
+    $data['ssr_examination_field_data']['examination_result_progress']['field'] = [
+      'id' => 'examination_result_progress',
+    ];
+
+    // Copy id data to examination_result_for_student.
+    $data['ssr_examination_field_data']['examination_result_for_student_in_tab'] = $data['ssr_examination_field_data']['id'];
+    // Override title and override views field.
+    $data['ssr_examination_field_data']['examination_result_for_student_in_tab']['title'] = t('Examination result');
+    $data['ssr_examination_field_data']['examination_result_for_student_in_tab']['help'] =  t('Show examination result for student.');
+    $data['ssr_examination_field_data']['examination_result_for_student_in_tab']['field'] = [
+      'id' => 'examination_result_for_student_in_tab',
+    ];
+  }
+
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to examination_result_for_student.
+    $data['users_field_data']['examination_result_for_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['examination_result_for_student']['title'] = t('Examination result');
+    $data['users_field_data']['examination_result_for_student']['help'] =  t('Show examination result for student.');
+    $data['users_field_data']['examination_result_for_student']['field'] = [
+      'id' => 'examination_result_for_student',
+    ];
+
+    // Copy uid data to examination_result_published_for_student.
+    $data['users_field_data']['examination_result_published_for_student'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['examination_result_published_for_student']['title'] = t('Examination result published');
+    $data['users_field_data']['examination_result_published_for_student']['help'] =  t('Examination result published');
+    $data['users_field_data']['examination_result_published_for_student']['field'] = [
+      'id' => 'examination_result_published_for_student',
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_examinations_support_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'assessment_group_examinations_list') {
+    $view->element['#cache']['contexts'][] = 'route';
+    $view->element['#cache']['contexts'][] = 'user';
+    $assessment_group_id = \Drupal::routeMatch()->getRawParameter('ssr_assessment_group');
+    $view->element['#cache']['tags'][] = 'ssr_examination_result_list:ag:' . $assessment_group_id;
+  }
+
+  if ($view->id() === 'examination_results') {
+    $view->element['#cache']['contexts'][] = 'route';
+    $view->element['#cache']['contexts'][] = 'user';
+    $examination_id = \Drupal::routeMatch()->getRawParameter('ssr_examination');
+    $view->element['#cache']['tags'][] = 'ssr_examination_result_list:e:' . $examination_id;
+  }
+
+  if ($view->id() === 'student_examination_list') {
+    $user_id = \Drupal::routeMatch()->getRawParameter('user');
+    $view->element['#cache']['contexts'][] = 'route';
+    $view->element['#cache']['contexts'][] = 'user';
+    $view->element['#cache']['tags'][] = 'ssr_examination_list';
+    $view->element['#cache']['tags'][] = 'ssr_examination_result_list:u:' . $user_id;
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function simple_school_reports_examinations_support_views_pre_render(\Drupal\views\ViewExecutable $view) {
+  if (isset($view) && $view->id() === 'examination_results') {
+    $examination_id = \Drupal::routeMatch()->getRawParameter('ssr_examination');
+    $examination = $examination_id ? \Drupal::entityTypeManager()->getStorage('ssr_examination')->load($examination_id) : NULL;
+    if ($examination) {
+      $view->setTitle($view->getTitle() . ' - ' . $examination->label());
+    }
+  }
+}
+
+function ssr_views_permission_access_to_student_examination() {
+  $module_handler = \Drupal::moduleHandler();
+  if (!$module_handler->moduleExists('simple_school_reports_examinations_support')) {
+    return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+  $account = \Drupal::currentUser();
+
+  $student = \Drupal::routeMatch()->getParameter('user');
+  $access = \Drupal\Core\Access\AccessResult::neutral();
+
+  if ($student instanceof \Drupal\user\UserInterface && $student->hasRole('student')) {
+    $access = $student->access('update', $account, TRUE);
+  }
+
+  $access->cachePerPermissions();
+  $access->addCacheContexts(['route']);
+  return $access;
+
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_examinations_support_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'student_examination_list' && $view->current_display === 'list') {
+    $student_uid = \Drupal::routeMatch()->getRawParameter('user');
+
+    $examination_ids = [];
+    $examination_ids_by_state = [];
+    if ($student_uid) {
+      /** @var \Drupal\simple_school_reports_examinations_support\Service\ExaminationServiceInterface $examination_service */
+      $examination_service = \Drupal::service('simple_school_reports_examinations_support.examination_service');
+
+      foreach ($examination_service->getExaminationResultValuesForUser($student_uid, TRUE, TRUE) as $examination_id => $state) {
+        $examination_ids[] = $examination_id;
+        $examination_ids_by_state[$state][] = $examination_id;
+      }
+
+      $examination_ids = array_keys($examination_service->getExaminationResultValuesForUser($student_uid, TRUE, TRUE));
+    }
+
+    if (empty($examination_ids)) {
+      $examination_ids = [-1];
+    }
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (!empty($condition['field']) && $condition['field'] === 'ssr_examination_field_data.id' && $condition['value'] == '-1') {
+          $condition['operator'] = 'IN';
+          $condition['value'] = $examination_ids;
+        }
+
+        if (!empty($condition['field']) && $condition['field'] === 'ssr_examination_field_data.id' && $condition['value'] != '-1') {
+          $state_examination_ids = $examination_ids;
+
+          if (!empty($condition['value'] && is_numeric($condition['value']))) {
+            $key = (int) $condition['value'];
+            $options = array_keys(assessment_group_user_examination_result_state_options());
+            $state_value = $options[$key] ?? NULL;
+            if ($state_value) {
+              $state_examination_ids = $examination_ids_by_state[$state_value] ?? [];
+            }
+          }
+
+          if (empty($state_examination_ids)) {
+            $state_examination_ids = [-1];
+          }
+
+          $condition['operator'] = 'IN';
+          $condition['value'] = $state_examination_ids;
+        }
+      }
+    }
+  }
+}
+
+function clean_up_examinations() {
+  try {
+    /** @var \Drupal\Core\Database\Connection $connection */
+    $connection = \Drupal::service('database');
+
+    // Clean up examinations.
+    $examination_ids_to_remove = [];
+    $subquery = $connection->select('ssr_assessment_group', 'ag')
+      ->fields('ag', ['id'])
+      ->where('[ag].[id] = [e].[assessment_group]');
+    $results = $connection->select('ssr_examination_field_data', 'e')
+      ->notExists($subquery)
+      ->fields('e', ['id'])
+      ->range(0, 50)
+      ->execute();
+
+    foreach ($results as $result) {
+      $examination_ids_to_remove[$result->id] = $result->id;
+    }
+    $examination_ids_to_remove = array_values($examination_ids_to_remove);
+
+    if (!empty($examination_ids_to_remove)) {
+      $examination_storage = \Drupal::entityTypeManager()->getStorage('ssr_examination');
+      $examinations = $examination_storage->loadMultiple($examination_ids_to_remove);
+      $examination_storage->delete($examinations);
+    }
+
+    // Clean up examination results.
+    $examination_result_ids_to_remove = [];
+
+    $subquery = $connection->select('ssr_examination', 'e')
+      ->fields('e', ['id'])
+      ->where('[e].[id] = [er].[examination]');
+    $results = $connection->select('ssr_examination_result_field_data', 'er')
+      ->notExists($subquery)
+      ->fields('er', ['id'])
+      ->range(0, 50)
+      ->execute();
+
+    foreach ($results as $result) {
+      $examination_result_ids_to_remove[$result->id] = $result->id;
+    }
+
+    $examination_result_ids_to_remove = array_values($examination_result_ids_to_remove);
+
+    if (!empty($examination_result_ids_to_remove)) {
+      $examination_result_storage = \Drupal::entityTypeManager()
+        ->getStorage('ssr_examination_result');
+      $examination_results = $examination_result_storage->loadMultiple($examination_result_ids_to_remove);
+      $examination_result_storage->delete($examination_results);
+    }
+
+  }
+  catch (\Exception $e) {
+    // Ignore
+    return;
+  }
+}

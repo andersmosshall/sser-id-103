@@ -1,0 +1,21 @@
+uuid: 8cfa333b-ad39-4a12-98b0-25954b5fe386
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_grade_system
+field_name: field_grade_system
+entity_type: node
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: _simple_school_reports_extension_proxy_supported_grade_systems
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

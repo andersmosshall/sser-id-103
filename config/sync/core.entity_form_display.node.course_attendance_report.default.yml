@@ -1,0 +1,61 @@
+uuid: 0c234076-fea3-4f4a-810e-4e68a13e1176
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.course_attendance_report.field_calendar_event
+    - field.field.node.course_attendance_report.field_class_end
+    - field.field.node.course_attendance_report.field_class_start
+    - field.field.node.course_attendance_report.field_course
+    - field.field.node.course_attendance_report.field_course_sub_group
+    - field.field.node.course_attendance_report.field_duration
+    - field.field.node.course_attendance_report.field_student_course_attendance
+    - node.type.course_attendance_report
+id: node.course_attendance_report.default
+targetEntityType: node
+bundle: course_attendance_report
+mode: default
+content:
+  field_class_start:
+    type: datetime_timestamp
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_course:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_course_sub_group:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_duration:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_calendar_event: true
+  field_class_end: true
+  field_student_course_attendance: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

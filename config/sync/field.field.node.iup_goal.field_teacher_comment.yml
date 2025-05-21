@@ -1,0 +1,27 @@
+uuid: 3cb6ef28-2d9e-46cc-aa2f-0dc128ac5120
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_teacher_comment
+    - node.type.iup_goal
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: node.iup_goal.field_teacher_comment
+field_name: field_teacher_comment
+entity_type: node
+bundle: iup_goal
+label: Lärarkommentar
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

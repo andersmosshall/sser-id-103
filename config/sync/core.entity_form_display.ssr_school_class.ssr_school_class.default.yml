@@ -1,0 +1,56 @@
+uuid: aefb6225-6072-41a9-9bfc-43fff00881f3
+langcode: en
+status: true
+dependencies:
+  module:
+    - inline_entity_form
+    - simple_school_reports_class_support
+id: ssr_school_class.ssr_school_class.default
+targetEntityType: ssr_school_class
+bundle: ssr_school_class
+mode: default
+content:
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  school_week:
+    type: inline_entity_form_complex
+    weight: 3
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  student_suffix:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  nickname: true
+  uid: true

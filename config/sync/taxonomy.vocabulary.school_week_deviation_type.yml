@@ -1,0 +1,9 @@
+uuid: da0b7ef9-8071-4ce3-b718-87d7af7cf9ab
+langcode: en
+status: true
+dependencies: {  }
+name: 'School week deviation type'
+vid: school_week_deviation_type
+description: null
+weight: 0
+new_revision: false

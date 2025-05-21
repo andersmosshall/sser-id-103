@@ -1,0 +1,21 @@
+uuid: 0cc5e8ae-561e-42b7-98bf-7d09cfc6c1ca
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_module
+field_name: field_module
+entity_type: node
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_module_info_get_modules
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

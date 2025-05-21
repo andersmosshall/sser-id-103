@@ -1,0 +1,21 @@
+uuid: 817bfaa4-70ce-45be-9150-6c7c56ba4da1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vimeo
+    - node.type.help_page
+  module:
+    - vimeo_embed_field
+id: node.help_page.field_vimeo
+field_name: field_vimeo
+entity_type: node
+bundle: help_page
+label: Vimeo
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: vimeo

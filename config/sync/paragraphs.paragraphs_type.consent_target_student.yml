@@ -1,0 +1,10 @@
+uuid: f98acdd6-c567-493f-a51d-b8d977c6a545
+langcode: en
+status: true
+dependencies: {  }
+id: consent_target_student
+label: 'Target group: students'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

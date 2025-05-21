@@ -1,0 +1,25 @@
+uuid: 1630441e-ef56-4869-8838-5161381a0858
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_subject
+    - node.type.written_reviews_subject_state
+id: node.written_reviews_subject_state.field_school_subject
+field_name: field_school_subject
+entity_type: node
+bundle: written_reviews_subject_state
+label: Subject
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_school_subject
+      display_name: all_school_subjects
+      arguments: {  }
+field_type: entity_reference

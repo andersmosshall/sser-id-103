@@ -1,0 +1,9 @@
+uuid: eefc5782-559d-4eb4-a216-b393b76dc3cf
+langcode: en
+status: true
+dependencies: {  }
+name: 'GEG grade system'
+vid: geg_grade_system
+description: null
+weight: 0
+new_revision: false

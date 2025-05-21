@@ -1,0 +1,28 @@
+uuid: 1f626460-b1ee-4ab5-8f82-552583745059
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_block_parent
+    - taxonomy.vocabulary.school_subject
+id: taxonomy_term.school_subject.field_block_parent
+field_name: field_block_parent
+entity_type: taxonomy_term
+bundle: school_subject
+label: 'Block parent'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      school_subject: school_subject
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

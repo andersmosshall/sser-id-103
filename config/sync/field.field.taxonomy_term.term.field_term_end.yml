@@ -1,0 +1,21 @@
+uuid: 10ab7e76-d74e-491a-8ce1-49106d6bb629
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_end
+    - taxonomy.vocabulary.term
+id: taxonomy_term.term.field_term_end
+field_name: field_term_end
+entity_type: taxonomy_term
+bundle: term
+label: 'Term end'
+description: 'The end of the term, used to set default values for statistics filtering.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 1638731117
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

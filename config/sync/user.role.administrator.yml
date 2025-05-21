@@ -1,0 +1,181 @@
+uuid: 3dead36d-1f65-497c-acd5-b798f514891e
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+    - filter.format.wordsupported_format
+    - node.type.consent
+    - node.type.course
+    - node.type.course_attendance_report
+    - node.type.day_absence
+    - node.type.di_student_group
+    - node.type.grade_round
+    - node.type.grade_statistics
+    - node.type.grade_student_group
+    - node.type.grade_subject
+    - node.type.iup
+    - node.type.iup_goal
+    - node.type.iup_round
+    - node.type.list_template
+    - node.type.student_development_interview
+    - node.type.written_reviews
+    - node.type.written_reviews_round
+    - node.type.written_reviews_subject_state
+    - taxonomy.vocabulary.extra_adaptations
+    - taxonomy.vocabulary.iup_standard_goal
+    - taxonomy.vocabulary.iup_standard_phrase
+    - taxonomy.vocabulary.school_week_deviation_type
+    - taxonomy.vocabulary.special_diet
+    - taxonomy.vocabulary.term
+    - taxonomy.vocabulary.written_reviews_standard_phrase
+  module:
+    - create_user_permission
+    - file
+    - filter
+    - node
+    - simple_school_reports_class_support
+    - simple_school_reports_core
+    - simple_school_reports_dnp_support
+    - simple_school_reports_entities
+    - simple_school_reports_examinations_support
+    - simple_school_reports_maillog
+    - simple_school_reports_module_info
+    - simple_school_reports_schema_support
+    - taxonomy
+    - views_custom_permissions
+id: administrator
+label: Administratör
+weight: 5
+is_admin: null
+permissions:
+  - 'Views Custom Permissions'
+  - 'access user profiles'
+  - 'administer simple school reports settings'
+  - 'administer users'
+  - 'assign user roles'
+  - 'can login'
+  - 'create consent content'
+  - 'create course content'
+  - 'create course_attendance_report content'
+  - 'create day_absence content'
+  - 'create di_student_group content'
+  - 'create dnp_prov_settings'
+  - 'create dnp_prov_test_settings'
+  - 'create dnp_provisioning'
+  - 'create grade_round content'
+  - 'create grade_statistics content'
+  - 'create grade_student_group content'
+  - 'create grade_subject content'
+  - 'create iup_goal content'
+  - 'create iup_round content'
+  - 'create list_template content'
+  - 'create school week'
+  - 'create school_week_deviation'
+  - 'create ssr_assessment_group'
+  - 'create ssr_schema_entry'
+  - 'create ssr_school_class'
+  - 'create student_development_interview content'
+  - 'create terms in extra_adaptations'
+  - 'create terms in iup_standard_goal'
+  - 'create terms in iup_standard_phrase'
+  - 'create terms in school_week_deviation_type'
+  - 'create terms in special_diet'
+  - 'create terms in term'
+  - 'create terms in written_reviews_standard_phrase'
+  - 'create users'
+  - 'create written_reviews_round content'
+  - 'delete any consent content'
+  - 'delete any course content'
+  - 'delete any course_attendance_report content'
+  - 'delete any day_absence content'
+  - 'delete any di_student_group content'
+  - 'delete any grade_round content'
+  - 'delete any grade_statistics content'
+  - 'delete any grade_student_group content'
+  - 'delete any grade_subject content'
+  - 'delete any iup content'
+  - 'delete any iup_goal content'
+  - 'delete any iup_round content'
+  - 'delete any list_template content'
+  - 'delete any student di meeting'
+  - 'delete any student_development_interview content'
+  - 'delete any written_reviews content'
+  - 'delete any written_reviews_round content'
+  - 'delete dnp_prov_settings'
+  - 'delete dnp_prov_test_settings'
+  - 'delete dnp_provisioning'
+  - 'delete own course content'
+  - 'delete own course_attendance_report content'
+  - 'delete own day_absence content'
+  - 'delete own di_student_group content'
+  - 'delete own files'
+  - 'delete own grade_round content'
+  - 'delete own grade_statistics content'
+  - 'delete own grade_student_group content'
+  - 'delete own grade_subject content'
+  - 'delete own iup_round content'
+  - 'delete own student_development_interview content'
+  - 'delete school week'
+  - 'delete school_week_deviation'
+  - 'delete ssr_assessment_group'
+  - 'delete ssr_schema_entry'
+  - 'delete ssr_school_class'
+  - 'delete term revisions in extra_adaptations'
+  - 'delete terms in extra_adaptations'
+  - 'delete terms in iup_standard_goal'
+  - 'delete terms in iup_standard_phrase'
+  - 'delete terms in special_diet'
+  - 'delete terms in term'
+  - 'delete terms in written_reviews_standard_phrase'
+  - 'delete user entity'
+  - 'edit any consent content'
+  - 'edit any course content'
+  - 'edit any course_attendance_report content'
+  - 'edit any di_student_group content'
+  - 'edit any grade_round content'
+  - 'edit any grade_statistics content'
+  - 'edit any grade_student_group content'
+  - 'edit any grade_subject content'
+  - 'edit any iup_round content'
+  - 'edit any student_development_interview content'
+  - 'edit any written_reviews content'
+  - 'edit any written_reviews_round content'
+  - 'edit any written_reviews_subject_state content'
+  - 'edit dnp_prov_settings'
+  - 'edit dnp_prov_test_settings'
+  - 'edit own course content'
+  - 'edit own course_attendance_report content'
+  - 'edit own di_student_group content'
+  - 'edit own grade_round content'
+  - 'edit own grade_student_group content'
+  - 'edit own grade_subject content'
+  - 'edit own iup_round content'
+  - 'edit own student_development_interview content'
+  - 'edit school week'
+  - 'edit school_week_deviation'
+  - 'edit ssr_schema_entry'
+  - 'edit ssr_school_class'
+  - 'edit terms in extra_adaptations'
+  - 'edit terms in iup_standard_goal'
+  - 'edit terms in iup_standard_phrase'
+  - 'edit terms in special_diet'
+  - 'edit terms in term'
+  - 'edit terms in written_reviews_standard_phrase'
+  - 'mail caregivers'
+  - 'register absence'
+  - 'school staff permissions'
+  - 'send bug report'
+  - 'use text format full_html'
+  - 'use text format wordsupported_format'
+  - 'view dnp_prov_settings'
+  - 'view dnp_prov_test_settings'
+  - 'view dnp_provisioning'
+  - 'view maillog'
+  - 'view protected personal data'
+  - 'view school week'
+  - 'view ssr_assessment_group'
+  - 'view ssr_module_info price'
+  - 'view ssr_schema_entry'
+  - 'view ssr_student_leave_application'
+  - 'view user email addresses'

@@ -1,0 +1,22 @@
+uuid: 436eb60f-b1e0-4757-bcfb-9b3da0dcd33a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_adapted_studies
+  module:
+    - user
+id: user.user.field_adapted_studies
+field_name: field_adapted_studies
+entity_type: user
+bundle: user
+label: 'Adapted studies'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:school_week'
+  handler_settings: {  }
+field_type: entity_reference

@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_maillog_install() {
+  module_set_weight('simple_school_reports_maillog', 6);
+}
+
+/**
+ * Install new field.
+ */
+function simple_school_reports_maillog_update_10001() {
+  $recipient_email = \Drupal\Core\Field\BaseFieldDefinition::create('string')
+    ->setLabel(t('Recipient email'))
+    ->setSetting('max_length', 255)
+    ->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'string',
+    ])
+    ->setDisplayConfigurable('view', TRUE);
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('recipient_email', 'ssr_maillog', 'simple_school_reports_maillog', $recipient_email);
+}
+
+/**
+ * Populate new field.
+ */
+function simple_school_reports_maillog_update_10002() {
+  $maillog_items = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->loadByProperties(['status' => 1]);
+
+  foreach ($maillog_items as $item) {
+    if ($recipient_user = $item->get('recipient_user')->entity) {
+      /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+      $email_service = \Drupal::service('simple_school_reports_core.email_service');
+      if ($recipient_email = $email_service->getUserEmail($recipient_user)) {
+        $item->set('recipient_email', $recipient_email);
+        $item->save();
+      }
+    }
+  }
+}
+
+/**
+ * Install new fields.
+ */
+function simple_school_reports_maillog_update_10003() {
+  $fields = [];
+
+  $fields['send_status'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('Send status'))
+    ->setRequired(TRUE)
+    ->setDefaultValue('sent')
+    ->setSetting('allowed_values_function', 'simple_school_reports_maillog_send_status_options')
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['error_message'] = BaseFieldDefinition::create('text_long')
+    ->setLabel(t('Error message'))
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_maillog', 'simple_school_reports_maillog', $storage_definition);
+  }
+}
+
+/**
+ * Queue population of send_status field.
+ */
+function simple_school_reports_maillog_update_10004() {
+  $maillog_ids = \Drupal::entityTypeManager()->getStorage('ssr_maillog')->getQuery()->accessCheck(FALSE)->execute();
+  if (empty($maillog_ids)) {
+    return;
+  }
+  $queue = \Drupal::service('queue')->get('modify_entity_queue');
+  $queue->createQueue();
+  foreach ($maillog_ids as $id) {
+    $fields_to_modify = [
+      'send_status' => 'sent',
+    ];
+    $queue->createItem(['entity_type' => 'ssr_maillog', 'entity_id' => $id, 'fields' => $fields_to_modify]);
+  }
+}
+
+/**
+ * Install mail count entity type.
+ */
+function simple_school_reports_maillog_update_10005() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_mail_count')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_mail_count'));
+  }
+}

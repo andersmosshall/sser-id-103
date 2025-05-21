@@ -1,0 +1,21 @@
+uuid: e47493eb-b783-449b-a923-14db0166c2d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_invalid_absence_to
+    - node.type.grade_round
+id: node.grade_round.field_invalid_absence_to
+field_name: field_invalid_absence_to
+entity_type: node
+bundle: grade_round
+label: 'Invalid absence to'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1639574062
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

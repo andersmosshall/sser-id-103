@@ -1,0 +1,17 @@
+uuid: abfdb898-9e18-4f08-8f33-02fb6bc68fa9
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - simple_school_reports_core
+    - simple_school_reports_entities
+id: caregiver
+label: Vårdnadshavare
+weight: 3
+is_admin: null
+permissions:
+  - 'delete own files'
+  - 'send bug report'
+  - 'view school week'
+  - 'view ssr_student_leave_application'

@@ -1,0 +1,30 @@
+uuid: dd59ffb8-8781-42c9-a490-8f84810100ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.iup_student_tab
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: views_block__iup_student_tab_list
+theme: ssr_base
+region: content
+weight: -6
+provider: null
+plugin: 'views_block:iup_student_tab-list'
+settings:
+  id: 'views_block:iup_student_tab-list'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/iup-list'

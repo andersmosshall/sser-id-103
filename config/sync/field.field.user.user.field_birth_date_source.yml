@@ -1,0 +1,21 @@
+uuid: 184b8b8d-66a2-4815-a598-9fe7442d6f12
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_birth_date_source
+  module:
+    - options
+    - user
+id: user.user.field_birth_date_source
+field_name: field_birth_date_source
+entity_type: user
+bundle: user
+label: 'Enter birth date as'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

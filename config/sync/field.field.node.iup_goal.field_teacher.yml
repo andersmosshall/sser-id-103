@@ -1,0 +1,35 @@
+uuid: 9a663ae5-93ae-49cf-b993-74ac05e6021a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_teacher
+    - node.type.iup_goal
+id: node.iup_goal.field_teacher
+field_name: field_teacher
+entity_type: node
+bundle: iup_goal
+label: Teachers
+description: 'Leave empty for generic IUP goal'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: field_first_name
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        teacher: teacher
+        student: '0'
+        caregiver: '0'
+        administrator: '0'
+        principle: '0'
+    include_anonymous: false
+field_type: entity_reference

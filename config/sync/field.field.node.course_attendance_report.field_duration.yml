@@ -1,0 +1,23 @@
+uuid: 4fe474c8-7475-48e6-b262-c1fb637d7cb7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_duration
+    - node.type.course_attendance_report
+id: node.course_attendance_report.field_duration
+field_name: field_duration
+entity_type: node
+bundle: course_attendance_report
+label: 'Class duration'
+description: 'Class duration in minutes'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: 1440
+  prefix: ''
+  suffix: min
+field_type: integer

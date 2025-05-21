@@ -1,0 +1,5 @@
+label: 'Påminn elev'
+description: 'Påminnelse skickas samtidigt som påminnelser till vårdnadshavare.'
+settings:
+  on_label: Ja
+  off_label: Nej

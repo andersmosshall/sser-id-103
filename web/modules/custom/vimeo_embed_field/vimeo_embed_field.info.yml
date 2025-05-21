@@ -1,0 +1,9 @@
+name: Vimeo Embed Field
+type: module
+description: Defines a Vimeo embed video field type and display the vimeo video as embed.
+core_version_requirement: ^10 || ^11
+package: Field types
+dependencies:
+  - drupal:field
+  - drupal:image
+  - drupal:file

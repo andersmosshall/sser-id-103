@@ -1,0 +1,5 @@
+name: 'Simple School Reports Email Attachments'
+type: module
+description: 'Simple School Reports Email Attachments'
+package: 'Simple School Reports Mini'
+core_version_requirement: ^10 || ^11

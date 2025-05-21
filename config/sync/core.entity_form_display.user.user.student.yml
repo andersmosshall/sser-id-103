@@ -1,0 +1,253 @@
+uuid: 24c7537f-5ed4-4d8b-8709-e4aa1599ee46
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.user.caregiver_ief
+    - core.entity_form_mode.user.student
+    - field.field.user.user.field_adapted_studies
+    - field.field.user.user.field_address
+    - field.field.user.user.field_allow_login
+    - field.field.user.user.field_birth_date
+    - field.field.user.user.field_birth_date_source
+    - field.field.user.user.field_caregivers
+    - field.field.user.user.field_class
+    - field.field.user.user.field_dnp_username
+    - field.field.user.user.field_eduid_username
+    - field.field.user.user.field_extra_adaptations
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_gender
+    - field.field.user.user.field_grade
+    - field.field.user.user.field_invalid_absence
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_last_password_reset
+    - field.field.user.user.field_make_up_time_reminded
+    - field.field.user.user.field_mentor
+    - field.field.user.user.field_middle_name
+    - field.field.user.user.field_notes
+    - field.field.user.user.field_password_expiration
+    - field.field.user.user.field_pending_expire_sent
+    - field.field.user.user.field_protected_personal_data
+    - field.field.user.user.field_special_diet
+    - field.field.user.user.field_ssn
+    - field.field.user.user.field_telephone_number
+  module:
+    - field_group
+    - inline_entity_form
+    - paragraphs
+    - simple_school_reports_core
+    - telephone
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_special_diet:
+      children:
+        - field_special_diet
+      label: Specialkost
+      region: content
+      parent_name: ''
+      weight: 14
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: false
+id: user.user.student
+targetEntityType: user
+bundle: user
+mode: student
+content:
+  field_adapted_studies:
+    type: inline_entity_form_complex
+    weight: 15
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+  field_address:
+    type: paragraphs
+    weight: 11
+    region: content
+    settings:
+      title: Adress
+      title_plural: Adresser
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: all
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: address
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: '0'
+    third_party_settings: {  }
+  field_birth_date:
+    type: ssr_date_timestamp
+    weight: 8
+    region: content
+    settings:
+      end_of_day: false
+      placeholder: ''
+      noon: false
+    third_party_settings: {  }
+  field_birth_date_source:
+    type: options_buttons
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_caregivers:
+    type: inline_entity_form_complex
+    weight: 13
+    region: content
+    settings:
+      form_mode: caregiver_ief
+      override_labels: true
+      label_singular: Vårdnadshavare
+      label_plural: Vårdnadshavare
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: true
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {  }
+  field_class:
+    type: options_select
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_extra_adaptations:
+    type: paragraphs
+    weight: 17
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: preview
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: button
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: collapse_edit_all
+        convert: '0'
+        duplicate: '0'
+    third_party_settings: {  }
+  field_first_name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_gender:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_grade:
+    type: options_select
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_last_name:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_mentor:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_middle_name:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_notes:
+    type: text_textarea
+    weight: 16
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_protected_personal_data:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_special_diet:
+    type: entity_reference_autocomplete
+    weight: 12
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_ssn:
+    type: string_personal_number
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_telephone_number:
+    type: telephone_default
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  account: true
+  field_allow_login: true
+  field_dnp_username: true
+  field_eduid_username: true
+  field_invalid_absence: true
+  field_last_password_reset: true
+  field_make_up_time_reminded: true
+  field_password_expiration: true
+  field_pending_expire_sent: true
+  langcode: true
+  language: true
+  path: true

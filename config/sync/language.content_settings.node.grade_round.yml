@@ -1,0 +1,11 @@
+uuid: 35854f3f-0082-4e64-acdd-0bc799515304
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.grade_round
+id: node.grade_round
+target_entity_type_id: node
+target_bundle: grade_round
+default_langcode: site_default
+language_alterable: false

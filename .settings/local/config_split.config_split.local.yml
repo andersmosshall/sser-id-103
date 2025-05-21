@@ -1,0 +1,19 @@
+uuid: ab1867e8-10e9-4d51-aa6a-f3305b5cafcd
+langcode: en
+status: false
+dependencies: {  }
+id: local
+label: local
+description: ''
+weight: 0
+folder: ''
+module:
+  simple_school_reports_noprod: 10
+  # ENDOF OF SSR LOCAL MODULES
+  simple_school_reports_user_import_random: 10
+  simple_school_reports_scb_grade_export: 10
+theme: {  }
+blacklist: {  }
+graylist: {  }
+graylist_dependents: true
+graylist_skip_equal: false

@@ -1,0 +1,21 @@
+uuid: 81f99d9c-b23a-4671-b509-b4a91a79af5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_start
+    - taxonomy.vocabulary.term
+id: taxonomy_term.term.field_term_start
+field_name: field_term_start
+entity_type: taxonomy_term
+bundle: term
+label: 'Term start'
+description: 'The start of the term, used to set default values for statistics filtering.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 1638731104
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

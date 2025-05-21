@@ -1,0 +1,10 @@
+uuid: 1e4be8de-5eec-4aa2-9d8b-134352bf2007
+langcode: en
+status: true
+dependencies: {  }
+id: consent_target_role
+label: 'Target group: roles'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

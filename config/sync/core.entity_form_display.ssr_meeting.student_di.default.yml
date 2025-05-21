@@ -1,0 +1,73 @@
+uuid: ad3d9dfb-b2fd-4beb-b23b-216f914cc778
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_meeting.student_di.field_student
+    - field.field.ssr_meeting.student_di.field_teachers
+    - simple_school_reports_entities.ssr_meeting_type.student_di
+  module:
+    - simple_school_reports_core
+    - simple_school_reports_extension_proxy
+id: ssr_meeting.student_di.default
+targetEntityType: ssr_meeting
+bundle: student_di
+mode: default
+content:
+  attending:
+    type: ssr_di_attending_select_widget
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_student:
+    type: ssr_di_student_select_widget
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_teachers:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: ssr_date_time_timestamp
+    weight: 1
+    region: content
+    settings:
+      seconds_value: '0'
+    third_party_settings: {  }
+  location:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  meeting_link:
+    type: link_only_url
+    weight: 4
+    region: content
+    settings:
+      placeholder_url: ''
+    third_party_settings: {  }
+  to:
+    type: ssr_date_time_timestamp
+    weight: 2
+    region: content
+    settings:
+      seconds_value: '59'
+    third_party_settings: {  }
+hidden:
+  invited: true
+  label: true
+  langcode: true
+  meta: true
+  node_parent: true

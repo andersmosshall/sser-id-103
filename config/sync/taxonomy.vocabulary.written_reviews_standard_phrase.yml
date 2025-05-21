@@ -1,0 +1,9 @@
+uuid: 516d30f3-db7b-4c61-85ce-7e7dc2a88836
+langcode: en
+status: true
+dependencies: {  }
+name: 'Written reviews standard phrases'
+vid: written_reviews_standard_phrase
+description: null
+weight: 0
+new_revision: false

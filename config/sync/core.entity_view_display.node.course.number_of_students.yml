@@ -1,0 +1,32 @@
+uuid: 18b47dea-b1fb-4e3c-8413-98f6c4224cea
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.number_of_students
+    - field.field.node.course.field_class
+    - field.field.node.course.field_school_subject
+    - field.field.node.course.field_ssr_schema
+    - field.field.node.course.field_student
+    - field.field.node.course.field_teacher
+    - node.type.course
+  module:
+    - user
+id: node.course.number_of_students
+targetEntityType: node
+bundle: course
+mode: number_of_students
+content:
+  number_of_students:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_class: true
+  field_school_subject: true
+  field_ssr_schema: true
+  field_student: true
+  field_teacher: true
+  langcode: true
+  links: true

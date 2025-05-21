@@ -1,0 +1,47 @@
+entity.ssr_signing.settings:
+  path: 'admin/structure/ssr-signing'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SsrSigningSettingsForm'
+    _title: 'Signing'
+  requirements:
+    _permission: 'administer signing'
+
+entity.ssr_consent_answer.settings:
+  path: 'admin/structure/ssr-consent-answer'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SsrConsentAnswerSettingsForm'
+    _title: 'Consent answer'
+  requirements:
+    _permission: 'administer consent answer'
+
+entity.school_week.settings:
+  path: 'admin/structure/school-week'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SchoolWeekSettingsForm'
+    _title: 'School Week'
+  requirements:
+    _permission: 'administer school week'
+
+entity.school_week_deviation.settings:
+  path: 'admin/structure/school-week-deviation'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SchoolWeekDeviationSettingsForm'
+    _title: 'School week deviation'
+  requirements:
+    _permission: 'administer school_week_deviation'
+
+entity.ssr_student_leave_application.settings:
+  path: 'admin/structure/ssr-student-leave-application'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\StudentLeaveApplicationSettingsForm'
+    _title: 'Student leave application'
+  requirements:
+    _permission: 'administer ssr_student_leave_application'
+
+entity.ssr_lookup.settings:
+  path: 'admin/structure/ssr-lookup'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SSRLookupSettingsForm'
+    _title: 'SSR Lookup'
+  requirements:
+    _permission: 'administer ssr_lookup'

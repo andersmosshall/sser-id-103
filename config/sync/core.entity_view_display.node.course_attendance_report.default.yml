@@ -1,0 +1,70 @@
+uuid: 793da835-193a-460b-ba3d-e772dd3a57c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.course_attendance_report.field_calendar_event
+    - field.field.node.course_attendance_report.field_class_end
+    - field.field.node.course_attendance_report.field_class_start
+    - field.field.node.course_attendance_report.field_course
+    - field.field.node.course_attendance_report.field_course_sub_group
+    - field.field.node.course_attendance_report.field_duration
+    - field.field.node.course_attendance_report.field_student_course_attendance
+    - node.type.course_attendance_report
+  module:
+    - user
+id: node.course_attendance_report.default
+targetEntityType: node
+bundle: course_attendance_report
+mode: default
+content:
+  field_class_start:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_course_sub_group:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_duration:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_calendar_event: true
+  field_class_end: true
+  field_student_course_attendance: true
+  langcode: true
+  links: true

@@ -1,0 +1,29 @@
+uuid: fc178a0f-582b-4ac0-90a9-2459638a098a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_school_subject
+    - taxonomy.vocabulary.iup_standard_goal
+    - taxonomy.vocabulary.school_subject
+id: taxonomy_term.iup_standard_goal.field_school_subject
+field_name: field_school_subject
+entity_type: taxonomy_term
+bundle: iup_standard_goal
+label: Subject
+description: 'Leave empty for generic IUP goal'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      school_subject: school_subject
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,6 @@
+simple_school_reports_absence_matrix.absence_matrix:
+  title: 'Absence matrix'
+  route_name: view.absence_matrix.page
+  base_route: view.registered_absence.upcoming
+  weight: 30
+

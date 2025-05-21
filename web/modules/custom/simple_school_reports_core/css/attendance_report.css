@@ -1,0 +1,51 @@
+.attendance-report-form .report-wrapper .student-row:nth-child(even) {
+  background: #f3f4f9;
+  padding: 20px
+}
+
+.attendance-report-form .report-wrapper .student-row:nth-child(odd) {
+  padding: 20px
+}
+
+.attendance-report-form .report-wrapper .student-row--info-wrapper > *:not(:last-child) {
+  margin-right: 20px;
+}
+.attendance-report-form .report-wrapper .student-row--info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.attendance-report-form .report-wrapper .student-row--report-wrapper--attendance-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.attendance-report-form .report-wrapper .student-row--report-wrapper--attendance-info > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.attendance-report-form .report-wrapper .student-row--report-wrapper--attendance-info .form-boolean-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.attendance-report-form .report-wrapper .student-row--report-wrapper--attendance-info .form-boolean-group > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.attendance-report-form .report-wrapper .form-item {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.attendance-report-form .report-wrapper .form-type--number {
+  margin: 0 !important;
+}
+

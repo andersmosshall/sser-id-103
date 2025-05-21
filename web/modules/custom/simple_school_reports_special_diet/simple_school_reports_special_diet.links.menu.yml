@@ -1,0 +1,5 @@
+simple_school_reports_special_diet.special_diet_options:
+  title: 'Special diet options'
+  description: 'Administer options for special diets'
+  parent: simple_school_reports_core.config
+  route_name: view.special_diet_items.list

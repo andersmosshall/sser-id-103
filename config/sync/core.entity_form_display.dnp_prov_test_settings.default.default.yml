@@ -1,0 +1,70 @@
+uuid: 19783b2e-d190-4781-9fdc-d652f35c259f
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_school_reports_dnp_support.dnp_prov_test_settings_type.default
+  module:
+    - field_group
+third_party_settings:
+  field_group:
+    group_adjust_students:
+      children:
+        - students
+        - list_behavior
+      label: 'Anpassa elevlista'
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: 'Om inget annat anges används samtliga elever i berörd årskurs för detta provtillfälle. Du kan anpassa listan genom att ange elever att exkludera eller definera en specifik elevlista.'
+        required_fields: true
+id: dnp_prov_test_settings.default.default
+targetEntityType: dnp_prov_test_settings
+bundle: default
+mode: default
+content:
+  list_behavior:
+    type: options_buttons
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  students:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  teachers:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  test:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  langcode: true
+  status: true
+  uid: true

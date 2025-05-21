@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_module_info.module_info_service:
+    class: Drupal\simple_school_reports_module_info\Service\ModuleInfoService
+    arguments: ['@database', '@entity_type.manager', '@state', '@module_handler', '@event_dispatcher']

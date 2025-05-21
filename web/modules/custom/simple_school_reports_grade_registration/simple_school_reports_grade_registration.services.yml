@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_grade_registration.grade_round_progress_service:
+    class: Drupal\simple_school_reports_grade_registration\Service\GradeRoundProgressService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default' ]

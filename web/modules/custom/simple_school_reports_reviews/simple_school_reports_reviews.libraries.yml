@@ -1,0 +1,12 @@
+written_review_round:
+  version: VERSION
+  css:
+    theme:
+      css/written_review_round.css: { }
+
+review_registration:
+  version: VERSION
+  css:
+    theme:
+      css/review_registration.css: { }
+

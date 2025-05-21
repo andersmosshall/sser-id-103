@@ -1,0 +1,31 @@
+### Example of "sser_fetch_all" && "sser_update_all" bash helper.
+### NOTE there is also a sser_deploy_dev alias in the .bash_local file.
+
+alias sser_fetch_all="cd ~/Projects/sser &&
+  if [ ! -d \"sser-sites\" ]; then \
+    mkdir sser-sites; \
+    echo \"Created sser-sites folder\"; \
+  fi
+  cd sser-sites &&
+
+  ### Verify stage.
+  ### [PUT THE LOCAL SECTION FETCHERS HERE]
+
+  ### Go back to sser root.
+  cd ~/Projects/sser;
+"
+
+
+### Make sure everything is up to date and then update all sites.
+sser_update_all() {
+  sser_fetch_all
+  echo "Go to sser sites"
+  cd ~/Projects/sser/sser-sites || return
+
+  # Update stage
+  ### [PUT THE LOCAL SECTION UPDATERS HERE]
+
+  # Go back to sser root
+  cd ~/Projects/sser || return
+}
+

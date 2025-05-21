@@ -1,0 +1,71 @@
+uuid: 40cbbe66-ebcb-41bb-9172-ec1a9ae2f786
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_consent_target_groups
+    - node.type.consent
+    - paragraphs.paragraphs_type.consent_target_caregivers
+    - paragraphs.paragraphs_type.consent_target_role
+    - paragraphs.paragraphs_type.consent_target_student
+  module:
+    - entity_reference_revisions
+id: node.consent.field_consent_target_groups
+field_name: field_consent_target_groups
+entity_type: node
+bundle: consent
+label: 'Target groups'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      consent_target_caregivers: consent_target_caregivers
+      consent_target_role: consent_target_role
+      consent_target_student: consent_target_student
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 14
+        enabled: false
+      budget_row:
+        weight: 15
+        enabled: false
+      budget_row_label:
+        weight: 16
+        enabled: false
+      budget_sum:
+        weight: 17
+        enabled: false
+      consent_target_caregivers:
+        weight: 18
+        enabled: true
+      consent_target_role:
+        weight: 19
+        enabled: true
+      consent_target_student:
+        weight: 20
+        enabled: true
+      grade_registration:
+        weight: 21
+        enabled: false
+      grade_statistics_data_source:
+        weight: 22
+        enabled: false
+      list_template_field:
+        weight: 23
+        enabled: false
+      schema:
+        weight: 24
+        enabled: false
+      student_course_attendance:
+        weight: 25
+        enabled: false
+      written_review:
+        weight: 26
+        enabled: false
+field_type: entity_reference_revisions

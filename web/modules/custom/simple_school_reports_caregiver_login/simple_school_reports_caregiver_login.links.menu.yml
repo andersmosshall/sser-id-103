@@ -1,0 +1,6 @@
+simple_school_reports_caregiver_login.start_page_caregiver:
+  title: 'Start - caregiver'
+  description: 'Go to caregiver start page'
+  weight: 101
+  parent: simple_school_reports_core.start_page_resolver
+  route_name: simple_school_reports_caregiver_login.start_page_caregiver

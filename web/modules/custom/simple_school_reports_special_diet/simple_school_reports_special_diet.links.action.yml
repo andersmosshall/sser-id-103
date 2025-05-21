@@ -1,0 +1,13 @@
+simple_school_reports_special_diet.add_special_diet_item:
+  route_name: entity.taxonomy_term.add_form
+  title: 'Add special diet option'
+  route_parameters:
+    taxonomy_vocabulary: 'special_diet'
+  appears_on:
+    - view.special_diet_items.list
+
+simple_school_reports_special_diet.special_diet_options:
+  route_name:  view.special_diet_items.list
+  title: 'Special diet options'
+  appears_on:
+    - view.special_diet.special_diet

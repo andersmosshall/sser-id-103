@@ -1,0 +1,14 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_special_diet_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'taxonomy_term_special_diet_form') {
+    $form['status']['#access'] = FALSE;
+    $form['relations']['#access'] = FALSE;
+    $form['status']['widget']['value']['#default_value'] = TRUE;
+  }
+}

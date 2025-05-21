@@ -1,0 +1,30 @@
+uuid: 073a4952-82bb-44ca-95bc-dc99ebc2bbf4
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.assessment_group_examinations_list
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__assessment_group_examinations_list_list
+theme: ssr_base
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:assessment_group_examinations_list-list'
+settings:
+  id: 'views_block:assessment_group_examinations_list-list'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/assessment-group/*'

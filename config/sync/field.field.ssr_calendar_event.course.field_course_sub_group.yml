@@ -1,0 +1,21 @@
+uuid: 1a84b7c6-886c-4337-b8d9-35ff12ae1050
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_calendar_event.field_course_sub_group
+    - simple_school_reports_entities.ssr_calendar_event_type.course
+id: ssr_calendar_event.course.field_course_sub_group
+field_name: field_course_sub_group
+entity_type: ssr_calendar_event
+bundle: course
+label: 'Course sub group'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: default
+default_value_callback: ''
+settings: {  }
+field_type: string

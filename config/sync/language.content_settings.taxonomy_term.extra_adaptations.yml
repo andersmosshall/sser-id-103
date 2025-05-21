@@ -1,0 +1,11 @@
+uuid: ca27e615-ac7c-49f2-9646-86546bcef6e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.extra_adaptations
+id: taxonomy_term.extra_adaptations
+target_entity_type_id: taxonomy_term
+target_bundle: extra_adaptations
+default_langcode: site_default
+language_alterable: false

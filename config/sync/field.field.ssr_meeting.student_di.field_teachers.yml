@@ -1,0 +1,21 @@
+uuid: 28a6f44d-e327-4c74-8ba6-d6911750f3d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_meeting.field_teachers
+    - simple_school_reports_entities.ssr_meeting_type.student_di
+id: ssr_meeting.student_di.field_teachers
+field_name: field_teachers
+entity_type: ssr_meeting
+bundle: student_di
+label: Teacher
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings: {  }
+field_type: entity_reference

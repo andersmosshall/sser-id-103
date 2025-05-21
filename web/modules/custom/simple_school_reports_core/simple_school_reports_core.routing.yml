@@ -1,0 +1,305 @@
+simple_school_reports_core.multiple_adbsence_day:
+  path: '/student/register-absence/multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\RegisterMultipleAbsenceForm'
+    _title: 'Register absence'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_core.single_absence_day:
+  path: '/student/{user}/register-absence'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\RegisterSingleAbsenceForm'
+    _title: 'Register absence'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+
+simple_school_reports_core.single_absence_day_specific:
+  path: '/student/{user}/register-absence/{date}/{type}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\RegisterSingleSpecificAbsenceForm'
+    _title: 'Register absence'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+
+simple_school_reports_core.multiple_password_reset:
+  path: '/users/send-login-instructions'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MailMultipleResetPasswordForm'
+    _title: 'Send login instructions'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_core.start_page_resolver:
+  path: '/start/resolve'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\StartPageController::startPageResolver'
+    _title: 'Start'
+  requirements:
+    _access: 'TRUE'
+
+simple_school_reports_core.start_page_default:
+  path: '/start/default'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\StartPageController::defaultStartPage'
+    _title: 'Start'
+  requirements:
+    _permission: 'school staff permissions+budget review+administer budget'
+
+simple_school_reports_core.add_student:
+  path: '/students/add'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\EntityFormModeController::addStudentEntityForm'
+    _title: 'Add student'
+  requirements:
+    _permission: 'create users'
+
+simple_school_reports_core.reset_invalid_absence_counter:
+  path: '/student/reset-invalid-absence-counter'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\ResetInvalidAbsenceMultipleForm'
+    _title: 'Reset invalid absence'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_core.bulk_update_grade:
+  path: '/student/bulk-update-grade'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\BulkUpdateGradeForm'
+    _title: 'Bulk update grade'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_core.bulk_update_mentor:
+  path: '/student/bulk-update-mentor'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\BulkUpdateMentorForm'
+    _title: 'Bulk update mentor'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_core.admin:
+  path: '/admin/config-simple-school-reports'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Simple school reports config'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.add_language_school_subject:
+  path: '/admin/school-subjects/add-language-school-subject'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\AddLanguageSchoolSubjectForm'
+    _title: 'Add language school subject'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.activate_school_subject:
+  path: '/admin/school-subjects/{taxonomy_term}/activate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\ActivateSchoolSubjectForm'
+    _title: 'Activate school subject'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.deactivate_school_subject:
+  path: '/admin/school-subjects/{taxonomy_term}/deactivate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\DeactivateSchoolSubjectForm'
+    _title: 'Deactivate school subject'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.config_message_templates:
+  path: '/admin/message-templates-config'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MessageTemplatesConfigForm'
+    _title: 'Message templates config'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.config_start_page_content:
+  path: '/admin/start-page-content-config'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\StartPageContentConfigForm'
+    _title: 'Start page content config'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.config_file_templates:
+  path: '/admin/file-templates-config'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\FileTemplatesConfigForm'
+    _title: 'File templates config'
+  requirements:
+    _permission: 'administer modules'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.student_statistics:
+  path: '/user/{user}/statistics'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\RangeToUrlForm'
+    _title_callback: '\Drupal\simple_school_reports_core\Controller\UserPageController::getStudentAbsenceStatisticsTitle'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_core.latest_reports:
+  path: '/user/{user}/latest-reports'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\UserPageController::latestReports'
+    _title_callback: '\Drupal\simple_school_reports_core\Controller\UserPageController::getLatestReportsTitle'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_core.weekly_summary:
+  path: '/statistics/weekly-summary'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\WeekNumberToUrlRangeForm'
+    _title: 'Weekly summary'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_core.statistics:
+  path: '/statistics'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Statistics'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_core.multiple_mail_caregivers:
+  path: '/student/mail-caregivers/multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MailMultipleCaregiversForm'
+    _title: 'Mail caregivers'
+  requirements:
+    _permission: 'mail caregivers'
+
+simple_school_reports_core.mail_caregivers:
+  path: '/student/{user}/mail-caregivers'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MailCaregiversSingleForm'
+    _title: 'Mail caregivers'
+  requirements:
+    _permission: 'mail caregivers'
+
+simple_school_reports_core.user_send_mail_multiple:
+  path: '/mail-users'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MailMultipleUsersForm'
+    _title: 'Mail users'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_core.user_send_mail:
+  path: '/user/{user}/send-mail'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\MailSingleUserForm'
+    _title: 'Mail user'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_core.actions:
+  path: '/actions-list'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Actions'
+  requirements:
+    _permission: 'school staff permissions+budget review+administer budget'
+
+simple_school_reports_core.ssn_key_gen:
+  path: '/admin/ssn-key-generator'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\GenerateSsnKeyForm'
+    _title: 'Personal number key generator'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_core.file-generator:
+  path: '/file-generator/{id}'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\FileGenerator::generate'
+    _title: 'Generate file'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_core.ssr_import:
+  path: '/ssr-import'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\SSRImportForm'
+    _title: 'Import'
+  requirements:
+    _permission: 'administer modules'
+
+simple_school_reports_core.test_mail:
+  path: '/test-mail'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\TestMailForm'
+    _title: 'Test mail form'
+  requirements:
+    _permission: 'administer modules'
+
+simple_school_reports_core.test_signing:
+  path: '/test-signing'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\TestSigningForm'
+    _title: 'Test signing form'
+  requirements:
+    _permission: 'administer modules'
+
+simple_school_reports_core.export_multiple_users:
+  path: '/export-multiple-users'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\ExportMultipleUsersForm'
+    _title: 'Export users'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_core.sanity_check:
+  path: '/sanity-check'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core\Controller\SanityCheckController::sanityCheck'
+    _title: 'Sanity check'
+  requirements:
+    _permission: 'administer modules'
+
+simple_school_reports_core.panic_confirm:
+  path: '/panic'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\PanicForm'
+    _title: 'Panic!'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_core.invoice_support:
+  path: '/admin/invoice-support'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\InvoiceSupportForm'
+    _title: 'Invoice support'
+  requirements:
+    _permission: 'administer modules'

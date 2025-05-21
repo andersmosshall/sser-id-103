@@ -1,0 +1,26 @@
+uuid: 1e29a79f-b1b2-4459-86bd-497b29be1446
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_maillog.field_body
+  module:
+    - allowed_formats
+    - simple_school_reports_maillog
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: ssr_maillog.ssr_maillog.field_body
+field_name: field_body
+entity_type: ssr_maillog
+bundle: ssr_maillog
+label: Text
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

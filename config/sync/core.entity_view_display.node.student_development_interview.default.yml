@@ -1,0 +1,72 @@
+uuid: 910725fc-27cb-43d5-96b9-49087b356f14
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.student_development_interview.field_caregiver_reminder_setting
+    - field.field.node.student_development_interview.field_locked
+    - field.field.node.student_development_interview.field_locked_caregivers
+    - field.field.node.student_development_interview.field_remind_teacher
+    - field.field.node.student_development_interview.field_student_groups
+    - node.type.student_development_interview
+  module:
+    - user
+id: node.student_development_interview.default
+targetEntityType: node
+bundle: student_development_interview
+mode: default
+content:
+  field_caregiver_reminder_setting:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_locked:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_locked_caregivers:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_remind_teacher:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_student_groups:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true

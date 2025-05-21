@@ -1,0 +1,26 @@
+uuid: f436d5ce-ee4f-4d16-9b6f-ea81655f723f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_special_diet
+  module:
+    - user
+id: user.user.field_special_diet
+field_name: field_special_diet
+entity_type: user
+bundle: user
+label: 'Special diet'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: special_diet_items
+      display_name: reference
+      arguments: {  }
+field_type: entity_reference

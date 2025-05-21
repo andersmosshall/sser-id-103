@@ -1,0 +1,25 @@
+uuid: 314be401-cf3d-4b63-932a-1a14309817e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: studentgradeagestatistics
+theme: ssr_base
+region: content
+weight: -20
+provider: null
+plugin: grade_age_statistics
+settings:
+  id: grade_age_statistics
+  label: 'Student grade age statistics'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/*\r\n/students"

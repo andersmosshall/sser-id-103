@@ -1,0 +1,21 @@
+uuid: 49618cda-64f5-4810-aa6d-7763fbcfece4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_user_roles
+    - paragraphs.paragraphs_type.consent_target_role
+id: paragraph.consent_target_role.field_user_roles
+field_name: field_user_roles
+entity_type: paragraph
+bundle: consent_target_role
+label: Roles
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user_role'
+  handler_settings: {  }
+field_type: entity_reference

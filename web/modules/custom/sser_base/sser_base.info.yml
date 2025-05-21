@@ -1,0 +1,8 @@
+name: SSER Base
+type: module
+description: SSER Base module
+core_version_requirement: ^9 || ^10 || ^11
+package: 'Simple School Reports Base'
+version: 1.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core

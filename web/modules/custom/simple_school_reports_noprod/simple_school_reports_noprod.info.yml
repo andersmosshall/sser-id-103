@@ -1,0 +1,9 @@
+name: Simple School Reports Noprod
+type: module
+description: Simple School Reports Noprod
+core_version_requirement: ^10 || ^11
+package: 'Simple School Reports Noprod'
+version: 11.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy

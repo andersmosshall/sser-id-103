@@ -1,0 +1,5 @@
+# Update [URL_NAME]
+echo "Update [URL_NAME]"
+cd [URL_NAME] || return
+bash .scripts/update-from-base.sh
+cd ~/Projects/sser/sser-sites || return

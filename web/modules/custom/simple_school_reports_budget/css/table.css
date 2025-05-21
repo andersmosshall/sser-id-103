@@ -1,0 +1,37 @@
+.budget-table .result--green {
+  color: #2cc036bf;
+}
+
+.budget-table .result--red {
+  color: #d72222bf;
+}
+
+
+.budget-table td {
+  height: auto;
+}
+
+.budget-table td .input-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.budget-table td .input-wrapper .prefix-sign {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  min-width: 11px;
+}
+
+.budget-table .col--type--budget-sum {
+  padding-bottom: 16px;
+}
+
+.budget-table .col--type--budget-sum.col--name {
+  text-align: right;
+}
+
+
+.budget-table input {
+  max-width: 140px;
+}

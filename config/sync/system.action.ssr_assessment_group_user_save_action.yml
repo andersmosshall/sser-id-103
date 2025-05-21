@@ -1,0 +1,13 @@
+uuid: c43c620d-9014-4925-b0b9-146aa27bdfe7
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+_core:
+  default_config_hash: WnBnC98ZMuSXUJaHqHEx6LUrm2OuMZzvyxUs5Javxeo
+id: ssr_assessment_group_user_save_action
+label: 'Save assessment group users'
+type: ssr_assessment_group_user
+plugin: 'entity:save_action:ssr_assessment_group_user'
+configuration: {  }

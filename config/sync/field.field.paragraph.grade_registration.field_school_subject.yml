@@ -1,0 +1,21 @@
+uuid: d874f265-cc15-4d55-9c72-dbbf86e8def2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_school_subject
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_school_subject
+field_name: field_school_subject
+entity_type: paragraph
+bundle: grade_registration
+label: Subject
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings: {  }
+field_type: entity_reference

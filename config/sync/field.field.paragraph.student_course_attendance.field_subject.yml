@@ -1,0 +1,29 @@
+uuid: e489bad9-bb1b-4351-80f2-50ef4eb7e40f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_subject
+    - paragraphs.paragraphs_type.student_course_attendance
+    - taxonomy.vocabulary.school_subject
+id: paragraph.student_course_attendance.field_subject
+field_name: field_subject
+entity_type: paragraph
+bundle: student_course_attendance
+label: Subject
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      school_subject: school_subject
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,21 @@
+uuid: d8a8dc71-5dee-412c-9d30-f3a8ef0daa19
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.iup_goal
+  module:
+    - options
+id: node.iup_goal.field_state
+field_name: field_state
+entity_type: node
+bundle: iup_goal
+label: 'Comment given'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

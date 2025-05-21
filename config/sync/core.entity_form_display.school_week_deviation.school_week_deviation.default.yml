@@ -1,0 +1,84 @@
+uuid: 6ec82e8d-f00b-4ba1-99e0-cc1211baf0d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.school_week_deviation.school_week_deviation.field_classes
+  module:
+    - simple_school_reports_core
+    - simple_school_reports_entities
+    - time_field
+id: school_week_deviation.school_week_deviation.default
+targetEntityType: school_week_deviation
+bundle: school_week_deviation
+mode: default
+content:
+  deviation_type:
+    type: entity_reference_autocomplete_tags
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_classes:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  from:
+    type: time_widget
+    weight: 4
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_date:
+    type: ssr_date_timestamp
+    weight: 0
+    region: content
+    settings:
+      noon: '1'
+      end_of_day: 0
+      placeholder: ''
+    third_party_settings: {  }
+  grade:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  no_teaching:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  to:
+    type: time_widget
+    weight: 5
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_date:
+    type: ssr_date_timestamp
+    weight: 1
+    region: content
+    settings:
+      noon: '1'
+      end_of_day: 0
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  length: true
+  status: true
+  uid: true

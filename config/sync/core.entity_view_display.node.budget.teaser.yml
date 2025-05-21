@@ -1,0 +1,28 @@
+uuid: eab53435-3ce0-4ede-9e22-a78296a55652
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.budget.field_budget_row
+    - node.type.budget
+  module:
+    - user
+id: node.budget.teaser
+targetEntityType: node
+bundle: budget
+mode: teaser
+content:
+  budget_table:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_budget_row: true
+  langcode: true

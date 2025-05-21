@@ -1,0 +1,20 @@
+uuid: 4a9b94fa-9bd8-4961-9981-dcd311549992
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_signing.field_hidden_data
+  module:
+    - simple_school_reports_entities
+id: ssr_signing.ssr_signing.field_hidden_data
+field_name: field_hidden_data
+entity_type: ssr_signing
+bundle: ssr_signing
+label: 'Hidden data'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

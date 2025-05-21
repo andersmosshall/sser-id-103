@@ -1,0 +1,30 @@
+uuid: 7f608b80-973d-445c-9085-5ad9fe10785a
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_attendance_type
+field_name: field_attendance_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: attending
+      label: Attending
+    -
+      value: valid_absence
+      label: 'Valid absence'
+    -
+      value: invalid_absence
+      label: 'Invalid absence'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,25 @@
+simple_school_reports_entities.ssr_meeting_type.*:
+  type: config_entity
+  label: 'Meeting type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+
+simple_school_reports_entities.ssr_calendar_event_type.*:
+  type: config_entity
+  label: 'Calendar Event type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string

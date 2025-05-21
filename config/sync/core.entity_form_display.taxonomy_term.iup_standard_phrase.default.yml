@@ -1,0 +1,50 @@
+uuid: ebbc92f5-8150-4d20-95ed-90b972bdf5bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.iup_standard_phrase.field_iup_context
+    - field.field.taxonomy_term.iup_standard_phrase.field_long_phrase
+    - field.field.taxonomy_term.iup_standard_phrase.field_use_long_phrase
+    - taxonomy.vocabulary.iup_standard_phrase
+  module:
+    - text
+id: taxonomy_term.iup_standard_phrase.default
+targetEntityType: taxonomy_term
+bundle: iup_standard_phrase
+mode: default
+content:
+  field_iup_context:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_long_phrase:
+    type: text_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_use_long_phrase:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  path: true
+  status: true

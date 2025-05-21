@@ -1,0 +1,53 @@
+simple_school_reports_examinations.sort_out_examinations:
+  path: 'assessment-group/{ssr_assessment_group}/sort-out-examinations'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations\Form\ExaminationsSortOutForm'
+    _title: 'Sort out examinations'
+  requirements:
+    _entity_access: 'ssr_assessment_group.main_teacher_actions'
+  options:
+    parameters:
+      ssr_assessment_group:
+        type: 'entity:ssr_assessment_group'
+
+simple_school_reports_examinations.handle_examination_result:
+  path: 'assessment-group/{ssr_assessment_group}/examination/{ssr_examination}/results/handle/{user}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations\Form\SetExaminationResult'
+    _title: 'Handle examination result'
+  requirements:
+    _entity_access: 'ssr_assessment_group.handle_all_results'
+  options:
+    parameters:
+      ssr_assessment_group:
+        type: 'entity:ssr_assessment_group'
+      ssr_examination:
+        type: 'entity:ssr_examination'
+      user:
+        type: 'entity:user'
+
+simple_school_reports_examinations.course_to_assessment_group:
+  path: 'node/{node}/copy-to-assessment-group'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations\Form\CourseToAssessmentGroup'
+    _title: 'Copy to assessment group'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_examinations\Form\CourseToAssessmentGroup::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+
+
+simple_school_reports_examinations.examination_list_student_tab:
+  path: '/user/{user}/examinations'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_examinations\Controller\ExaminationsController::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_examinations\Controller\ExaminationsController::getStudentTabTitle'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

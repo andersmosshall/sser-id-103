@@ -1,0 +1,10 @@
+entity.ssr_schema_entry.edit_form:
+  route_name: entity.ssr_schema_entry.edit_form
+  group: ssr_schema_entry
+  title: 'Edit'
+
+entity.ssr_schema_entry.delete_form:
+  route_name: entity.ssr_schema_entry.delete_form
+  group: ssr_schema_entry
+  title: 'Delete'
+  weight: 10

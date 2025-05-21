@@ -1,0 +1,54 @@
+uuid: b41f4b4f-66c0-48d2-8dfb-0e651d7af9f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_signing.ssr_signing.field_hidden_data
+    - field.field.ssr_signing.ssr_signing.field_sign_template
+  module:
+    - simple_school_reports_entities
+id: ssr_signing.ssr_signing.default
+targetEntityType: ssr_signing
+bundle: ssr_signing
+mode: default
+content:
+  created:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i:s'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_sign_template:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  uid:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_hidden_data: true
+  label: true
+  sign_type: true
+  status: true

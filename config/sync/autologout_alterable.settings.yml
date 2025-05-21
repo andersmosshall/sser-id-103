@@ -1,0 +1,37 @@
+_core:
+  default_config_hash: LpICeDuM_1vhUnfPLtSjmfIS1bipxpFaiIyCgHqT3CU
+langcode: sv
+enabled: true
+session_timeout: 2700
+max_session_timeout: 172800
+ignore_user_activity: false
+use_individual_logout_threshold: false
+use_infinite_session_for_privileged: false
+role_logout: false
+role_logout_max: false
+include_destination: false
+client_activity_mousemove: true
+client_activity_touchmove: true
+client_activity_click: true
+client_activity_keydown: true
+client_activity_scroll: true
+show_dialog: true
+dialog_limit: 60
+dialog_width: 450
+countdown_format: '%hours%:%mins%:%secs%'
+dialog_title: 'Du håller på att loggas ut'
+dialog_message: 'Du håller på att loggas ut på grund av inaktivitet. Om du loggas ut kommer du förlora all osparad data. Behöver du mer tid?'
+dialog_stay_button: Ja
+dialog_logout_button: Nej
+dialog_title_not_extendible: 'Du håller på att loggas ut'
+dialog_message_not_extendible: 'Din inloggningstid håller på att löpa ut och kan inte förlängas. Spara all osparad data nu.'
+dialog_close_button_not_extendible: 'Stäng meddelande'
+dialog_logout_button_not_extendible: 'Logga ut nu'
+logged_out_dialog_title: 'Du har loggats ut'
+logged_out_dialog_message: 'Var god logga in igen eller följd länken nedan.'
+inactivity_message: 'Du har loggats ut på grund av inaktivitet.'
+inactivity_message_type: warning
+induced_logout_message: 'Du har loggats ut.'
+induced_logout_message_type: status
+use_watchdog: true
+whitelisted_ip_addresses: ''

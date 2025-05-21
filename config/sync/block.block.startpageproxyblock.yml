@@ -1,0 +1,25 @@
+uuid: 2efd2876-b234-40e2-bb03-bc3b0198c6fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: startpageproxyblock
+theme: ssr_base
+region: content
+weight: -16
+provider: null
+plugin: start_page_proxy_block
+settings:
+  id: start_page_proxy_block
+  label: 'Start page proxy block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/start\r\n/start/*"

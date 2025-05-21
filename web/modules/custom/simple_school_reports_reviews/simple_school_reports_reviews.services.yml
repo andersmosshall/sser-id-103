@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_reviews.written_reviews_round_progress_service:
+    class: Drupal\simple_school_reports_reviews\Service\WrittenReviewsRoundProgressService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default' ]

@@ -1,0 +1,11 @@
+uuid: e1c173cb-f3f7-4c39-bcc0-b03614ee03f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.help_page
+id: node.help_page
+target_entity_type_id: node
+target_bundle: help_page
+default_langcode: site_default
+language_alterable: false

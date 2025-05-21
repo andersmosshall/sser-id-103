@@ -1,0 +1,6 @@
+uuid: abc498bd-9f26-44d7-b614-af528fa51ffa
+langcode: en
+status: true
+dependencies: {  }
+id: course
+label: course

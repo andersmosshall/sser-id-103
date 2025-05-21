@@ -1,0 +1,5 @@
+name: 'Simple School Reports Demo'
+type: module
+description: 'Simple School Reports Demo'
+package: 'Simple School Reports Demo'
+core_version_requirement: ^10 || ^11

@@ -1,0 +1,9 @@
+name: Simple School Reports Extens Grade Export
+type: module
+description: Simple School Reports Extens Grade Export
+core_version_requirement: ^10 || ^11
+package: 'Simple School Reports Mini'
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+  - simple_school_reports_grade_registration:simple_school_reports_grade_registration

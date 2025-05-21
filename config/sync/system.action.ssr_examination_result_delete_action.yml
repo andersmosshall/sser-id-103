@@ -1,0 +1,13 @@
+uuid: 1ab20cac-bd3c-4f6c-9d46-f5d082aa5d6a
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+_core:
+  default_config_hash: LeXDsFVlO8S7B_ilrAP0pLeNevwN7C6b9-RG8k0-zOU
+id: ssr_examination_result_delete_action
+label: 'Delete examination results'
+type: ssr_examination_result
+plugin: 'entity:delete_action:ssr_examination_result'
+configuration: {  }

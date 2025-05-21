@@ -1,0 +1,19 @@
+uuid: 22fabe1f-4cab-41c2-b1ea-12a4e4cf5f4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_class_end
+    - node.type.course_attendance_report
+id: node.course_attendance_report.field_class_end
+field_name: field_class_end
+entity_type: node
+bundle: course_attendance_report
+label: 'Class end'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

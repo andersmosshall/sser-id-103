@@ -1,0 +1,22 @@
+uuid: d69d6a62-cb91-4969-b0d5-e826ac574f4c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_grade_subject
+label: 'Node Grade subject'
+type: 'canonical_entities:node'
+pattern: '/grade-subject/[node:nid]'
+selection_criteria:
+  aabf6c2b-b421-40a8-b93d-96a71a573c1d:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: aabf6c2b-b421-40a8-b93d-96a71a573c1d
+    context_mapping:
+      node: node
+    bundles:
+      grade_subject: grade_subject
+selection_logic: and
+weight: -5
+relationships: {  }

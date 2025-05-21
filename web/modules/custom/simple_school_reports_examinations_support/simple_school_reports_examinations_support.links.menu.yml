@@ -1,0 +1,47 @@
+entity.ssr_assessment_group.settings:
+  title: 'Assessment group'
+  description: 'Configure an AssessmentGroup entity type.'
+  route_name:  entity.ssr_assessment_group.settings
+  parent: system.admin_structure
+
+entity.ssr_assessment_group.collection:
+  title: 'Assessment groups'
+  description: 'List of assessment groups.'
+  route_name: entity.ssr_assessment_group.collection
+  parent: system.admin_content
+
+entity.ssr_assessment_group_user.settings:
+  title: 'Assessment group user'
+  description: 'Configure an AssessmentGroupUser entity type.'
+  route_name:  entity.ssr_assessment_group_user.settings
+  parent: system.admin_structure
+
+entity.ssr_assessment_group_user.collection:
+  title: 'Assessment group users'
+  description: 'List of assessment group users.'
+  route_name: entity.ssr_assessment_group_user.collection
+  parent: system.admin_content
+
+entity.ssr_examination.settings:
+  title: 'Examination'
+  description: 'Configure an Examination entity type.'
+  route_name:  entity.ssr_examination.settings
+  parent: system.admin_structure
+
+entity.ssr_examination.collection:
+  title: 'Examinations'
+  description: 'List of examinations.'
+  route_name: entity.ssr_examination.collection
+  parent: system.admin_content
+
+entity.ssr_examination_result.settings:
+  title: 'Examination result'
+  description: 'Configure an ExaminationResult entity type.'
+  route_name:  entity.ssr_examination_result.settings
+  parent: system.admin_structure
+
+entity.ssr_examination_result.collection:
+  title: 'Examination results'
+  description: 'List of examination results.'
+  route_name: entity.ssr_examination_result.collection
+  parent: system.admin_content

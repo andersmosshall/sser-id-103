@@ -1,0 +1,29 @@
+uuid: 2ba12aca-049d-49a4-8b01-e09b12239ca6
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.written_reviews_review_list
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: views_block__written_reviews_review_list_preview
+theme: ssr_base
+region: content
+weight: -5
+provider: null
+plugin: 'views_block:written_reviews_review_list-preview'
+settings:
+  id: 'views_block:written_reviews_review_list-preview'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/written-reviews-round/*/user/*'

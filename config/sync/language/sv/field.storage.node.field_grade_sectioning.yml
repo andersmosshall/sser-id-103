@@ -1,0 +1,6 @@
+settings:
+  allowed_values:
+    -
+      label: 'Visa alla betyg separat'
+    -
+      label: "Slå ihop alla godkända betyg som 'godkänt'"

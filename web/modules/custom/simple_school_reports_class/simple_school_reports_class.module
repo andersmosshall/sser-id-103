@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Simple School Reports Class module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_class_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $field_map = [
+    'node_course_form' => [
+      'class_field' => 'field_class',
+      'student_field' => 'field_student',
+    ],
+    'node_course_edit_form' => [
+      'class_field' => 'field_class',
+      'student_field' => 'field_student',
+    ],
+    'ssr_assessment_group_add_form' => [
+      'class_field' => 'school_class',
+      'student_field' => 'students'
+    ],
+    'ssr_assessment_group_edit_form' => [
+      'class_field' => 'school_class',
+      'student_field' => 'students'
+    ],
+  ];
+
+  if (isset($field_map[$form_id])) {
+    $class_field = $field_map[$form_id]['class_field'];
+    $student_field = $field_map[$form_id]['student_field'];
+    \Drupal\simple_school_reports_class\ClassInsteadOfStudentsFormAlter::applyStatesToForm($form, $form_state, $class_field, $student_field);
+  }
+}
+
+function simple_school_reports_class_sync_class(\Drupal\Core\Entity\EntityInterface $entity, array $class_ids, string $students_field) {
+  /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
+  $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
+  $students = [];
+
+  foreach ($class_ids as $class_id) {
+    $students = array_merge($students, $class_service->getStudentIdsByClassId($class_id));
+  }
+  $students_value = [];
+  foreach ($students as $student_uid) {
+    $students_value[$student_uid] = ['target_id' => $student_uid];
+  }
+  $entity->set($students_field, array_values($students_value));
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function simple_school_reports_class_entity_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'course') {
+    if ($class_id = $entity->get('field_class')->target_id) {
+      simple_school_reports_class_sync_class($entity, [$class_id], 'field_student');
+    }
+  }
+
+  if ($entity->getEntityTypeId() == 'ssr_assessment_group') {
+    if ($class_id = $entity->get('school_class')->target_id) {
+      simple_school_reports_class_sync_class($entity, [$class_id], 'students');
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_class_user_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+  $class_id = $entity->get('field_class')->target_id;
+  if ($class_id) {
+    /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
+    $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
+    $class_service->queueClassSync($class_id); $class_service->queueClassSync($class_id);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function simple_school_reports_class_user_update(\Drupal\Core\Entity\EntityInterface $entity) {
+  $new_class = $entity->get('field_class')->target_id;
+  $old_class = $entity->original->get('field_class')->target_id;
+
+  if ($new_class !== $old_class) {
+    /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
+    $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
+
+    if ($new_class) {
+      $class_service->queueClassSync($new_class);
+    }
+    if ($old_class) {
+      $class_service->queueClassSync($old_class);
+    }
+  }
+}
+
+

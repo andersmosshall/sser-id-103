@@ -1,0 +1,54 @@
+uuid: 116862e9-b01a-4ea9-ae34-3fdbdabce908
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.school_subject.field_block_parent
+    - field.field.taxonomy_term.school_subject.field_language_code
+    - field.field.taxonomy_term.school_subject.field_mandatory
+    - field.field.taxonomy_term.school_subject.field_subject_code
+    - field.field.taxonomy_term.school_subject.field_subject_specify
+    - taxonomy.vocabulary.school_subject
+  module:
+    - options
+id: taxonomy_term.school_subject.default
+targetEntityType: taxonomy_term
+bundle: school_subject
+mode: default
+content:
+  field_language_code:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_mandatory:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_subject_code:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_subject_specify:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  description: true
+  field_block_parent: true
+  langcode: true

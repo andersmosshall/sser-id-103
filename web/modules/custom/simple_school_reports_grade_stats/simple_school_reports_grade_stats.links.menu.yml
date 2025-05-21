@@ -1,0 +1,6 @@
+simple_school_reports_grade_stats.grade_statistics_list:
+  title: 'Grade statistics'
+  description: 'View or create grade statistics'
+  weight: 110
+  parent: simple_school_reports_core.statistics
+  route_name: view.grade_statistics.list

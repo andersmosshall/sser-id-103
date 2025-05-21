@@ -1,0 +1,23 @@
+uuid: 90c7036f-6b1e-443b-aa49-97fe688136f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_merit
+    - taxonomy.vocabulary.geg_grade_system
+id: taxonomy_term.geg_grade_system.field_merit
+field_name: field_merit
+entity_type: taxonomy_term
+bundle: geg_grade_system
+label: Merit
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,27 @@
+uuid: a0fb985c-5eba-40e4-9700-8eb4da21568d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hdwdi_caregiver
+    - node.type.iup
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: node.iup.field_hdwdi_caregiver
+field_name: field_hdwdi_caregiver
+entity_type: node
+bundle: iup
+label: 'Vårdnadshavare kan...'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

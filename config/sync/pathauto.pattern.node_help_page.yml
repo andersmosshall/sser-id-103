@@ -1,0 +1,22 @@
+uuid: 019c34b1-34cd-49c8-85c4-37728288f6b1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_help_page
+label: 'Node Help page'
+type: 'canonical_entities:node'
+pattern: '/help/[node:title]'
+selection_criteria:
+  90a74684-25f3-42bc-8e07-53a1f63dcf81:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 90a74684-25f3-42bc-8e07-53a1f63dcf81
+    context_mapping:
+      node: node
+    bundles:
+      help_page: help_page
+selection_logic: and
+weight: -5
+relationships: {  }

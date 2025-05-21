@@ -1,0 +1,18 @@
+uuid: 3b7a8400-22d9-4a9e-8d17-648dc0714ebe
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.plain_text_ck
+  module:
+    - ckeditor5
+format: plain_text_ck
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - undo
+      - redo
+  plugins: {  }
+image_upload:
+  status: false

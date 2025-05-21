@@ -1,0 +1,29 @@
+uuid: 66a2f924-8d10-4da2-b4c7-00322bc901e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.di_student_group.field_iup_round
+    - field.field.node.di_student_group.field_remind_student
+    - field.field.node.di_student_group.field_student
+    - field.field.node.di_student_group.field_written_reviews_round
+    - node.type.di_student_group
+  module:
+    - user
+id: node.di_student_group.teaser
+targetEntityType: node
+bundle: di_student_group
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_iup_round: true
+  field_remind_student: true
+  field_student: true
+  field_written_reviews_round: true
+  langcode: true

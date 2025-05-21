@@ -1,0 +1,12 @@
+dialog_title: 'Du håller på att loggas ut'
+dialog_message: 'Du håller på att loggas ut på grund av inaktivitet. Om du loggas ut kommer du förlora all osparad data. Behöver du mer tid?'
+dialog_stay_button: Ja
+dialog_logout_button: Nej
+dialog_title_not_extendible: 'Du håller på att loggas ut'
+dialog_message_not_extendible: 'Din inloggningstid håller på att löpa ut och kan inte förlängas. Spara all osparad data nu.'
+dialog_close_button_not_extendible: 'Stäng meddelande'
+dialog_logout_button_not_extendible: 'Logga ut nu'
+logged_out_dialog_title: 'Du har loggats ut'
+logged_out_dialog_message: 'Var god logga in igen eller följd länken nedan.'
+inactivity_message: 'Du har loggats ut på grund av inaktivitet.'
+induced_logout_message: 'Du har loggats ut.'

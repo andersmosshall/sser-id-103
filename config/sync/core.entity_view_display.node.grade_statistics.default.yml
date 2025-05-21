@@ -1,0 +1,37 @@
+uuid: d610c4af-344b-43ef-90ec-d8493712eef5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.grade_statistics.field_compare_label
+    - field.field.node.grade_statistics.field_data_source
+    - field.field.node.grade_statistics.field_gender_options
+    - field.field.node.grade_statistics.field_grade_sectioning
+    - field.field.node.grade_statistics.field_merge
+    - field.field.node.grade_statistics.field_primary_label
+    - field.field.node.grade_statistics.field_school_subjects
+    - field.field.node.grade_statistics.field_statistics_presentation
+    - node.type.grade_statistics
+  module:
+    - user
+id: node.grade_statistics.default
+targetEntityType: node
+bundle: grade_statistics
+mode: default
+content:
+  present:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_compare_label: true
+  field_data_source: true
+  field_gender_options: true
+  field_grade_sectioning: true
+  field_merge: true
+  field_primary_label: true
+  field_school_subjects: true
+  field_statistics_presentation: true
+  langcode: true
+  links: true

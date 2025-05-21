@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_entities.school_week_service:
+    class: Drupal\simple_school_reports_entities\Service\SchoolWeekService
+    arguments: [ '@database', '@entity_type.manager', '@cache.default', '@state', '@?simple_school_reports_core.user_meta_data', '@module_handler']

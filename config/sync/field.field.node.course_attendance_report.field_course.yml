@@ -1,0 +1,29 @@
+uuid: 98b4bc80-f4e0-4960-b1e9-79cf2fd68d70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course
+    - node.type.course
+    - node.type.course_attendance_report
+id: node.course_attendance_report.field_course
+field_name: field_course
+entity_type: node
+bundle: course_attendance_report
+label: Course
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      course: course
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

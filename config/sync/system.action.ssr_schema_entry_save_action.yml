@@ -1,0 +1,13 @@
+uuid: c504325f-63a8-47fb-bb20-3c2729310be5
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+_core:
+  default_config_hash: MWkavhbpqS-dT5Fj09cn5Z7_0yoMMWiOCJwzjo9DYeE
+id: ssr_schema_entry_save_action
+label: 'Save ssr schema entries'
+type: ssr_schema_entry
+plugin: 'entity:save_action:ssr_schema_entry'
+configuration: {  }

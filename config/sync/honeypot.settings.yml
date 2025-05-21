@@ -1,0 +1,31 @@
+_core:
+  default_config_hash: 9bVDfWSa_In6VzTXmy04jJ_3ZQobihKjO9isuuUCPaw
+protect_all_forms: false
+unprotected_forms:
+  - search_form
+  - search_block_form
+  - views_exposed_form
+  - honeypot_settings_form
+log: false
+element_name: url
+time_limit: 3
+expire: 120
+form_settings:
+  user_login_form: true
+  user_register_form: true
+  user_pass: true
+  node_budget_form: false
+  node_course_form: false
+  node_course_attendance_report_form: false
+  node_day_absence_form: false
+  node_grade_round_form: false
+  node_grade_statistics_form: false
+  node_grade_student_group_form: false
+  node_grade_subject_form: false
+  node_iup_form: false
+  node_iup_goal_form: false
+  node_iup_round_form: false
+  node_list_template_form: false
+  node_written_reviews_form: false
+  node_written_reviews_round_form: false
+  node_written_reviews_subject_state_form: false

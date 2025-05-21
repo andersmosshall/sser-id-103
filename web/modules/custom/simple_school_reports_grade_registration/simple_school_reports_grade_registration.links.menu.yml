@@ -1,0 +1,5 @@
+simple_school_reports_grade_registration.grade_round_list:
+  title: 'Grade registration'
+  description: 'Register grades or create new grade registration rounds'
+  parent: simple_school_reports_core.actions
+  route_name: view.grade_registration_rounds.active

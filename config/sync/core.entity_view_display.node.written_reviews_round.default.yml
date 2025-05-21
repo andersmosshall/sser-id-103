@@ -1,0 +1,65 @@
+uuid: 7e8e96d2-51c1-4989-8076-45b3568db5b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.written_reviews_round.field_document_date
+    - field.field.node.written_reviews_round.field_locked
+    - field.field.node.written_reviews_round.field_term_type
+    - field.field.node.written_reviews_round.field_written_reviews_subject
+    - node.type.written_reviews_round
+  module:
+    - options
+    - user
+id: node.written_reviews_round.default
+targetEntityType: node
+bundle: written_reviews_round
+mode: default
+content:
+  field_document_date:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_locked:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_term_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_written_reviews_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  langcode: true
+  links: true

@@ -1,0 +1,21 @@
+uuid: ba67a5bd-ca09-4ca8-81b2-94d2ee5c5db7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.consent_target_caregivers.field_students
+    - paragraphs.paragraphs_type.consent_target_caregivers
+id: paragraph.consent_target_caregivers.default
+targetEntityType: paragraph
+bundle: consent_target_caregivers
+mode: default
+content:
+  field_students:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

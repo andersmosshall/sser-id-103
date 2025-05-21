@@ -1,0 +1,110 @@
+<?php
+
+use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_ssr_start_page_route().
+ */
+function simple_school_reports_caregiver_login_ssr_start_page_route(\Drupal\Core\Session\AccountInterface $account) {
+  if ($account->hasPermission('super user permissions') || simple_school_reports_caregiver_login_ssr_login_access($account)->isAllowed()) {
+    return 'simple_school_reports_caregiver_login.start_page_caregiver';
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_ssr_login_access().
+ */
+function simple_school_reports_caregiver_login_ssr_login_access(\Drupal\Core\Session\AccountInterface $user) {
+  if (in_array('caregiver', $user->getRoles())) {
+    if ($user instanceof \Drupal\user\UserInterface && $user->get('field_allow_login')->value != 1) {
+      return \Drupal\Core\Access\AccessResult::neutral();
+    }
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+    if (!empty($user_meta_data->getCaregiverStudents($user->id()))) {
+      return \Drupal\Core\Access\AccessResult::allowed();
+    }
+  }
+  return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+/**
+ * Implements hook_default_start_page_content_alter().
+ */
+function simple_school_reports_caregiver_login_default_start_page_content_alter(array &$default_content) {
+  $school_name = \Drupal\Core\Site\Settings::get('ssr_school_name', '');
+  $default_content['caregiver'] = [
+    'value' => '<h2>Hej [AF]!</h2><p>Välkommen till Simple School Reports för ' .  $school_name . '.</p><p>Här kan du som vårdnadshavare se information om ditt barn och anmäla frånvaro.</p>',
+    'format' => 'full_html',
+  ];
+}
+
+/**
+ * Implements hook_default_start_page_content_config_form_alter().
+ */
+function simple_school_reports_caregiver_login_default_start_page_content_config_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, array $contents) {
+  $category_name_map = [
+    'caregiver' => t('Caregiver start page'),
+  ];
+
+  /** @var ReplaceTokenServiceInterface $replace_service */
+  $replace_service = \Drupal::service('simple_school_reports_core.replace_token_service');
+
+  $description = '';
+  $replace_tokens = $replace_service->getReplaceTokenDescriptions([
+    ReplaceTokenServiceInterface::CURRENT_USER_REPLACE_TOKENS,
+  ], TRUE);
+
+  if (!empty($replace_tokens)) {
+    $description_lines = ['<b>' . t('Replacement patterns') . ':</b>'];
+    foreach ($replace_tokens as $token => $description) {
+      $description_lines[] = $token . ' = ' . $description;
+    }
+    $description = implode('<br>', $description_lines);
+  }
+
+  foreach ($contents as $type => $content) {
+    if (empty($category_name_map[$type])) {
+      continue;
+    }
+    $form[$type . '_wrapper'] = [
+      '#type' => 'details',
+      '#title' => $category_name_map[$type],
+      '#open' => TRUE,
+    ];
+
+    $form[$type . '_wrapper'][$type] = [
+      '#type' => 'text_format',
+      '#title' => t('Start page content'),
+      '#format' => $content['format'] ?? 'full_html',
+      '#allowed_formats' => ['full_html'],
+      '#default_value' => $content['value'] ?? NULL,
+      '#required' => TRUE,
+      '#description' => $description,
+    ];
+  }
+
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_caregiver_login_views_query_alter(ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'cargiver_students') {
+
+    $current_user = \Drupal::currentUser();
+
+    if (in_array('caregiver', $current_user->getRoles())) {
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as &$condition) {
+          if (!empty($condition['field']) && $condition['field'] === 'user__field_caregivers.field_caregivers_target_id') {
+            $condition['value'] = $current_user->id();
+          }
+        }
+      }
+    }
+  }
+}
+

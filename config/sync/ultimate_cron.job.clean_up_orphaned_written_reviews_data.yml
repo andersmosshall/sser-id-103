@@ -1,0 +1,28 @@
+uuid: 564164b8-628f-4ba4-b761-0d1cd03555cc
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Clean up orphaned written reviews data'
+id: clean_up_orphaned_written_reviews_data
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: clean_up_orphaned_written_reviews_data
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */3 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

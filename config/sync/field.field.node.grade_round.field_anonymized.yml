@@ -1,0 +1,21 @@
+uuid: 5ad6545d-1c0d-4ba2-95c3-88b033642c3c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_anonymized
+    - node.type.grade_round
+id: node.grade_round.field_anonymized
+field_name: field_anonymized
+entity_type: node
+bundle: grade_round
+label: Anonymized
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

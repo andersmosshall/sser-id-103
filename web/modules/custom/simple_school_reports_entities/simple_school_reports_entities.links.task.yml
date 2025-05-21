@@ -1,0 +1,191 @@
+entity.ssr_signing.settings:
+  title: 'Settings'
+  route_name: entity.ssr_signing.settings
+  base_route: entity.ssr_signing.settings
+entity.ssr_signing.view:
+  title: 'View'
+  route_name: entity.ssr_signing.canonical
+  base_route: entity.ssr_signing.canonical
+entity.ssr_signing.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_signing.edit_form
+  base_route: entity.ssr_signing.canonical
+entity.ssr_signing.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_signing.delete_form
+  base_route: entity.ssr_signing.canonical
+  weight: 10
+entity.ssr_signing.collection:
+  title: 'Signings'
+  route_name: entity.ssr_signing.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_consent_answer.settings:
+  title: 'Settings'
+  route_name: entity.ssr_consent_answer.settings
+  base_route: entity.ssr_consent_answer.settings
+entity.ssr_consent_answer.view:
+  title: 'View'
+  route_name: entity.ssr_consent_answer.canonical
+  base_route: entity.ssr_consent_answer.canonical
+entity.ssr_consent_answer.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_consent_answer.edit_form
+  base_route: entity.ssr_consent_answer.canonical
+entity.ssr_consent_answer.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_consent_answer.delete_form
+  base_route: entity.ssr_consent_answer.canonical
+  weight: 10
+entity.ssr_consent_answer.collection:
+  title: 'Consent answers'
+  route_name: entity.ssr_consent_answer.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_meeting.view:
+  title: 'View'
+  route_name: entity.ssr_meeting.canonical
+  base_route: entity.ssr_meeting.canonical
+entity.ssr_meeting.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_meeting.edit_form
+  base_route: entity.ssr_meeting.canonical
+entity.ssr_meeting.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_meeting.delete_form
+  base_route: entity.ssr_meeting.canonical
+  weight: 10
+entity.ssr_meeting.collection:
+  title: 'Meetings'
+  route_name: entity.ssr_meeting.collection
+  base_route: system.admin_content
+  weight: 10
+entity.ssr_meeting_type.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_meeting_type.edit_form
+  base_route: entity.ssr_meeting_type.edit_form
+entity.ssr_meeting_type.collection:
+  title: 'List'
+  route_name: entity.ssr_meeting_type.collection
+  base_route: entity.ssr_meeting_type.collection
+
+entity.school_week.settings:
+  title: 'Settings'
+  route_name: entity.school_week.settings
+  base_route: entity.school_week.settings
+entity.school_week.view:
+  title: 'View'
+  route_name: entity.school_week.canonical
+  base_route: entity.school_week.canonical
+entity.school_week.edit_form:
+  title: 'Edit'
+  route_name: entity.school_week.edit_form
+  base_route: entity.school_week.canonical
+entity.school_week.delete_form:
+  title: 'Delete'
+  route_name: entity.school_week.delete_form
+  base_route: entity.school_week.canonical
+  weight: 10
+entity.school_week.collection:
+  title: 'School Weeks'
+  route_name: entity.school_week.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.school_week_deviation.settings:
+  title: 'Settings'
+  route_name: entity.school_week_deviation.settings
+  base_route: entity.school_week_deviation.settings
+entity.school_week_deviation.view:
+  title: 'View'
+  route_name: entity.school_week_deviation.canonical
+  base_route: entity.school_week_deviation.canonical
+entity.school_week_deviation.edit_form:
+  title: 'Edit'
+  route_name: entity.school_week_deviation.edit_form
+  base_route: entity.school_week_deviation.canonical
+entity.school_week_deviation.delete_form:
+  title: 'Delete'
+  route_name: entity.school_week_deviation.delete_form
+  base_route: entity.school_week_deviation.canonical
+  weight: 10
+entity.school_week_deviation.collection:
+  title: 'School week deviations'
+  route_name: entity.school_week_deviation.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_student_leave_application.settings:
+  title: 'Settings'
+  route_name: entity.ssr_student_leave_application.settings
+  base_route: entity.ssr_student_leave_application.settings
+entity.ssr_student_leave_application.view:
+  title: 'View'
+  route_name: entity.ssr_student_leave_application.canonical
+  base_route: entity.ssr_student_leave_application.canonical
+entity.ssr_student_leave_application.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_student_leave_application.edit_form
+  base_route: entity.ssr_student_leave_application.canonical
+entity.ssr_student_leave_application.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_student_leave_application.delete_form
+  base_route: entity.ssr_student_leave_application.canonical
+  weight: 10
+entity.ssr_student_leave_application.collection:
+  title: 'Student leave applications'
+  route_name: entity.ssr_student_leave_application.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_calendar_event.view:
+  title: 'View'
+  route_name: entity.ssr_calendar_event.canonical
+  base_route: entity.ssr_calendar_event.canonical
+entity.ssr_calendar_event.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_calendar_event.edit_form
+  base_route: entity.ssr_calendar_event.canonical
+entity.ssr_calendar_event.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_calendar_event.delete_form
+  base_route: entity.ssr_calendar_event.canonical
+  weight: 10
+entity.ssr_calendar_event.collection:
+  title: 'Calendar Events'
+  route_name: entity.ssr_calendar_event.collection
+  base_route: system.admin_content
+  weight: 10
+entity.ssr_calendar_event_type.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_calendar_event_type.edit_form
+  base_route: entity.ssr_calendar_event_type.edit_form
+entity.ssr_calendar_event_type.collection:
+  title: 'List'
+  route_name: entity.ssr_calendar_event_type.collection
+  base_route: entity.ssr_calendar_event_type.collection
+
+entity.ssr_lookup.settings:
+  title: 'Settings'
+  route_name: entity.ssr_lookup.settings
+  base_route: entity.ssr_lookup.settings
+entity.ssr_lookup.view:
+  title: 'View'
+  route_name: entity.ssr_lookup.canonical
+  base_route: entity.ssr_lookup.canonical
+entity.ssr_lookup.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_lookup.edit_form
+  base_route: entity.ssr_lookup.canonical
+entity.ssr_lookup.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_lookup.delete_form
+  base_route: entity.ssr_lookup.canonical
+  weight: 10
+entity.ssr_lookup.collection:
+  title: 'SSR Lookups'
+  route_name: entity.ssr_lookup.collection
+  base_route: system.admin_content
+  weight: 10

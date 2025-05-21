@@ -1,0 +1,14 @@
+uuid: e86a07c6-94de-471c-a589-3da2fe99d097
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - simple_school_reports_entities
+id: student
+label: Elev
+weight: 2
+is_admin: null
+permissions:
+  - 'delete own files'
+  - 'view ssr_student_leave_application'

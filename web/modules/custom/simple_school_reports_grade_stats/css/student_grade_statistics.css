@@ -1,0 +1,23 @@
+.student-grade-statistics .visible-columns-select .fieldset__wrapper {
+  display: flex;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.student-grade-statistics .visible-columns-select .fieldset__wrapper .form-type--checkbox {
+  margin-top: 0;
+  margin-bottom: 16px;
+  margin-right: 16px;
+}
+
+.student-grade-statistics .visible-columns-select .fieldset__wrapper .form-type--checkbox .form-item__label option {
+  white-space: nowrap;
+}
+
+.student-grade-statistics .generate-grade-document-fieldset {
+  margin-top: 68px;
+}
+
+.student-grade-statistics .generate-grade-doc-wrapper {
+  margin-bottom: 24px;
+}

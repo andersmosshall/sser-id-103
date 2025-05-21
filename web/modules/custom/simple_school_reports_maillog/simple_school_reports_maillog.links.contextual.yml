@@ -1,0 +1,21 @@
+entity.ssr_maillog.edit_form:
+  route_name: entity.ssr_maillog.edit_form
+  group: ssr_maillog
+  title: Edit
+
+entity.ssr_maillog.delete_form:
+  route_name: entity.ssr_maillog.delete_form
+  group: ssr_maillog
+  title: Delete
+  weight: 10
+
+entity.ssr_mail_count.edit_form:
+  route_name: entity.ssr_mail_count.edit_form
+  group: ssr_mail_count
+  title: 'Edit'
+
+entity.ssr_mail_count.delete_form:
+  route_name: entity.ssr_mail_count.delete_form
+  group: ssr_mail_count
+  title: 'Delete'
+  weight: 10

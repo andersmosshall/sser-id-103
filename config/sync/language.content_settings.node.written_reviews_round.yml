@@ -1,0 +1,11 @@
+uuid: b17c378a-fc51-4b08-a104-3baa784b1c0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.written_reviews_round
+id: node.written_reviews_round
+target_entity_type_id: node
+target_bundle: written_reviews_round
+default_langcode: site_default
+language_alterable: false

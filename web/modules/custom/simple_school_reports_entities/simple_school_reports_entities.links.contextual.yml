@@ -1,0 +1,87 @@
+entity.ssr_signing.edit_form:
+  route_name: entity.ssr_signing.edit_form
+  group: ssr_signing
+  title: Edit
+
+entity.ssr_signing.delete_form:
+  route_name: entity.ssr_signing.delete_form
+  group: ssr_signing
+  title: Delete
+  weight: 10
+
+entity.ssr_consent_answer.edit_form:
+  route_name: entity.ssr_consent_answer.edit_form
+  group: ssr_consent_answer
+  title: Edit
+
+entity.ssr_consent_answer.delete_form:
+  route_name: entity.ssr_consent_answer.delete_form
+  group: ssr_consent_answer
+  title: Delete
+  weight: 10
+
+entity.ssr_meeting.edit_form:
+  route_name: entity.ssr_meeting.edit_form
+  group: ssr_meeting
+  title: Edit
+
+entity.ssr_meeting.delete_form:
+  route_name: entity.ssr_meeting.delete_form
+  group: ssr_meeting
+  title: Delete
+  weight: 10
+
+entity.school_week.edit_form:
+  route_name: entity.school_week.edit_form
+  group: school_week
+  title: Edit
+
+entity.school_week.delete_form:
+  route_name: entity.school_week.delete_form
+  group: school_week
+  title: Delete
+  weight: 10
+
+entity.school_week_deviation.edit_form:
+  route_name: entity.school_week_deviation.edit_form
+  group: school_week_deviation
+  title: 'Edit'
+
+entity.school_week_deviation.delete_form:
+  route_name: entity.school_week_deviation.delete_form
+  group: school_week_deviation
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_student_leave_application.edit_form:
+  route_name: entity.ssr_student_leave_application.edit_form
+  group: ssr_student_leave_application
+  title: 'Edit'
+
+entity.ssr_student_leave_application.delete_form:
+  route_name: entity.ssr_student_leave_application.delete_form
+  group: ssr_student_leave_application
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_calendar_event.edit_form:
+  route_name: entity.ssr_calendar_event.edit_form
+  group: ssr_calendar_event
+  title: 'Edit'
+
+entity.ssr_calendar_event.delete_form:
+  route_name: entity.ssr_calendar_event.delete_form
+  group: ssr_calendar_event
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_lookup.edit_form:
+  route_name: entity.ssr_lookup.edit_form
+  group: ssr_lookup
+  title: 'Edit'
+
+entity.ssr_lookup.delete_form:
+  route_name: entity.ssr_lookup.delete_form
+  group: ssr_lookup
+  title: 'Delete'
+  weight: 10

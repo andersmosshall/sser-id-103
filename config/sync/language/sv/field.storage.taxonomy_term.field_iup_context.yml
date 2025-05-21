@@ -1,0 +1,12 @@
+settings:
+  allowed_values:
+    -
+      label: 'Hur gick det?'
+    -
+      label: 'Var är vi?'
+    -
+      label: 'Hur gör vi? - Skolan ska...'
+    -
+      label: 'Hur gör vi? - Eleven kan...'
+    -
+      label: 'Hur gör vi? - Vårdnadshavare kan...'

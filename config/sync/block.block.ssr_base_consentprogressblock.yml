@@ -1,0 +1,28 @@
+uuid: 356a574d-d5ae-40d8-aace-1063a4f5b188
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - simple_school_reports_extension_proxy
+  theme:
+    - ssr_base
+id: ssr_base_consentprogressblock
+theme: ssr_base
+region: highlighted
+weight: -19
+provider: null
+plugin: consent_progres_block
+settings:
+  id: consent_progres_block
+  label: 'Consent progress block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      consent: consent

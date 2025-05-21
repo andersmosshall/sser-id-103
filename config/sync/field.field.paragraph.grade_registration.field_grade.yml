@@ -1,0 +1,31 @@
+uuid: 8d2a0dd3-e250-4629-a536-94bfaeeac42a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_grade
+    - paragraphs.paragraphs_type.grade_registration
+    - taxonomy.vocabulary.af_grade_system
+    - taxonomy.vocabulary.geg_grade_system
+id: paragraph.grade_registration.field_grade
+field_name: field_grade
+entity_type: paragraph
+bundle: grade_registration
+label: Grade
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      af_grade_system: af_grade_system
+      geg_grade_system: geg_grade_system
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: af_grade_system
+field_type: entity_reference

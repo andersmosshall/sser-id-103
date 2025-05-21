@@ -1,0 +1,50 @@
+simple_school_reports_dnp_provisioning.classes_tab:
+  base_route: entity.dnp_provisioning.canonical
+  weight: 100
+  route_name: simple_school_reports_dnp_provisioning.table_tab
+  route_parameters:
+    sheet: 'classes'
+  title: 'Classes'
+
+simple_school_reports_dnp_provisioning.subject_groups_tab:
+  base_route: entity.dnp_provisioning.canonical
+  weight: 200
+  route_name: simple_school_reports_dnp_provisioning.table_tab
+  route_parameters:
+    sheet: 'subjects'
+  title: 'Subject groups'
+
+simple_school_reports_dnp_provisioning.students_tab:
+  base_route: entity.dnp_provisioning.canonical
+  weight: 300
+  route_name: simple_school_reports_dnp_provisioning.table_tab
+  route_parameters:
+    sheet: 'students'
+  title: 'Students'
+
+simple_school_reports_dnp_provisioning.staff_tab:
+  base_route: entity.dnp_provisioning.canonical
+  weight: 400
+  route_name: simple_school_reports_dnp_provisioning.table_tab
+  route_parameters:
+    sheet: 'staff'
+  title: 'Staff'
+
+simple_school_reports_dnp_provisioning.federated_usernames_students:
+  base_route: view.dnp_federation_usernames.student_dnp_usernames
+  weight: 100
+  route_name: view.dnp_federation_usernames.student_dnp_usernames
+  title: 'Federated usernames - Students'
+
+simple_school_reports_dnp_provisioning.federated_usernames_staff:
+  base_route: view.dnp_federation_usernames.student_dnp_usernames
+  weight: 200
+  route_name: view.dnp_federation_usernames.staff_dnp_usernames
+  title: 'Federated usernames - Staff'
+
+simple_school_reports_dnp_provisioning.federated_eduid_staff:
+  base_route: view.dnp_federation_usernames.student_dnp_usernames
+  weight: 300
+  route_name: view.dnp_federation_usernames.staff_eduid_usernames
+  title: 'EduID usernames - Staff'
+

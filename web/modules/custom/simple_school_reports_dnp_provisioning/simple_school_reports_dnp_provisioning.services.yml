@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_dnp_provisioning.dnp_provisioning_service:
+    class: Drupal\simple_school_reports_dnp_provisioning\Service\DnpProvisioningService
+    arguments: [ '@entity_type.manager' ]

@@ -1,0 +1,25 @@
+uuid: ebcfa2d2-f7a3-4998-afa9-27c890d76ae7
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: graderoundprogressblock
+theme: ssr_base
+region: highlighted
+weight: -18
+provider: null
+plugin: grade_round_progress_block
+settings:
+  id: grade_round_progress_block
+  label: 'Grade round progress block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/grade-registration/*/subjects'

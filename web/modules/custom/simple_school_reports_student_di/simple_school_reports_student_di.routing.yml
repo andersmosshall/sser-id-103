@@ -1,0 +1,57 @@
+student_di.meeting_series_create:
+  path: 'student-development-interview/{node}/meetings/create'
+  defaults:
+    _form: '\Drupal\simple_school_reports_student_di\Form\StudentDiSeriesForm'
+    _title: 'Create meetings'
+  requirements:
+    _permission: 'school staff permissions'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+simple_school_reports_student_di.di_user_tab:
+  path: 'user/{user}/development-interview'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_student_di\Controller\StudentDIController::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_student_di\Controller\StudentDIController::getStudentTabTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_student_di\Controller\StudentDIController::accessStudentDITab'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+simple_school_reports_student_di.meeting_book:
+  path: 'meeting/{meeting}/book/{user}'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_student_di\Controller\StudentDIController::meetingBook'
+    _title: 'Book meeting'
+  requirements:
+    _entity_access: 'user.update'
+    meeting: \d+
+    user: \d+
+  options:
+    parameters:
+      meeting:
+        type: entity:ssr_meeting
+      user:
+        type: entity:user
+
+simple_school_reports_student_di.meeting_unbook:
+  path: 'meeting/{meeting}/unbook/{user}'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_student_di\Controller\StudentDIController::meetingUnbook'
+    _title: 'Change meeting'
+  requirements:
+    _entity_access: 'user.update'
+    meeting: \d+
+    user: \d+
+  options:
+    parameters:
+      meeting:
+        type: entity:ssr_meeting
+      user:
+        type: entity:user

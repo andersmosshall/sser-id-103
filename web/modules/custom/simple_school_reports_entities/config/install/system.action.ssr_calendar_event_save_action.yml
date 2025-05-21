@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: ssr_calendar_event_save_action
+label: 'Save calendar events'
+type: ssr_calendar_event
+plugin: entity:save_action:ssr_calendar_event
+configuration: {  }

@@ -1,0 +1,5 @@
+name: 'Simple School Reports Maillog Mini'
+type: module
+description: 'Simple School Reports Maillog Mini'
+package: 'Simple School Reports Mini'
+core_version_requirement: ^10 || ^11

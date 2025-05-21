@@ -1,0 +1,20 @@
+uuid: 4673e534-a96a-4637-b0f0-938cf532d0d2
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_class_support
+    - simple_school_reports_entities
+id: school_week_deviation.field_classes
+field_name: field_classes
+entity_type: school_week_deviation
+type: entity_reference
+settings:
+  target_type: ssr_school_class
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

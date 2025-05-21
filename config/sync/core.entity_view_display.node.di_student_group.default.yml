@@ -1,0 +1,54 @@
+uuid: 3e56b2fb-e7d5-4189-a9ec-df9c97c58980
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.di_student_group.field_iup_round
+    - field.field.node.di_student_group.field_remind_student
+    - field.field.node.di_student_group.field_student
+    - field.field.node.di_student_group.field_written_reviews_round
+    - node.type.di_student_group
+  module:
+    - user
+id: node.di_student_group.default
+targetEntityType: node
+bundle: di_student_group
+mode: default
+content:
+  field_iup_round:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_remind_student:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_written_reviews_round:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  links: true

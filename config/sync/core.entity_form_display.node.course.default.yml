@@ -1,0 +1,86 @@
+uuid: 9c4493aa-1a3b-41eb-8388-ed4cc6bb8cc0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.course.field_class
+    - field.field.node.course.field_school_subject
+    - field.field.node.course.field_ssr_schema
+    - field.field.node.course.field_student
+    - field.field.node.course.field_teacher
+    - node.type.course
+  module:
+    - inline_entity_form
+id: node.course.default
+targetEntityType: node
+bundle: course
+mode: default
+content:
+  field_class:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_school_subject:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_ssr_schema:
+    type: inline_entity_form_complex
+    weight: 5
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Lektion
+      label_plural: Lektioner
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+  field_student:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_teacher:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

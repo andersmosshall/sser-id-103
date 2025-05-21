@@ -1,0 +1,27 @@
+uuid: 3349aef2-6e6d-4d5e-b90e-0103bf4995aa
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - node
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+id: node.field_hdig
+field_name: field_hdig
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

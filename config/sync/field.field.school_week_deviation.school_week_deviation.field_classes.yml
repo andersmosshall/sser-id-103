@@ -1,0 +1,26 @@
+uuid: 16a23b10-8455-434b-a5c1-e20401f021bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.school_week_deviation.field_classes
+  module:
+    - simple_school_reports_entities
+id: school_week_deviation.school_week_deviation.field_classes
+field_name: field_classes
+entity_type: school_week_deviation
+bundle: school_week_deviation
+label: Classes
+description: 'The classes that this school week deviation applies to.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: class_reference
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

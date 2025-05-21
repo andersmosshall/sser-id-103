@@ -1,0 +1,17 @@
+uuid: 593127a1-29d3-477a-bb6f-c5a811d2ce43
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Written reviews round'
+type: written_reviews_round
+description: null
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

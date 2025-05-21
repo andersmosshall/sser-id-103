@@ -1,0 +1,25 @@
+uuid: 25305153-1bc6-4566-94b6-86676fece18d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_grade_stats_compare_source
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.field_grade_stats_compare_source
+field_name: field_grade_stats_compare_source
+entity_type: paragraph
+bundle: grade_statistics_data_source
+label: 'Compare data source'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: grade_student_groups
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

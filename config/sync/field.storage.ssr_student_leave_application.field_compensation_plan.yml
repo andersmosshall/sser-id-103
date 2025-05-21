@@ -1,0 +1,27 @@
+uuid: 28a167ed-ea01-4ec5-a1b1-33da37f0ee42
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - simple_school_reports_entities
+    - text
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+      processed: processed
+      format: '0'
+id: ssr_student_leave_application.field_compensation_plan
+field_name: field_compensation_plan
+entity_type: ssr_student_leave_application
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

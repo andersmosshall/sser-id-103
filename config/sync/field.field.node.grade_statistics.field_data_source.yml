@@ -1,0 +1,58 @@
+uuid: 73820c4d-c2fb-4096-98ab-5aea657c78dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_data_source
+    - node.type.grade_statistics
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+  module:
+    - entity_reference_revisions
+id: node.grade_statistics.field_data_source
+field_name: field_data_source
+entity_type: node
+bundle: grade_statistics
+label: 'Data sources'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      grade_statistics_data_source: grade_statistics_data_source
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 8
+        enabled: false
+      budget_row:
+        weight: 12
+        enabled: false
+      budget_row_label:
+        weight: 13
+        enabled: false
+      budget_sum:
+        weight: 14
+        enabled: false
+      grade_registration:
+        weight: 9
+        enabled: false
+      grade_statistics_data_source:
+        weight: 7
+        enabled: true
+      list_template_field:
+        weight: 17
+        enabled: false
+      schema:
+        weight: 10
+        enabled: false
+      student_course_attendance:
+        weight: 11
+        enabled: false
+      written_review:
+        weight: 12
+        enabled: false
+field_type: entity_reference_revisions

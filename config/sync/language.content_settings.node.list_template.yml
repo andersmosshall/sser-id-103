@@ -1,0 +1,11 @@
+uuid: 24d24cb8-4981-415d-a791-db0635c2eebd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.list_template
+id: node.list_template
+target_entity_type_id: node
+target_bundle: list_template
+default_langcode: site_default
+language_alterable: false

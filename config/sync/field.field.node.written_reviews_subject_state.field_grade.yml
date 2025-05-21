@@ -1,0 +1,21 @@
+uuid: d13befda-c1e7-42e5-a5d6-bf6e22ef0aca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade
+    - node.type.written_reviews_subject_state
+  module:
+    - options
+id: node.written_reviews_subject_state.field_grade
+field_name: field_grade
+entity_type: node
+bundle: written_reviews_subject_state
+label: Grade
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

@@ -1,0 +1,25 @@
+uuid: 286ebeb9-eb25-4cad-9e31-a66698c89425
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_class
+    - node.type.course
+id: node.course.field_class
+field_name: field_class
+entity_type: node
+bundle: course
+label: Class
+description: 'All students from selected class will be assigned to this course. Leave blank to select an explicit student list below.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: class_reference
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

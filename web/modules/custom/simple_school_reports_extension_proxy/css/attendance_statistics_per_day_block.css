@@ -1,0 +1,55 @@
+.attendance-statistics-per-day-block table td {
+  vertical-align: top;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats {
+  font-size: 0.75rem;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 75%;
+  text-wrap: nowrap;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--ok {
+  background: #2cc036bf;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--warning {
+  background: #f9ab35;
+}
+
+.attendance-statistics-per-day-block .attendance-day-stats.attendance-day-stats--danger {
+  background: #d72222bf
+}
+
+.attendance-statistics-per-day-block table {
+  table-layout: fixed;
+}
+
+.attendance-statistics-per-day-block .attendance-day-lessons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.attendance-statistics-per-day-block .attendance-day-lesson-wrapper {
+  position: relative;
+  width: 45px;
+  height: 45px;
+}
+
+.attendance-statistics-per-day-block .attendance-day-lesson-svg svg {
+  width: 45px;
+  height: 45px;
+}
+
+.attendance-statistics-per-day-block .attendance-day-lesson-stat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 600;
+}

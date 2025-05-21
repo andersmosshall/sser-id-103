@@ -1,0 +1,11 @@
+uuid: 3572f2ff-1801-4c76-8bc5-3f7434d442d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.written_reviews
+id: node.written_reviews
+target_entity_type_id: node
+target_bundle: written_reviews
+default_langcode: site_default
+language_alterable: false

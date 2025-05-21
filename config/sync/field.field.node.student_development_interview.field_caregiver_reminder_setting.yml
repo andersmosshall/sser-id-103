@@ -1,0 +1,27 @@
+uuid: 12d9c749-7fb6-471f-b483-da84f9b14eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_caregiver_reminder_setting
+    - node.type.student_development_interview
+id: node.student_development_interview.field_caregiver_reminder_setting
+field_name: field_caregiver_reminder_setting
+entity_type: node
+bundle: student_development_interview
+label: 'Reminder limits for caregivers'
+description: 'Set how many hours befor meeting start reminder(s) should be sent. '
+required: false
+translatable: false
+default_value:
+  -
+    value: 2
+  -
+    value: 24
+default_value_callback: ''
+settings:
+  min: 1
+  max: 168
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,78 @@
+entity.ssr_assessment_group.settings:
+  title: 'Settings'
+  route_name: entity.ssr_assessment_group.settings
+  base_route: entity.ssr_assessment_group.settings
+entity.ssr_assessment_group.view:
+  title: 'View'
+  route_name: entity.ssr_assessment_group.canonical
+  base_route: entity.ssr_assessment_group.canonical
+entity.ssr_assessment_group.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_assessment_group.edit_form
+  base_route: entity.ssr_assessment_group.canonical
+entity.ssr_assessment_group.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_assessment_group.delete_form
+  base_route: entity.ssr_assessment_group.canonical
+  weight: 10
+entity.ssr_assessment_group.collection:
+  title: 'Assessment groups'
+  route_name: entity.ssr_assessment_group.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_assessment_group_user.settings:
+  title: 'Settings'
+  route_name: entity.ssr_assessment_group_user.settings
+  base_route: entity.ssr_assessment_group_user.settings
+entity.ssr_assessment_group_user.collection:
+  title: 'Assessment group users'
+  route_name: entity.ssr_assessment_group_user.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_examination.settings:
+  title: 'Settings'
+  route_name: entity.ssr_examination.settings
+  base_route: entity.ssr_examination.settings
+entity.ssr_examination.view:
+  title: 'View'
+  route_name: entity.ssr_examination.canonical
+  base_route: entity.ssr_examination.canonical
+entity.ssr_examination.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_examination.edit_form
+  base_route: entity.ssr_examination.canonical
+entity.ssr_examination.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_examination.delete_form
+  base_route: entity.ssr_examination.canonical
+  weight: 10
+entity.ssr_examination.collection:
+  title: 'Examinations'
+  route_name: entity.ssr_examination.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_examination_result.settings:
+  title: 'Settings'
+  route_name: entity.ssr_examination_result.settings
+  base_route: entity.ssr_examination_result.settings
+entity.ssr_examination_result.view:
+  title: 'View'
+  route_name: entity.ssr_examination_result.canonical
+  base_route: entity.ssr_examination_result.canonical
+entity.ssr_examination_result.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_examination_result.edit_form
+  base_route: entity.ssr_examination_result.canonical
+entity.ssr_examination_result.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_examination_result.delete_form
+  base_route: entity.ssr_examination_result.canonical
+  weight: 10
+entity.ssr_examination_result.collection:
+  title: 'Examination results'
+  route_name: entity.ssr_examination_result.collection
+  base_route: system.admin_content
+  weight: 10

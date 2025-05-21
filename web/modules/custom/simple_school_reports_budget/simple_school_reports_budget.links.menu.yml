@@ -1,0 +1,5 @@
+simple_school_reports_budget.budget_list:
+  title: 'Budget'
+  description: 'List and administer budgets'
+  parent: simple_school_reports_core.actions
+  route_name: view.budget.list

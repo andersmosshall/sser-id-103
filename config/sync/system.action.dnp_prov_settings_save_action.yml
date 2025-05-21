@@ -1,0 +1,13 @@
+uuid: 58406c68-e104-4ec4-ad73-6fb0bf6c5c74
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_dnp_support
+_core:
+  default_config_hash: jigeX9m384cFlXpNooqFsEXiyyyHZUQc7ObZzwKQPGk
+id: dnp_prov_settings_save_action
+label: 'Save dnp provisioning settingss'
+type: dnp_prov_settings
+plugin: 'entity:save_action:dnp_prov_settings'
+configuration: {  }

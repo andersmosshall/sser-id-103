@@ -1,0 +1,8 @@
+simple_school_reports_leave_application.create:
+  route_name: simple_school_reports_leave_application.create
+  title: 'Create leave application'
+  weight: 50
+  appears_on:
+    - simple_school_reports_leave_application.leave_application_student_tab
+    - entity.user.canonical
+    - simple_school_reports_core.latest_reports

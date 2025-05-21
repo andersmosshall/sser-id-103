@@ -1,0 +1,6 @@
+settings:
+  allowed_values:
+    -
+      label: 'Delsumma, summera alla rader från senaste delsumman'
+    -
+      label: 'Totalsumma, summera alla rader (rekommenderas att placeras sist)'

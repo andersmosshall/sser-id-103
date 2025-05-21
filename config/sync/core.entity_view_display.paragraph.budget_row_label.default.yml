@@ -1,0 +1,21 @@
+uuid: 1d6473fa-26bc-4ce0-8a33-c35543323b24
+langcode: sv
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.budget_row_label.field_label
+    - paragraphs.paragraphs_type.budget_row_label
+id: paragraph.budget_row_label.default
+targetEntityType: paragraph
+bundle: budget_row_label
+mode: default
+content:
+  field_label:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

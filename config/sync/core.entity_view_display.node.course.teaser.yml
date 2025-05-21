@@ -1,0 +1,32 @@
+uuid: 90b5843c-ff3b-473f-b576-aef5f0672f7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.course.field_class
+    - field.field.node.course.field_school_subject
+    - field.field.node.course.field_ssr_schema
+    - field.field.node.course.field_student
+    - field.field.node.course.field_teacher
+    - node.type.course
+  module:
+    - user
+id: node.course.teaser
+targetEntityType: node
+bundle: course
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_class: true
+  field_school_subject: true
+  field_ssr_schema: true
+  field_student: true
+  field_teacher: true
+  langcode: true
+  number_of_students: true

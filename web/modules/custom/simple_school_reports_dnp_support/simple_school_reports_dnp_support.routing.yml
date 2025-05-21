@@ -1,0 +1,15 @@
+entity.dnp_provisioning.settings:
+  path: 'admin/structure/dnp-provisioning'
+  defaults:
+    _form: '\Drupal\simple_school_reports_dnp_support\Form\DnpProvisioningSettingsForm'
+    _title: 'Dnp Provisioning'
+  requirements:
+    _permission: 'administer dnp_provisioning'
+
+entity.dnp_prov_settings.settings:
+  path: 'admin/structure/dnp-prov-settings'
+  defaults:
+    _form: '\Drupal\simple_school_reports_dnp_support\Form\DnpProvSettingsSettingsForm'
+    _title: 'Dnp Provisioning Settings'
+  requirements:
+    _permission: 'administer dnp_prov_settings'

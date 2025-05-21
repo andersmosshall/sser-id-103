@@ -1,0 +1,61 @@
+uuid: 0cbd89e7-e3f6-4692-9894-397f7282c159
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+id: ssr_examination.ssr_examination.default
+targetEntityType: ssr_examination
+bundle: ssr_examination
+mode: default
+content:
+  assessment_group:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  deadline:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  created: true
+  langcode: true
+  uid: true

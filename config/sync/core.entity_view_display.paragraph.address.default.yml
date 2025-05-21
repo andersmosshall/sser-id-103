@@ -1,0 +1,39 @@
+uuid: 2c3bce3d-d3e0-4a54-9c99-abd2e0b54503
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.address.field_city
+    - field.field.paragraph.address.field_street_address
+    - field.field.paragraph.address.field_zip_code
+    - paragraphs.paragraphs_type.address
+id: paragraph.address.default
+targetEntityType: paragraph
+bundle: address
+mode: default
+content:
+  field_city:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_street_address:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_zip_code:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

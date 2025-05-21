@@ -1,0 +1,3464 @@
+# Swedish translation of simple_school_reports_core
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2017-11-10 11:14+0200\n"
+"PO-Revision-Date: 2017-11-10 11:14+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Pre school class"
+msgstr "Förskoleklass"
+
+msgid "Student has quit"
+msgstr "Elev har slutat"
+
+msgid "Current day"
+msgstr "Nuvarande dag"
+
+msgid "Register absence"
+msgstr "Registrera frånvaro"
+
+msgid "Choose absence"
+msgstr "Välj frånvaro"
+
+msgid "Today (@date)"
+msgstr "Idag (@date)"
+
+msgid "Tomorrow (@date)"
+msgstr "Imorgon (@date)"
+
+msgid "Today (Whole day @date)"
+msgstr "Idag (Hela dagen @date)"
+
+msgid "Tomorrow (Whole day @date)"
+msgstr "Imorgon (Hela dagen @date)"
+
+msgid "Other period"
+msgstr "Annan period"
+
+msgid "Select \"other period\" to set an other date or part of a day."
+msgstr "Välj \"annan period\" för att ange ett annat datum eller del av en dag."
+
+msgid "Absence"
+msgstr "Frånvaro"
+
+msgid "Absence from"
+msgstr "Frånvaro från"
+
+msgid "Absence to"
+msgstr "Frånvaro till"
+
+msgid "Reported absence"
+msgstr "Anmäld frånvaro"
+
+msgid "Leave absence"
+msgstr "Ledig"
+
+msgid "Absence type"
+msgstr "Frånvarotyp"
+
+msgid "Latest report"
+msgstr "Senaste rapporteringar"
+
+msgid "Are you sure you want to activate school subject?"
+msgstr "Är du säker på att du vill aktivera ämnet?"
+
+msgid "Activate"
+msgstr "Aktivera"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Subject code"
+msgstr "Ämneskod"
+
+msgid "none"
+msgstr "ingen"
+
+msgid "Language code"
+msgstr "Språkkod"
+
+msgid "There is already a school subject with this settings."
+msgstr "Det finns redan ett ämne med dessa inställningar."
+
+msgid "Are you sure you want to deactivate school subject?"
+msgstr "Är du säker på att du vill inaktivera ämnet?"
+
+msgid "School subject added."
+msgstr "Ämne tillagt."
+
+msgid "Deactivate"
+msgstr "Inaktivera"
+
+msgid "Email address"
+msgstr "E-postadress"
+
+msgid "Register grade"
+msgstr "Registrera betyg"
+
+msgid "Generate documents"
+msgstr "Generera dokument"
+
+msgid "Make up invalid absence"
+msgstr "Bonustimme"
+
+msgid "Sum"
+msgstr "Summa"
+
+msgid "Upcoming"
+msgstr "Kommande"
+
+msgid "Absence make up time"
+msgstr "Bonustimme"
+
+msgid "Replacement patterns"
+msgstr "Ersättningsmönster"
+
+msgid "Subject"
+msgstr "Ämne"
+
+msgid "Message"
+msgstr "Meddelande"
+
+msgid "No limit"
+msgstr "Ingen gräns"
+
+msgid "@days days ago"
+msgstr "@days dagar sedan"
+
+msgid "Caregiver start page"
+msgstr "Vårdnadshavare startsida"
+
+msgid "Start page content"
+msgstr "Startsideinnehåll"
+
+msgid "Students in school"
+msgstr "Elever i skolan"
+
+msgid "Statistics"
+msgstr "Statistik"
+
+msgid "Range selector"
+msgstr "Periodväljare"
+
+msgid "Apply"
+msgstr "Tillämpa"
+
+msgid "From"
+msgstr "Från"
+
+msgid "To"
+msgstr "Till"
+
+msgid "Not obligatory"
+msgstr "Ej obligatoriskt"
+
+msgid "Mail will be sent to mentor; @mentors"
+msgstr "Meddelande kommer att skickas till mentor; @mentors"
+
+msgid "Something went wrong."
+msgstr "Någonting gick fel."
+
+msgid "No mail has been sent."
+msgstr "Inget meddelande har skickats."
+
+msgid "There are already absence registrations that partly or completely includes selected absence period."
+msgstr "Det finns reda frånvaroregistreringar som helt eller delvis överlappar vald frånvaroperiod."
+
+msgid "Sending mails"
+msgstr "Skicka meddelanden"
+
+msgid "Processed @current out of @total."
+msgstr "Hanterar @current av @total handlingar"
+
+msgid "Save configuration"
+msgstr "Spara inställningar"
+
+msgid "Configuration has been saved"
+msgstr "Inställningar har sparats"
+
+msgid "Generate ssn key form"
+msgstr "Formujlär för att generera personnummernyckel"
+
+msgid "Generate"
+msgstr "Generera"
+
+msgid "Mail caregivers"
+msgstr "Meddela vårdnadshavare"
+
+msgid "Recipients"
+msgstr "Mottagare"
+
+msgid "Reset invalid absence counter"
+msgstr "Återställ ogiltig frånvaro"
+
+msgid "Save"
+msgstr "Spara"
+
+msgid "Calculate invalid absence from"
+msgstr "Beräkna ogiltig frånvaro från"
+
+msgid "Calculate invalid absence to"
+msgstr "Beräkna ogiltig frånvaro till"
+
+msgid "Week number"
+msgstr "Veckonummer"
+
+msgid "Select week"
+msgstr "Välj vecka"
+
+msgid "This mail can not be answered. To reply send mail to @name @mail"
+msgstr "Detta meddelande kan inte besvaras. För att svara skicka meddelande till @name @mail"
+
+msgid "Attendance report"
+msgstr "Närvarorapport"
+
+msgid "Student first name"
+msgstr "Elev förnamn"
+
+msgid "Student last name"
+msgstr "Elev efternamn"
+
+msgid "Student full name"
+msgstr "Elev fullständigt namn"
+
+msgid "Total invalid absence"
+msgstr "Total ogiltig frånvaro"
+
+msgid "Recipient first name"
+msgstr "Mottagare förnamn"
+
+msgid "Recipient last name"
+msgstr "Mottagare efternamn"
+
+msgid "Recipient full name"
+msgstr "Mottagare fullständigt namn"
+
+msgid "Recipient email address"
+msgstr "Mottagare e-postadress"
+
+msgid "Current user first name"
+msgstr "Nuvarande användare förnamn"
+
+msgid "Current user last name"
+msgstr "Nuvarande användare efternamn"
+
+msgid "Current user full name"
+msgstr "Nuvarande användare fullständigt namn"
+
+msgid "Current user email address"
+msgstr "Nuvarande användare e-postadress"
+
+msgid "Class name"
+msgstr "Kursnamn"
+
+msgid "Invalid absence time in minutes"
+msgstr "Ogiltig frånvaro i minuter"
+
+msgid "School staff start page"
+msgstr "Skolpersonal startsida"
+
+msgid "Gr @grade"
+msgstr "Åk @grade"
+
+
+msgid "Created a new user account for <a href=\":url\">%name</a>. No email has been sent."
+msgstr "Skapade en ny användare för <a href=\":url\">%name</a>. Inget e-postmeddelande har skickats."
+
+msgid "content items"
+msgstr "innehåll"
+
+msgid "content item"
+msgstr "innehåll"
+
+msgid "Edit mode"
+msgstr "Redigeringsläge"
+
+msgid "Add mode"
+msgstr "Skapaläga"
+
+msgid "This value is not a valid email address."
+msgstr "Detta värde är inte en giltig e-postadress"
+
+msgid "Are you sure you want to remove %label?"
+msgstr "Är du säker på att du vill ta bort %label?"
+
+msgid "Collapse / Edit all"
+msgstr "Fäll in / Redigera alla"
+
+msgid "Add above"
+msgstr "Lägg till ovanför"
+
+msgid "Content"
+msgstr "Innehåll"
+
+msgid "Startpage - default"
+msgstr "Startsida - standard"
+
+msgid "Startpage"
+msgstr "Startsida"
+
+msgid "Absence day history"
+msgstr "Dagsfrånvaro historik"
+
+msgid "Students"
+msgstr "Elever"
+
+msgid "Add student"
+msgstr "Lägg till elev"
+
+msgid "Unknown grade"
+msgstr "Okänd årskurs"
+
+msgid "Activate login possibility"
+msgstr "Aktivera möjlighet till att logga in"
+
+msgid "Delete this @type_singular from the system."
+msgstr "Radera denna @type_singular från systemet."
+
+msgid "No terms available. <a href=\":link\">Add term</a>."
+msgstr "Ingen termin tillgänglig. <a href=\":link\">Lägg till termin</a>."
+
+msgid "Courses"
+msgstr "Kurser"
+
+msgid "All Courses"
+msgstr "Alla kurser"
+
+msgid "My Courses"
+msgstr "Mina Kurser"
+
+msgid "My courses"
+msgstr "Mina kurser"
+
+msgid "All courses"
+msgstr "Alla kurser"
+
+msgid "Add course"
+msgstr "Lägg till kurs"
+
+msgid "Report"
+msgstr "Rapportera"
+
+msgid "Reported absence (@date)"
+msgstr "Rapporterad frånvaro (@date)"
+
+msgid "Attending"
+msgstr "Närvarande"
+
+msgid "Valid absence"
+msgstr "Giltig frånvaro"
+
+msgid "Invalid absence"
+msgstr "Ogiltig frånvaro"
+
+msgid "Invalid absence in minutes"
+msgstr "Ogiltig frånvaro i minuter"
+
+msgid "Student attendance"
+msgstr "Elevnärvaro"
+
+msgid "Latest attendance reports"
+msgstr "Senaste närvarorapporter"
+
+msgid "Calculating invalid absence"
+msgstr "Beräknar ogiltig frånvaro"
+
+msgid "Calculate students invalid absence for this dates."
+msgstr "Beräkna elvers ogiltiga frånvaro för dessa datum"
+
+msgid "Terms"
+msgstr "Terminer"
+
+msgid "Simple school reports config"
+msgstr "Inställningar för simple school reports"
+
+msgid "here"
+msgstr "här"
+
+msgid "School subjects"
+msgstr "Ämnen"
+
+msgid "Add new term or change existing terms."
+msgstr "Lägg till termin eller redigera existerande terminer."
+
+msgid "List school subjects and add new language subjects."
+msgstr "Lista ämnen"
+
+msgid "Latest reports"
+msgstr "Senaste rapporteringar"
+
+msgid "Absence in minutes"
+msgstr "Frånvaro i minuter"
+
+msgid "Go to page @key"
+msgstr "Gå till sida @key"
+
+msgid "First page"
+msgstr "Första sidan"
+
+msgid "min"
+msgstr "min"
+
+msgid "School subject"
+msgstr "Ämne"
+
+msgid "Proportion"
+msgstr "Andel"
+
+msgid "The proportion is compared to total invalid absence."
+msgstr "Andelen är jämfört med total ogiltig frånvaro."
+
+msgid "Weekday"
+msgstr "Veckodag"
+
+msgid "Registered absence"
+msgstr "Registrerad frånvaro"
+
+msgid "No registered absence to summarize for selected period."
+msgstr "Ingen registrerad frånvaro att summera för vald period."
+
+msgid "days"
+msgstr "dagar"
+
+msgid "Weekly summary"
+msgstr "Veckosammanställning"
+
+msgid "-- Select action --"
+msgstr "-- Välj handling --"
+
+msgid "Selected 1 item in this view"
+msgid_plural "Selected @count items in this view"
+msgstr[0] "Vald 1 rad i denna vy"
+msgstr[1] "Valt @count rader i denna vy"
+
+msgid "Select / deselect all results in this view (all pages, @count total)"
+msgstr "Välj / välj bort alla restultat i denna vy (alla sidor, @count totalt)"
+
+msgid "Action will be executed on all items in the view."
+msgstr "Handling genomförs på alla rader i denna vy."
+
+msgid "Selected all items except:"
+msgstr "Välj alla utom:"
+
+msgid "Items selected:"
+msgstr "Valda:"
+
+msgid "Execute action"
+msgstr "Genomför handling"
+
+msgid "Are you sure you wish to perform \"%action\" action on 1 entity?"
+msgid_plural "Are you sure you wish to perform \"%action\" action on %count entities?"
+msgstr[0] "Är du säker på att du vill gennomföra \"%action\" handlingen på 1 entitet?"
+msgstr[1] "Är du säker på att du vill gennomföra \"%action\" handlingen på %count entiteter?"
+
+msgid "Send"
+msgstr "Skicka"
+
+msgid "Message templates config"
+msgstr "Meddelandemallar inställningar"
+
+msgid "Define messages that will be sent out from the simple school reports system."
+msgstr "Definera meddelanden som skickas ut från simple school reports."
+
+msgid "Add language school subject"
+msgstr "Lägg till språkämne"
+
+msgid "Mail caregivers about invalid absence"
+msgstr "Meddela vårdnadshavare om ogiltig frånvaro"
+
+msgid "@student misses caregiver(s) with email address set."
+msgstr "@student saknar vårdnadshavare med e-postadress."
+
+msgid "Mail will only be sent for students for which invalid absence has been changed."
+msgstr "Meddelande skickas endast för elever vars ogiltiga frånvaro har ändrats."
+
+msgid "Note that you in this report check which students that are attending and for how long they were attending. No mails is sent to caregivers. No invalid absence is registered for this class."
+msgstr "Observera att du i denna närvarorapport anger vilka elever som närvarar och hur länge de närvarar. Inga meddelanden skickas till vårdnadshavare. Ingen ogiltig frånvaro registreras för denna lektion."
+
+msgid "Attending time in minutes"
+msgstr "Närvarotid i minuter"
+
+msgid "Updating last reminder date"
+msgstr "Uppdaterar senaste påminnelsedatum"
+
+msgid "@days ago"
+msgstr "dagar sedan"
+
+msgid "Make up time reminder"
+msgstr "Påminnelse om bonustimme"
+
+msgid "List and filter students to send out make up time reminder"
+msgstr "Lista och filtrera elever för att skicka ut påminnelse om bonustimme"
+
+msgid "Generate student groups automatically and assign grading teachers by analysing the courses in simple school reports"
+msgstr "Genera elevgrupper automatiskt och tillsätt betygsättande lärare genom att analysera kurser i simple school reports"
+
+msgid "Do not generate any student groups, I want to add them manually"
+msgstr "Generera inte några elevgrupper. Jag vill lägga till dem manuellt."
+
+msgid "Generate student groups"
+msgstr "Generera elev grupper"
+
+msgid "@name - loading..."
+msgstr "@name - laddar..."
+
+msgid "Grading subjects"
+msgstr "Betygsämnen"
+
+msgid "Use grade from"
+msgstr "Använd betyg från"
+
+msgid "If set, grades will be imported from this grade round as default grades when teachers add grades."
+msgstr "Om satt så kommer betyg från denna betygsomgång importeras som standard värde när lärare lägger till betyg."
+
+msgid "Grading teachers"
+msgstr "Betygsättande lärare"
+
+msgid "Only grading teachers will have permission to set grade for this subject and student group."
+msgstr "Endast betygsättande lärare kommer ha behörighet att sätta betyg för detta ämne och elevgrupp."
+
+msgid "Grade registration"
+msgstr "Betygsregistrering"
+
+msgid "Register grades or create new grade registration rounds"
+msgstr "Registrera betyg och skapa nya betygsomgångar"
+
+msgid "Add grade registration round"
+msgstr "Lägg till betygsomgång"
+
+msgid "Anonymized"
+msgstr "Anonymiserad"
+
+msgid "Define file that will be used when generating in the simple school reports system."
+msgstr "Definiera fil som används vid generering i simple school reports"
+
+msgid "File templates config"
+msgstr "Filmallar inställningar"
+
+msgid "Grade round progress"
+msgstr "Status på betygsomgång"
+
+msgid "Consent progress"
+msgstr "Status på samtycke"
+
+msgid "Personal number key generator"
+msgstr "Personummernyckel-generator"
+
+msgid "Generate key for personal number, to be used for example in grade registrations."
+msgstr "Generera nyckel för personnummer att användas t.ex. i betygsregistrering."
+
+msgid "anonymous"
+msgstr "anonym"
+
+msgid "Use the <a href=\":url\">@label</a> text format"
+msgstr "Använde <a href=\":url\">@label</a> textformatet"
+
+msgid "Written reviews registration"
+msgstr "Skriftliga omdömen"
+
+msgid "Register written reviews or create new written reviews rounds"
+msgstr "Registrera skriftliga omdömen eller skapa nya omgångar för skriftliga omdömen"
+
+msgid "Add written reviews round"
+msgstr "Lägg till omgång för skriftliga omdömen"
+
+msgid "Grade @grade"
+msgstr "Årskurs @grade"
+
+msgid "Written reviews per subject"
+msgstr "Skriftliga omdömen per ämne"
+
+msgid "School efforts per student"
+msgstr "Skolans insatser per elev"
+
+msgid "Register written reviews for @name"
+msgstr "Registrera skriftliga omdömen för @name"
+
+msgid "Written reviews round progress"
+msgstr "Status för omgång för skriftliga omdömen"
+
+msgid "No assessment"
+msgstr "Ingen bedömning"
+
+msgid "Insufficient knowledge"
+msgstr "Otillräckliga kunskaper"
+
+msgid "Acceptable knowledge"
+msgstr "Godtagbara kunskaper"
+
+msgid "More then acceptable knowledge"
+msgstr "Mer än godtagbara kunskaper"
+
+msgctxt "ssr"
+msgid "State"
+msgstr "Status"
+
+msgid "Grade"
+msgstr "Betyg"
+
+msgid "Short comment"
+msgstr "Kort kommentar"
+
+msgid "Comment"
+msgstr "Kommentar"
+
+msgid "The short comment will be shown in generated written review document"
+msgstr "Den korta kommentaren kommer att visas i genererat skriftlig omdömes-dokument"
+
+msgid "Mark the state of this grade registration"
+msgstr "Ange status för denna betygsregistrering"
+
+msgid "Mark the state of this written review"
+msgstr "Ange status för detta skriftliga omdöme"
+
+msgid "Register school efforts"
+msgstr "Registrera skolans insatser"
+
+msgid "Select standard phrase to add."
+msgstr "Välj standardfras att lägga till."
+
+msgid "Generate written reviews documents"
+msgstr "Generera skriftliga omdömes-dokument"
+
+msgid "File template missing."
+msgstr "Filmall saknas."
+
+msgid "Generating written reviews documents"
+msgstr "Generar skriftliga omdömes-dokument"
+
+msgid "Grade file generation complete. Save the file in a secure location. This file will shortly be removed from server. Download it now form @link"
+msgstr "Betygsdokument färdiga. Spara filen på en säker plats. Denna fil kommer att raderas från servern inom kort. Ladda ner filen @link"
+
+msgid "Select grades for this written reviews round"
+msgstr "Välj årskurser för denna omgång för skriftliga omdömen"
+
+msgid "Select subjects for this written reviews round"
+msgstr "Välj ämnen för denna omgång för skriftliga omdömen"
+
+msgid "Setup written reviews round"
+msgstr "Sätt upp omgång för skriftliga omdömen"
+
+msgid "Current written reviews round is locked for new registrations."
+msgstr "Denna omgång för skriftliga omdömen är låst för nya registreringar."
+
+msgid "Generate grade catalog"
+msgstr "Generera betygskatalog"
+
+msgid "Personal number key"
+msgstr "Nyckel för personnummer"
+
+msgid "You can choose to skip upload the key, then the personal number field will be set to aammdd-nnnn, and may be changed manually in generated files."
+msgstr "Du kan välja att hoppa över denna nyckel. Personnummerfältet kommer då att vis aammdd-nnnn, och kan ändras manuellt i genererade filer."
+
+msgid "If you are missing or need to update the personal number key, generate a new template @link"
+msgstr "Om du saknar eller behöver uppdatera nycker för personnummer, generera en ny mall @link"
+
+msgid "Generating grade documents"
+msgstr "Genererar betygsdokument"
+
+msgid "Register grade for @name"
+msgstr "Registrera betyg för @name"
+
+msgid "This grade registration is marked as done and therefore locked for registration. Unlock by unchecking this checkbox."
+msgstr "Denna betygsregistrering är märkt som klar och därför låst för registrering. Lås upp genom att bocka ur denna checkbox."
+
+msgid "Exclude student"
+msgstr "Exkludera elev"
+
+msgid "Exclude student / Set later"
+msgstr "Exkludera elev / Ange senare"
+
+msgid "Student does not study the subject"
+msgstr "Eleven läser inte ämnet"
+
+msgid "Adapted studies"
+msgstr "Anpassad studiegång"
+
+msgid "Adapted studies (@date)"
+msgstr "Anpassad studiegång (@date)"
+
+msgid "Grade will be set later"
+msgstr "Betyg anges senare"
+
+msgid "You can not set state to \"Done\" if there is pending grades to set."
+msgstr "Du kan inte anget status \"Klar\" om det finns betyg som ska anges senare."
+
+msgid "Select reason for excluded student"
+msgstr "Välj anledning för exkluderad elev"
+
+msgid "Grading teacher"
+msgstr "Betygssättande lärare"
+
+msgid "The short comment will be shown in generated grade document"
+msgstr "Den korta kommentaren kommer att visas i genererat betygsdokument"
+
+msgid "Empty grades"
+msgstr "Töm betyg"
+
+msgid "By checking this, when save, all registered grades in this group will be erased."
+msgstr "Genom att bocka för denna. När du sparar kommer alla registrerade betyg i denna grupp och ämne tas bort."
+
+msgid "Written reviews standard phrases"
+msgstr "Standardfraser för skriftliga omdömen"
+
+msgid "List standard phrases for written reviews"
+msgstr "Lista standardfraser för skriftliga omdömen"
+
+msgid "IUP standard phrases"
+msgstr "Standardfraser för IUP"
+
+msgid "IUP registrations"
+msgstr "IUP-registreringar"
+
+msgid "List standard phrases for IUP"
+msgstr "Lista standardfraser för IUP"
+
+msgid "Register IUP or create IUP rounds"
+msgstr "Registrera IUP eller skapa IUP-omgångar"
+
+msgid "IUP registration"
+msgstr "IUP-registrering"
+
+msgid "Add IUP round"
+
+msgstr "Lägg till IUP-omgång"
+msgid "Administer standard phrases"
+msgstr "Administrera standardfraser"
+
+msgid "not started"
+msgstr "ej påbörjad"
+
+msgid "Not started"
+msgstr "Ej påbörjad"
+
+msgid "Add another teacher"
+msgstr "Lägg till lärare"
+
+msgid "IUP standard goals"
+msgstr "Standardmål för IUP"
+
+msgid "IUP goal"
+msgstr "IUP-mål"
+
+msgid "IUP"
+msgstr "IUP"
+
+msgid "List and comment IUP goals"
+msgstr "Lista och kommentera IUP-mål"
+
+msgid "Handle IUP"
+msgstr "Hantera IUP"
+
+msgid "Select grades for generating student groups."
+msgstr "Välj årskurser för genererade elevgrupper"
+
+msgid "Select for which subjects grading teachers will be searched for."
+msgstr "Välj för vilka ämnen betygsättande lärare ska sökas efter."
+
+msgid "Generating student groups"
+msgstr "Generera elevgrupper"
+
+msgid "Administer standard goals"
+msgstr "Administrera standardmål"
+
+msgid "Generate iup documents"
+msgstr "Generera iup dokument"
+
+msgid "Generating iup documents"
+msgstr "Genererar iup dokument"
+
+msgid "IUP file generation complete. Save the file in a secure location. This file will shortly be removed from server. Download it now form @link"
+msgstr "IUP fil färdiga. Spara filen på en säker plats. Denna fil kommer att raderas från servern inom kort. Ladda ner filen @link"
+
+msgid "Written reviews file generation complete. Save the file in a secure location. This file will shortly be removed from server. Download it now form @link"
+msgstr "Skriftliga omdömen färdiga. Spara filen på en säker plats. Denna fil kommer att raderas från servern inom kort. Ladda ner filen @link"
+
+msgid "This IUP is marked as done and agreed, it is not advised to edit it."
+msgstr "Denna IUP är märkt som klar och överenskommen, det är inte rekommenderat att redigera den."
+
+msgid "Done and agreed"
+msgstr "Klar och överenskommen"
+
+msgid "Done"
+msgstr "Klar"
+
+msgid "done"
+msgstr "klar"
+
+msgid "Mark the state of this IUP registration"
+msgstr "Ange status på denna IUP-registrering"
+
+msgid "Generate IUP document"
+msgstr "Generera IUP-dokument"
+
+msgid "Generate iup document"
+msgstr "Generera IUP-dokument"
+
+msgid "Add standard goal"
+msgstr "Lägg till standardmål"
+
+msgid "Add standard phrase"
+msgstr "Lägg till standardfras"
+
+msgid "Choose"
+msgstr "Välj"
+
+msgid "Select standard goal."
+msgstr "Välj standardmål."
+
+msgid "Any"
+msgstr "Vilka som helst"
+
+msgid "No attendance reports to summarize for selected period."
+msgstr "Inga närvarorapporter att summera för vald period."
+
+msgid "Grade statistics"
+msgstr "Betygsstatistik"
+
+msgid "There is no grade statistics to be shown yet."
+msgstr "Det finns ingen betygsstatistik att visa ännu."
+
+msgid "There is no students in grade @grade"
+msgstr "Det finns inga elever i årskurs @grade"
+
+msgid "Merit"
+msgstr "Merit"
+
+msgid "Select subjects"
+msgstr "Välj ämnen"
+
+msgid "Grade round"
+msgstr "Betygsomgång"
+
+msgid "School subject updated."
+msgstr "Skolämne uppdaterad."
+
+msgid "View or create grade statistics"
+msgstr "Visa eller skapa betygsstatistik"
+
+msgid "Summarize absence per week"
+msgstr "Summera frånvaro per vecka"
+
+msgid "View/Print"
+msgstr "Visa/Skriv ut"
+
+msgid "Add grade statistics"
+msgstr "Lägg till betygsstatistik"
+
+msgid "Boys"
+msgstr "Pojkar"
+
+msgid "Girls"
+msgstr "Flickor"
+
+msgid "All"
+msgstr "Alla"
+
+msgid "Mean merit"
+msgstr "Meritpoäng snitt"
+
+msgid "Proportion of eligibility"
+msgstr "Andel gymnasiebehöriga"
+
+msgid "All selected subjects"
+msgstr "Alla valda ämnen"
+
+msgid "Eligibility"
+msgstr "Gymnasiebehörighet"
+
+msgid "Not pass"
+msgstr "Inte godkänd"
+
+msgid "Pass"
+msgstr "Godkänd"
+
+msgid "Gender"
+msgstr "Kön"
+
+msgid "School grade"
+msgstr "Årskurs"
+
+msgid "Caregiver address"
+msgstr "Vårdnadshavaradress"
+
+msgid "Caregiver contact"
+msgstr "Vårdnadshavarkontakt"
+
+msgid "Student address"
+msgstr "Elevadress"
+
+msgid "Student contact"
+msgstr "Elevkontakt"
+
+msgid "Custom column"
+msgstr "Egen kolumn"
+
+msgid "Caregivers"
+msgstr "Vårdnadshavare"
+
+msgid "List templates"
+msgstr "Listmallar"
+
+msgid "Show/Print/Create new list templates"
+msgstr "Visa/Skriv ut/Skapa nya listmallar"
+
+msgid "Add list template"
+msgstr "Lägg till listmall"
+
+msgid "Print out"
+msgstr "Skriv ut"
+
+msgid "Status Details"
+msgstr "Statusdetaljer"
+
+msgid "Enabled (@size)"
+msgstr "Aktiverad (@size)"
+
+msgid "Memory available: @available."
+msgstr "Minne tillgängligt: @available."
+
+msgid "Name of new list template"
+msgstr "Namn på ny listmall"
+
+msgid "Duplicate list template @name"
+msgstr "Duplicera listmall @name"
+
+msgid "List template"
+msgstr "Listmallar"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Start - school staff"
+msgstr "Start - skolpersonal"
+
+msgid "Go to school staff start page"
+msgstr "Gå till startsida för skolpersonal"
+
+msgid "Start page content config"
+msgstr "Startsideinnehåll inställningar"
+
+msgid "Define content to be shown on start page after login."
+msgstr "Definera innehåll att visa på startsidan efter inloggning."
+
+msgid "Start - caregiver"
+msgstr "Start - vårdnadshavare"
+
+msgid "Go to caregiver start page"
+msgstr "Gå till startsida för vårdnadshavare"
+
+msgid "My profile"
+msgstr "Min profil"
+
+msgid "Login by username has been disabled. Use your email address instead."
+msgstr "Inloggning med användarnamn är inaktiverat. Använd din e-postadress istället."
+
+msgid "Student in school"
+msgstr "Elev i skolan"
+
+msgid "Student grade statistics"
+msgstr "Elev betygsstatistik"
+
+msgid "Default start page block"
+msgstr "Standard startsida"
+
+msgid "Absence day student statistics"
+msgstr "Dagsfrånvaro elevstatistik"
+
+msgid "Caregiver start page block"
+msgstr "Vårdnadshavare startsida"
+
+msgid "List template list block"
+msgstr "Listmallar"
+
+msgid "@name must be within +- 1 week."
+msgstr "@name måste vara inom +- 1 vecka."
+
+msgid "There is already an attendance report for this date, time and duration. Edit it @link"
+msgstr "Det finns redan en närvarorapport för detta datum, tid och lektionslängd. Redigera @link"
+
+msgid "There are one or more attendance reports partly or completely overlapping this report."
+msgstr "Det finns en eller flera närvarorapporter som helt eller delvis överlappar denna rapport."
+
+msgid "Written reviews"
+msgstr "Skriftliga omdömen"
+
+msgid "Generate written reviews document"
+msgstr "Generera dokument för skriftliga omdömen"
+
+msgid "Generate grade document"
+msgstr "Generera betygsdokument"
+
+msgid "No grade has been registered."
+msgstr "Inga betyg har registrerats."
+
+msgid "Create users"
+msgstr "Skapa användare"
+
+msgid "Boy"
+msgstr "Pojke"
+
+msgid "Girl"
+msgstr "Flicka"
+
+msgid "Users will get an mail with instructions to set a password for future logins. (Note, if any of the user in this list is caregivers, they will be set to allow login.)"
+msgstr "Användare får ett e-postmeddelande med instruktioner för att välja ett lösenord för framtida inloggningar. (OBS, om någon av användarna i denna lista är vårdnadshavare kommer de få status tillåta login)"
+
+msgid "Allow login"
+msgstr "Tillåt login"
+
+msgid "Mail users"
+msgstr "Skicka e-post till användare"
+
+msgid "Mail student"
+msgstr "Skicka e-post till elev"
+
+msgid "Mail students"
+msgstr "Skicka e-post till elever"
+
+msgid "Current grade round is locked for grade registration."
+msgstr "Denna betygsregistreringsomgång är låst för betygsregistrering"
+
+msgid "@name misses a valid personal number, document is generated anyway with value @value"
+msgstr "@name saknar giltigt personnummer, dokument är genereras ändå med värde @value"
+
+msgid "@name has multiple grades set in @subject"
+msgstr "@name har flera registrerade betyg i @subject"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "People"
+msgstr "Personer"
+
+msgid "Duplicate"
+msgstr "Kopiera"
+
+msgid "Name of new budget"
+msgstr "Namn på ny budget"
+
+msgid "Duplicate budget @name"
+msgstr "Duplicera budget @name"
+
+msgid "Budget"
+msgstr "Budget"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Per student"
+msgstr "Per elev"
+
+msgid "Per student depending of annual worker"
+msgstr "Per elev beroende på årsarbetare"
+
+msgid "Per unit"
+msgstr "Per enhet"
+
+msgid "Remark"
+msgstr "Anmärkning"
+
+msgid "Evaluated sum"
+msgstr "Utvärderad"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "No budget rows to show"
+msgstr "Inga budgetrader att visa"
+
+msgid "kr/student"
+msgstr "kr/elev"
+
+msgid "annual worker/student"
+msgstr "årsarbetare/elev"
+
+msgid "Mean salary"
+msgstr "Snittlön"
+
+msgid "kr/unit"
+msgstr "kr/enhet"
+
+msgid "Evaluate budget"
+msgstr "Utvärdera budget"
+
+msgid "Students in grade"
+msgstr "Elever i årskurs"
+
+msgid "Student age"
+msgstr "Elevålder"
+
+msgid "Unknown age"
+msgstr "Okänd ålder"
+
+msgid "year"
+msgstr "år"
+
+msgid "Add budget"
+msgstr "Lägg till budget"
+
+msgid "Lock"
+msgstr "Lås"
+
+msgid "Lock this round for future registrations, can be unlocked by editing the round later."
+msgstr "Lås denna omgång för framtida registreringar. Can låsas upp genom att redigera omgången senare."
+
+msgid "All"
+msgstr "Alla"
+
+msgid "No term is active. Administer terms @link."
+msgstr "Finns ingen aktiv termin. Administrera terminer @link."
+
+msgid "The current term has ended. Administer terms @link."
+msgstr "Nuvarande termin har avslutats. Administrera terminer @link"
+
+msgid "Published"
+msgstr "Publiserad"
+
+msgid "Sorry to hear that you found an issue. Please describe the issue below and we will try to make Simple School Reports better together."
+msgstr "Tråkigt att höra att du hittat ett problem. Var vänlig och beskriv problemet nedan så försöker vi tillsammans göra Simple School Reports bättre."
+
+msgid "Issue"
+msgstr "Problem"
+
+msgid "Describe the issue as detailed as possible."
+msgstr "Beskriv problemet så detaljerat som möjligt."
+
+msgid "Bug report from @name"
+msgstr "Felrapport från @name"
+
+msgid "Thank you for your bug report. Together we make Simple School Reports better."
+msgstr "Tack för din felrapport. Tillsammans gör vi Simple School Reports bättre."
+
+msgid "I have found an issue"
+msgstr "Jag har hittat ett problem"
+
+msgid "Help"
+msgstr "Hjälp"
+
+msgid "Add existing @type_singular"
+msgstr "Lägg till existerande @type_singular"
+
+msgid "Add @type_singular"
+msgstr "Lägg till @type_singular"
+
+msgid "Add new @type_singular"
+msgstr "Lägg till ny @type_singular"
+
+msgid "Note! Any reported attendance of type invalid absence to whole class in any course will be converted to valid absence if the class session completely or partly interferes with the reported absence."
+msgstr "OBS! Rapporterad frånvaro av typ Ogiltig frånvaro till hel lektion i kurser kommer att konverteras till Giltig frånvaro om lektionen helt eller delvis överlappas av given frånvaroperiod."
+
+msgid "Update users"
+msgstr "Uppdaterar användare"
+
+msgid "This IUP-round is locked, IUPs can not be edited."
+msgstr "Denna IUP-omgång är låst. IUPer kan inte redigeras."
+
+msgid "Choose what to do with selected students above"
+msgstr "Välj vad du vill göra med valda elever ovan"
+
+msgid "Increase grade one level"
+msgstr "Öka årskurs en nivå"
+
+msgid "Decrease grade one level"
+msgstr "Minska årskurs en nivå"
+
+msgid "Set specific grade"
+msgstr "Ange specifik årskurs"
+
+msgid "Started"
+msgstr "Startad"
+
+msgid "started"
+msgstr "startad"
+
+msgid "Part sum"
+msgstr "Delsumma"
+
+msgid "No @title added yet."
+msgstr "Ingen @title tillagd ännu."
+
+msgid "Help clips for current page"
+msgstr "Hjälpfilmer för nuvarande sida"
+
+msgid "All help clips"
+msgstr "Alla hjälpfilmer"
+
+msgctxt "written_reviews"
+msgid "Review"
+msgstr "Omdöme"
+
+msgid "Grade from @grade_round"
+msgstr "Betyg från @grade_round"
+
+msgid "Use grade @grade from @term"
+msgstr "Använd betyg @grade från @term"
+
+msgctxt "school_term"
+msgid "Add term"
+msgstr "Lägg till termin"
+
+msgid "@count mails has been sent."
+msgstr "@count e-post har skickats."
+
+msgid "Set mentor"
+msgstr "Ange mentor"
+
+msgid "Mentor set"
+msgstr "Mentor sparad"
+
+msgid "Bulk update grade"
+msgstr "Massuppdatera årskurs"
+
+msgid "Bulk update mentor"
+msgstr "Massuppdatera mentor"
+
+msgid "The email address %value is already taken."
+msgstr "E-postadressen %value är upptagen."
+
+msgid "Attachments"
+msgstr "Bilagor"
+
+msgid "You can only attach up to @limit files"
+msgstr "Du kan bara bifoga upp till @limit filer"
+
+msgid "Total filesize of all attached files is above @limit"
+msgstr "Total filstorlek av alla bifogade filer är över @limit"
+
+msgid "Roles"
+msgstr "Roller"
+
+msgid "Invalid personal number"
+msgstr "Ogiltigt personnummer"
+
+msgid "Student's signature"
+msgstr "Elevens underskrift"
+
+msgid "Guardian's signature"
+msgstr "Vårdnadshavares underskrift"
+
+msgid "Teachers signature"
+msgstr "Pedagogens underskrift"
+
+msgid "Note. Information in documents is regenerated. I.e. information that may have changed since the regular time of the round, such as student name or mentor etc., may therefore be out of date. For documents current at the time of the round please download from the school's local archives."
+msgstr "Observera. Information i dokument generaras på nytt. D.v.s. information som kan ha ändrats sedan ordinarie tidpunkt för omgången, såsom elevnamn eller mentor etc., kan därför vara inaktuell. För dokument aktuella för tidpunkten för omgången vänligen hämta från skolans lokala arkiv."
+
+msgid "Special diet"
+msgstr "Specialkost"
+
+msgid "List special diet and which students has those special diets"
+msgstr "Lista specialkost och vilka elever som har dessa specialkoster"
+
+msgid "Add a short label for the goal. Is shown when listing and reviewing of IUP goals."
+msgstr "Skriv in en kort titel för målet. Visas vid listning och utvärdering av IUP-mål."
+
+msgid "Absence registered"
+msgstr "Frånvaro registrerad"
+
+msgid "Save to update"
+msgstr "Spara för att uppdatera"
+
+msgid "Copy @label"
+msgstr "Kopiera @label"
+
+msgid "Copy @label from @source"
+msgstr "Kopiera @label från @source"
+
+msgid "Copy item"
+msgstr "Kopiera objekt"
+
+msgid "Copy to all"
+msgstr "Kopiera till alla"
+
+msgid "Send me a copy"
+msgstr "Skicka kopia till mig"
+
+msgid "A copy of the mail and to whom the mail has been sent to will be sent to you."
+msgstr "En kopia av mailet och vilka som mailet skickats till kommer att skickas till dig."
+
+msgid "Course attendance"
+msgstr "Kursnärvaro"
+
+msgid "Message caregiver"
+msgstr "Meddela vårdnadshavare"
+
+msgid "Infra structure"
+msgstr "Infrastruktur"
+
+msgid "Mail mentor"
+msgstr "Maila mentor"
+
+msgid "Mail user"
+msgstr "Maila användare"
+
+msgid "Triggering user"
+msgstr "Triggande användare"
+
+msgid "Sent"
+msgstr "Skickat"
+
+msgid "Student context"
+msgstr "Elevkontext"
+
+msgid "Recipient user"
+msgstr "Mottagande användare"
+
+msgid "Mail type"
+msgstr "Mailtyp"
+
+msgid "List mail sent by the system last 3 months"
+msgstr "Lista mail som är skickat av systemet senaste 3 månaderna"
+
+msgid "Recipient email at the time"
+msgstr "Mottagarens e-postadress vid tillfället"
+
+msgid "No items selected"
+msgstr "Inga objekt valda"
+
+msgid "I have red and confirm the text above"
+msgstr "Jag har läst och bekräftar texten ovan."
+
+msgid "Enter the security key"
+msgstr "Ange säkerhetsnyckeln"
+
+msgid "A mail has been sent to @email with a security key"
+msgstr "Ett mail har skickats till @email med en säkerhetsnyckel"
+
+msgid "@school_name security key"
+msgstr "@school_name säkerhetsnyckel"
+
+msgid "A security key is requested for @school_name: @key"
+msgstr "En säkerhetsnyckel är begärd för @school_name: @key"
+
+msgid "Invalid security code"
+msgstr "Ogiltig säkerhetsnyckel"
+
+msgid "@name does not have an valid email address"
+msgstr "@name saknar giltig e-postadress"
+
+msgid "Consent"
+msgstr "Samtycke"
+
+msgid "Consents"
+msgstr "Samtycken"
+
+msgid "Handle and list all consents"
+msgstr "Hantera och lista alla samtycken"
+
+msgid "Handle consents"
+msgstr "Hantera samtycken"
+
+msgid "Handle consent"
+msgstr "Hantera samtycke"
+
+msgid "Add consent"
+msgstr "Lägg till samtycke"
+
+msgid "Manage"
+msgstr "Hantera"
+
+msgid "You have consents to answer. You can handle your consents @link."
+msgstr "Du har samtycken att svara på. Du kan hantera dina samtycken @link."
+
+msgid "Consents per user"
+msgstr "Samtycken per användare"
+
+msgid "List and handle consents that user are expected to answer"
+msgstr "Lista och hantera samtycken som användare förväntas svara på"
+
+msgid "Send reminder"
+msgstr "Skicka påminnelse"
+
+msgid "List users with unhandled consents that are able to login and handle them by themself."
+msgstr "Lista användare med ohanterade samtycken som har möjlighet att logga in och hantera dem själva."
+
+msgid "Accepted"
+msgstr "Accepterad"
+
+msgid "Rejceted"
+msgstr "Avvisad"
+
+msgid "Not answered"
+msgstr "Ej svarat"
+
+msgid "My answer"
+msgstr "Mitt svar"
+
+msgid "Other answers"
+msgstr "Övriga svar"
+
+msgid "No answer has been given, check this box if you want to give answer."
+msgstr "Inget svar har givits, markera boxen om du vill ge ett svar."
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Answer"
+msgstr "Svar"
+
+msgid "I confirm that I have duly obtained the consent answer"
+msgstr "Jag bekräftar att jag på tillbörligt sätt tillförskaffat svaret på samtycket"
+
+msgid "I hereby confirm the following:"
+msgstr "Jag bekräftar härmed följande:"
+
+msgid "I register answer: @answer for @name from @from"
+msgstr "Jag registrerar svar: @answer för @name från @from"
+
+msgid "Has to be handled by school staff"
+msgstr "Måste hanteras av skolpersonal"
+
+msgid "Missing answers"
+msgstr "Svar saknas"
+
+msgid "Fully rejected"
+msgstr "Helt avvisad"
+
+msgid "Fully or partly rejected"
+msgstr "Helt eller delvis avvisad"
+
+msgid "Fully or partly accepted"
+msgstr "Helt eller delvis accepterad"
+
+msgid "Fully accepted"
+msgstr "Helt accepterad"
+
+msgid "No filter"
+msgstr "Inget filter"
+
+msgid "Answer has been given, check this box if you want to change it."
+msgstr "Svar har givits, markera boxen om du vill ändre det."
+
+msgid "Remind of consents"
+msgstr "Påminn om samtycke"
+
+msgid "Regarding @name"
+msgstr "Gällande @name"
+
+msgid "@user has no consent to answer or can not login with a valid email."
+msgstr "@user har inget samtycke att svara på eller kan inte logga in med giltig epost"
+
+msgid "Absence matrix"
+msgstr "Frånvaromatris"
+
+msgid "Set leave"
+msgstr "Ange ledig"
+
+msgid "Set reported"
+msgstr "Ange anmäld"
+
+msgid "Add period"
+msgstr "Lägg till period"
+
+msgid "Delete @label"
+msgstr "Radera @label"
+
+msgid "Register @absence_type @date for @name"
+msgstr "Registrera @absence_type @date för @name"
+
+msgid "Could not send mail to @mail since valid mail is missing."
+msgstr "Kunde inte skicka mail till @mail eftersom giltig e-postadress saknas."
+
+msgid "@name is not a student."
+msgstr "@name är inte en elev."
+
+msgid "A copy of the mail will be sent to relevant students with valid email addresses as well."
+msgstr "En kopia av mailet skickas också till berörda elever med giltiga e-postadresser."
+
+msgid "A copy of the mail will be sent to relevant students with valid email addresses as well. NOTE: All students in the previously selected list of students, see recipients above, will receive a copy of the mail, even if the corresponding caregivers has been deselected."
+msgstr "En kopia av mailet skickas också till berörda elever med giltiga e-postadresser. OBS: Alla elever i den tidigare valda listan av elever, se mottagare ovan, kommer att få en kopia av mailet, även om motsvarande vårdnadshavare har avmarkerats."
+
+msgid "A copy of the mail will be sent to the student if email addresses is valid. NOTE: The student will receive a copy of the mail, even if the corresponding caregivers has been deselected."
+msgstr "En kopia av mailet skickas också eleven om hen har giltig e-postadress. OBS: Eleven kommer att få en kopia av mailet, även om motsvarande vårdnadshavare har avmarkerats."
+
+msgid "Send to students as well"
+msgstr "Skicka till elever också"
+
+msgid "Notify caregivers"
+msgstr "Meddela vårdnadshavare"
+
+msgid "Mail with information about this registration will be sent to @caregivers"
+msgstr "Mail med information om denna registrering kommer att skickas till @caregivers"
+
+msgid "Absence has been registered to @student_name by @current_user"
+msgstr "Frånvaro har registrerats för @student_name av @current_user"
+
+msgid "@from - @to (@type)"
+msgstr "@from - @to (@type)"
+
+msgid "Generate student groups automatically and assign teachers by analysing the mentors in each grade"
+msgstr "Generera elevgrupper automatiskt och tilldela lärare genom att analysera mentorer i varje årskurs"
+
+msgid "Select settings to be applied to all student groups"
+msgstr "Välj inställningar som ska tillämpas på alla elevgrupper"
+
+msgid "These settings can also be set or modified for each student group individually later."
+msgstr "Dessa inställningar kan också ställas in eller ändras för varje elevgrupp individuellt senare."
+
+msgid "IUP round"
+msgstr "IUP-omgång"
+
+msgid "Select the IUP round to be used for all student groups."
+msgstr "Välj IUP-omgång som ska användas för alla elevgrupper."
+
+msgid "Written review round"
+msgstr "Omgång för skriftliga omdömen"
+
+msgid "Select the written review round to be used for all student groups."
+msgstr "Välj omgång för skriftliga omdömen som ska användas för alla elevgrupper."
+
+msgid "This content has been modified by another user, please reload the page and try again."
+msgstr "Detta innehåll har ändrats av en annan användare, ladda om sidan och försök igen."
+
+msgid "Something went wrong. The meeting might have been changed or already been booked."
+msgstr "Något gick fel. Mötet kan ha ändrats eller redan bokats."
+
+msgid "Meeting"
+msgstr "Möte"
+
+msgid "Student"
+msgstr "Elev"
+
+msgid "Teacher"
+msgstr "Lärare"
+
+msgctxt "verb"
+msgid "Book"
+msgstr "Boka"
+
+msgid "Unbook"
+msgstr "Avboka"
+
+msgid "Meeting is unbooked"
+msgstr "Mötet är avbokat"
+
+msgid "Meeting attendance list is saved"
+msgstr "Mötets deltagarlista är sparad"
+
+msgid "Change meeting"
+msgstr "Ändra möte"
+
+msgid "Validate availability"
+msgstr "Kontrollera tillgänglighet"
+
+msgid "What do you want to do?"
+msgstr "Vad vill du göra?"
+
+msgid "Change attending people"
+msgstr "Ändra deltagande personer"
+
+msgid "Unbook meeting completely"
+msgstr "Avboka möte helt"
+
+msgid "Are you sure you want to change the meeting for @name?"
+msgstr "Är du säker på att du vill ändra mötet för @name?"
+
+msgid "Attending"
+msgstr "Deltar"
+
+msgid "Are you sure you want to book the meeting for @name?"
+msgstr "Är du säker på att du vill boka mötet för @name?"
+
+msgid "There are development meetings available for @name to book. You may book meeting @link."
+msgstr "Det finns utvecklingssamtal tillgängliga för @name att boka. Du kan boka möte @link."
+
+msgid "Development interview"
+msgstr "Utvecklingssamtal"
+
+msgid "The following people are not available for the meeting: @people"
+msgstr "Följande personer är inte tillgängliga för mötet: @people"
+
+msgid "The meeting is too long."
+msgstr "Mötet är för långt."
+
+msgid "To date must be after from date."
+msgstr "Till-datum måste vara efter från-datum."
+
+msgid "From date must be before to date."
+msgstr "Från-datum måste vara före till-datum."
+
+msgid "Validate that selected attendances are available for this meeting date."
+msgstr "Konrollera att valda deltagare är tillgängliga för denna mötestid."
+
+msgid "Meeting reminder"
+msgstr "Mötespåminnelse"
+
+msgid "Remind student"
+msgstr "Påminn elev"
+
+msgid "Select if the remind student setting for all student groups."
+msgstr "Välj om inställningen för att påminna elev för alla elevgrupper."
+
+msgid "Create new student development interview rounds and add create meetings"
+msgstr "Skapa nya omgångar för utvecklingssamtal för elever och lägg till möten"
+
+msgid "Student development interview"
+msgstr "Utvecklingssamtal för elever"
+
+msgid "Add development interview round"
+msgstr "Lägg till omgång för utvecklingssamtal"
+
+msgid "List meetings"
+msgstr "Lista möten"
+
+msgid "Create meetings"
+msgstr "Skapa möten"
+
+msgid "@count meetings has been created."
+msgstr "@count möten har skapats."
+
+msgid "One or many teachers is not available for at least one of the meetings."
+msgstr "En eller flera lärare är inte tillgängliga för minst ett av mötena."
+
+msgid "The following teachers are not available for the meeting @time: @teachers"
+msgstr "Följande lärare är inte tillgängliga för mötet @time: @teachers"
+
+msgid "Validate that the dates are not overlapping with other meetings for the selected teachers."
+msgstr "Konrollera att datumen inte överlappar med andra möten för de valda lärarna."
+
+msgid "Meeting link (optional)"
+msgstr "Möteslänk (valfritt)"
+
+msgid "Location (optional)"
+msgstr "Plats (valfritt)"
+
+msgid "Meeting @start_time - @end_time"
+msgstr "Möte @start_time - @end_time"
+
+msgid "Included"
+msgstr "Inkluderad"
+
+msgid "Teachers for the meetings in the student development interview: @wrapper - @student_group"
+msgstr "Lärare för mötena i utvecklingssamtal för elever: @wrapper - @student_group"
+
+msgid "Select the length of the break between each meeting in minutes."
+msgstr "Välj längden på pausen mellan varje möte i minuter."
+
+msgid "Break"
+msgstr "Paus"
+
+msgid "Select the length of each meeting in minutes."
+msgstr "Välj längden på varje möte i minuter."
+
+msgid "Meeting length"
+msgstr "Möteslängd"
+
+msgid "Select the number of meetings to create."
+msgstr "Välj antalet möten att skapa."
+
+msgid "Number of meetings"
+msgstr "Antal möten"
+
+msgid "Select the start date and time for the first meeting."
+msgstr "Välj startdatum och tid för första mötet."
+
+msgid "Teachers"
+msgstr "Lärare"
+
+msgid "Select teachers for the meetings. If multiple teacher should be selected, separate them with comma."
+msgstr "Välj lärare för mötena. Om flera lärare ska väljas, separera dem med komma."
+
+msgid "Student group in @wrapper"
+msgstr "Elevgrupp i @wrapper"
+
+msgid "Validate dates"
+msgstr "Konrollera datum"
+
+msgid "Meeting link"
+msgstr "Möteslänk"
+
+msgid "Attendance"
+msgstr "Närvaro"
+
+msgid "Valid absence from course"
+msgstr "Giltig frånvaro från kurs"
+
+msgid "Invalid absence from course"
+msgstr "Ogiltig frånvaro från kurs"
+
+msgid "Total school time"
+msgstr "Total skoltid"
+
+msgid "School week"
+msgstr "Skolvecka"
+
+msgid "school week"
+msgstr "skolvecka"
+
+msgid "School weeks"
+msgstr "Skolveckor"
+
+msgid "school weeks"
+msgstr "skolveckor"
+
+msgid "School day"
+msgstr "Skoldag"
+
+msgid "School days"
+msgstr "Skoldagar"
+
+msgid "Day start"
+msgstr "Dag start"
+
+msgid "Day end"
+msgstr "Dag slut"
+
+msgid "Lessons"
+msgstr "Lektioner"
+
+msgid "The lessons that are assumed unless there are attendance reports defining the lesson time and length."
+msgstr "Lektioner som antas om det inte finns några närvarorapporter som definierar lektionernas tid och längd."
+
+msgid "School week settings"
+msgstr "Skolvecka inställningar"
+
+msgid "List and administer school week settings"
+msgstr "Lista och hantera inställningar för skolveckor"
+
+msgid "School week for @label"
+msgstr "Skolvecka för @label"
+
+msgid "No school week set for @label"
+msgstr "Ingen skolvecka för @label"
+
+msgid "Module is not enabled."
+msgstr "Modul är inte aktiv."
+
+msgid "No attendance data to analyse."
+msgstr "Ingen närvarodata att analysera."
+
+msgid "Attending: @attended %, Valid absence: @valid_absence %, Invalid absence: @invalid_absence %"
+msgstr "Närvaro: @attended %, Giltig frånvaro: @valid_absence %, Ogiltig frånvaro: @invalid_absence %"
+
+msgid "Here you can set the school week time for each grade/class. This will be used to calculate attendance statistics for students for specific days."
+msgstr "Här kan du ange skolveckans tid för varje årskurs/klass. Detta kommer att användas för att beräkna närvarostatistik för elever för specifika dagar."
+
+msgid "You may set start and end time for each school day. If not set a school day will be assumed to have its middle at 12:00 in the analyse, adding one hour in each direction. For example for a 300 min long school day, start time will be assumed at 08:30 and end at 15:30."
+msgstr "Du kan ange start och sluttid för varje skoldag. Om det inte är inställt kommer en skoldag att antas ha sin mitt vid 12:00 i analysen, adderat en timme i varje riktning. Till exempel för en 300 min lång skoldag kommer starttid att antas kl 08:30 och sluttid kl 15:30."
+
+msgid "School day length of @day_label"
+msgstr "Skoldagslängd för @day_label"
+
+msgid "The length of the school day for @day_label in minutes."
+msgstr "Längden på skoldagen för @day_label i minuter."
+
+msgid "School day start of @day_label"
+msgstr "Skoldagens starttid för @day_label"
+
+msgid "School day end of @day_label"
+msgstr "Skoldagens sluttid för @day_label"
+
+msgid "Show details"
+msgstr "Visa detaljer"
+
+msgid "Hide details"
+msgstr "Dölj detaljer"
+
+msgid "The selected period may span of multiple grades, attendance statistics may not be accurate."
+msgstr "Vald period kan omfatta flera årskurser, närvarostatistik kan vara felaktig."
+
+msgid "Student grade are assumed to be @grade for this period which may affect the school day length in the analyse."
+msgstr "Elevens årskurs antas vara @grade för denna period vilket kan påverka skoldagens längd i analysen."
+
+msgid "It looks like an error may have occurred when creating the absence registration. Please check in @link that everything is in order. If not, please try again or contact the school."
+msgstr "Det ser ut som att ett fel kan ha inträffat när frånvaroregistreringen skulle skapas. Var vänlig och kontrollera i @link att allt är i sin ordning. Om inte, var vänlig försök igen eller kontakta skolan."
+
+msgid "Total absence"
+msgstr "Total frånvaro"
+
+msgid "Lesson time"
+msgstr "Lektionstid"
+
+msgid "Number of students"
+msgstr "Antal elever"
+
+msgid "Note! Due to the date filter there are students categorised to other grades than their current grade."
+msgstr "Observera! På grund av datumfiltret finns det elever kategoriserade till andra årskurser än deras nuvarande årskurs."
+
+msgid "No data available for the selected period and student group. It may be because the period is invalid or there is no school week set."
+msgstr "Ingen data tillgänglig för vald period och elevgrupp. Det kan bero på att perioden är ogiltig eller att det inte finns någon skolvecka inställd."
+
+msgid "Absence statistics summary"
+msgstr "Frånvarostatistik summering"
+
+msgid "Summarize attendance statistics for a period"
+msgstr "Sammanställ närvarostatistik för en period"
+
+msgid "Attendance period summary"
+msgstr "Närvaroanalys för period"
+
+msgid "Administer attendance period analyse settings"
+msgstr "Administrera inställningar för närvaroanalys för period"
+
+msgid "Attendance period analyse"
+msgstr "Närvaroanalys för period"
+
+msgid "Attendance period analyse settings"
+msgstr "Inställningar för närvaroanalys för period"
+
+msgid "Absence percentage limit @i"
+msgstr "Frånvaro procentuell gräns @i"
+
+msgid "Absence percentage limits"
+msgstr "Frånvaro procentuella gränser"
+
+msgid "Sort out school week deviations"
+msgstr "Gallra avvikelser för skolvecka"
+
+msgid "Add school week deviations"
+msgstr "Lägg till avvikelser för skolvecka"
+
+msgid "Note! This deviation will be removed for following school grades: @grades"
+msgstr "Observera! Denna avvikelse kommer att tas bort för följande årskurser: @grades"
+
+msgid "School week deviation"
+msgstr "Avvikelse för skolvecka"
+
+msgid "school week deviation"
+msgstr "avvikelse för skolvecka"
+
+msgid "school week deviations"
+msgstr "avvikelser för skolvecka"
+
+msgid "School week deviations"
+msgstr "Avvikelser för skolvecka"
+
+msgid "Deviation from"
+msgstr "Avvikelse från"
+
+msgid "Deviation to"
+msgstr "Avvikelse till"
+
+msgid "School day length"
+msgstr "Skoldagslängd"
+
+msgid "this deviation"
+msgstr "denna avvikelse"
+
+msgid "School day start"
+msgstr "Skoldagens starttid"
+
+msgid "School day end"
+msgstr "Skoldagens sluttid"
+
+msgid "Deviation type"
+msgstr "Avvikelsetyp"
+
+msgid "The school grades that this school week deviation applies to."
+msgstr "Årskurser som denna avvikelse för skolvecka gäller för."
+
+msgid "@count items removed"
+msgstr "@count objekt borttagna"
+
+msgid "Removing school week deviations"
+msgstr "Radera avvikelse för skolvecka"
+
+msgid "Delete all deviations that are older than this date."
+msgstr "Radera alla avvikelser som är äldre än detta datum."
+
+msgid "Date limit"
+msgstr "Datumgräns"
+
+msgid "List students with adapted studies"
+msgstr "Lista över elever med anpassad studiegång"
+
+msgid "Students with adapted studies"
+msgstr "Elever med anpassad studiegång"
+
+msgid "Specific deviation"
+msgstr "Specifik avvikelse"
+
+msgid "Specific deviation for this school week only."
+msgstr "Specifik avvikelse för endast denna skolvecka."
+
+msgid "Joint grader"
+msgstr "Sambedömare"
+
+msgid "Export is completed. Save the file in a secure location. This file will shortly be removed from server. Download it now form @link"
+msgstr "Exporten är klar. Spara filen på en säker plats. Denna fil kommer snart att tas bort från servern. Ladda ner den nu från @link"
+
+msgid "Something went wrong. Try again."
+msgstr "Något gick fel. Försök igen."
+
+msgid "Processing data"
+msgstr "Processar data"
+
+msgid "There are errors preventing the export to be completed."
+msgstr "Det finns fel som hindrar exporten från att slutföras."
+
+msgid "Please select at least one user."
+msgstr "Vänligen välj minst en användare."
+
+msgid "Select export method to use depending on destination system"
+msgstr "Välj exportmetod att använda beroende på destinationsystem"
+
+msgid "Select export method"
+msgstr "Välj exportmetod"
+
+msgid "Export method"
+msgstr "Exportmetod"
+
+msgid "Export users"
+msgstr "Exportera användare"
+
+msgid "Personal number"
+msgstr "Personnummer"
+
+msgid "Birth date"
+msgstr "Födelsedatum"
+
+msgid "Last name"
+msgstr "Efternamn"
+
+msgid "First name"
+msgstr "Förnamn"
+
+msgid "This export will generate CSV file with the selected users. CSV files can be read by many other systems and can also be opened in spreadsheet applications like Excel. Use this if you want to import users to an other system."
+msgstr "Denna export kommer att generera en CSV-fil med de valda användarna. CSV-filer kan läsas av många andra system och kan också öppnas i kalkylapplikationer som Excel. Använd detta om du vill importera användare till ett annat system."
+
+msgid "Other system (csv)"
+msgstr "Annat system (csv)"
+
+msgid "Include caregivers"
+msgstr "Inkludera vårdnadshavare"
+
+msgid "Include user id"
+msgstr "Inkludera användarnas id"
+
+msgid "This export will generate file with the selected users. The is compatible with other simple school reports systems. Use this if you want to import users to an other simple school reports system."
+msgstr "Denna export kommer att generera en fil med de valda användarna. Den är kompatibel med andra simple school reports-system. Använd detta om du vill importera användare till ett annat simple school reports-system."
+
+msgid "Skipping @name due to unknown error. Try again."
+msgstr "Hoppar över @name på grund av okänt fel. Försök igen."
+
+msgid "Student @name has caregivers missing a valid personal number: @caregivers"
+msgstr "Elev @name har vårdnadshavare som saknar giltigt personnummer: @caregivers"
+
+msgid "Personal number @ssn is used by multiple users: @users"
+msgstr "Personnummer @ssn används av flera användare: @users"
+
+msgid "Student @name is missing a valid personal number"
+msgstr "Elev @name saknar giltigt personnummer"
+
+msgid "Student @name is missing school grade or has an invalid value"
+msgstr "Elev @name saknar årskurs eller har ett ogiltigt värde"
+
+msgid "User @name is not a student"
+msgstr "Användare @name är inte en elev"
+
+msgid "School year"
+msgstr "Skolår"
+
+msgid "No users selected."
+msgstr "Inga användare valda."
+
+msgid "School name"
+msgstr "Namn på skola"
+
+msgid "General information"
+msgstr "Generell information"
+
+msgid "Abort the export with an error"
+msgstr "Avbryt exporten med ett fel"
+
+msgid "Include without personal number without a warning"
+msgstr "Inkludera utan personnummer utan varning"
+
+msgid "Include without personal number but show me a warning"
+msgstr "Inkludera utan personnummer men visa mig en varning"
+
+msgid "Ignore caregiver"
+msgstr "Ignorera vårdnadshavare"
+
+msgid "Behavior if caregiver is missing personal number"
+msgstr "Beteende om vårdnadshavare saknar personnummer"
+
+msgid "This export will generate file with the selected users to be compatible with PMO systems. Use this if you want to import users to a PMO system."
+msgstr "Denna export kommer att generera en fil med de valda användarna för att vara kompatibel med PMO-system. Använd detta om du vill importera användare till ett PMO-system."
+
+msgid "Caregiver for"
+msgstr "Vårdnadshavare för"
+
+msgid "There is already a leave application covering the same period for this student."
+msgstr "Det finns redan en ledighetsansökan som täcker samma period för denna elev."
+
+msgid "To date is too far in the future. Maximum @days days ahead allowed."
+msgstr "Slutdatum är för långt fram i tiden. Max @days dagar tillåtet."
+
+msgid "From date is too far in the past. Maximum @days days ago allowed."
+msgstr "Startdatum är för långt tillbaka i tiden. Max @days dagar tillåtet."
+
+msgid "The leave application is too long. Maximum @days days allowed."
+msgstr "Ledighetsansökan är för lång. Max @days dagar tillåtet."
+
+msgid "Invalid period. Try again."
+msgstr "Ogiltig period. Försök igen."
+
+msgid "To date must be after from date"
+msgstr "Slutdatum måste vara efter startdatum"
+
+msgid "To date is required"
+msgstr "Slutdatum är obligatoriskt"
+
+msgid "From date is required"
+msgstr "Startdatum är obligatoriskt"
+
+msgid "Reason for leave is required"
+msgstr "Anledning till ledighet är obligatorisk"
+
+msgid "Student is required"
+msgstr "Elev är obligatorisk"
+
+msgid "Leave application"
+msgstr "Ledighetsansökan"
+
+msgid "Leave applications"
+msgstr "Ledighetsansökningar"
+
+msgid "leave application"
+msgstr "ledighetsansökan"
+
+msgid "leave applications"
+msgstr "ledighetsansökningar"
+
+msgid "Pending"
+msgstr "Väntande"
+
+msgid "Rejected"
+msgstr "Avslagen"
+
+msgid "Approved"
+msgstr "Godkänd"
+
+msgid "Select user"
+msgstr "Välj användare"
+
+msgid "Handle"
+msgstr "Hantera"
+
+msgid "Handled leave applications"
+msgstr "Hanterade ledighetsansökningar"
+
+msgid "Leave applications to handle"
+msgstr "Ledighetsansökningar att hantera"
+
+msgid "Administer leave application settings"
+msgstr "Administrera inställningar för ledighetsansökningar"
+
+msgid "Leave application settings"
+msgstr "Inställningar för ledighetsansökningar"
+
+msgid "List and handle leave applications"
+msgstr "Lista och hantera ledighetsansökningar"
+
+msgid "Create leave application"
+msgstr "Skapa ledighetsansökan"
+
+msgid "The leave application %label has been updated."
+msgstr "Ledighetsansökan %label har uppdaterats."
+
+msgid "New leave application %label has been created."
+msgstr "Ny ledighetsansökan %label har skapats."
+
+msgid "Handle leave application mails"
+msgstr "Hanterar e-post för ledighetsansökningar"
+
+msgid "I confirm that I want to handle this application even though I am the creator of the application."
+msgstr "Jag bekräftar att jag vill hantera denna ansökan även om jag är skaparen av ansökan."
+
+msgid "Note that these handler notes is included in the email sent to the caregivers if set to do so."
+msgstr "Observera att handläggarens anteckningar inkluderas i e-postmeddelandet som skickas till vårdnadshavarna om det är inställt så."
+
+msgid "Handler notes"
+msgstr "Handläggarens anteckningar"
+
+msgid "Notes"
+msgstr "Anteckningar"
+
+msgid "I reject the leave application"
+msgstr "Jag avslår ledighetsansökan"
+
+msgid "I approve the leave application"
+msgstr "Jag godkänner ledighetsansökan"
+
+msgid "The student has relative high absence when summarize previous absence with days from this application. Depending on the school policy the application may need to be handled by a principle."
+msgstr "Eleven har relativt hög frånvaro när tidigare frånvaro summeras med dagar från denna ansökan. Beroende på skolans rutiner kan ansökan behöva hanteras av en rektor."
+
+msgid "Absence days"
+msgstr "Frånvarodagar"
+
+msgid "For more detailed statistics, see @link"
+msgstr "För mer detaljerad statistik, se @link"
+
+msgid "@student statistics"
+msgstr "@student statistik"
+
+msgid "Absence statistics for @student from @from - @to"
+msgstr "Frånvarostatistik för @student från @from - @to"
+
+msgid "Handle leave application"
+msgstr "Hantera ledighetsansökan"
+
+msgid "The school has been notified."
+msgstr "Skolan har blivit informerad."
+
+msgid "Login to @url to handle the application."
+msgstr "Logga in på @url för att hantera ansökan."
+
+msgid "@label created by @user."
+msgstr "@label skapad av @user."
+
+msgid "New leave application"
+msgstr "Ny ledighetsansökan"
+
+msgid "@label created."
+msgstr "@label skapad."
+
+msgid "Enter a plan for how student may compensate for the lost tuition."
+msgstr "Ange en plan för hur eleven kan kompensera förlorad undervisning"
+
+msgid "Compensation plan"
+msgstr "Kompenseringsplan"
+
+msgid "Reason for leave"
+msgstr "Anledning till ledighet"
+
+msgid "Date and time"
+msgstr "Datum och tid"
+
+msgid "Enter date as"
+msgstr "Ange datum som"
+
+msgid "Create application"
+msgstr "Skapa ansökan"
+
+msgid "Create leave application"
+msgstr "Skapa ledighetsansökan"
+
+msgid "Create leave application for @student"
+msgstr "Skapa ledighetsansökan för @student"
+
+msgid "You have leave applications to handle. You can handle them @link."
+msgstr "Du har ledighetsansökningar att hantera. Du kan hantera dem @link."
+
+msgid "Max application days future"
+msgstr "Max dagar framåt i ansökningar"
+
+msgid "Max application days ago"
+msgstr "Max dagar bakåt i ansökningar"
+
+msgid "Maximum number of days a leave application can be in the future."
+msgstr "Maximalt antal dagar en ledighetsansökan kan vara i framtiden."
+
+msgid "Maximum number of days a leave application can be in the past."
+msgstr "Maximalt antal dagar en ledighetsansökan kan vara bakåt i tiden."
+
+msgid "Maximum number of days a leave application can have."
+msgstr "Maximalt antal dagar en ledighetsansökan kan ha."
+
+msgid "Number of days for which a leave application must be handled by a principle."
+msgstr "Antal dagar som innebär att ledighetsansökan måste hanteras av en rektor."
+
+msgid "Long leave"
+msgstr "Lång ledighet"
+
+msgid "Me (@name)"
+msgstr "Mig (@name)"
+
+msgid "Handled by"
+msgstr "Hanterad av"
+
+msgid "Leave days"
+msgstr "Lediga dager"
+
+msgid "@label has been @state by @handler."
+msgstr "@label har blivit @state av @handler."
+
+msgid "rejected"
+msgstr "avslagen"
+
+msgid "approved"
+msgstr "godkänd"
+
+msgid "Leave application for @student"
+msgstr "Ledighetsansökan för @student"
+
+msgid "Handle application"
+msgstr "Hantera ansökan"
+
+msgid "Max application days"
+msgstr "Max antal dagar i ansökan"
+
+msgid "Leave application has been handled."
+msgstr "Ledighetsansökan har hanterats."
+
+msgid "Student leave application"
+msgstr "Ledighetsansökan för elev"
+
+msgid "student leave application"
+msgstr "ledighetsansökan för elev"
+
+msgid "Caregiver"
+msgstr "Vårdnadshavare"
+
+msgid "Administrator"
+msgstr "Administratör"
+
+msgid "Principle"
+msgstr "Rektor"
+
+msgid "Budget reviewer"
+msgstr "Budgetgranskare"
+
+msgid "Budget administrator"
+msgstr "Budgetadministratör"
+
+msgid "To absence list"
+msgstr "Till frånvarolista"
+
+msgid "Extra recipients"
+msgstr "Extra mottagare"
+
+msgid "Add extra recipients to the mail, one per row. Remember to not expose school related information to unauthorized recipients."
+msgstr "Lägg till extra mottagare till mailet, en per rad. Kom ihåg att inte exponera skolrelaterad information till obehöriga mottagare."
+
+msgid "The email address %mail is not valid."
+msgstr "Mailadressen %mail är inte giltig."
+
+msgid "Birth data"
+msgstr "Födelsedata"
+
+msgid "Show birth data. If there is no personal number registered or logged in user does not have access to view it, the last four digits will be masked as \"****\"."
+msgstr "Visa födelsedata. Om det inte finns något personnummer registrerat eller inloggad användare inte har behörighet att se det, kommer de sista fyra siffrorna att maskeras med \"****\"."
+
+msgid "The entered personal number @value is not valid."
+msgstr "Det angivna personnumret @value är inte giltigt."
+
+msgid "The entered personal number @value is already used by @user."
+msgstr "Det angivna personnumret @value används redan av @user."
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid "Digital national tests"
+msgstr "Digitala nationella prov"
+
+msgid "Create DNP provisioning"
+msgstr "Skapa DNP-provisionering"
+
+msgid "Digital national test"
+msgstr "Digitalt nationellt prov"
+
+msgid "Download DNP Provisioning"
+msgstr "Ladda ner DNP-provisionering"
+
+msgid "DNP Provisioning - set synced"
+msgstr "DNP-provisionering - märk som synkroniserad"
+
+msgid "DNP"
+msgstr "DNP"
+
+msgid "Resources for digital national tests"
+msgstr "Resurser för digitala nationella prov"
+
+msgid "DNP provisioning settings"
+msgstr "Inställningar för DNP-provisionering"
+
+msgid "Settings for DNP provisioning exports"
+msgstr "Inställningar för DNP-provisioneringsexport"
+
+msgid "DNP provisioning"
+msgstr "DNP-provisionering"
+
+msgid "List and create DNP provisionings"
+msgstr "Lista och skapa DNP-provisioneringar"
+
+msgid "DNP federated usernames"
+msgstr "DNP federerade användarnamn"
+
+msgid "List federated usernames for DNP"
+msgstr "Lista federerade användarnamn för DNP"
+
+msgid "Classes"
+msgstr "Klasser"
+
+msgid "Class"
+msgstr "Klass"
+
+msgid "Subject groups"
+msgstr "Ämnesgrupper"
+
+msgid "Staff"
+msgstr "Personal"
+
+msgid "Students - Federated usernames"
+msgstr "Elever - Federerade användarnamn"
+
+msgid "Staff - DNP federated usernames"
+msgstr "Personal - DNP federerade användarnamn"
+
+msgid "Staff - EduID usernames"
+msgstr "Personal - EduID användarnamn"
+
+msgid "Add DNP provisioning settings"
+msgstr "Lägg till DNP-provisioneringsinställningar"
+
+msgid "Edit DNP provisioning settings"
+msgstr "Redigera DNP-provisioneringsinställningar"
+
+msgid "Delete DNP provisioning settings"
+msgstr "Ta bort DNP-provisioneringsinställningar"
+
+msgid "Create new DNP provisioning"
+msgstr "Skapa ny DNP-provisionering"
+
+msgid "DNP provisioning settings preview"
+msgstr "Förhandsgranskning av DNP-provisioneringsinställningar"
+
+msgid "No DNP provisioning settings found."
+msgstr "Inga DNP-provisioneringsinställningar hittades."
+
+msgid "Select last uploaded DNP provisioning"
+msgstr "Välj senast uppladdade DNP-provisionering"
+
+msgid "The last uploaded DNP provisioning is used to determine the changes in the new provisioning to mark \"Ta bort\" property in the generated file properly."
+msgstr "Den senast uppladdade DNP-provisioneringen används för att bestämma ändringarna i den nya provisioneringen för att korrekt markera egenskapen \"Ta bort\" i den genererade filen."
+
+msgid "Next step"
+msgstr "Nästa steg"
+
+msgid "DNP provisioning created."
+msgstr "DNP-provisionering skapad."
+
+msgid "Add dnp provisioning"
+msgstr "Lägg till DNP-provisionering"
+
+msgid "Configure a DNP Provisioning Settings entity type."
+msgstr "Konfigurera en DNP-provisioneringsinställningstyp."
+
+msgid "List of DNP provisionings."
+msgstr "Lista över DNP-provisioneringar."
+
+msgid "DNP Provisionings"
+msgstr "DNP-provisioneringar"
+
+msgid "Configure a DNP Provisioning entity type."
+msgstr "Konfigurera en DNP-provisioneringstyp."
+
+msgid "Add dnp provisioning test settings"
+msgstr "Lägg till DNP-provisioneringstestinställningar"
+
+msgid "Add dnp provisioning test settings type"
+msgstr "Lägg till DNP-provisioneringstestinställningstyp"
+
+msgid "Only include the above selected students in the list, exclude all others"
+msgstr "Inkludera endast de ovan valda eleverna i listan, exkludera alla andra"
+
+msgid "Use all relevant students for the test but exclude the above selected students"
+msgstr "Använd alla relevanta elever för testet men exkludera de ovan valda eleverna"
+
+msgid "@subject in gr @grade"
+msgstr "@subject i åk @grade"
+
+msgid "Delete dnp provisioning test settings type"
+msgstr "Ta bort DNP-provisioneringstestinställningstyp"
+
+msgid "Save dnp provisioning test settings type"
+msgstr "Spara DNP-provisioneringstestinställningstyp"
+
+msgid "Edit %label dnp provisioning test settings type"
+msgstr "Redigera %label DNP-provisioneringstestinställningstyp"
+
+msgid "Created"
+msgstr "Skapad"
+
+msgid "Created by"
+msgstr "Skapad av"
+
+msgid "Select if the list above is a list of students to include (explicitly) or exclude from the list of students in the grade relevant for the selected test."
+msgstr "Välj om listan ovan är en lista över elever att inkludera (explicit) eller exkludera från listan över elever i den årskurs som är relevant för det valda testet."
+
+msgid "Usage of the students list"
+msgstr "Användning av elevlistan"
+
+msgid "Students not relevant for the selected test will be ignored."
+msgstr "Elever som inte är relevanta för det valda testet kommer att ignoreras."
+
+msgid "Teachers for assessment"
+msgstr "Lärare för bedömning"
+
+msgctxt "assessment"
+msgid "Test"
+msgstr "Prov"
+
+msgctxt "assessment"
+msgid "Tests"
+msgstr "Prov"
+
+msgid "Federated usernames - Students"
+msgstr "Federerade användarnamn - Elever"
+
+msgid "Federated usernames - Staff"
+msgstr "Federerade användarnamn - Personal"
+
+msgid "EduID usernames - Staff"
+msgstr "EduID-användarnamn - Personal"
+
+msgid "Populate teachers for assessment"
+msgstr "Populera lärare för bedömning"
+
+msgid "If checked, teachers will be populated to each test by analyse of courses in Simple School Reports."
+msgstr "Om markerad kommer lärare att populeras för varje prov genom analys av kurser i Simple School Reports."
+
+msgid "Users that should be marked with \"Sekretessmarkering\" to Skolverkets test portal. In general such secret data should not be in SSR but if there are user that still should have this marking to Skolverket, add those here. Otherwise you can add secrete user data manually in the generated file before uploading to Skolverket."
+msgstr "Användare som ska markeras med \"Sekretessmarkering\" till Skolverkets testportal. I allmänhet bör sådan hemlig data inte finnas i SSR men om det finns användare som ändå ska ha denna markering hos Skolverket, lägg till dem här. Annars kan du lägga till hemlig användardata manuellt i den genererade filen innan du laddar upp den till Skolverket."
+
+msgid "Users with secrecy marking"
+msgstr "Användare med sekretessmarkering"
+
+msgid "Staff that will be exported regardless of if they occur as teachers in affected classes or not. For example principles or administrators."
+msgstr "Personal som kommer att exporteras oavsett om de förekommer som lärare i berörda klasser eller inte. Till exempel rektorer eller administratörer."
+
+msgid "Guaranteed staff"
+msgstr "Garanterad personal"
+
+msgid "Include email in the provisioning file if user has a valid email."
+msgstr "Inkludera e-post i provisioneringsfilen om användaren har en giltig e-postadress."
+
+msgid "Include student email"
+msgstr "Inkludera elevers e-post"
+
+msgid "Include staff email"
+msgstr "Inkludera personalens e-post"
+
+msgid "Warnings"
+msgstr "Varningar"
+
+msgid "Number of staff members"
+msgstr "Antal personalanvändare"
+
+msgid "Number of students"
+msgstr "Antal elever"
+
+msgid "Number of subject groups"
+msgstr "Antal ämnesgrupper"
+
+msgid "Number of classes"
+msgstr "Antal klasser"
+
+msgid "File for DNP Provisioning"
+msgstr "Fil för DNP-provisionering"
+
+msgid "The prefix to use for the provisioning file name."
+msgstr "Prefixet som ska användas för provisioneringsfilens namn."
+
+msgid "File name prefix"
+msgstr "Filnamnsprefix"
+
+msgid "Downloaded"
+msgstr "Nedladdad"
+
+msgid "Synced"
+msgstr "Synkroniserad"
+
+msgid "Mark as synced"
+msgstr "Markera som synkroniserad"
+
+msgid "Only set synced if you have confirmed that this provisioning file has been successfully uploaded to Skolverket."
+msgstr "Markera endast som synkroniserad om du har bekräftat att denna provisioneringsfil framgångsrikt har laddats upp till Skolverket."
+
+msgid "Are you sure you want to mark this provisioning file as synced?"
+msgstr "Är du säker på att du vill markera denna provisioneringsfil som synkroniserad?"
+
+msgid "DNP provisioning is marked as synced"
+msgstr "DNP-provisionering är markerad som synkroniserad"
+
+msgid "The selected grades will be devided up in their respective classes if applicable."
+msgstr "De valda årskurserna kommer att delas upp i sina respektive klasser om det är tillämpligt."
+
+msgid "Define grades and subjects"
+msgstr "Definiera årskurser och ämnen"
+
+msgid "My mentoring students"
+msgstr "Mina mentorselever"
+
+msgid "Password approved (Strength: @password-score of @policy-score)"
+msgstr "Lösenord godkänt (Styrka: @password-score av @policy-score)"
+
+msgid "Password rejected (Strength: @password-score of @policy-score)"
+msgstr "Lösenord avvisat (Styrka: @password-score av @policy-score)"
+
+msgid "Password strength will be verified when you proceed with the next user field."
+msgstr "Lösenordsstyrka kommer att verifieras när du fortsätter med nästa användarfält."
+
+msgid "Verifying password strength..."
+msgstr "Verifierar lösenordsstyrka..."
+
+msgid "Extra adaptations"
+msgstr "Extra anpassningar"
+
+msgid "List students with extra adaptations"
+msgstr "Lista elever med extra anpassningar"
+
+msgid "Students with extra adaptations"
+msgstr "Elever med extra anpassningar"
+
+msgid "Create and administer extra adaptations"
+msgstr "Skapa och administrera extra anpassningar"
+
+msgid "Add extra adaptations"
+msgstr "Lägg till extra anpassningar"
+
+msgid "Add extra adaptation"
+msgstr "Lägg till extra anpassning"
+
+msgid "Previous IUP goals with feedback"
+msgstr "Tidigare IUP-mål med återkoppling"
+
+msgid "Merit points for students in grade @grade"
+msgstr "Meritpoäng för elever i årskurs @grade"
+
+msgid "The password does not satisfy the password policies."
+msgstr "Lösenordet uppfyller inte lösenordspolicyn."
+
+msgid "The password has a score of @password-score but the policy requires a score of at least @policy-score"
+msgstr "Lösenordet har en styrka @password-score men policyn kräver styrka @policy-score som minst"
+
+msgid "Grade from trial"
+msgstr "Betyg från prövning"
+
+msgid "Update reason"
+msgstr "Ändringsorsak"
+
+msgid "Correction"
+msgstr "Rättelse"
+
+msgctxt "update_reason"
+msgid "Change"
+msgstr "Ändring"
+
+msgid "Show protected data"
+msgstr "Visa skyddade uppgifter"
+
+msgid "If users have privacy marking or protected population records, only administrators and principals have access to sensitive information. School staff and the user himself can still see a limited set of information about the user. For example. name and class information (for students)."
+msgstr "Om användare har sekretessmarkering eller skyddad folkbokföring kommer bara administratörer och rektorer åt känslig information. Skolpersonal och användaren själv kan fortfarande se en begränsad uppsättning information om användaren. T.ex. namn och klassinformation (för elever)."
+
+msgid "NOTE: Remember that you probably want to set caregivers and siblings to this setting as well."
+msgstr "OBSERVERA: Kom ihåg att du förmodligen vill ställa in vårdnadshavare och syskon till denna inställning också."
+
+msgid "NOTE: Always store data that is essential for the purpose of your school. Do not store more data than necessary!"
+msgstr "OBSERVERA: Spara alltid bara den data som är nödvändig för syftet med din skola. Spara inte mer data än nödvändigt!"
+
+msgid "Week"
+msgstr "Vecka"
+
+msgid "A: @attended % VA: @valid_absence % IA: @invalid_absence %"
+msgstr "N: @attended % GF: @valid_absence % OF: @invalid_absence %"
+
+msgid "w.@week (@from - @to)"
+msgstr "v.@week (@from - @to)"
+
+msgid "Attendance statistics per day"
+msgstr "Närvarostatistik per dag"
+
+msgid "Create and administer classes"
+msgstr "Skapa och administrera klasser"
+
+msgid "Completed but not passed"
+msgstr "Genomfört med inte godkänt"
+
+msgid "Completed"
+msgstr "Genomfört"
+
+msgid "Not completed"
+msgstr "Ej genomfört"
+
+msgid "Skip for this student"
+msgstr "Hoppa över för denna elev"
+
+msgid "Handle examination results"
+msgstr "Hantera examinationsresultat"
+
+msgid "Examination results"
+msgstr "Examinationsresultat"
+
+msgid "Examination result"
+msgstr "Examinationsresultat"
+
+msgid "Examinations"
+msgstr "Examinationer"
+
+msgid "Examination"
+msgstr "Examination"
+
+msgid "Assessment groups"
+msgstr "Bedömningsgrupper"
+
+msgid "Assessment group"
+msgstr "Bedömningsgrupp"
+
+msgid "Add examination result"
+msgstr "Lägg till examinationsresultat"
+
+msgid "Add examination"
+msgstr "Lägg till examination"
+
+msgid "Add assessment group user"
+msgstr "Lägg till användare i bedömningsgrupp"
+
+msgid "Add assessment group"
+msgstr "Lägg till bedömningsgrupp"
+
+msgid "@count examination results saved."
+msgstr "@count examinationsresultat sparade."
+
+msgid "Processed @current out of @total."
+msgstr "Bearbetat @current av @total."
+
+msgid "Saving examination results"
+msgstr "Sparar examinationsresultat"
+
+msgid "If not published this examination result will be shown on the student tab."
+msgstr "Om ej publicerad kommer detta examinationsresultat att visas på elevfliken."
+
+msgid "If not published no examination result will be shown on the student tab."
+msgstr "Om ej publicerad kommer inget examinationsresultat att visas på elevfliken."
+
+msgid "New examination result %label has been created."
+msgstr "Nytt examinationsresultat %label har skapats."
+
+msgid "New examination %label has been created."
+msgstr "Ny examination %label har skapats."
+
+msgid "New assessment group %label has been created."
+msgstr "Ny bedömningsgrupp %label har skapats."
+
+msgid "Last date"
+msgstr "Sista datum"
+
+msgid "Permissions for others"
+msgstr "Behörigheter för andra"
+
+msgid "Main teacher"
+msgstr "Huvudlärare"
+
+msgid "To be able to add new examination results in this assessment group."
+msgstr "För att kunna lägga till nya examinationsresultat i denna bedömningsgrupp."
+
+msgid "Allow add examinations"
+msgstr "Tillåt att lägga till examinationer"
+
+msgid "To be able to handle all examination results in this assessment group."
+msgstr "För att kunna hantera alla examinationsresultat i denna bedömningsgrupp."
+
+msgid "Allow handle all examination results"
+msgstr "Tillåt att hantera alla examinationsresultat"
+
+msgid "To be able to view all examination results in this assessment group."
+msgstr "För att kunna se alla examinationsresultat i denna bedömningsgrupp."
+
+msgid "Allow view all examination results"
+msgstr "Tillåt att se alla examinationsresultat"
+
+msgid "To be able to change the settings of this assessment group."
+msgstr "För att kunna ändra inställningarna för denna bedömningsgrupp."
+
+msgid "Allow administer this assessment group"
+msgstr "Tillåt att administrera denna bedömningsgrupp"
+
+msgid "View/Handle examination results"
+msgstr "Visa/Hantera examinationsresultat"
+
+msgid "You can edit adapted studies as school week for a specific student. That school week setting will take precedence over the grade/class setting."
+msgstr "Du kan redigera anpassade studiegång som skolvecka för en specifik elev. Denna skolvecko-inställning kommer att ha företräde framför årskurs-/klassinställningen."
+
+msgid "If school week is set for class and grade. The school week for the class will be used."
+msgstr "Om skolvecka är inställd för klass och årskurs kommer skolveckan för klassen kommer att användas."
+
+msgid "School week for grades"
+msgstr "Skolvecka för årskurser"
+
+msgid "School week for classes"
+msgstr "Skolvecka för klasser"
+
+msgid "Class and grade, example: Anders Andersson (1-3A Gr 3)"
+msgstr "Klass och årskurs, exempel: Anders Andersson (1-3A Åk 3)"
+
+msgid "Class (only class name), example: Anders Andersson (3A)"
+msgstr "Klass (endast klassnamn), exempel: Anders Andersson (3A)"
+
+msgid "Default (only grade), example: Anders Andersson (Gr 3)"
+msgstr "Standard (endast årskurs), exempel: Anders Andersson (Åk 3)"
+
+msgid "Choose what suffix students have in different lists for identification. Class name will be the name of this class and grade will be the grade of the student."
+msgstr "Välj vilket suffix elever har i olika listor för identifiering. Klassnamn kommer att vara namnet på denna klass och årskurs kommer att vara elevens årskurs."
+
+msgid "Behavior of student suffix"
+msgstr "Beteende av elevsuffix"
+
+msgid "Mentors"
+msgstr "Mentorer"
+
+msgid "Use as short name as possible!"
+msgstr "Använd så kort namn som möjligt!"
+
+msgid "@count items saved"
+msgstr "@count objekt sparade"
+
+msgid "@count items copied"
+msgstr "@count objekt kopierade"
+
+msgid "Copying school week"
+msgstr "Kopierar skolvecka"
+
+msgid "Select at least one target that is not the same as the source."
+msgstr "Välj minst ett mål som inte är samma som källan för skolvecka."
+
+msgid "The selected source does not have a school week."
+msgstr "Valda källan har inte en skolvecka."
+
+msgid "Source to copy school week from"
+msgstr "Källa att kopiera skolvecka från"
+
+msgid "Copy school week"
+msgstr "Kopiera skolvecka"
+
+msgid "Targets to create school week on"
+msgstr "Mål att skapa skolvecka för"
+
+msgid "Note that any current school week on the target will be replaced."
+msgstr "Observera att eventuell nuvarande skolvecka på målet kommer att ersättas."
+
+msgid "No class"
+msgstr "Ingen klass"
+
+msgid "Add class"
+msgstr "Skapa klass"
+
+msgid "Assign to class"
+msgstr "Tilldela klass"
+
+msgid "A class with students cannot be deactivated."
+msgstr "En klass med elever kan inte avaktiveras."
+
+msgid "Class assigned"
+msgstr "Klass tilldelad"
+
+msgid "Sort out examinations"
+msgstr "Gallra examinationer"
+
+msgid "Delete all examinations in assessment group @label older than this date."
+msgstr "Radera alla examinationer i bedömningsgruppen @label äldre än detta datum."
+
+msgid "No examinations to sort out."
+msgstr "Inga examinationer att gallra bort."
+
+msgid "Removing examinations"
+msgstr "Tar bort examinationer"
+
+msgid "All subjects"
+msgstr "Alla ämnen"
+
+msgid "Edit result"
+msgstr "Hantera resultat"
+
+msgid "Published"
+msgstr "Publicerad"
+
+msgid "Not in assessment group"
+msgstr "Ej i bedömningsgrupp"
+
+msgid "All students from selected class will be assigned to this course. Leave blank to select an explicit student list below."
+msgstr "Alla elever från vald klass kommer att läggas till denna kurs. Lämna tomt för att välja en explicit elevlista nedan."
+
+msgid "school class"
+msgstr "klass"
+
+msgid "School class"
+msgstr "Klass"
+
+msgid "school classes"
+msgstr "klasser"
+
+msgid "School classes"
+msgstr "Klasser"
+
+msgid "Create assessment group from course"
+msgstr "Skapa bedömningsgrupp från kurs"
+
+msgid "Do you want to copy @label to a new assessment group?"
+msgstr "Vill du kopiera @label till en ny bedömningsgrupp?"
+
+msgid "Please describe the reason why you want to shut down the site to maintenance mode."
+msgstr "Beskriv varför du vill stänga ner webbplatsen till underhållsläge."
+
+msgid "All users (including yourself) will be logged out and the site will be shut down into maintenance mode. A bug report mail will automatically be sent to the system administrator."
+msgstr "Alla användare (inklusive dig själv) kommer att loggas ut och webbplatsen kommer att stängas ner till underhållsläge. Ett felrapportmejl kommer automatiskt att skickas till systemadministratören."
+
+msgid "Do you want to set the site into maintenance mode?"
+msgstr "Vill du ställa in webbplatsen i underhållsläge?"
+
+msgid "PANIC! @name has been set into maintenance mode."
+msgstr "PANIK! @name har ställts in i underhållsläge."
+
+msgid "Panic!"
+msgstr "Panik!"
+
+msgid "Shut down the site to maintenance mode. Only do this if you have reason to believe that the system has been compromised and you want to shut it down for investigation."
+msgstr "Stäng ner webbplatsen till underhållsläge. Gör detta endast om du har skäl att tro att systemet har komprometterats och du vill stänga ner det för undersökning."
+
+msgid "This combination of roles is not allowed."
+msgstr "Denna kombination av roller är inte tillåten."
+
+msgid "User with role student cannot have any other role."
+msgstr "Användare med rollen elev får inte ha någon annan roll."
+
+msgid "NOTE: Contact details for students with protected personal data will not be included."
+msgstr "OBSERVERA: Kontaktuppgifter för elever med skyddade personuppgifter kommer inte att inkluderas."
+
+msgid "Include student contact details"
+msgstr "Inkludera elevens kontaktuppgifter"
+
+msgid "The grade refers to the grade that has been set in the corresponding student groups. Only students in these student groups will be included in the export."
+msgstr "Årskursen avser den årskurs som har ställts in i motsvarande elevgrupper. Endast elever i dessa elevgrupper kommer att inkluderas i exporten."
+
+msgid "Grades to include in export file"
+msgstr "Årskurser att inkludera i exportfil"
+
+msgid "Extens export (MGBETYG)"
+msgstr "Extens-export (MGBETYG)"
+
+msgid "Invalid date"
+msgstr "Ogiltigt datum"
+
+msgid "Invalid duration"
+msgstr "Ogiltig lektionslängd"
+
+msgid "free day"
+msgstr "ledig"
+
+msgid "Free day"
+msgstr "Ledig"
+
+msgid "School day"
+msgstr "Skoldag"
+
+msgid "No teaching hours (free)"
+msgstr "Ingen undervisning (ledig)"
+
+msgid "If the school week deviation has teaching hours, it must have a start and end date for the school day."
+msgstr "Om avvikelse för skolveckan har undervisningstider måste den ha ett start- och sluttid för skoldagen."
+
+msgid "Select a lesson"
+msgstr "Välj en lektion"
+
+msgid "Select lesson"
+msgstr "Välj lektion"
+
+msgid "Lesson"
+msgstr "Lektion"
+
+msgid "Divergent lesson"
+msgstr "Avvikande lektion"
+
+msgid "Report method"
+msgstr "Rapporteringsmetod"
+
+msgid "Full group"
+msgstr "Helgrupp"
+
+msgid "Cancel lesson"
+msgstr "Ställ in lektion"
+
+msgid "Undo cancel lesson"
+msgstr "Ångra inställd lektion"
+
+msgid "Fast report"
+msgstr "Snabbrapportera"
+
+msgid "Every fifth week"
+msgstr "Var femte vecka"
+
+msgid "Every fourth week"
+msgstr "Var fjärde vecka"
+
+msgid "Every third week"
+msgstr "Var tredje vecka"
+
+msgid "Every second week"
+msgstr "Varannan vecka"
+
+msgid "Specify periodicity"
+msgstr "Ange periodicitet"
+
+msgid "Even weeks"
+msgstr "Jämna veckor"
+
+msgid "Odd weeks"
+msgstr "Udda veckor"
+
+msgid "Weekly"
+msgstr "Varje vecka"
+
+msgid "Configure lessons to report sync settings."
+msgstr "Konfigurera inställningar för synkronisering av lektioner att rapportera."
+
+msgid "To report all"
+msgstr "Att rapportera alla"
+
+msgid "To report"
+msgstr "Att rapportera"
+
+msgid "Settings for sync of lessons"
+msgstr "Inställningar för synk. av lektioner"
+
+msgid "Sync lessons from schema"
+msgstr "Synkronisera lektioner från schema"
+
+msgid "Cancel of lesson @label has been reverted"
+msgstr "Inställd lektion @label har ångrats"
+
+msgid "Undo cancel lesson"
+msgstr "Ångra ställ in lektion"
+
+msgid "Are you sure you want to undo cancel @label?"
+msgstr "Är du säker på att du vill ångra inställ lektion @label?"
+
+msgid "There is no lessons to report to sync."
+msgstr "Det finns inga 'lektioner att rapportera' för synkronisering."
+
+msgid "Lessons to report are synced every night for the current day. But on this page you can trigger a manual sync for a specific period. Not outside current active term though."
+msgstr "Lektioner att rapportera synkroniseras varje natt för den aktuella dagen. Men på denna sida kan du göra en manuell synkronisering för en specifik period. Dock inte utanför den nuvarande aktiva terminen."
+
+msgid "Synchronize to"
+msgstr "Synkronisera till"
+
+msgid "Synchronize from"
+msgstr "Synkronisera från"
+
+msgid "Synchronize"
+msgstr "Synkronisera"
+
+msgid "No lessons to fast report"
+msgstr "Inga lektioner att snabbrapportera"
+
+msgid "NOTE: Students that has registered absence during any part of the lesson will be set as valid absence from the lesson."
+msgstr "OBS: Elever som har registrerad dagsfrånvaro under någon del av lektionen kommer att anges som giltig frånvaro från lektionen."
+
+msgid "Cancel lesson"
+msgstr "Ställ in lektion"
+
+msgid "Skip lesson (do nothing)"
+msgstr "Hoppa över lektion (gör ingenting)"
+
+msgid "What to do if there is a conflict with the existing reported lessons. Could be due to a previous deviation report or if schema has recently been changed."
+msgstr "Vad ska göras om det finns en konflikt med befintliga rapporterade lektioner. Kan bero på en tidigare avvikande rapportering eller om schemat nyligen har ändrats."
+
+msgid "Conflict behavior"
+msgstr "Beteende vid konflikt"
+
+msgid "Students (@count)"
+msgstr "Elever (@count)"
+
+msgid "Fast report"
+msgstr "Snabbrapportera"
+
+msgid "Fast report lessons"
+msgstr "Snabbrapportera lektioner"
+
+msgid "No lessons has been cancelled."
+msgstr "Inga lektioner har ställts in."
+
+msgid "Cancel lessons"
+msgstr "Ställ in lektioner"
+
+msgid "Are you sure you want to cancel the lessons?"
+msgstr "Är du säker på att du vill ställa in lektionerna?"
+
+msgid "Fast report lesson"
+msgstr "Snabbrapportera lektion"
+
+msgid "@label cancelled"
+msgstr "@label inställd"
+
+msgid "Are you sure you want to cancel the lesson @label?"
+msgstr "Är du säker på att du vill ställa in lektionen @label?"
+
+msgid "this lesson"
+msgstr "denna lektion"
+
+msgid "Remove unreported lessons"
+msgstr "Ta bort icke-rapporterade lektioner"
+
+msgid "Remove all unreported lessons to report"
+msgstr "Ta bort alla icke-rapporterade lektioner att rapportera"
+
+msgid "Remove unreported events"
+msgstr "Ta bort icke-rapporterade händelser"
+
+msgid "Enable or disable syncing of lessons to report"
+msgstr "Aktivera eller inaktivera synkronisering av lektioner att rapportera"
+
+msgid "Sync is enabled"
+msgstr "Synkronisering är aktiv"
+
+msgid "@count days has been synced with lessons to report."
+msgstr "@count dagar har synkroniserats med lektioner att rapportera."
+
+msgid "@count lessons has been cancelled."
+msgstr "@count lektioner har ställts in."
+
+msgid "@count lessons has been skipped."
+msgstr "@count lektioner har hoppats över."
+
+msgid "@count lessons has been reported."
+msgstr "@count lektioner har rapporterats."
+
+msgid "@count unreported lessons has been removed."
+msgstr "@count icke-rapporterade lektioner har tagits bort."
+
+msgid "Students not relevant for the student list for the corresponding course will be ignored."
+msgstr "Elever som inte är relevanta för elevlistan för motsvarande kurs kommer att ignoreras."
+
+msgid "With start at"
+msgstr "Med start vid"
+
+msgid "Specific periodicity for group @number"
+msgstr "Specifik periodicitet för grupp @number"
+
+msgid "Periodicity for group @number"
+msgstr "Periodicitet för grupp @number"
+
+msgid "Group name @number"
+msgstr "Gruppnamn @number"
+
+msgid "Number of groups"
+msgstr "Antal grupper"
+
+msgid "Deviated group or periodicity"
+msgstr "Avvikande grupp eller periodicitet"
+
+msgid "Set lesson length in minutes"
+msgstr "Ange lektionslängd i minuter"
+
+msgid "Lesson duration"
+msgstr "Lektionslängd"
+
+msgid "Lesson start"
+msgstr "Lektionsstart"
+
+msgid "Source"
+msgstr "Källa"
+
+msgid "Lesson from schema"
+msgstr "Lektion från schema"
+
+msgid "Note. It may take several minutes before the student lists are updated in places where class is used."
+msgstr "Obs. Det kan ta flera minuter innan elevlistorna uppdateras på platser där klass används."
+
+msgid "Calculate school days from schema"
+msgstr "Beräkna skoldagar från schema"
+
+msgid "Lesson with diverged periodicity that might not occur every week."
+msgstr "Lektion med avvikande periodicitet som kanske inte inträffar varje vecka."
+
+msgid "Lesson with diverged student list or periodicity that might not occur every week for all students."
+msgstr "Lektion med avvikande elevlista eller periodicitet som kanske inte inträffar varje vecka för alla elever."
+
+msgid "There can only be @number super admin users."
+msgstr "Det kan bara finnas @number superadmin-användare."
+
+msgid "Import users"
+msgstr "Importera användare"
+
+msgid "Select method to import users"
+msgstr "Välj metod för att importera användare"
+
+msgid "Import random users"
+msgstr "Importera slumpmässiga användare"
+
+msgid "ONLY FOR TESTING PURPOSES! Import users by randomizing data."
+msgstr "ENDAST FÖR TESTSYFTE! Importera användare genom att slumpa data."
+
+msgid "Imported @count users"
+msgstr "Importerade @count användare"
+
+msgid "No users to import."
+msgstr "Inga användare att importera."
+
+msgid "Import users"
+msgstr "Importera användare"
+
+msgid "No other users to import"
+msgstr "Inga andra användare att importera"
+
+msgid "Other users to import"
+msgstr "Andra användare att importera"
+
+msgid "No students to import"
+msgstr "Inga elever att importera"
+
+msgid "Students and caregivers to import"
+msgstr "Elever och vårdnadshavare att importera"
+
+msgid "Import and overwrite with @name"
+msgstr "Importera och skriv över med @name"
+
+msgid "Skip @name"
+msgstr "Hoppa över @name"
+
+msgid "Users with validation errors"
+msgstr "Användare med valideringsfel"
+
+msgid "Validate users"
+msgstr "Validera användare"
+
+msgid "The following issues were found in the import source:"
+msgstr "Följande problem hittades i importkällan:"
+
+msgid "No issues were found in the import source."
+msgstr "Inga problem hittades i importkällan."
+
+msgid "There are multiple users with this email in the import source, user will not be imported."
+msgstr "Det finns flera användare med denna e-post i importkällan, användaren kommer inte att importeras."
+
+msgid "There are multiple users with this personal number in the import source, user will not be imported."
+msgstr "Det finns flera användare med detta personnummer i importkällan, användaren kommer inte att importeras."
+
+msgid "Invalid address, user will be imported without address."
+msgstr "Ogiltig adress, användaren kommer att importeras utan adress."
+
+msgid "Missing valid personal number, user will not be imported."
+msgstr "Saknar giltigt personnummer, användaren kommer inte att importeras."
+
+msgid "Import"
+msgstr "Importera"
+
+msgid "Preview"
+msgstr "Förhandsgranska"
+
+msgid "Error importing user: @error"
+msgstr "Fel vid import av användare: @error"
+
+msgid "Unknown error occurred"
+msgstr "Okänt fel inträffade"
+
+msgid "Unknown validation error"
+msgstr "Okänt valideringsfel"
+
+msgid "Unknown user"
+msgstr "Okänd användare"
+
+msgid "Teachers to generate"
+msgstr "Lärare att generera"
+
+msgid "Caregivers and mentor will be generated for each student."
+msgstr "Vårdnadshavare och mentor kommer att genereras för varje elev."
+
+msgid "Number of students to generate for grade %grade"
+msgstr "Antal elever att generera för årskurs %grade"
+
+msgid "NOTE: SCB do not support partial imports. It is important that the student list and the grade registration is complete before using the SCB export file."
+msgstr "OBSERVERA: SCB stöder inte partiella importer. Det är därför viktigt att elevlistan och betygsregistreringen är komplett innan exporterad SCB-fil används."
+
+msgid "NOTE: Only students with the final grade in grade 9 will be included."
+msgstr "OBSERVERA: Endast elever med slutbetyg i årskurs 9 kommer att inkluderas."
+
+msgid "Include students in grade 9"
+msgstr "Inkludera elever i årskurs 9"
+
+msgid "Include students in grade 6"
+msgstr "Inkludera elever i årskurs 6"
+
+msgid "SCB export"
+msgstr "SCB-export"
+
+msgid "Refresh"
+msgstr "Uppdatera"
+
+msgid "Sum label"
+msgstr "Summa-etikett"
+
+msgid "Use only sum"
+msgstr "Använd endast summa"
+
+msgid "Monthly fee"
+msgstr "Månadsavgift"
+
+msgid "Invoice settings"
+msgstr "Fakturainställningar"
+
+msgctxt "invoice"
+msgid "Sum"
+msgstr "Summa"
+
+msgid "Invoice support"
+msgstr "Faktureringsstöd"
+
+msgid "List installed modules and their fees for invoicing."
+msgstr "Lista installerade moduler och deras avgifter för fakturering."
+
+msgid "Discount"
+msgstr "Rabatt"
+
+msgid "Annual fee: @label"
+msgstr "Årsavgift: @label"
+
+msgid "Monthly fee: @labal"
+msgstr "Månadsavgift: @label"
+
+msgid "Super user has logged in to @school_name"
+msgstr "Privilegierad användare har loggat in på @school_name"
+
+msgid "Super user @name has logged in to @school_name."
+msgstr "Privilegierad användare @name har loggat in på @school_name."
+
+msgid "Administer options for special diets"
+msgstr "Hantera alternativ för specialkost"
+
+msgid "Special diet options"
+msgstr "Specialkost-alternativ"
+
+msgid "Add special diet option"
+msgstr "Lägg till specialkost-alternativ"
+
+msgid "View @name"
+msgstr "Visa @name"
+
+msgid "Fee"
+msgstr "Avgift"
+
+msgid "Item"
+msgstr "Objekt"
+
+msgid "fee"
+msgstr "avgift"
+
+msgid "item"
+msgstr "objekt"
+
+msgid "Male students"
+msgstr "Elever som är pojkar"
+
+msgid "Female students"
+msgstr "Elever som är flickor"
+
+msgid "Students with special diet"
+msgstr "Elever med specialkost"
+
+msgid "Send status"
+msgstr "Status"
+
+msgid "Message sent"
+msgstr "Meddelande skickat"
+
+msgid "Message transfer failed"
+msgstr "Misslyckades att skicka"
+
+msgid "Simulated message"
+msgstr "Simulerat meddelande"
+
+msgid "Error message"
+msgstr "Felmeddelande"
+
+msgid "SSR Mail count"
+msgstr "SSR Antal mail"
+
+msgid "SSR Maillog"
+msgstr "SSR Maillog"
+
+msgid "Mail count"
+msgstr "Antal mail"
+
+msgid "Mail log"
+msgstr "Maillog"
+
+msgid "No data available."
+msgstr "Ingen data tillgänglig."
+
+msgid "Data is presented as Sent/Failed/Simulated"
+msgstr "Data presenteras som Skickade/Misslyckade/Simulerade"
+
+msgid "Mail counts per day"
+msgstr "Antal mail per dag"
+
+msgid "Total: @sent sent, @failed failed, @simulated simulated"
+msgstr "Totalt: @sent skickade, @failed misslyckade, @simulated simulerade"
+
+msgid "Demo mode is active. No messages are sent to real email addresses. This is a demonstration site and data can be removed at any time. Do not use real personal information."
+msgstr "Demoläge är aktivt. Inga meddelanden skickas till riktiga e-postadresser. Detta är en demonstrationswebbplats och data kan tas bort när som helst. Använd inte riktiga personuppgifter."
+
+msgid "Not registered"
+msgstr "Ej registrerad"
+
+msgid "Mail count report -  @school_name"
+msgstr "Mailräkningsrapport - @school_name"
+
+msgid "Current mail count stats last @days days for @school_name. Sent - @sent. Failed - @failed"
+msgstr "Nuvarande mailräkningsstatistik senaste @days dagarna för @school_name. Skickade - @sent. Misslyckade - @failed"
+
+msgid "Extra mail count batch size"
+msgstr "Extra e-postmeddelanden per batch"
+
+msgid "Mail count fee"
+msgstr "Avgift för e-postmeddelanden"
+
+msgid "This month"
+msgstr "Denna månad"
+
+msgid "This school year"
+msgstr "Detta läsår"
+
+msgid "Last month"
+msgstr "Förra månaden"
+
+msgid "Last school year"
+msgstr "Förra läsåret"
+
+msgid "No mail count fee"
+msgstr "Ingen avgift för e-postmeddelanden"
+
+msgid "Module sum label"
+msgstr "Modulsummans etikett"
+
+msgid "Use only sum for modules"
+msgstr "Använd endast summan för moduler"
+
+msgid "á Fee"
+msgstr "á Avgift"
+
+msgid "Extra messages"
+msgstr "Extra meddelanden"
+
+msgid "Module sum"
+msgstr "Modulsumma"
+
+msgid "Count"
+msgstr "Antal"
+
+msgid "No schema to show."
+msgstr "Inget schema att visa."
+
+msgid "Schema"
+msgstr "Schema"
+
+msgid "Deviations from schema may occur."
+msgstr "Avvikelser från schema kan förekomma."
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""

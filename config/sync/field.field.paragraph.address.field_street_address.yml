@@ -1,0 +1,19 @@
+uuid: 286340ee-2629-4b8e-90e4-63a1f2aa4a78
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_street_address
+    - paragraphs.paragraphs_type.address
+id: paragraph.address.field_street_address
+field_name: field_street_address
+entity_type: paragraph
+bundle: address
+label: 'Street address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

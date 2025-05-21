@@ -1,0 +1,19 @@
+uuid: 5f778b88-67a5-449d-9512-1a9d64fb8452
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+    - text
+id: taxonomy_term.field_iup_goal
+field_name: field_iup_goal
+entity_type: taxonomy_term
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

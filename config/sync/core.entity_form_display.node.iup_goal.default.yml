@@ -1,0 +1,52 @@
+uuid: 4c39f3db-9a4c-436c-8052-53a63bfbf119
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.iup_goal.field_iup_goal
+    - field.field.node.iup_goal.field_iup_round
+    - field.field.node.iup_goal.field_school_subject
+    - field.field.node.iup_goal.field_state
+    - field.field.node.iup_goal.field_student
+    - field.field.node.iup_goal.field_teacher
+    - field.field.node.iup_goal.field_teacher_comment
+    - node.type.iup_goal
+  module:
+    - allowed_formats
+    - text
+id: node.iup_goal.default
+targetEntityType: node
+bundle: iup_goal
+mode: default
+content:
+  field_teacher_comment:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 2
+      placeholder: ''
+    third_party_settings:
+      allowed_formats:
+        hide_help: '1'
+        hide_guidelines: '1'
+  preview_iup_goal:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_iup_goal: true
+  field_iup_round: true
+  field_school_subject: true
+  field_state: true
+  field_student: true
+  field_teacher: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

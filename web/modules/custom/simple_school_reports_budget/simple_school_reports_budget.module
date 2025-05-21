@@ -1,0 +1,215 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_ssr_login_access().
+ */
+function simple_school_reports_budget_ssr_login_access(\Drupal\Core\Session\AccountInterface $user) {
+  if ($user->hasPermission('budget review') || $user->hasPermission('administer budget')) {
+    return \Drupal\Core\Access\AccessResult::allowed();
+  }
+  return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+
+/**
+ * Implements hook_ssr_start_page_route().
+ */
+function simple_school_reports_budget_ssr_start_page_route(\Drupal\Core\Session\AccountInterface $account) {
+  if ($account->hasPermission('budget review') || $account->hasPermission('administer budget')) {
+    return 'simple_school_reports_core.start_page_default';
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ */
+function simple_school_reports_budget_field_widget_single_element_paragraphs_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if (isset($context['delta']) && !empty($element['#paragraph_type']) && !empty($element['subform']) && $element['#paragraph_type'] === 'budget_row') {
+    /** @var \Drupal\simple_school_reports_budget\Service\BudgetServiceInterface $budget_service */
+    $budget_service = \Drupal::service('simple_school_reports_budget.budget_service');
+    $budget_service->budgetRowFormAlter($element['subform'], $form_state, $context['delta']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_budget_paragraph_view(array &$build, \Drupal\paragraphs\ParagraphInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() === 'budget_row') {
+    if ($display->getComponent('row_info')) {
+      $expense = $entity->get('field_expense')->value;
+      $build['row_info'] = [
+        '#type' => 'container',
+      ];
+
+      $row_type = $entity->get('field_row_type')->value;
+
+      $fields_to_hide = [
+        'field_annual_worker',
+        'field_mean_salary',
+      ];
+
+      if ($row_type === 'annual_worker' || $row_type === 'per_student') {
+        if (!$entity->get('field_age_limit_from')->isEmpty() || !$entity->get('field_age_limit_to')->isEmpty()) {
+          $age_from = $entity->get('field_age_limit_from')->value;
+          $age_to = $entity->get('field_age_limit_to')->value;
+          $age_string = '';
+          if ($age_from && $age_to) {
+            $age_string = $age_from . ' - ' . $age_to;
+          }
+          elseif ($age_from) {
+            $age_string = '>=' . $age_from;
+          }
+          else {
+            $age_string = '<=' . $age_to;
+          }
+
+          $age_string .= ' ' . t('year');
+
+          $build['row_info']['age_span'] = [
+            '#prefix' => '<div><strong>' . t('Age span') . ': </strong>',
+            '#markup' => $age_string,
+            '#suffiz' => '</div>',
+          ];
+        }
+      }
+
+      if ($row_type === 'annual_worker') {
+        $fields_to_hide[] = 'field_value';
+
+        $annual_worker_string = '';
+        if ($expense) {
+          $annual_worker_string .= '-';
+        }
+
+        $annual_worker = $entity->get('field_annual_worker')->value;
+        if ($annual_worker) {
+          $annual_worker_string .= $annual_worker;
+        }
+
+        if (!empty($build['field_mean_salary'][0]['#markup'])) {
+          $annual_worker_string .= ' x ' . $build['field_mean_salary'][0]['#markup'];
+        }
+
+        $build['row_info']['annual_worker_row'] = [
+          '#prefix' => '<div>',
+          '#markup' => $annual_worker_string,
+          '#suffix' => ' ' . t('per annual worker and student') . '</div>',
+        ];
+      }
+
+      foreach ($fields_to_hide as $field) {
+        $build[$field]['#access'] = FALSE;
+      }
+
+      if ($expense && !empty($build['field_value'][0]['#markup'])) {
+        $build['field_value'][0]['#markup'] = '-' . $build['field_value'][0]['#markup'];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_budget_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    if ($entity->bundle() === 'budget') {
+      $operations['view_print'] = [
+        'title' => t('View/Print'),
+        'url' => \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $entity->id()], ['query' => ['back_destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+
+      if (\Drupal::currentUser()->hasPermission('administer budget')) {
+        $operations['copy_budget'] = [
+          'title' => t('Duplicate', [], ['context' => 'copy']),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_budget.duplicate_budget', ['node' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -98,
+        ];
+      }
+
+
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_budget_node_view(array &$build, \Drupal\node\NodeInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() === 'budget') {
+    if ($display->getComponent('budget_table')) {
+
+      /** @var \Drupal\simple_school_reports_budget\Service\BudgetServiceInterface $budget_service */
+      $budget_service = \Drupal::service('simple_school_reports_budget.budget_service');
+
+      $build['budget_table'] = [
+        '#type' => 'container',
+      ];
+
+      $form = [];
+      $budget_service->buildBudgetTable($entity, $form);
+
+
+      $cache = \Drupal\Core\Cache\CacheableMetadata::createFromRenderArray($build);
+
+      /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+      $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+      $cache->setCacheMaxAge($user_meta_data->getStudentCacheAgeMax(TRUE));
+      $cache->applyTo($build);
+
+      $build['budget_table']['table'] = $form;
+    }
+
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_budget_ssr_local_actions_alter(array &$local_actions, \Drupal\Core\Cache\CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'entity.node.canonical') {
+    $budget_node = $context['current_request']->get('node');
+    if ($budget_node instanceof \Drupal\node\NodeInterface && $budget_node->bundle() === 'budget') {
+      $cache->addCacheableDependency($budget_node);
+      $cache->addCacheContexts(['user']);
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = \Drupal\Core\Access\AccessResult::allowedIf($budget_node->access('view'));
+
+      $local_actions['print_action'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Print out'),
+          'url' => \Drupal\Core\Url::fromUserInput('#'),
+          'localized_options' => [
+            'attributes' => [
+              'class' => [
+                'action--ssr-print',
+              ],
+            ],
+          ],
+        ],
+        '#access' => $access,
+        '#weight' => 9,
+      ];
+
+
+      $local_actions['evaluate'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Evaluate budget'),
+          'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_budget.evaluate_budget', ['node' => $budget_node->id()], ['query' => ['back_destination' => $destination]]),
+        ],
+        '#access' => $access->andIf(\Drupal\Core\Access\AccessResult::allowedIfHasPermission(\Drupal::currentUser(), 'administer budget')),
+        '#weight' => 10,
+      ];
+    }
+  }
+}

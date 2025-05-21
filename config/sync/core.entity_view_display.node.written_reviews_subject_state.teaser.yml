@@ -1,0 +1,31 @@
+uuid: a8887e0b-5bd9-4839-abd3-2385b2b335d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.written_reviews_subject_state.field_class
+    - field.field.node.written_reviews_subject_state.field_grade
+    - field.field.node.written_reviews_subject_state.field_school_subject
+    - field.field.node.written_reviews_subject_state.field_state
+    - field.field.node.written_reviews_subject_state.field_written_reviews
+    - node.type.written_reviews_subject_state
+  module:
+    - user
+id: node.written_reviews_subject_state.teaser
+targetEntityType: node
+bundle: written_reviews_subject_state
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_class: true
+  field_grade: true
+  field_school_subject: true
+  field_state: true
+  field_written_reviews: true
+  langcode: true

@@ -1,0 +1,13 @@
+uuid: 2784ae99-dc5d-4c67-b2c0-e427e56d23b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - key.key.field_encryption
+  module:
+    - real_aes
+id: field_encryption
+label: 'Field Encryption'
+encryption_method: real_aes
+encryption_method_configuration: {  }
+encryption_key: field_encryption

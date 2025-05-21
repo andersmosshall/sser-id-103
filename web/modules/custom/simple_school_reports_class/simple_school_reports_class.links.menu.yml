@@ -1,0 +1,5 @@
+simple_school_reports_class.classes_admin:
+  title: 'Classes'
+  description: 'Create and administer classes'
+  parent: simple_school_reports_core.config
+  route_name: view.classes_list.list

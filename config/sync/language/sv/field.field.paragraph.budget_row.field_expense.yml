@@ -1,0 +1,4 @@
+label: 'Typ av värde'
+settings:
+  on_label: Utgift/Avdrag
+  off_label: Intäckt/Påslag/Bidrag

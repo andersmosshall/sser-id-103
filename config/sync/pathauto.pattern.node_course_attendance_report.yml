@@ -1,0 +1,22 @@
+uuid: d43985c2-5016-4493-b7c7-fb50db64daef
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_course_attendance_report
+label: 'Node Course attendance report'
+type: 'canonical_entities:node'
+pattern: '/course/[node:field_course:entity:title]-[node:field_course:target_id]/attendance-report/[node:nid]'
+selection_criteria:
+  774d2185-423b-4560-b264-545b4ee447e9:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 774d2185-423b-4560-b264-545b4ee447e9
+    context_mapping:
+      node: node
+    bundles:
+      course_attendance_report: course_attendance_report
+selection_logic: and
+weight: -5
+relationships: {  }

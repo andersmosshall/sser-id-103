@@ -1,0 +1,23 @@
+uuid: 6b60dea4-2db6-40e5-9eca-e757f9613e25
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_include_merit
+    - paragraphs.paragraphs_type.grade_statistics_data_source
+id: paragraph.grade_statistics_data_source.field_include_merit
+field_name: field_include_merit
+entity_type: paragraph
+bundle: grade_statistics_data_source
+label: 'Include merit'
+description: 'Includes table with mean merit values for primary and secondary data sources. Recommended only for VT in grade 9.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

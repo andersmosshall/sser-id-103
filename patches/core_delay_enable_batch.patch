@@ -1,0 +1,62 @@
+diff --git a/includes/batch.inc b/includes/batch.inc
+index 3c80ee1d..2b0d8505 100644
+--- a/includes/batch.inc
++++ b/includes/batch.inc
+@@ -235,6 +235,19 @@ function _batch_progress_page() {
+       ],
+     ],
+   ];
++
++  $op_delay_settings = [];
++  if (!empty($batch['sets']) ) {
++    foreach ($batch['sets'] as $set) {
++      if (is_numeric($set['op_delay'] ?? NULL) && $set['op_delay'] > 10) {
++        $op_delay_settings[] = $set['op_delay'];
++      }
++    }
++  }
++  if (!empty($op_delay_settings)) {
++    $build['#attached']['drupalSettings']['batch']['opDelay'] = max($op_delay_settings);
++  }
++
+   return $build;
+ }
+ 
+@@ -268,6 +281,9 @@ function _batch_process() {
+     $current_set['start'] = microtime(TRUE);
+   }
+ 
++  // Reset the 'break' flag.
++  $current_set['results']['break'] = FALSE;
++
+   $queue = _batch_queue($current_set);
+ 
+   while (!$current_set['success']) {
+@@ -329,6 +345,12 @@ function _batch_process() {
+       $current_set['elapsed'] = round((microtime(TRUE) - $current_set['start']) * 1000, 2);
+       break;
+     }
++
++    // Break processing if item has set id to do so.
++    if (!empty($current_set['results']['break'])) {
++      $current_set['elapsed'] = round((microtime(TRUE) - $current_set['start']) * 1000, 2);
++      break;
++    }
+   }
+ 
+   if ($batch['progressive']) {
+diff --git a/misc/batch.js b/misc/batch.js
+index 2a055157..05efa7ef 100644
+--- a/misc/batch.js
++++ b/misc/batch.js
+@@ -36,7 +36,9 @@
+           errorCallback,
+         );
+         progressBar.setProgress(-1, batch.initMessage);
+-        progressBar.startMonitoring(`${batch.uri}&op=do`, 10);
++
++        const delay = batch.opDelay || 10;
++        progressBar.startMonitoring(`${batch.uri}&op=do`, delay);
+         // Remove HTML from no-js progress bar.
+         $progress.empty();
+         // Append the JS progressbar element.

@@ -1,0 +1,43 @@
+register absence:
+  title: 'Allow to (bulk) add absence to students'
+
+can login:
+  title: 'Activate login possibility'
+
+delete user entity:
+  title: 'Allow delete user entity'
+  description: 'Allow to delete any users such as students and caregivers.'
+  restrict access: true
+
+assign user roles:
+  title: 'Allow add/edit roles on user'
+  restrict access: true
+
+administer simple school reports settings:
+  title: 'Allow administer simple school reports settings'
+  restrict access: true
+
+mail caregivers:
+  title: 'Allow mail caregivers'
+
+school staff permissions:
+  title: 'School staff permissions'
+
+budget review:
+  title: 'Review budgets'
+
+administer budget:
+  title: 'Administer budgets'
+
+send bug report:
+  title: 'Send bug report'
+
+view protected personal data:
+  title: 'View protected personal data'
+  description: 'Allow to view protected personal data on user with security marking'
+  restrict access: true
+
+super user permissions:
+  title: 'Super user permissions (all permissions)'
+  description: 'Gain access to all permissions'
+  restrict access: true

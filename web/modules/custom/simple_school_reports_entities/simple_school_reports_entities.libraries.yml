@@ -1,0 +1,8 @@
+school_week_form:
+  version: VERSION
+  js:
+    js/school_week_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

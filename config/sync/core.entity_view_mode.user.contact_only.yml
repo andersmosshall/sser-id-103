@@ -1,0 +1,11 @@
+uuid: 8df6b408-8f2d-428b-8af9-62f71adea99d
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.contact_only
+label: 'Contact only'
+description: ''
+targetEntityType: user
+cache: true

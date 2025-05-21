@@ -1,0 +1,10 @@
+entity.ssr_school_class.edit_form:
+  route_name: entity.ssr_school_class.edit_form
+  group: ssr_school_class
+  title: 'Edit'
+
+entity.ssr_school_class.delete_form:
+  route_name: entity.ssr_school_class.delete_form
+  group: ssr_school_class
+  title: 'Delete'
+  weight: 10

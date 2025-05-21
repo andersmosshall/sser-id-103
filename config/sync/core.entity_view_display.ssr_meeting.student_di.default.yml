@@ -1,0 +1,101 @@
+uuid: a6f38de1-2225-4df8-afc7-07cfd53abcca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_meeting.student_di.field_student
+    - field.field.ssr_meeting.student_di.field_teachers
+    - simple_school_reports_entities.ssr_meeting_type.student_di
+  module:
+    - link
+    - user
+id: ssr_meeting.student_di.default
+targetEntityType: ssr_meeting
+bundle: student_di
+mode: default
+content:
+  attending:
+    type: author
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  iup_round:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  location:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  meeting_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  written_reviews_round:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  field_student: true
+  field_teachers: true
+  invited: true
+  label: true
+  langcode: true
+  meta: true
+  node_parent: true

@@ -1,0 +1,17 @@
+simple_school_reports_reviews.written_reviews_subjects:
+  title: 'Written reviews per subject'
+  route_name: view.written_reviews_subject_list.written_reviews_subject_list
+  base_route: view.written_reviews_subject_list.written_reviews_subject_list
+  weight: 10
+
+simple_school_reports_reviews.written_reviews_students:
+  title: 'School efforts per student'
+  route_name: view.written_reviews_student_list.written_reviews_student_list
+  base_route: view.written_reviews_subject_list.written_reviews_subject_list
+  weight: 20
+
+simple_school_reports_reviews.written_reviews_student_tab:
+  base_route: entity.user.canonical
+  weight: 50
+  route_name: simple_school_reports_reviews.written_reviews_student_tab
+  title: 'Written reviews'

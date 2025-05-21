@@ -1,0 +1,23 @@
+uuid: f16e2965-c04e-409f-8d52-e3d794c8202c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sorting
+    - node.type.list_template
+  module:
+    - options
+id: node.list_template.field_sorting
+field_name: field_sorting
+entity_type: node
+bundle: list_template
+label: Sorting
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: name
+default_value_callback: ''
+settings: {  }
+field_type: list_string

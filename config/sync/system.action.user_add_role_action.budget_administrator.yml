@@ -1,0 +1,14 @@
+uuid: 2e8d6c23-a74d-4445-bda5-20305ac9da4c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.budget_administrator
+  module:
+    - user
+id: user_add_role_action.budget_administrator
+label: 'Add the Budget administrator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: budget_administrator

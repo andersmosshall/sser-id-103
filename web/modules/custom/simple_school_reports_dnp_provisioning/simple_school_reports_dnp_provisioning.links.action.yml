@@ -1,0 +1,11 @@
+simple_school_reports_dnp_provisioning.dnp_provisioning_settings_create:
+  route_name: entity.dnp_prov_settings.add_form
+  title: 'Add DNP provisioning settings'
+  appears_on:
+    - view.dnp_settings_for_provisioning.list
+
+simple_school_reports_dnp_provisioning.create:
+  route_name: simple_school_reports_dnp_provisioning.create
+  title: 'Create new DNP provisioning'
+  appears_on:
+    - view.dnp_provisioning.list

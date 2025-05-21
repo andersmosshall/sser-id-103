@@ -1,0 +1,8 @@
+name: 'Simple School Reports Examinations'
+type: module
+description: 'Simple School Reports Examinations'
+package: Simple School Reports
+core_version_requirement: ^10 || ^11
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_examinations_support:simple_school_reports_examinations_support

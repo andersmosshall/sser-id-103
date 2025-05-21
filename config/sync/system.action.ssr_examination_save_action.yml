@@ -1,0 +1,13 @@
+uuid: a55e00b2-ac1c-4de4-93ec-3d1d426f4443
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+_core:
+  default_config_hash: 659_SR17xKOBhKy-cb_ZSgD3b3_xNAKeNMe8qkEr35U
+id: ssr_examination_save_action
+label: 'Save examinations'
+type: ssr_examination
+plugin: 'entity:save_action:ssr_examination'
+configuration: {  }

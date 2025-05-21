@@ -1,0 +1,22 @@
+entity.ssr_school_class.settings:
+  title: 'Settings'
+  route_name: entity.ssr_school_class.settings
+  base_route: entity.ssr_school_class.settings
+entity.ssr_school_class.view:
+  title: 'View'
+  route_name: entity.ssr_school_class.canonical
+  base_route: entity.ssr_school_class.canonical
+entity.ssr_school_class.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_school_class.edit_form
+  base_route: entity.ssr_school_class.canonical
+entity.ssr_school_class.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_school_class.delete_form
+  base_route: entity.ssr_school_class.canonical
+  weight: 10
+entity.ssr_school_class.collection:
+  title: 'School classes'
+  route_name: entity.ssr_school_class.collection
+  base_route: system.admin_content
+  weight: 10

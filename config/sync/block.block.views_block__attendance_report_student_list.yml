@@ -1,0 +1,39 @@
+uuid: a0df8a30-aaa9-4d07-a5df-c98892883a8a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.attendance_report_student_list
+  module:
+    - node
+    - system
+    - views
+  theme:
+    - ssr_base
+id: views_block__attendance_report_student_list
+theme: ssr_base
+region: content
+weight: -15
+provider: null
+plugin: 'views_block:attendance_report_student_list-attendance_report_student_list'
+settings:
+  id: 'views_block:attendance_report_student_list-attendance_report_student_list'
+  label: 'Attendance report'
+  label_display: visible
+  provider: views
+  context_mapping:
+    parent_id: '@node.node_route_context:node'
+  views_label: 'Attendance report'
+  items_per_page: none
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      course_attendance_report: course_attendance_report
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/node/*/edit'

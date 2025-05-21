@@ -1,0 +1,11 @@
+uuid: 432d0a3e-6e5a-4b9f-8df0-e91a3207e908
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.school_efforts_only
+label: 'School efforts only'
+description: ''
+targetEntityType: node
+cache: true

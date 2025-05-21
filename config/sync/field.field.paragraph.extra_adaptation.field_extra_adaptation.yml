@@ -1,0 +1,25 @@
+uuid: 9e4b52e3-ff2e-427c-8b74-2cbab4fd85ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_extra_adaptation
+    - paragraphs.paragraphs_type.extra_adaptation
+id: paragraph.extra_adaptation.field_extra_adaptation
+field_name: field_extra_adaptation
+entity_type: paragraph
+bundle: extra_adaptation
+label: 'Extra adjustment'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: extra_adaptations_reference
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

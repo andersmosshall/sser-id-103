@@ -1,0 +1,25 @@
+uuid: e911087a-0a47-4e0d-9a1f-927c1b9015e5
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_core
+    - system
+  theme:
+    - ssr_base
+id: absencedaystudentstatistics
+theme: ssr_base
+region: content
+weight: -8
+provider: null
+plugin: absence_day_student_statistics
+settings:
+  id: absence_day_student_statistics
+  label: 'Registrerad frånvaro'
+  label_display: visible
+  provider: simple_school_reports_core
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/statistics'

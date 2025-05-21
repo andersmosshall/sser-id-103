@@ -1,0 +1,11 @@
+uuid: 8222e0ff-5b37-470c-9612-863997f40b21
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.special_diet
+id: taxonomy_term.special_diet
+target_entity_type_id: taxonomy_term
+target_bundle: special_diet
+default_langcode: site_default
+language_alterable: false

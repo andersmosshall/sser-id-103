@@ -1,0 +1,62 @@
+uuid: c57b98a7-dbc6-46fe-9c9e-0db2e49bd609
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_budget_row
+    - node.type.budget
+    - paragraphs.paragraphs_type.budget_row
+    - paragraphs.paragraphs_type.budget_row_label
+    - paragraphs.paragraphs_type.budget_sum
+  module:
+    - entity_reference_revisions
+id: node.budget.field_budget_row
+field_name: field_budget_row
+entity_type: node
+bundle: budget
+label: Rows
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      budget_row: budget_row
+      budget_row_label: budget_row_label
+      budget_sum: budget_sum
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: -18
+        enabled: false
+      budget_row:
+        weight: -21
+        enabled: true
+      budget_row_label:
+        weight: -20
+        enabled: true
+      budget_sum:
+        weight: -19
+        enabled: true
+      grade_registration:
+        weight: -17
+        enabled: false
+      grade_statistics_data_source:
+        weight: -16
+        enabled: false
+      list_template_field:
+        weight: -15
+        enabled: false
+      schema:
+        weight: -14
+        enabled: false
+      student_course_attendance:
+        weight: -13
+        enabled: false
+      written_review:
+        weight: -12
+        enabled: false
+field_type: entity_reference_revisions

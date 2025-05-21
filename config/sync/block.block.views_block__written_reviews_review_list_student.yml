@@ -1,0 +1,32 @@
+uuid: d0d67c6e-5980-4e53-9837-ed491de05d5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.written_reviews_review_list
+  module:
+    - node
+    - views
+  theme:
+    - ssr_base
+id: views_block__written_reviews_review_list_student
+theme: ssr_base
+region: content
+weight: -18
+provider: null
+plugin: 'views_block:written_reviews_review_list-student'
+settings:
+  id: 'views_block:written_reviews_review_list-student'
+  label: 'Written reviews'
+  label_display: visible
+  provider: views
+  views_label: 'Written reviews'
+  items_per_page: none
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      written_reviews: written_reviews

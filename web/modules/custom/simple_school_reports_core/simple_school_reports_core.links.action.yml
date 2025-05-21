@@ -1,0 +1,29 @@
+simple_school_reports_core.user_student_create:
+  route_name: simple_school_reports_core.add_student
+  title: 'Add student'
+  appears_on:
+    - view.students.students
+    - entity.user.collection
+
+simple_school_reports_core.course_add:
+  route_name: node.add
+  title: 'Add course'
+  route_parameters:
+    node_type: 'course'
+  appears_on:
+    - view.courses.my_courses
+    - view.courses.all_courses
+
+simple_school_reports_core.term_add:
+  route_name: entity.taxonomy_term.add_form
+  title: 'Add term'
+  route_parameters:
+    taxonomy_vocabulary: 'term'
+  appears_on:
+    - view.terms.terms
+
+simple_school_reports_core.language_school_subject_add:
+  route_name: simple_school_reports_core.add_language_school_subject
+  title: 'Add language school subject'
+  appears_on:
+    - view.school_subjects.school_subjects

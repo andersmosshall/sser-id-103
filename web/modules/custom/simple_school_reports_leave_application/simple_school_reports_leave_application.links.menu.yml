@@ -1,0 +1,11 @@
+simple_school_reports_leave_application.leave_applications:
+  title: 'Leave applications'
+  description: 'List and handle leave applications'
+  parent: simple_school_reports_core.actions
+  route_name: view.pending_leave_applications.pending
+
+simple_school_reports_leave_application.student_leave_application_settings:
+  title: 'Leave application settings'
+  parent: simple_school_reports_core.config
+  description: 'Administer leave application settings'
+  route_name: simple_school_reports_leave_application.student_leave_application_settings

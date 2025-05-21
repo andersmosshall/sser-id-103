@@ -1,0 +1,19 @@
+uuid: 49ddbac5-058f-403c-82b6-e51bcc49ec55
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_compare_label
+    - node.type.grade_statistics
+id: node.grade_statistics.field_compare_label
+field_name: field_compare_label
+entity_type: node
+bundle: grade_statistics
+label: 'Compare label'
+description: 'Compare label for graphs/tables, leave empty to use selected compare grade round name as label'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

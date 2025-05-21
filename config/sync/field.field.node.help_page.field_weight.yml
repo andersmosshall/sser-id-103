@@ -1,0 +1,23 @@
+uuid: bcd694d3-898f-485b-a525-cc7b72ec0d93
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_weight
+    - node.type.help_page
+id: node.help_page.field_weight
+field_name: field_weight
+entity_type: node
+bundle: help_page
+label: Weight
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

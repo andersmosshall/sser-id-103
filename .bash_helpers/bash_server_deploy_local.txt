@@ -1,0 +1,8 @@
+# Example of sser_deploy_local bash helper.
+
+alias sser_deploy_local="bash .scripts/deploy-local.sh -profile='sser'"
+
+### Prod specific secret
+if [ -f ~/.bash_prod_local ]; then
+    . ~/.bash_prod_local
+fi

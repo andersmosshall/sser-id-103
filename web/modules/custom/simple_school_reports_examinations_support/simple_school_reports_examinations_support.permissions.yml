@@ -1,0 +1,39 @@
+administer ssr_assessment_group:
+  title: 'Administer assessment groups'
+  restrict access: true
+view ssr_assessment_group:
+  title: 'View assessment group'
+edit ssr_assessment_group:
+  title: 'Edit assessment group'
+delete ssr_assessment_group:
+  title: 'Delete assessment group'
+create ssr_assessment_group:
+  title: 'Create assessment group'
+
+administer ssr_assessment_group_user:
+  title: 'Administer assessment group users'
+  restrict access: true
+
+administer ssr_examination:
+  title: 'Administer examinations'
+  restrict access: true
+view ssr_examination:
+  title: 'View examination'
+edit ssr_examination:
+  title: 'Edit examination'
+delete ssr_examination:
+  title: 'Delete examination'
+create ssr_examination:
+  title: 'Create examination'
+
+administer ssr_examination_result:
+  title: 'Administer examination results'
+  restrict access: true
+view ssr_examination_result:
+  title: 'View examination result'
+edit ssr_examination_result:
+  title: 'Edit examination result'
+delete ssr_examination_result:
+  title: 'Delete examination result'
+create ssr_examination_result:
+  title: 'Create examination result'

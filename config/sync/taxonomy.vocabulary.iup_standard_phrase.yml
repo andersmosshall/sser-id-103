@@ -1,0 +1,9 @@
+uuid: b60f756c-13ac-4bba-abfb-ad570d8795f9
+langcode: en
+status: true
+dependencies: {  }
+name: 'IUP standard phrases'
+vid: iup_standard_phrase
+description: null
+weight: 0
+new_revision: false

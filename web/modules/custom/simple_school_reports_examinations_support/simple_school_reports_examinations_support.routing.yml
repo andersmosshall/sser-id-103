@@ -1,0 +1,45 @@
+entity.ssr_assessment_group.settings:
+  path: 'admin/structure/ssr-assessment-group'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations_support\Form\AssessmentGroupSettingsForm'
+    _title: 'Assessment group'
+  requirements:
+    _permission: 'administer ssr_assessment_group'
+
+entity.ssr_assessment_group_user.settings:
+  path: 'admin/structure/ssr-assessment-group-user'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations_support\Form\AssessmentGroupUserSettingsForm'
+    _title: 'Assessment group user'
+  requirements:
+    _permission: 'administer ssr_assessment_group_user'
+
+entity.ssr_examination.settings:
+  path: 'admin/structure/ssr-examination'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations_support\Form\ExaminationSettingsForm'
+    _title: 'Examination'
+  requirements:
+    _permission: 'administer ssr_examination'
+
+entity.ssr_examination_result.settings:
+  path: 'admin/structure/ssr-examination-result'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations_support\Form\ExaminationResultSettingsForm'
+    _title: 'Examination result'
+  requirements:
+    _permission: 'administer ssr_examination_result'
+
+simple_school_reports_examinations_support.set_examination_results:
+  path: 'assessment-group/{ssr_assessment_group}/examination/{ssr_examination}/results/handle-multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_examinations_support\Form\SetMultipleExaminationResults'
+    _title: 'Handle examination results'
+  requirements:
+    _entity_access: 'ssr_assessment_group.handle_all_results'
+  options:
+    parameters:
+      ssr_assessment_group:
+        type: 'entity:ssr_assessment_group'
+      ssr_examination:
+        type: 'entity:ssr_examination'

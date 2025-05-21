@@ -1,0 +1,11 @@
+uuid: 962882cf-1b9c-435c-b684-b952ba8379eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: extension_proxy_consent_reminders
+label: 'Remind of consents'
+type: user
+plugin: extension_proxy_consent_reminders
+configuration: {  }

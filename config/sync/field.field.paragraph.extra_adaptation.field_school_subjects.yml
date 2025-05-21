@@ -1,0 +1,29 @@
+uuid: 1fbc0344-d96b-470e-9e39-4b89f3ae40cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_school_subjects
+    - paragraphs.paragraphs_type.extra_adaptation
+    - taxonomy.vocabulary.school_subject
+id: paragraph.extra_adaptation.field_school_subjects
+field_name: field_school_subjects
+entity_type: paragraph
+bundle: extra_adaptation
+label: 'School subjects'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      school_subject: school_subject
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

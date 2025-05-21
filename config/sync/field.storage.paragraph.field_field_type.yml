@@ -1,0 +1,21 @@
+uuid: 26577161-bca6-4b58-9fab-bc5206eccc5d
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_field_type
+field_name: field_field_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_proxy_list_template_field_types
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

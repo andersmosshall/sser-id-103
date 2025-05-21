@@ -1,0 +1,21 @@
+uuid: d345fa69-b26c-4704-b669-794dd1519412
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_update_reason
+    - paragraphs.paragraphs_type.grade_registration
+  module:
+    - options
+id: paragraph.grade_registration.field_update_reason
+field_name: field_update_reason
+entity_type: paragraph
+bundle: grade_registration
+label: 'Update reason'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

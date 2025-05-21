@@ -1,0 +1,5 @@
+description: 'Inkulderar en tabell med andel gymnasiebehörighet (godkänt i SV/EN/MA och 9 andra ämnen) för primära och jämförelse-datakällor. Rekommenderas endast för VT i årskurs 9.'
+settings:
+  on_label: Ja
+  off_label: Nej
+label: 'Inkludera gymnasiebehörighet'

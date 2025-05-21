@@ -1,0 +1,13 @@
+simple_school_reports_examinations.add_assessment_group:
+  route_name: entity.ssr_assessment_group.add_form
+  title: 'Add assessment group'
+  weight: 50
+  appears_on:
+    - view.assessment_groups.list
+
+simple_school_reports_examinations.sort_out_examinations:
+  title: 'Sort out examinations'
+  route_name: simple_school_reports_examinations.sort_out_examinations
+  weight: 110
+  appears_on:
+    - entity.ssr_assessment_group.canonical

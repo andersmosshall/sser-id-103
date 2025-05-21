@@ -1,0 +1,40 @@
+uuid: a509d0b8-b2a2-476d-acaa-53ec4e335578
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade_registration
+    - node.type.grade_subject
+    - paragraphs.paragraphs_type.grade_registration
+  module:
+    - entity_reference_revisions
+id: node.grade_subject.field_grade_registration
+field_name: field_grade_registration
+entity_type: node
+bundle: grade_subject
+label: 'Grade registration'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      grade_registration: grade_registration
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 6
+        enabled: false
+      grade_registration:
+        weight: 5
+        enabled: true
+      schema:
+        weight: 7
+        enabled: false
+      student_course_attendance:
+        weight: 8
+        enabled: false
+field_type: entity_reference_revisions

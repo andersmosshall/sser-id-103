@@ -1,0 +1,23 @@
+name: SSR base
+type: theme
+description: Claro subtheme
+core_version_requirement: ^10 || ^11
+
+# Defines the base theme
+base theme: claro
+
+# Defines libraries group in which we can add css/js.
+libraries:
+  - ssr_base/global
+
+# Regions
+regions:
+  header: 'Header'
+  pre_content: 'Pre-content'
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted
+  help: Help
+  content: Content
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  sidebar_first: 'First sidebar'

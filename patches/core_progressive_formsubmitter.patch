@@ -1,0 +1,29 @@
+diff --git a/lib/Drupal/Core/Form/FormSubmitter.php b/lib/Drupal/Core/Form/FormSubmitter.php
+index b5638ce9..19f9d125 100644
+--- a/lib/Drupal/Core/Form/FormSubmitter.php
++++ b/lib/Drupal/Core/Form/FormSubmitter.php
+@@ -59,7 +59,23 @@ class FormSubmitter implements FormSubmitterInterface {
+       // Store $form_state information in the batch definition.
+       $batch['form_state'] = $form_state;
+ 
+-      $batch['progressive'] = !$form_state->isProgrammed();
++      $progressive = !$form_state->isProgrammed();
++      if ($progressive) {
++        // Check if all sets are explicitly set to not be progressive.
++        if (!empty($batch['sets'])) {
++          $not_progressive = TRUE;
++          foreach ($batch['sets'] as $set) {
++            if (!(isset($set['progressive']) && $set['progressive'] === FALSE)) {
++              $not_progressive = FALSE;
++              break;
++            }
++          }
++          if ($not_progressive) {
++            $progressive = FALSE;
++          }
++        }
++      }
++      $batch['progressive'] = $progressive;
+       $response = batch_process();
+       // If the batch has been completed and _batch_finished() called then
+       // $batch will be NULL.

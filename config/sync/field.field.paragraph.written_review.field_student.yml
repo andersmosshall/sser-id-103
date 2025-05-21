@@ -1,0 +1,35 @@
+uuid: 0c068c0e-d6f0-4603-8a5e-d85c9bf12c3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_student
+    - paragraphs.paragraphs_type.written_review
+id: paragraph.written_review.field_student
+field_name: field_student
+entity_type: paragraph
+bundle: written_review
+label: Student
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: field_first_name
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        student: student
+        caregiver: '0'
+        teacher: '0'
+        administrator: '0'
+        principle: '0'
+    include_anonymous: false
+field_type: entity_reference

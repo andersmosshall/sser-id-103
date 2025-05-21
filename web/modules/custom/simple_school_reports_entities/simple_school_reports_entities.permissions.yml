@@ -1,0 +1,98 @@
+administer signing:
+  title: 'Administer signing settings'
+  restrict access: true
+view signing:
+  title: View signing
+
+administer consent answer:
+  title: 'Administer consent answer settings'
+  restrict access: true
+delete consent answer:
+  title: Delete consent answer
+create consent answer:
+  title: Create consent answer
+view consent answer:
+  title: View consent answer
+edit consent answer:
+  title: Edit consent answer
+
+administer meeting types:
+  title: 'Administer meeting types'
+  description: 'Maintain the types of meeting entity.'
+  restrict access: true
+delete meeting:
+  title: Delete meeting
+create meeting:
+  title: Create meeting
+view meeting:
+  title: View meeting
+edit meeting:
+  title: Edit meeting
+
+delete any student di meeting:
+  title: Delete any student di meeting
+
+administer school week:
+  title: 'Administer school week settings'
+  restrict access: true
+delete school week:
+  title: Delete school week
+create school week:
+  title: Create school week
+view school week:
+  title: View school week
+edit school week:
+  title: Edit school week
+
+administer school_week_deviation:
+  title: 'Administer school week deviations'
+  restrict access: true
+view school_week_deviation:
+  title: 'View school week deviation'
+edit school_week_deviation:
+  title: 'Edit school week deviation'
+delete school_week_deviation:
+  title: 'Delete school week deviation'
+create school_week_deviation:
+  title: 'Create school week deviation'
+
+administer ssr_student_leave_application:
+  title: 'Administer student leave applications'
+  restrict access: true
+view ssr_student_leave_application:
+  title: 'View student leave application'
+edit ssr_student_leave_application:
+  title: 'Edit student leave application'
+delete ssr_student_leave_application:
+  title: 'Delete student leave application'
+create ssr_student_leave_application:
+  title: 'Create student leave application'
+handle all ssr_student_leave_application:
+  title: 'Handle all student leave applications'
+handle long ssr_student_leave_application:
+  title: 'Handle long student leave applications'
+
+administer ssr_calendar_event types:
+  title: 'Administer calendar event types'
+  description: 'Maintain the types of ssr calendar event entity.'
+  restrict access: true
+view ssr_calendar_event:
+  title: 'View calendar event'
+edit ssr_calendar_event:
+  title: 'Edit calendar event'
+delete ssr_calendar_event:
+  title: 'Delete calendar event'
+create ssr_calendar_event:
+  title: 'Create calendar event'
+
+administer ssr_lookup:
+  title: 'Administer ssr lookups'
+  restrict access: true
+view ssr_lookup:
+  title: 'View ssr lookup'
+edit ssr_lookup:
+  title: 'Edit ssr lookup'
+delete ssr_lookup:
+  title: 'Delete ssr lookup'
+create ssr_lookup:
+  title: 'Create ssr lookup'

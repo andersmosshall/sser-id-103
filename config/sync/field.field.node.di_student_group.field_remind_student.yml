@@ -1,0 +1,21 @@
+uuid: 9b1fcf99-8f3f-4689-a713-12acb06b50de
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_remind_student
+    - node.type.di_student_group
+id: node.di_student_group.field_remind_student
+field_name: field_remind_student
+entity_type: node
+bundle: di_student_group
+label: 'Remind student'
+description: 'Reminder will be sent along side with reminders to caregivers.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

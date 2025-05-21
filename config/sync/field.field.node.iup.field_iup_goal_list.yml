@@ -1,0 +1,29 @@
+uuid: b4e0f6e8-697e-453c-92c5-02c7d0e976ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_iup_goal_list
+    - node.type.iup
+    - node.type.iup_goal
+id: node.iup.field_iup_goal_list
+field_name: field_iup_goal_list
+entity_type: node
+bundle: iup
+label: 'IUP goal'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      iup_goal: iup_goal
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

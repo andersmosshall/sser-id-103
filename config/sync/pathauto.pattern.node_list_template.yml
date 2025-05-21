@@ -1,0 +1,22 @@
+uuid: 3251c92a-2d16-4b8b-8274-e4bea6a81931
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_list_template
+label: 'Node List template'
+type: 'canonical_entities:node'
+pattern: '/list-template/[node:title]'
+selection_criteria:
+  f40886a1-9862-4620-bdf3-837effca74c1:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: f40886a1-9862-4620-bdf3-837effca74c1
+    context_mapping:
+      node: node
+    bundles:
+      list_template: list_template
+selection_logic: and
+weight: -5
+relationships: {  }

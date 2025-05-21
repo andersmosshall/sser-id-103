@@ -1,0 +1,8 @@
+name: 'Simple School Reports Module Info'
+type: module
+description: 'Simple School Reports Module Info'
+package: 'Simple School Reports'
+core_version_requirement: ^10 || ^11
+version: 11.0.0
+interface translation project: simple_school_reports_module_info
+interface translation server pattern: modules/custom/simple_school_reports_module_info/translations/%project.%language.po

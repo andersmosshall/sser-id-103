@@ -1,0 +1,19 @@
+uuid: f567ab16-63a0-4d5f-81c0-8b5781f62a7e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_created
+    - paragraphs.paragraphs_type.grade_registration
+id: paragraph.grade_registration.field_created
+field_name: field_created
+entity_type: paragraph
+bundle: grade_registration
+label: Created
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

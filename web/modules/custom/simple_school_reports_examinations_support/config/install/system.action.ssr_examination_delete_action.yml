@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_examinations_support
+id: ssr_examination_delete_action
+label: 'Delete examinations'
+type: ssr_examination
+plugin: entity:delete_action:ssr_examination
+configuration: {  }

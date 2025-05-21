@@ -1,0 +1,29 @@
+uuid: f506a3f0-595f-4db6-aded-de8de84f2a09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_student_leave_application.field_handler_notes
+    - filter.format.plain_text_ck
+  module:
+    - allowed_formats
+    - simple_school_reports_entities
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - plain_text_ck
+id: ssr_student_leave_application.ssr_student_leave_application.field_handler_notes
+field_name: field_handler_notes
+entity_type: ssr_student_leave_application
+bundle: ssr_student_leave_application
+label: 'Handler notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text_ck
+field_type: text_long

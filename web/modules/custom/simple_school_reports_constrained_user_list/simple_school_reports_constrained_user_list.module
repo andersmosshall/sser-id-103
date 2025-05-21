@@ -1,0 +1,43 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function simple_school_reports_constrained_user_list_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
+  if ($entity_type->id() === 'user') {
+    if (!empty($fields['field_birth_date_source'])) {
+      $fields['field_birth_date_source']->setDefaultValue('ssn');
+    }
+
+    if (!empty($fields['field_ssn'])) {
+      $fields['field_ssn']->setRequired(TRUE);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function simple_school_reports_constrained_user_list_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, ?\Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  if ($field_definition->getName() === 'field_birth_date_source') {
+    return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+
+  if ($operation !== 'view' && $field_definition->getName() === 'field_birth_date') {
+    return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+
+  return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_constrained_user_list_user_presave(\Drupal\user\UserInterface $user) {
+  if ($user->get('field_birth_date_source')->isEmpty()) {
+    $user->set('field_birth_date_source', 'ssn');
+    simple_school_reports_core_user_presave($user);
+  }
+}

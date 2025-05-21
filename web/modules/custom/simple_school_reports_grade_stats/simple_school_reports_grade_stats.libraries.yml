@@ -1,0 +1,40 @@
+student_grade_statistics:
+  version: VERSION
+  css:
+    theme:
+      css/student_grade_statistics.css: { }
+  js:
+    js/student_grade_statistics.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+grade_statistics:
+  version: VERSION
+  css:
+    theme:
+      css/grade_statistics.css: { }
+
+grade_statistics_node:
+  version: VERSION
+  css:
+    theme:
+      css/grade_statistics_node.css: { }
+  js:
+    js/grade_statistics_node.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+grade_statistics_graph:
+  version: VERSION-ä
+  js:
+    js/grade_statistics_graph.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - simple_school_reports_core/chartjs

@@ -1,0 +1,11 @@
+uuid: 62dab31e-9a98-453c-99e5-4b54bb3427fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.iup_standard_goal
+id: taxonomy_term.iup_standard_goal
+target_entity_type_id: taxonomy_term
+target_bundle: iup_standard_goal
+default_langcode: site_default
+language_alterable: false

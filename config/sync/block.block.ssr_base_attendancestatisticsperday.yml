@@ -1,0 +1,25 @@
+uuid: a59afb8f-557d-4151-84e4-fc7cba0bbb79
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: ssr_base_attendancestatisticsperday
+theme: ssr_base
+region: content
+weight: -13
+provider: null
+plugin: attendance_statistics_per_day
+settings:
+  id: attendance_statistics_per_day
+  label: 'Attendance statistics per day'
+  label_display: visible
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/statistics'

@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+use Drupal\file\FileInterface;
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_core_install() {
+  module_set_weight('simple_school_reports_core', 0);
+}
+
+/**
+ * Clean up email adress.
+ */
+function simple_school_reports_core_update_9001() {
+  /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+  $email_service = \Drupal::service('simple_school_reports_core.email_service');
+
+  /** @var \Drupal\user\UserStorageInterface $user_storage */
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $uids = $user_storage->getQuery()->accessCheck(FALSE)->execute();
+
+  foreach ($uids as $uid) {
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $user_storage->load($uid);
+    if ($user->isAnonymous()) {
+      continue;
+    }
+
+    $set_email = FALSE;
+    if ($user->getEmail()) {
+      $mail = $user->getEmail();
+      $prefix = 'no-reply-';
+      $suffix = str_replace('.', '\.', 'simpleschoolreports.se');
+      $preg_match = $prefix . '.+' . $suffix;
+      if (preg_match('/' . $preg_match . '/', $mail)) {
+        $set_email = TRUE;
+      }
+      $preg_match = $prefix . '.+' . 'default';
+      if (preg_match('/' . $preg_match . '/', $mail)) {
+        $set_email = TRUE;
+      }
+
+    }
+    else {
+      $set_email = TRUE;
+    }
+
+    if ($set_email) {
+      $email = \Drupal\simple_school_reports_core\UserFormAlter::resolveMailValue(NULL);
+      $user->setEmail($email);
+      $user->save();
+    }
+  }
+}
+
+/**
+ * Update school subject names.
+ */
+function simple_school_reports_core_update_9002() {
+  $properties = ['vid' => 'school_subject'];
+  $subjects = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+  /** @var \Drupal\taxonomy\TermInterface $subject */
+  foreach ($subjects as $subject) {
+    // The presave hook takes care of the new name.
+    $subject->save();
+  }
+}
+
+/**
+ * Check all caregivers.
+ */
+function simple_school_reports_core_update_10001() {
+  // Check all caregivers.
+  $caregiver_uids = \Drupal::entityTypeManager()->getStorage('user')
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('roles', 'caregiver')
+    ->execute();
+
+  if (!empty($caregiver_uids)) {
+    $queue = \Drupal::service('queue')->get('check_caregiver_queue');
+    $queue->createQueue();
+    foreach ($caregiver_uids as $caregiver_uid) {
+      $queue->createItem($caregiver_uid);
+    }
+  }
+}
+
+/**
+ * Remove uploaded template files except logos.
+ */
+function simple_school_reports_core_update_10002() {
+  $fids = \Drupal::state()->get('ssr_file_templates', []);
+
+  $types_to_remove = [
+    'student_grade_term',
+    'student_grade_final',
+    'student_group_grade',
+    'teacher_grade_sign',
+    'written_reviews',
+    'iup',
+  ];
+
+  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+
+  foreach ($types_to_remove as $key) {
+    if (isset($fids[$key])) {
+      if ($file = $file_storage->load($fids[$key])) {
+        $file->delete();
+      }
+      $fids[$key] = NULL;
+    }
+  }
+
+  \Drupal::state()->set('ssr_file_templates', $fids);
+}

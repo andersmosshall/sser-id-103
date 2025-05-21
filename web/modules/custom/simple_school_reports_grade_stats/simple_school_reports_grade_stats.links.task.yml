@@ -1,0 +1,5 @@
+simple_school_reports_grade_stats.student_grade_statistics:
+  base_route: entity.user.canonical
+  weight: 70
+  route_name: simple_school_reports_grade_stats.student_grade_statistics
+  title: 'Grade statistics'

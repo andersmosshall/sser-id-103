@@ -1,0 +1,9 @@
+uuid: ad94a40a-2677-4bdd-b4b1-31e66ebf0139
+langcode: en
+status: true
+dependencies: {  }
+name: 'IUP standard goals'
+vid: iup_standard_goal
+description: null
+weight: 0
+new_revision: false

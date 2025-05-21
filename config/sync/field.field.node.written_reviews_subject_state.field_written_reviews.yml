@@ -1,0 +1,43 @@
+uuid: 9e54b33d-99cb-4d16-a911-e0497143d248
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_written_reviews
+    - node.type.written_reviews_subject_state
+    - paragraphs.paragraphs_type.written_review
+  module:
+    - entity_reference_revisions
+id: node.written_reviews_subject_state.field_written_reviews
+field_name: field_written_reviews
+entity_type: node
+bundle: written_reviews_subject_state
+label: 'Written reviews'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      written_review: written_review
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 6
+        enabled: false
+      grade_registration:
+        weight: 7
+        enabled: false
+      schema:
+        weight: 8
+        enabled: false
+      student_course_attendance:
+        weight: 9
+        enabled: false
+      written_review:
+        weight: 10
+        enabled: true
+field_type: entity_reference_revisions

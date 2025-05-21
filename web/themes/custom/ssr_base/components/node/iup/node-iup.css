@@ -1,0 +1,11 @@
+.iup-signing {
+  display: flex;
+  flex-wrap: nowrap;
+  border-top: 1px solid #4d4d4d;
+  margin-top: 60px;
+}
+
+.iup-signing > p {
+  margin: 0;
+  flex: 0 0 33.33333333%;
+}

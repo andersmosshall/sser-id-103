@@ -1,0 +1,18 @@
+standard_iup_goal_select:
+  version: VERSION
+  css:
+    theme:
+      css/standard_iup_goal_select.css: { }
+  js:
+    js/standard_iup_goal_select.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+
+iup_round:
+  version: VERSION
+  css:
+    theme:
+      css/iup_round.css: { }

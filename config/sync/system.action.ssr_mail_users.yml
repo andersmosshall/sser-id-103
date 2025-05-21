@@ -1,0 +1,11 @@
+uuid: 3d6ebd36-bbe6-47ed-b0cf-6d3417ac11c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_mail_users
+label: 'Mail users'
+type: user
+plugin: ssr_mail_users
+configuration: {  }

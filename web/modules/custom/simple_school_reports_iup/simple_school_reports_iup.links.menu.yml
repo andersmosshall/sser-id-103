@@ -1,0 +1,31 @@
+simple_school_reports_iup.iup_base:
+  title: 'IUP'
+  description: 'Handle IUP'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_iup.iup_base
+
+simple_school_reports_iup.iup_round_list:
+  title: 'IUP registrations'
+  description: 'Register IUP or create IUP rounds'
+  weight: 100
+  parent: simple_school_reports_iup.iup_base
+  route_name: view.iup_rounds.list
+
+simple_school_reports_iup.iup_goal_list:
+  title: 'IUP goal'
+  description: 'List and comment IUP goals'
+  weight: 101
+  parent: simple_school_reports_iup.iup_base
+  route_name: view.iup_goals.list
+
+simple_school_reports_iup.standard_phrases:
+  title: 'IUP standard phrases'
+  parent: simple_school_reports_core.config
+  description: 'List standard phrases for IUP'
+  route_name: view.standard_phrases.iup
+
+simple_school_reports_iup.standard_goals:
+  title: 'IUP standard goals'
+  parent: simple_school_reports_core.config
+  description: 'List standard phrases for IUP'
+  route_name: view.iup_standard_goals.iup_standard_goals

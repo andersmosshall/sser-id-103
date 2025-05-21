@@ -1,0 +1,26 @@
+uuid: 2b425d37-a61a-4c7c-b413-7313fda594ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ssr_schema
+    - node.type.course
+id: node.course.field_ssr_schema
+field_name: field_ssr_schema
+entity_type: node
+bundle: course
+label: Schema
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:ssr_schema_entry'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

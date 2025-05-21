@@ -1,0 +1,21 @@
+uuid: 39e6ea1e-49e5-4560-817d-c7d988966346
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_term_type
+    - node.type.iup_round
+  module:
+    - options
+id: node.iup_round.field_term_type
+field_name: field_term_type
+entity_type: node
+bundle: iup_round
+label: 'Term type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

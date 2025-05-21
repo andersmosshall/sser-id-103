@@ -1,0 +1,21 @@
+uuid: 982e84a7-1997-4891-acb0-5d22a19619db
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_mandatory
+    - taxonomy.vocabulary.school_subject
+id: taxonomy_term.school_subject.field_mandatory
+field_name: field_mandatory
+entity_type: taxonomy_term
+bundle: school_subject
+label: Mandatory
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

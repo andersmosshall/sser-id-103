@@ -1,0 +1,10 @@
+entity.ssr_module_info.edit_form:
+  route_name: entity.ssr_module_info.edit_form
+  group: ssr_module_info
+  title: 'Edit'
+
+entity.ssr_module_info.delete_form:
+  route_name: entity.ssr_module_info.delete_form
+  group: ssr_module_info
+  title: 'Delete'
+  weight: 10

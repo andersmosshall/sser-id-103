@@ -1,0 +1,7 @@
+simple_school_reports_list_templates.duplicate_list_template:
+  path: '/list-template/{node}/duplicate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_list_templates\Form\DuplicateListTemplateForm'
+    _title: 'Duplicate list template'
+  requirements:
+    _permission: 'school staff permissions'

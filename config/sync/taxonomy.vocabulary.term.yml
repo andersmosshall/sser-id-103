@@ -1,0 +1,9 @@
+uuid: 4ac441f6-0c96-4275-bdd0-b8eeffd37994
+langcode: en
+status: true
+dependencies: {  }
+name: Term
+vid: term
+description: null
+weight: 0
+new_revision: false

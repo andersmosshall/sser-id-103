@@ -1,0 +1,25 @@
+uuid: c13b26a1-3d57-4426-82a9-8ea893b38a42
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student
+    - node.type.day_absence
+id: node.day_absence.field_student
+field_name: field_student
+entity_type: node
+bundle: day_absence
+label: Student
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: student_reference
+      display_name: all_students
+      arguments: {  }
+field_type: entity_reference

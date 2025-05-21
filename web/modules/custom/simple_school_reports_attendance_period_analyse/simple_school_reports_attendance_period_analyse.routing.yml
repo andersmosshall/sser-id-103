@@ -1,0 +1,7 @@
+simple_school_reports_attendance_period_analyse.attendance_period_analyse_settings:
+  path: 'admin/attendance-period-analyse-settings'
+  defaults:
+    _form: '\Drupal\simple_school_reports_attendance_period_analyse\Form\AttendancePeriodAnalyseConfigForm'
+    _title: 'Attendance period analyse settings'
+  requirements:
+    _permission: 'administer simple school reports settings'

@@ -1,0 +1,21 @@
+uuid: 687804fa-b4a4-41cb-a4b8-0dfec5774425
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grades
+    - node.type.list_template
+  module:
+    - options
+id: node.list_template.field_grades
+field_name: field_grades
+entity_type: node
+bundle: list_template
+label: Grades
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

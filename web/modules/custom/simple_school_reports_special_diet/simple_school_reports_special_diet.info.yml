@@ -1,0 +1,5 @@
+name: 'Simple School Reports Special Diet'
+type: module
+description: 'Simple School Reports Special Diet'
+package: 'Simple School Reports Mini'
+core_version_requirement: ^10 || ^11

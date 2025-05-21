@@ -1,0 +1,5 @@
+simple_school_reports_student_di.di_user_tab:
+  title: 'Development interview'
+  route_name: simple_school_reports_student_di.di_user_tab
+  base_route: entity.user.canonical
+  weight: 5

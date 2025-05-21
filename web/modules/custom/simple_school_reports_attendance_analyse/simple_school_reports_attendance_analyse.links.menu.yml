@@ -1,0 +1,6 @@
+students.page.adapted_studies:
+  title: 'Students with adapted studies'
+  description: 'List students with adapted studies'
+  weight: 140
+  parent: students.page
+  route_name: view.students.adapted_studies

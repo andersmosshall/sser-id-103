@@ -1,0 +1,29 @@
+uuid: bb017b22-f909-488f-b9ed-2e722bb39dac
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.student_di_user_list
+  module:
+    - system
+    - views
+  theme:
+    - ssr_base
+id: ssr_base_views_block__student_di_user_list_booked_student
+theme: ssr_base
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:student_di_user_list-booked_student'
+settings:
+  id: 'views_block:student_di_user_list-booked_student'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/development-interview'

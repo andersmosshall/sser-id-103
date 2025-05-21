@@ -1,0 +1,8 @@
+ssr_schema_entry_form:
+  version: VERSION
+  js:
+    js/ssr_schema_entry_form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

@@ -1,0 +1,29 @@
+uuid: 08c939c9-d7f0-4d8e-afb1-8f06e81be3d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grade_subject
+    - node.type.grade_student_group
+    - node.type.grade_subject
+id: node.grade_student_group.field_grade_subject
+field_name: field_grade_subject
+entity_type: node
+bundle: grade_student_group
+label: 'Grade subject'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      grade_subject: grade_subject
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,23 @@
+uuid: e9df6a68-8a11-48fa-b514-cf4cfc74c293
+langcode: en
+status: true
+dependencies: {  }
+name: 'Plain text ck'
+format: plain_text_ck
+weight: 0
+filters:
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: true
+    weight: -10
+    settings:
+      allowed_html: '<br> <p>'
+      filter_html_help: false
+      filter_html_nofollow: false

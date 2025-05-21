@@ -1,0 +1,33 @@
+uuid: 3601225b-c8b2-45c3-9eac-78cce4a371e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_sorting
+field_name: field_sorting
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: name
+      label: Name
+    -
+      value: grade_name
+      label: 'Grade, name'
+    -
+      value: gender_name
+      label: 'Gender, name'
+    -
+      value: grade_gender_name
+      label: 'Grade, gender, name'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

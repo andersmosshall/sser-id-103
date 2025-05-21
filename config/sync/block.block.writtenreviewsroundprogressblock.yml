@@ -1,0 +1,25 @@
+uuid: 2eccbf6d-b239-4fe8-95ba-9a1eaff3ee6c
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: writtenreviewsroundprogressblock
+theme: ssr_base
+region: highlighted
+weight: -17
+provider: null
+plugin: written_reviews_round_progress_block
+settings:
+  id: written_reviews_round_progress_block
+  label: 'Written reviews round progress block'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/written-reviews/*/subjects\r\n/written-reviews/*/school-efforts-students"

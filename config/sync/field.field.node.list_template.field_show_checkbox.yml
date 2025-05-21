@@ -1,0 +1,23 @@
+uuid: df46e46c-583c-47ed-b7b6-85003291b75b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_checkbox
+    - node.type.list_template
+id: node.list_template.field_show_checkbox
+field_name: field_show_checkbox
+entity_type: node
+bundle: list_template
+label: 'Show checkbox first'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

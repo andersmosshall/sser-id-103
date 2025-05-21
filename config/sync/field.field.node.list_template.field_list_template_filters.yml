@@ -1,0 +1,21 @@
+uuid: 12e9c26d-ef0d-4699-8db9-8052b370df98
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_list_template_filters
+    - node.type.list_template
+  module:
+    - options
+id: node.list_template.field_list_template_filters
+field_name: field_list_template_filters
+entity_type: node
+bundle: list_template
+label: 'More filters'
+description: 'Optionally select more filters to further reduce the students in this list.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,11 @@
+entity.ssr_module_info.settings:
+  title: 'Module info'
+  description: 'Configure a Module info entity type.'
+  route_name:  entity.ssr_module_info.settings
+  parent: system.admin_structure
+
+entity.ssr_module_info.collection:
+  title: 'Module infos'
+  description: 'List of module infos.'
+  route_name: entity.ssr_module_info.collection
+  parent: system.admin_content

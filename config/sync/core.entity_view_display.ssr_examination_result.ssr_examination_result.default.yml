@@ -1,0 +1,42 @@
+uuid: 9c3f4fa3-e13c-4304-8350-ad8e81226b24
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - simple_school_reports_examinations_support
+id: ssr_examination_result.ssr_examination_result.default
+targetEntityType: ssr_examination_result
+bundle: ssr_examination_result
+mode: default
+content:
+  examination:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  status: true
+  uid: true

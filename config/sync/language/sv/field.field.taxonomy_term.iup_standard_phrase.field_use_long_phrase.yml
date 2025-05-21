@@ -1,0 +1,4 @@
+label: 'Använd lång standardfras'
+settings:
+  on_label: Ja
+  off_label: Nej

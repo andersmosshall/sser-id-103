@@ -1,0 +1,24 @@
+ssr_schema_entry.add_form:
+  title: 'Add ssr schema entry'
+  route_name: entity.ssr_schema_entry.add_form
+  appears_on:
+    - entity.ssr_schema_entry.collection
+
+simple_school_reports_schema.sync_calendar_events:
+  route_name: simple_school_reports_schema.sync_calendar_events
+  title: 'Sync lessons from schema'
+  appears_on:
+    - view.courses.my_courses
+    - view.courses.all_courses
+    - view.calendar_events_courses.my_courses
+    - view.calendar_events_courses.all_courses
+
+simple_school_reports_schema.sync_config_form:
+  route_name: simple_school_reports_schema.sync_config_form
+  title: 'Settings for sync of lessons'
+  appears_on:
+    - view.courses.my_courses
+    - view.courses.all_courses
+    - view.calendar_events_courses.my_courses
+    - view.calendar_events_courses.all_courses
+

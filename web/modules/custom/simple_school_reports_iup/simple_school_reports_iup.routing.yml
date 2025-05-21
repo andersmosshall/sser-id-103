@@ -1,0 +1,44 @@
+simple_school_reports_iup.student_router:
+  path: '/iup-round/{round_nid}/student/{student_uid}/router'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_iup\Controller\IUPRouter::router'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_iup.iup_base:
+  path: '/iup'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'IUP'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_iup.generate_iup_multiple_docs:
+  path: '/iup-round/{node}/generate-iup-documents'
+  defaults:
+    _form: '\Drupal\simple_school_reports_iup\Form\GenerateIUPDocMultipleForm'
+    _title: 'Generate IUP documents'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_iup.generate_iup_single_doc:
+  path: '/node/{node}/generate-iup-document'
+  defaults:
+    _form: '\Drupal\simple_school_reports_iup\Form\GenerateIUPDocSingleForm'
+    _title: 'Generate IUP document'
+  requirements:
+    _entity_access: 'node.view'
+    _permission: 'school staff permissions'
+
+simple_school_reports_iup.iup_student_tab:
+  path: '/user/{user}/iup-list'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_iup\Controller\IUPRouter::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_iup\Controller\IUPRouter::getStudentTabTitle'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

@@ -1,0 +1,21 @@
+uuid: f062e35c-e0b9-4640-9e44-56dacd075057
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_absence_to
+    - node.type.day_absence
+id: node.day_absence.field_absence_to
+field_name: field_absence_to
+entity_type: node
+bundle: day_absence
+label: 'Absence to'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1638305630
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

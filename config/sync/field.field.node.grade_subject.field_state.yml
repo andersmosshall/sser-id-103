@@ -1,0 +1,21 @@
+uuid: f1914a27-18e3-4a97-8a19-5adac2e95c53
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.grade_subject
+  module:
+    - options
+id: node.grade_subject.field_state
+field_name: field_state
+entity_type: node
+bundle: grade_subject
+label: State
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

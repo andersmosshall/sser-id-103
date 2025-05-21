@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_iup_install() {
+  module_set_weight('simple_school_reports_iup', 10);
+}

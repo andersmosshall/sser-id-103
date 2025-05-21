@@ -1,0 +1,25 @@
+uuid: 8bcbb646-641f-42b3-86bf-1d13f030853c
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+    - system
+  theme:
+    - ssr_base
+id: ssr_base_notificationsmessages
+theme: ssr_base
+region: highlighted
+weight: -16
+provider: null
+plugin: ssr_notifications_messages
+settings:
+  id: ssr_notifications_messages
+  label: 'Notifications messages'
+  label_display: '0'
+  provider: simple_school_reports_extension_proxy
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/start/*'

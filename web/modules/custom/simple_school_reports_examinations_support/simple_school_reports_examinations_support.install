@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the simple_school_reports_examinations_support module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Install missing fields in school week deviation.
+ */
+function simple_school_reports_examinations_support_update_10001() {
+  $fields = [];
+
+  $fields['school_class'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Class'))
+    ->setDescription(t('All students from selected class will be assigned to this course. Leave blank to select an explicit student list below.'))
+    ->setSetting('target_type', 'ssr_school_class')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_assessment_group', 'simple_school_reports_examinations_support', $storage_definition);
+  }
+}

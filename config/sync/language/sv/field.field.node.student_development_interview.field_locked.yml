@@ -1,0 +1,5 @@
+label: Låst
+description: 'Om låst kan inga nya möten skapas eller bokas.'
+settings:
+  on_label: Låst
+  off_label: Olåst

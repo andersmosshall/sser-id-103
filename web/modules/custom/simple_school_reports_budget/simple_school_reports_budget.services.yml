@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_budget.budget_service:
+    class: Drupal\simple_school_reports_budget\Service\BudgetService
+    arguments: [ '@simple_school_reports_core.user_meta_data' ]

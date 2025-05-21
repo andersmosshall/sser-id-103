@@ -1,0 +1,24 @@
+uuid: 6325957e-b67a-4749-bd93-6e41ed0fc5c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - user
+id: user.field_protected_personal_data
+field_name: field_protected_personal_data
+entity_type: user
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: security_marking
+      label: 'Security marking/Protected civil registration'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

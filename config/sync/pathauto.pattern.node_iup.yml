@@ -1,0 +1,22 @@
+uuid: 16bc6a78-19b5-4442-858c-339d3bcafb1b
+langcode: sv
+status: true
+dependencies:
+  module:
+    - node
+id: node_iup
+label: 'Node IUP'
+type: 'canonical_entities:node'
+pattern: '/iup/[node:nid]'
+selection_criteria:
+  3dc1c583-a0b8-429d-9b30-e8c11e06dc59:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 3dc1c583-a0b8-429d-9b30-e8c11e06dc59
+    context_mapping:
+      node: node
+    bundles:
+      iup: iup
+selection_logic: and
+weight: -5
+relationships: {  }

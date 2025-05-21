@@ -1,0 +1,8 @@
+services:
+  simple_school_reports_examinations_support.assessment_group_service:
+    class: Drupal\simple_school_reports_examinations_support\Service\AssessmentGroupService
+    arguments: [ '@database']
+
+  simple_school_reports_examinations_support.examination_service:
+    class: Drupal\simple_school_reports_examinations_support\Service\ExaminationService
+    arguments: ['@database', '@entity_type.manager', '@current_user' ]

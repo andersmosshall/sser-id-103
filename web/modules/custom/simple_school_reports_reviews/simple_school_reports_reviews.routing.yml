@@ -1,0 +1,49 @@
+simple_school_reports_reviews.student_router:
+  path: '/written-reviews/{round_nid}/student/{student_uid}/router'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::router'
+  requirements:
+    _permission: 'register absence'
+
+simple_school_reports_reviews.generate_review_docs:
+  path: '/written-reviews/{node}/generate-review-documents'
+  defaults:
+    _form: '\Drupal\simple_school_reports_reviews\Form\GenerateReviewDocsForm'
+    _title: 'Generate written reviews documents'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_reviews.generate_review_single_doc:
+  path: '/written-reviews/{node}/user/{user}/generate-review-document'
+  defaults:
+    _form: '\Drupal\simple_school_reports_reviews\Form\GenerateReviewSingleDocForm'
+    _title: 'Generate written reviews documents'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_reviews.written_reviews_student_tab:
+  path: '/user/{user}/written-reviews'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::getStudentTabTitle'
+  requirements:
+    _entity_access: 'user.update'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_reviews.written_review_preview:
+  path: '/written-reviews-round/{node}/user/{user}'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::studentTab'
+    _title_callback: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::getStudentPreviewTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_reviews\Controller\WrittenReviewsRouter::accessStudentPreview'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+      user:
+        type: 'entity:user'

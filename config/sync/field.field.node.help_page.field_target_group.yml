@@ -1,0 +1,21 @@
+uuid: bbf3c24f-9280-479f-b4e3-1bc04610f9a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_target_group
+    - node.type.help_page
+id: node.help_page.field_target_group
+field_name: field_target_group
+entity_type: node
+bundle: help_page
+label: Målgrupp
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user_role'
+  handler_settings: {  }
+field_type: entity_reference

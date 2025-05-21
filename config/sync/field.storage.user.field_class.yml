@@ -1,0 +1,20 @@
+uuid: 2e3243a1-f8b0-4589-83d8-def6befd4b11
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_class_support
+    - user
+id: user.field_class
+field_name: field_class
+entity_type: user
+type: entity_reference
+settings:
+  target_type: ssr_school_class
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

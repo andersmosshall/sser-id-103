@@ -1,0 +1,28 @@
+uuid: e1a5fb26-f30a-424c-9782-5d0972227233
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_maillog
+title: 'Notify mail count'
+id: notify_mail_count
+weight: 0
+module: simple_school_reports_maillog
+callback: notify_mail_count
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */6 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

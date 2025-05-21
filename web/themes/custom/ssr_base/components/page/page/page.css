@@ -1,0 +1,143 @@
+
+.layout-container {
+  max-width: 1400px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.page-wrapper > .layout-container {
+  min-height: 50vh;
+}
+
+body p {
+  margin-top: 0;
+}
+
+@media (min-width: 1340px) {
+  .absence-list-button {
+    display: none;
+  }
+
+  .layout-container .page-content.has-side-bar {
+    position: relative;
+    padding-right: 416px;
+    min-height: auto
+  }
+
+  .layout-container .region.region-sidebar-first {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    background: #fff;
+    padding: 0 12px;
+    margin-bottom: 16px;
+    border: 1px solid #c5c5c5c5;
+    min-height: 50vh;
+    max-width: 380px;
+  }
+}
+
+@media screen and (min-width: 61rem) {
+  .layout-region--node-main .layout-region__content, .layout-region--node-footer .layout-region__content {
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+.node--type-course.node--view-mode-number-of-students h2,
+.field.field--name-field-iup-goal-list .node--type-iup-goal h2 {
+  display: none;
+}
+
+#edit-preview-iup-goal h2 {
+  display: none;
+}
+
+.taxonomy-term.vocabulary-extra-adaptations h2 {
+  display: none;
+}
+.extra-adaptation-view-wrapper legend {
+  display: none;
+}
+.extra-adaptation-view-wrapper .fieldset__legend--visible ~ .fieldset__wrapper {
+  margin: 12px;
+}
+
+.field.field--name-field-iup-goal-list > .field__item {
+  padding: 12px;
+  border: 1px solid #dedfe4;
+  border-radius: 2px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.block-views-blockwritten-review-school-efforts-preview-school-efforts .field--name-title {
+  display: none;
+}
+
+.view-special-diet caption {
+  margin: 1rem 0 0.75rem;
+  font-size: 1.424rem;
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+.block-system-branding-block img[src*=".svg"] {
+  width: 320px;
+}
+
+.after-layout-wrapper {
+  position: relative;
+}
+
+@media print {
+  html {
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .block-local-tasks-block,
+  .block-ssr-local-actions-block,
+  .toolbar,
+  .messages-list,
+  .block-masquerade,
+  .block-ssr-footer-block,
+  .visible-columns-select,
+  .generate-grade-document-fieldset {
+    display: none;
+  }
+  .fieldset {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+  }
+  .fieldset__wrapper {
+    margin-bottom: 4px !important;
+  }
+
+  .graph-wrapper,
+  canvas,
+  table {
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  tr,
+  .fieldset,
+  .field.field--name-field-iup-goal-list > .field__item,
+  .grade-statistics--merged-subjects,
+  .grade-statistics--subject-item {
+    page-break-inside: avoid;
+  }
+
+  table th {
+    background-color: #f3f4f9 !important;
+  }
+
+  .block-system-branding-block img {
+    width: 150px;
+  }
+}

@@ -1,0 +1,5 @@
+label: Låst
+description: 'Om låst kan inte samtyckessvar hanteras för detta samtycke.'
+settings:
+  on_label: Låst
+  off_label: Olåst

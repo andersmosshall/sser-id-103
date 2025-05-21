@@ -1,0 +1,58 @@
+entity.ssr_maillog.settings:
+  title: 'Settings'
+  route_name: entity.ssr_maillog.settings
+  base_route: entity.ssr_maillog.settings
+entity.ssr_maillog.view:
+  title: 'View'
+  route_name: entity.ssr_maillog.canonical
+  base_route: entity.ssr_maillog.canonical
+entity.ssr_maillog.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_maillog.edit_form
+  base_route: entity.ssr_maillog.canonical
+entity.ssr_maillog.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_maillog.delete_form
+  base_route: entity.ssr_maillog.canonical
+  weight: 10
+entity.ssr_maillog.collection:
+  title: 'Maillogs'
+  route_name: entity.ssr_maillog.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_mail_count.settings:
+  title: 'Settings'
+  route_name: entity.ssr_mail_count.settings
+  base_route: entity.ssr_mail_count.settings
+entity.ssr_mail_count.view:
+  title: 'View'
+  route_name: entity.ssr_mail_count.canonical
+  base_route: entity.ssr_mail_count.canonical
+entity.ssr_mail_count.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_mail_count.edit_form
+  base_route: entity.ssr_mail_count.canonical
+entity.ssr_mail_count.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_mail_count.delete_form
+  base_route: entity.ssr_mail_count.canonical
+  weight: 10
+entity.ssr_mail_count.collection:
+  title: 'Mail counts'
+  route_name: entity.ssr_mail_count.collection
+  base_route: system.admin_content
+  weight: 10
+
+simple_school_reports_maillog.maillog:
+  title: 'Mail log'
+  route_name: view.ssr_maillog.list
+  base_route: view.ssr_maillog.list
+  weight: 10
+
+simple_school_reports_maillog.mail_count_page:
+  title: 'Mail count'
+  route_name: simple_school_reports_maillog.mail_count_page
+  base_route: view.ssr_maillog.list
+  weight: 20
+
