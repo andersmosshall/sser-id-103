@@ -1,5 +1,8 @@
+_core:
+  default_config_hash: HlN7eAN2N4JIHsYv56V4E7sqC9bS609KwvGFjyD_mgk
 langcode: en
-name: SSER Demo1
+uuid: 5bce322e-7d92-4e44-bb43-74b2e273a887
+name: 'SSER Demo1'
 mail: sser@selektiv.se
 slogan: ''
 page:
