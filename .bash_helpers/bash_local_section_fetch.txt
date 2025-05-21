@@ -1,0 +1,14 @@
+### Verify sserdemo1.
+if [ ! -d \"sserdemo1\" ]; then \
+  mkdir sserdemo1; \
+  git clone git@github.com:andersmosshall/sser-id-103.git sserdemo1; \
+  cd sserdemo1; \
+  git checkout main; \
+  echo \"Add sser-base remote\"; \
+  git remote add sser-base git@github.com:andersmosshall/sser-base.git; \
+  cd ..;
+fi
+cd sserdemo1 &&
+git pull &&
+echo \"Fetched sserdemo1\" &&
+cd ..;

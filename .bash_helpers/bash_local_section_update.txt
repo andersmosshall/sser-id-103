@@ -1,0 +1,5 @@
+# Update sserdemo1
+echo "Update sserdemo1"
+cd sserdemo1 || return
+bash .scripts/update-from-base.sh
+cd ~/Projects/sser/sser-sites || return

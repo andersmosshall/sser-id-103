@@ -1,0 +1,12 @@
+langcode: en
+name: SSER Demo1
+mail: sser@selektiv.se
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /start/resolve
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: sv
+mail_notification: null
