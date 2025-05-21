@@ -310,7 +310,12 @@ echo "   NOTE: This script will NOT perform this step."
 echo "   ====================================================================="
 echo ""
 echo "   Copying '$DEFAULT_SETTINGS_PHP_SRC' -> '$DEFAULT_SETTINGS_PHP' for the installer..."
-cp "$DEFAULT_SETTINGS_PHP_SRC" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed default.settings.php"; fi
+# Check if settings file already exists.
+if [ -f "$DEFAULT_SETTINGS_PHP" ]; then
+    echo "   WARNING: '$DEFAULT_SETTINGS_PHP' already exists. Skip copying..."
+else
+  cp "$DEFAULT_SETTINGS_PHP_SRC" "$DEFAULT_SETTINGS_PHP"; if [ $? -ne 0 ]; then error_exit "Failed default.settings.php"; fi
+fi
 echo ""
 echo ""
 bash "$UPDATE_OWNER_SCRIPT" -user="$OWNER_USER" -user-group="$OWNER_GROUP" --writable
