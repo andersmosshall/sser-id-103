@@ -90,8 +90,11 @@ module:
   simple_school_reports_email_attachments: 10
   simple_school_reports_grade_registration: 10
   simple_school_reports_help: 10
+  simple_school_reports_iup: 10
   simple_school_reports_leave_application: 10
   simple_school_reports_maillog_mini: 10
+  simple_school_reports_reviews: 10
+  simple_school_reports_scb_grade_export: 10
   simple_school_reports_schema_ssr: 10
   simple_school_reports_schema_support: 10
   views: 10
