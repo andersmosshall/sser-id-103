@@ -3,19 +3,15 @@
 namespace Drupal\simple_school_reports_core\Form;
 
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
-use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides a confirmation form for adding date range to url.
@@ -141,15 +137,14 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
     return $return;
   }
 
-  public static function getWeekOptions(?string $current_week_value = NULL): array {
+  public static function getWeekOptions(?string $current_week_value = NULL, null | DrupalDateTime | \DateTime $max_from = NULL, null | DrupalDateTime | \DateTime $max_to = null): array {
     $current_week_key = NULL;
     if ($current_week_value) {
       // Set current week as value -1.
-      $default_date = new \Drupal\Core\Datetime\DrupalDateTime();
+      $default_date = new DrupalDateTime();
       $default_date = WeekNumberToUrlRangeForm::getFirstDayOfWeek($default_date);
       $current_week_key = 'mts:' . $default_date->getTimestamp();
     }
-
 
     $date_walk = self::getFirstDayOfWeek(new DrupalDateTime());
     $date_walk->sub(new \DateInterval('P1092D'));
@@ -158,6 +153,14 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       $key = 'mts:' . $date_walk->getTimestamp();
       if ($current_week_value && $current_week_key === $key) {
         $key = $current_week_value;
+      }
+
+      if ($max_from && $date_walk->getTimestamp() < $max_from->getTimestamp()) {
+        $date_walk->add(new \DateInterval('P7D'));
+        continue;
+      }
+      if ($max_to && $date_walk->getTimestamp() > $max_to->getTimestamp()) {
+        break;
       }
 
       $week_options[$key] = $date_walk->format('Y - \v. W');
@@ -194,12 +197,24 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       }
     }
 
+    $options = [];
+    if ($this->currentRouteMatch->getRouteName() === 'simple_school_reports_schema.student_schema') {
+      $max_from = new \DateTime();
+      $max_from->setTime(0, 0, 0);
+      // Subtract 3 weeks.
+      $max_from->sub(new \DateInterval('P21D'));
+      $options = $this->getWeekOptions(NULL, $max_from, $this->termService->getDefaultSchoolYearEnd());
+    }
+    else {
+      $this->getWeekOptions();
+    }
+
     $form['from_date'] = [
       '#type' => 'select',
       '#title' => $this->t('Select week'),
       '#default_value' => 'mts:' . $default_value,
       '#required' => TRUE,
-      '#options' => $this->getWeekOptions(),
+      '#options' => $options,
     ];
 
     $form = parent::buildForm($form, $form_state);

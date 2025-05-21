@@ -40,10 +40,6 @@ class MakeCourseCalendarEventSubscriber implements EventSubscriberInterface {
    * @return void
    */
   public function onMakeCourseCalendarEvent(MakeCourseCalendarEvent $event) {
-    if (!$this->calendarEventsSyncService->syncIsEnabled()) {
-      return;
-    }
-
     $is_bulk_action = $event->isBulkAction();
     $days = $event->getDays();
     if (empty($days)) {

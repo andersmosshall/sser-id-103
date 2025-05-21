@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_core\Service\CourseServiceInterface;
 use Drupal\simple_school_reports_core\Service\TermService;
+use Drupal\simple_school_reports_entities\CalendarEventInterface;
 use Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface;
 use Drupal\simple_school_reports_schema_support\CourseCalendarEventTrait;
 use Drupal\simple_school_reports_schema_support\Events\MakeCourseCalendarEvent;
@@ -61,8 +62,6 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
       $this->lookup[$cid][$course_id] = [];
     }
 
-
-
     $courses = $warm_up_all ? $this->courseService->getActiveCourseIdsWithStudents() : [$course_id];
     if (!empty($courses)) {
       $query = $this->connection->select('ssr_calendar_event', 'ce');
@@ -84,6 +83,44 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     }
 
     return $cid;
+  }
+
+  protected function adjustCalendarEventsFromDeviations(CalendarEventInterface $calendar_event, array $deviations): ?CalendarEventInterface {
+    if (empty($deviations)) {
+      return $calendar_event;
+    }
+
+    $event_from = $calendar_event->get('from')->value;
+    $event_to = $calendar_event->get('to')->value;
+    $base_date = new \DateTime();
+    $base_date->setTimestamp($event_from);
+    $base_date->setTime(0, 0, 0);
+
+    foreach ($deviations as $deviation) {
+      if ($deviation['no_teaching']) {
+        return null;
+      }
+
+      $school_day_from = $deviation['from'] ?? NULL;
+      $school_day_to = $deviation['to'] ?? NULL;
+      if (!$school_day_from || !$school_day_to) {
+        continue;
+      }
+
+      $school_day_from += $base_date->getTimestamp();
+      $school_day_to += $base_date->getTimestamp();
+
+      // If calendar event is outside of school day, do not keep.
+      if ($event_to <= $school_day_from || $event_from >= $school_day_to) {
+        return null;
+      }
+
+      $event_from = max($event_from, $school_day_from);
+      $event_to = min($event_to, $school_day_to);
+      $calendar_event->set('from', $event_from);
+      $calendar_event->set('to', $event_to);
+    }
+    return $calendar_event;
   }
 
   /**
@@ -111,7 +148,7 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     $current_term_start = $this->termService->getCurrentTermStart(FALSE);
     $current_term_end = $this->termService->getCurrentTermEnd(FALSE);
 
-    $do_dispatch = TRUE;
+    $do_dispatch = $this->syncIsEnabled();
     if (!$current_term_start || !$current_term_end) {
       $do_dispatch = FALSE;
     }
@@ -171,40 +208,12 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     $calender_identifiers_to_keep = [];
     foreach ($calendar_events as $key => $calendar_event) {
       $event_from = $calendar_event->get('from')->value;
-      $event_to = $calendar_event->get('to')->value;
-      $base_date = new \DateTime();
-      $base_date->setTimestamp($from);
-      $base_date->setTime(0, 0, 0);
-      $base_date_string = $base_date->format('Y-m-d');
+      $event_from_date = new \DateTime();
+      $event_from_date->setTimestamp($event_from);
+      $event_from_date_string = $event_from_date->format('Y-m-d');
 
-      $keep = TRUE;
-      foreach ($deviation_list[$base_date_string] as $deviation) {
-        if ($deviation['no_teaching']) {
-          $keep = FALSE;
-          break;
-        }
-
-        $school_day_from = $deviation['from'] ?? NULL;
-        $school_day_to = $deviation['to'] ?? NULL;
-        if (!$school_day_from || !$school_day_to) {
-          continue;
-        }
-
-        $school_day_from += $base_date->getTimestamp();
-        $school_day_to += $base_date->getTimestamp();
-
-        // If calendar event is outside of school day, do not keep.
-        if ($to <= $school_day_from || $from >= $school_day_to) {
-          $keep = FALSE;
-          break;
-        }
-
-        $event_from = max($event_from, $school_day_from);
-        $event_to = min($event_to, $school_day_to);
-        $calendar_event->set('from', $event_from);
-        $calendar_event->set('to', $event_to);
-      }
-      if (!$keep) {
+      $calendar_event = $this->adjustCalendarEventsFromDeviations($calendar_event, $deviation_list[$event_from_date_string] ?? []);
+      if (!$calendar_event) {
         unset($calendar_events[$key]);
         continue;
       }
@@ -242,6 +251,102 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
       $calendar_event->delete();
       unset($stored_calendar_event_data[$identifier]);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateStudentCourseCalendarEvents(string|int $student_uid, int $from, int $to): array {
+    if (!ssr_use_schema()) {
+      return [];
+    }
+
+    $from = (int) $from;
+    $to = (int) $to;
+    if ($from > $to) {
+      $tmp = $to;
+      $to = $from;
+      $from = $tmp;
+    }
+
+    // Allow maximum of 30 days diff.
+    $max_days = 30 * 24 * 60 * 60;
+    if ($to - $from > $max_days) {
+      $to = $from + $max_days;
+    }
+
+    $course_ids = $this->courseService->getStudentActiveCourseIds($student_uid);
+    if (empty($course_ids)) {
+      return [];
+    }
+
+    $calendar_events = [];
+
+    $from_date = new \DateTime();
+    $from_date->setTimestamp($from);
+
+    $school_week = $this->schoolWeekService->getSchoolWeek($student_uid, $from_date);
+
+    if (!$school_week) {
+      return [];
+    }
+
+    $deviation_map = $this->schoolWeekService->getSchoolWeekDeviationMap($school_week);
+
+    $mocked_event = new MakeCourseCalendarEvent(1, $from, $to, FALSE);
+    $deviation_list = [];
+    $days = $mocked_event->getDays();
+    foreach ($days as $day) {
+      $day_string = $day->format('Y-m-d');
+      $deviation_list[$day_string] = [];
+      if (!empty($deviation_map[$day_string])) {
+        $deviation_list[$day_string][] = $deviation_map[$day_string];
+      }
+    }
+
+    foreach ($course_ids as $course_id) {
+      $event = new MakeCourseCalendarEvent($course_id, $from, $to, FALSE);
+      $this->dispatcher->dispatch($event, SsrSchemaSupportEvents::MAKE_COURSE_CALENDAR_EVENTS);
+      $calendar_events = array_merge($calendar_events, $event->getCalendarEvents());
+    }
+
+    $schema_data_identifiers = $this->courseService->getStudentSchemaEntryDataIdentifiers($student_uid);
+
+    // Filter and adjust the calendar events.
+    /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $calendar_event */
+    foreach ($calendar_events as $key => $calendar_event) {
+      if ($calendar_event->bundle() !== 'course') {
+        unset($calendar_events[$key]);
+        continue;
+      }
+
+      $calendar_event->setPreventSave(TRUE);
+      $course_id = $calendar_event->get('field_course')->target_id ?? '';
+      $course_sub_group = $calendar_event->get('field_course_sub_group')->value ?? 'default';
+
+      $schema_data_identifier = $course_id . ';' . $course_sub_group;
+      if (!in_array($schema_data_identifier, $schema_data_identifiers)) {
+        unset($calendar_events[$key]);
+        continue;
+      }
+
+      $event_from = $calendar_event->get('from')->value;
+      $event_from_date = new \DateTime();
+      $event_from_date->setTimestamp($event_from);
+      $event_from_date_string = $event_from_date->format('Y-m-d');
+
+      $calendar_event = $this->adjustCalendarEventsFromDeviations($calendar_event, $deviation_list[$event_from_date_string] ?? []);
+      if (!$calendar_event) {
+        unset($calendar_events[$key]);
+      }
+    }
+    $calendar_events = array_values($calendar_events);
+    // Sort calendar events by date.
+    usort($calendar_events, function (CalendarEventInterface $a, CalendarEventInterface $b) {
+      return $a->get('from')->value <=> $b->get('from')->value;
+    });
+
+    return $calendar_events;
   }
 
   /**

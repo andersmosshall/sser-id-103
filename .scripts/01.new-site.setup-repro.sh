@@ -25,6 +25,7 @@ DEFAULT_NO_REPLY_EMAIL="no-reply@simpleschoolreports.se"
 DEFAULT_TOOLBAR_COLOR="#0f0f0f"
 DEFAULT_MODULE_WEIGHT=10
 DEFAULT_EXTRA_ADMINS=0
+DEFAULT_SUSPICIOUS_MAIL_COUNT=6000
 
 # Modules to always exclude from selection (in addition to _support modules)
 declare -a ALWAYS_EXCLUDE_MODULES=(
@@ -241,6 +242,21 @@ done
 echo "Using Extra Super Admins count: ${SSR_EXTRA_SUPER_ADMINS}"
 
 while true; do
+  read -p "Enter suspicious mail count value (>1500, default: ${DEFAULT_SUSPICIOUS_MAIL_COUNT} - keep high. If mail count): " SSR_SUSPICIOUS_MAIL_COUNT_INPUT
+  # Apply default if input is empty
+  SSR_SUSPICIOUS_MAIL_COUNT=${SSR_SUSPICIOUS_MAIL_COUNT_INPUT:-$DEFAULT_SUSPICIOUS_MAIL_COUNT}
+  # Validate input is a number greater than 1500
+  if [[ "$SSR_SUSPICIOUS_MAIL_COUNT" =~ ^[0-9]+$ && "$SSR_SUSPICIOUS_MAIL_COUNT" -gt 1500 ]]; then
+    break # Exit loop if valid
+  else
+    echo "Invalid input. Please enter a number greater than 1500." >&2
+    # Reset variable if invalid input was given (forces re-entry or taking default again)
+    SSR_SUSPICIOUS_MAIL_COUNT=""
+  fi
+done
+echo "Using suspicious mail count: ${SSR_SUSPICIOUS_MAIL_COUNT}"
+
+while true; do
     read -p "Enter Toolbar Color (hex format, e.g., #aabbcc) [${DEFAULT_TOOLBAR_COLOR}]: " SSR_TOOLBAR_COLOR_INPUT
     SSR_TOOLBAR_COLOR=${SSR_TOOLBAR_COLOR_INPUT:-$DEFAULT_TOOLBAR_COLOR} # Use default if empty
     if [[ "$SSR_TOOLBAR_COLOR" =~ ^#[0-9a-fA-F]{6}$ ]]; then
@@ -428,6 +444,8 @@ apply_all_replacements() {
     || error_exit "Failed replacing [SSR_NO_REPLY_EMAIL] in ${filename}"
   sed -i "s/\\[SSR_EXTRA_SUPER_ADMINS\\]/${SSR_EXTRA_SUPER_ADMINS}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_EXTRA_SUPER_ADMINS] in ${filename}"
+  sed -i "s/\\[SSR_SUSPICIOUS_MAIL_COUNT\\]/${SSR_SUSPICIOUS_MAIL_COUNT}/g" "$target_file" \
+    || error_exit "Failed replacing [SSR_SUSPICIOUS_MAIL_COUNT] in ${filename}"
   sed -i "s/\\[SSR_TOOLBAR_COLOR\\]/${SSR_TOOLBAR_COLOR}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_TOOLBAR_COLOR] in ${filename}"
   sed -i "s/\\[FULL_URL\\]/${ESCAPED_FULL_URL}/g" "$target_file" \
@@ -737,7 +755,8 @@ echo "Municipality Code:      ${SCHOOL_MUNICIPALITY_CODE}"
 echo "Grade Range:            ${SSR_GRADE_FROM}-${SSR_GRADE_TO}"
 echo "Bug Report Email:       ${SSR_BUG_REPORT_EMAIL}"
 echo "No-Reply Email:         ${SSR_NO_REPLY_EMAIL}"
-echo "Extra Super Admins:     ${SSR_EXTRA_SUPER_ADMINS}" # Added
+echo "Extra Super Admins:     ${SSR_EXTRA_SUPER_ADMINS}"
+echo "Suspicious mail count:  ${SSR_SUSPICIOUS_MAIL_COUNT}"
 echo "Toolbar Color:          ${SSR_TOOLBAR_COLOR}"
 echo
 # Check Git setup confirmation status for final message

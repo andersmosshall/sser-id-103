@@ -79,3 +79,16 @@ simple_school_reports_schema.sync_config_form:
     _title: 'Settings for sync of lessons'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_schema_support\Form\CalendarEventSyncConfigForm::access'
+
+simple_school_reports_schema.student_schema:
+  path: '/user/{user}/schema'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\WeekNumberToUrlRangeForm'
+    _title_callback: '\Drupal\simple_school_reports_core\Controller\UserPageController::getStudentSchemaTitle'
+  requirements:
+    _entity_access: 'user.view'
+    _custom_access: '\Drupal\simple_school_reports_core\Controller\UserPageController::accessIfUserIsStudent'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

@@ -1,0 +1,25 @@
+uuid: 6cfb79b8-7613-41af-a7b3-2e4f39bb9824
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_schema_support
+    - system
+  theme:
+    - ssr_base
+id: ssr_base_studentschemablock
+theme: ssr_base
+region: content
+weight: 0
+provider: null
+plugin: student_schema_block
+settings:
+  id: student_schema_block
+  label: 'Student schema block'
+  label_display: '0'
+  provider: simple_school_reports_schema_support
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*/schema'

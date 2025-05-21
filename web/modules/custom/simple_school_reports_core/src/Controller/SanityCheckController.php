@@ -10,6 +10,36 @@ use Drupal\Core\Site\Settings;
  */
 class SanityCheckController extends ControllerBase {
 
+  protected function getConfigValue(array $config_path): string | null {
+    if (count($config_path) < 2) {
+      return NULL;
+    }
+
+    // First item is the config file.
+    $config_name = array_shift($config_path);
+    $config_object = $this->config($config_name);
+
+    // Second item is the config key.
+    $config_key = array_shift($config_path);
+    $config_value = $config_object->get($config_key);
+
+    // Loop through the rest of the config path.
+    foreach ($config_path as $key) {
+      if (is_array($config_value) && array_key_exists($key, $config_value)) {
+        $config_value = $config_value[$key];
+      }
+      else {
+        return NULL;
+      }
+    }
+
+    if (is_array($config_value)) {
+      return implode(', ', $config_value);
+    }
+
+    return (string) $config_value;
+  }
+
   public function sanityCheck() {
     $build = [];
 
@@ -56,6 +86,25 @@ class SanityCheckController extends ControllerBase {
     ];
     foreach ($secret_value_settings as $setting) {
       $rows[] = [$setting, !!Settings::get($setting) ? 'OK' : 'NOT SET'];
+    }
+
+    $safe_config_paths = [
+      ['symfony_mailer.settings', 'default_transport'],
+      ['symfony_mailer.mailer_transport.ssr_smtp', 'configuration', 'host'],
+      ['symfony_mailer.mailer_transport.ssr_smtp', 'configuration', 'port'],
+      ['symfony_mailer.mailer_transport.ssr_smtp', 'configuration', 'user'],
+    ];
+    foreach ($safe_config_paths as $config_paths) {
+      $value = $this->getConfigValue($config_paths);
+      $rows[] = [implode('.', $config_paths), $value ?? 'NOT SET'];
+    }
+
+    $secret_config_paths = [
+      ['symfony_mailer.mailer_transport.ssr_smtp', 'configuration', 'pass'],
+    ];
+    foreach ($secret_config_paths as $config_paths) {
+      $value = $this->getConfigValue($config_paths);
+      $rows[] = [implode('.', $config_paths), $value === 'SECRET' ? 'NOT SET' : 'OK'];
     }
 
     $build['settings_check_table'] = [

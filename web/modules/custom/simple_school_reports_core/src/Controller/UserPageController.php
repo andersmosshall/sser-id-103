@@ -120,6 +120,15 @@ class UserPageController extends ControllerBase {
     return $this->t('Statistics');
   }
 
+  public function getStudentSchemaTitle() {
+    $user = $this->currentRouteMatch->getParameter('user');
+    if ($user && $user instanceof UserInterface) {
+      return $user->getDisplayName() . ' - ' . $this->t('Schema');
+    }
+
+    return $this->t('Schema');
+  }
+
   public function accessIfUserIsStudent(UserInterface $user, AccountInterface $account): AccessResult {
     if ($user->hasRole('student')) {
       return AccessResult::allowed()->addCacheableDependency($user);

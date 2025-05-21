@@ -210,6 +210,39 @@ function simple_school_reports_grade_registration_node_presave(\Drupal\Core\Enti
 }
 
 /**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_grade_registration_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'grade_registration_subject_list') {
+    $current_user = \Drupal::currentUser();
+
+    if ($current_user->hasPermission('administer simple school reports settings')) {
+      return;
+    }
+
+    $grade_subject_nids_to_grade = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'grade_subject')
+      ->condition('field_teacher', $current_user->id())
+      ->execute();
+
+    if (empty($grade_subject_nids_to_grade)) {
+      $grade_subject_nids_to_grade = [-1];
+    }
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'node_field_data_node__field_grade_subject.nid') {
+          $condition['operator'] = 'IN';
+          $condition['value'] = array_values($grade_subject_nids_to_grade);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_views_pre_view().
  */
 function simple_school_reports_grade_registration_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
@@ -218,5 +251,7 @@ function simple_school_reports_grade_registration_views_pre_view(\Drupal\views\V
   }
   if ($view->id() === 'grade_registration_subject_list') {
     $view->element['#cache']['contexts'][] = 'user';
+    $view->element['#cache']['tags'][] = 'node_list:grade_subject';
+    $view->element['#cache']['tags'][] = 'node_list:grade_round';
   }
 }

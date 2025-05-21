@@ -107,6 +107,8 @@ $settings['ssr_max_written_reviews_subject_list'] = 18;
 $settings['ssr_toolbar_color'] = '#3a5ebd';
 
 $settings['ssr_bug_report_email'] = 'anders@mosshall.se';
-$settings['ssr_no_reply_email'] = 'anders@mosshall.se';
+$settings['ssr_no_reply_email'] = 'no-reply@simpleschoolreports.se';
 
 $settings['ssr_allowed_super_admins'] = 1;
+
+$settings['ssr_suspicious_mail_count'] = 10000;

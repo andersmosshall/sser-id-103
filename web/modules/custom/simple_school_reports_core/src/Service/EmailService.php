@@ -8,7 +8,9 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\MaintenanceModeInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\symfony_mailer\Address;
@@ -71,6 +73,11 @@ class EmailService implements EmailServiceInterface {
    */
   protected $logger;
 
+  /**
+   * If site is in maintenance mode.
+   */
+  protected bool $maintenanceMode;
+
   protected $uidRecipientMap;
 
   protected $uidCaregiverRecipientMap;
@@ -95,7 +102,8 @@ class EmailService implements EmailServiceInterface {
     AccountInterface $current_user,
     EmailFactoryInterface $email_factory,
     ModuleHandlerInterface $module_handler,
-    LoggerChannelFactoryInterface $logger
+    LoggerChannelFactoryInterface $logger,
+    StateInterface $state,
   ) {
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
@@ -105,6 +113,7 @@ class EmailService implements EmailServiceInterface {
     $this->emailFactory = $email_factory ?? NULL;
     $this->moduleHandler = $module_handler;
     $this->logger = $logger;
+    $this->maintenanceMode = !!$state->get('system.maintenance_mode');
   }
 
   protected function currentRequest(): Request {
@@ -256,7 +265,7 @@ class EmailService implements EmailServiceInterface {
       $email = $this->emailFactory->newTypedEmail('simple_school_reports_core', 'plaintext');
       $email->setTo($recipient);
 
-      $from_adr = new Address('no-reply@simpleschoolreports.se', $from);
+      $from_adr = new Address(Settings::get('ssr_no_reply_email', 'no-reply@simpleschoolreports.se'), $from);
       $email->setFrom($from_adr);
       $email->setSubject(strip_tags($subject));
 
@@ -290,6 +299,10 @@ class EmailService implements EmailServiceInterface {
       $email->addTextHeader('X-Auto-Response-Suppress', 'OOF, DR, RN, NRN, AutoReply');
       $this->mailCountIncrement();
       $is_simulated = str_ends_with($this->currentRequest()->getHost(), '.loc') || str_ends_with($recipient, '@example.com') || $this->moduleHandler->moduleExists('simple_school_reports_demo');
+
+      if ($this->maintenanceMode && empty($options['ignore_maintenance_mode'])) {
+        throw new \RuntimeException('Not allowed in maintenance mode.');
+      }
 
       if ($is_simulated) {
         $send_status = SsrMaillogInterface::MAILLOG_SEND_STATUS_SIMULATED;

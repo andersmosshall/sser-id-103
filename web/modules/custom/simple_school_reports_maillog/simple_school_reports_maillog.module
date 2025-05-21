@@ -9,6 +9,7 @@ use Drupal\Core\Render\Element;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -251,7 +252,6 @@ function clean_up_old_maillog_items() {
     return;
   }
 
-
   // Clean up maillog items older than 3 months.
   $time_limit = new \DateTime();
   $time_limit->sub(new \DateInterval('P3M'));
@@ -286,4 +286,125 @@ function clean_up_old_maillog_items() {
     $mailcount_items = $mailcount_storage->loadMultiple($mailcount_ids);
     $mailcount_storage->delete($mailcount_items);
   }
+}
+
+function notify_mail_count() {
+  $connection = \Drupal::database();
+  $state = \Drupal::state();
+
+  // Ignore in maintenance mode.
+  if ($state->get('system.maintenance_mode')) {
+    return;
+  }
+
+  $to = new \DateTime();
+  $to->setTime(23, 59, 59);
+  $from = new \DateTime();
+  $from->sub(new \DateInterval('P30D'));
+  $from->setTime(0, 0, 0);
+
+  $results = $connection->select('ssr_mail_count', 'mc')
+    ->condition('from', $from->getTimestamp(), '>=')
+    ->condition('to', $to->getTimestamp(), '<=')
+    ->fields('mc', ['sent', 'failed', 'simulated'])
+    ->execute();
+
+  $sent_count = 0;
+  $failed_count = 0;
+  foreach ($results as $result) {
+    $sent_count += $result->sent ?? 0;
+    $failed_count += $result->failed ?? 0;
+  }
+
+  // Add current day.
+  $current_day_string = $to->format('Y-m-d');
+  $current_day_data = $state->get('simple_school_reports_maillog.mailcount', [])[$current_day_string] ?? [];
+  $sent_count += $current_day_data['sent'] ?? 0;
+  $failed_count += $current_day_data['failed'] ?? 0;
+
+  try {
+    \Drupal::logger('notify_mail_count')->info('Current mail count stats last 30 days: sent - @sent, failed - @failed', ['@sent' => $sent_count, '@failed' => $failed_count]);
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('simple_school_reports_maillog')->error($e->getMessage());
+  }
+
+  $batch_size = Settings::get('mail_count_notify_batch', 500);
+
+  if ($sent_count < $batch_size) {
+    return;
+  }
+
+  // Check if we should put site in maintenance panic mode.
+  $ssr_suspicious_mail_count = Settings::get('ssr_suspicious_mail_count', 6000);
+  if ($sent_count >= $ssr_suspicious_mail_count) {
+    try {
+      $state->set('system.maintenance_mode', TRUE);
+      $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+      if ($ssr_bug_report_email) {
+        /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+        $email_service = \Drupal::service('simple_school_reports_core.email_service');
+        $subject = t('PANIC! - suspicious mail count activity - @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+        $message = t('Suspicious mail count detected, (@sent/@failed) for @school_name. Site is put in maintenance mode', ['@days' => 30, '@sent' => $sent_count, '@failed' => $failed_count, '@school_name' => Settings::get('ssr_school_name', '?')]);
+        $email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+          'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+          'no_reply_to' => TRUE,
+          'ignore_maintenance_mode' => TRUE,
+        ]);
+      }
+      \Drupal::logger('simple_school_reports_maillog')->error('Suspicious mail count detected, (@sent/@failed). Site is put in maintenance mode.', ['@sent' => $sent_count, '@failed' => $failed_count]);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('simple_school_reports_maillog')->error($e->getMessage());
+    }
+    return;
+  }
+
+  $thresholds = $state->get('simple_school_reports_maillog.mailcount_notify_thresholds', []);
+
+  $thresholds += [
+    'decay' => 0,
+    'notify' => $batch_size,
+  ];
+
+  if ($sent_count < $thresholds['decay']) {
+    $thresholds['decay'] -= $batch_size;
+    $thresholds['notify'] -= $batch_size;
+    if ($thresholds['decay'] <= 0 || $thresholds['notify'] <= 0) {
+      $state->delete('simple_school_reports_maillog.mailcount_notify_thresholds');
+      return;
+    }
+    $state->set('simple_school_reports_maillog.mailcount_notify_thresholds', $thresholds);
+    return;
+  }
+
+  if ($sent_count < $thresholds['notify']) {
+    return;
+  }
+
+  try {
+    $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+    if ($ssr_bug_report_email) {
+      /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+      $email_service = \Drupal::service('simple_school_reports_core.email_service');
+      $subject = t('Mail count report -  @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+      $message = t('Current mail count stats last @days days for @school_name. Sent - @sent. Failed - @failed', ['@days' => 30, '@sent' => $sent_count, '@failed' => $failed_count, '@school_name' => Settings::get('ssr_school_name', '?')]);
+      $email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+        'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+        'no_reply_to' => TRUE,
+      ]);
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('simple_school_reports_maillog')->error($e->getMessage());
+  }
+
+  $thresholds['decay'] = $sent_count - $batch_size;
+  $thresholds['notify'] = $sent_count + $batch_size;
+
+  if ($thresholds['decay'] <= 0) {
+    $state->delete('simple_school_reports_maillog.mailcount_notify_thresholds');
+    return;
+  }
+  $state->set('simple_school_reports_maillog.mailcount_notify_thresholds', $thresholds);
 }

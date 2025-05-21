@@ -76,5 +76,9 @@ $settings['ssr_no_reply_email'] = '[SSR_NO_REPLY_EMAIL]';
 // admin.
 $settings['ssr_allowed_super_admins'] = [SSR_EXTRA_SUPER_ADMINS];
 
+// Limit to put site in maintenance mode due to suspicious mail activity, if the
+// mail count is above this number.
+$settings['ssr_suspicious_mail_count'] = [SSR_SUSPICIOUS_MAIL_COUNT];
+
 // Fallback toolbar color #0f0f0f.
 $settings['ssr_toolbar_color'] = '[SSR_TOOLBAR_COLOR]';
