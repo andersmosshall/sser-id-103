@@ -1303,14 +1303,19 @@ function simple_school_reports_core_ssr_login_access(\Drupal\user\UserInterface 
  * Implements hook_mail_alter().
  */
 function simple_school_reports_core_mail_alter(&$message) {
-  $login_access_check_mails = [
+  $login_mails = [
     'password_reset',
     'register_admin_created',
   ];
 
-  if (in_array($message['key'] ?? '?', $login_access_check_mails)) {
+  $is_login_mail = in_array($message['key'] ?? '?', $login_mails);
+  /** @var \Drupal\user\UserInterface|null $login_user */
+  $login_user = NULL;
+
+  if ($is_login_mail) {
     $user = !empty($message['params']['account']) ? $message['params']['account'] : NULL;
     if ($user) {
+      $login_user = $user;
       $access = FALSE;
       /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
       $module_handler = \Drupal::service('module_handler');
@@ -1327,6 +1332,7 @@ function simple_school_reports_core_mail_alter(&$message) {
         }
       }
       if (!$access) {
+        $login_user = NULL;
         $message['send'] = FALSE;
       }
     }
@@ -1335,7 +1341,11 @@ function simple_school_reports_core_mail_alter(&$message) {
   if (!empty($message['send'])) {
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
     $module_handler = \Drupal::service('module_handler');
-    if ($module_handler->moduleExists('simple_school_reports_demo')) {
+
+    // Do not block login mail for administrators even in demo mode.
+    $allowed_login = $login_user && $login_user?->hasPermission('administer simple school reports settings');
+
+    if ($module_handler->moduleExists('simple_school_reports_demo') && !$allowed_login) {
       $message['send'] = FALSE;
       $message['blocked_by_demo'] = TRUE;
       return;
