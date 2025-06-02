@@ -96,3 +96,15 @@ delete ssr_lookup:
   title: 'Delete ssr lookup'
 create ssr_lookup:
   title: 'Create ssr lookup'
+
+administer ssr_organization:
+  title: 'Administer ssr organizations'
+  restrict access: true
+view ssr_organization:
+  title: 'View ssr organization'
+edit ssr_organization:
+  title: 'Edit ssr organization'
+delete ssr_organization:
+  title: 'Delete ssr organization'
+create ssr_organization:
+  title: 'Create ssr organization'

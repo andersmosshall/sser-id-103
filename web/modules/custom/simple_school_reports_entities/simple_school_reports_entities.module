@@ -44,6 +44,9 @@ function simple_school_reports_entities_theme() {
     'ssr_lookup' => [
       'render element' => 'elements',
     ],
+    'ssr_organization' => [
+      'render element' => 'elements',
+    ],
   ];
 }
 
@@ -269,3 +272,20 @@ function simple_school_reports_entities_views_data_alter(array &$data) {
   }
 }
 
+/**
+ * Prepares variables for ssr organization templates.
+ *
+ * Default template: ssr-organization.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the ssr organization information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_organization(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}

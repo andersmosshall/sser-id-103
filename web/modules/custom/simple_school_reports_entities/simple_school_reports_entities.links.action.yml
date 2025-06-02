@@ -57,3 +57,9 @@ ssr_lookup.add_form:
   route_name: entity.ssr_lookup.add_form
   appears_on:
     - entity.ssr_lookup.collection
+
+ssr_organization.add_form:
+  title: 'Add ssr organization'
+  route_name: entity.ssr_organization.add_form
+  appears_on:
+    - entity.ssr_organization.collection
