@@ -507,6 +507,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         'base_destination' => $this->uuid->generate(),
         'grade_round_name' => $grade_round->label(),
         'extens_export_grades' => $form_state->getValue('extens_export_grades', []),
+        'extens_include_contact_details' => $form_state->getValue('extens_include_contact_details', FALSE),
         'scb_export_types' => $scb_export_types,
       ];
 
