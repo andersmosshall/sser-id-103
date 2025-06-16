@@ -12,6 +12,31 @@ use Drupal\Core\Form\FormStateInterface;
  */
 final class SSROrganizationForm extends ContentEntityForm {
 
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildForm($form, $form_state);
+
+    $organization = $this->getEntity();
+    if (!$organization->isNew()) {
+      // Disable a set of fields if they are set.
+      $fields_to_disable = [
+        'label',
+        'municipality_code',
+        'school_types',
+        'school_unit_code',
+        'organization_type',
+        'parent',
+      ];
+
+      foreach ($fields_to_disable as $field_name) {
+        if ($organization->get($field_name)->value || $organization->get($field_name)->target_id) {
+          $form[$field_name]['#disabled'] = TRUE;
+        }
+      }
+    }
+
+    return $form;
+  }
+
   /**
    * {@inheritdoc}
    */

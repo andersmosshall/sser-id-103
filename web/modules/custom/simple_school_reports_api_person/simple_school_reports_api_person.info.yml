@@ -1,8 +1,7 @@
-name: 'Simple School Reports Maillog API Users'
+name: 'Simple School Reports API Users'
 type: module
-description: 'Simple School Reports Maillog API Users'
+description: 'Simple School Reports API Users'
 package: 'Simple School Reports Api'
 core_version_requirement: ^10 || ^11
 dependencies:
   - simple_school_reports_api_support:simple_school_reports_api_support
-  - simple_school_reports_constrained_user_list:simple_school_reports_constrained_user_list

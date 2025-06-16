@@ -171,7 +171,7 @@ print_step "Clear Drupal cache (post-deploy)"
 
 print_step "Run custom deploy hook (if exists)"
 # Note the careful quoting for the PHP code within the eval string
-"${DRUSH_CMD[@]}" php-eval 'if (function_exists("simple_school_reports_module_info_deploy")) { simple_school_reports_module_info_deploy(); }'
+"${DRUSH_CMD[@]}" php-eval 'if (function_exists("simple_school_reports_core_deploy")) { simple_school_reports_core_deploy(); }'
 
 print_step "Disable Maintenance Mode"
 "${DRUSH_CMD[@]}" state:set system.maintenance_mode 0 --input-format=integer

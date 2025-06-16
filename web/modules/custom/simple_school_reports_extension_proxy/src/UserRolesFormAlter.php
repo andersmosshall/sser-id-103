@@ -9,6 +9,9 @@ class UserRolesFormAlter {
 
   public static function userFormAlter(&$form, FormStateInterface $form_state) {
     if (!empty($form['account']['roles'])) {
+      // Always hide api user.
+      unset($form['account']['roles']['#options']['api']);
+
       $field_access = array_key_exists('#access', $form['account']['roles']) ? $form['account']['roles']['#access'] : TRUE;
       if ($field_access) {
         /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */

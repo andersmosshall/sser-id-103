@@ -1956,3 +1956,13 @@ function simple_school_reports_core_preprocess_block(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_deploy().
+ */
+function simple_school_reports_core_deploy() {
+  /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+  $dispatcher = \Drupal::service('event_dispatcher');
+  $event = new \Drupal\simple_school_reports_core\Events\SsrPostDeployEvent();
+  $dispatcher->dispatch($event, \Drupal\simple_school_reports_core\Events\SsrCoreEvents::SSR_POST_DEPLOY);
+}

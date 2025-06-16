@@ -55,6 +55,9 @@ module:
   path_alias: 0
   phpass: 0
   real_aes: 0
+  rest: 0
+  restui: 0
+  serialization: 0
   simple_school_reports_class_support: 0
   simple_school_reports_core: 0
   simple_school_reports_dnp_support: 0

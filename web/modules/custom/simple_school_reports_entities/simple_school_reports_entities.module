@@ -5,14 +5,9 @@
  * Provides a signing entity type.
  */
 
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Render\Element;
-use Drupal\simple_school_reports_entities\Entity\SsrSigning;
 use Drupal\simple_school_reports_entities\SsrConsentAnswerInterface;
-use Drupal\user\UserInterface;
 use Drupal\simple_school_reports_entities\SsrSigningInterface;
-use Drupal\simple_school_reports_entities\Entity\SsrMeeting;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -129,6 +124,20 @@ function simple_school_reports_entities_lookup_types() {
     'default' => t('Not specified'),
     'ssr_version' => t('SSR Version'),
   ];
+}
+
+
+function simple_school_reports_entities_organization_types() {
+  return [
+    'school_organiser' => t('School organizer'),
+    'school' => t('School'),
+    'school_unit' => t('School unit'),
+    'other' => t('Other'),
+  ];
+}
+
+function simple_school_reports_entities_school_types() {
+  return \Drupal\simple_school_reports_core\SchoolTypeHelper::getSupportedSchoolTypes();
 }
 
 /**

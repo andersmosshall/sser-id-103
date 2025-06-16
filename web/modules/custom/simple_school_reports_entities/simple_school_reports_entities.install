@@ -315,4 +315,18 @@ function simple_school_reports_entities_update_10013() {
   }
 }
 
+/**
+ * Install ssr organization entity type.
+ */
+function simple_school_reports_entities_update_10014() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_organization')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_organization'));
+  }
+}
+
 

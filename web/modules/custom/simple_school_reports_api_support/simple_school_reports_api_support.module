@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_ssr_login_access().
+ */
+function simple_school_reports_api_support_ssr_login_access(\Drupal\Core\Session\AccountInterface $user) {
+  if (in_array('api', $user->getRoles())) {
+    \Drupal\Core\Access\AccessResult::forbidden();
+  }
+  return \Drupal\Core\Access\AccessResult::neutral();
+}

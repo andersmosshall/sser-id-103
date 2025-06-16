@@ -86,3 +86,8 @@ services:
     class: Drupal\simple_school_reports_core\Service\SSRVersionService
     arguments: [ '@entity_type.manager', '@cache.default', '@module_handler', '@extension.list.module' ]
 
+  simple_school_reports_core.organizations_service:
+    class: Drupal\simple_school_reports_core\Service\OrganizationsService
+    tags:
+      - { name: event_subscriber }
+    arguments: [ '@entity_type.manager', '@state', '@logger.factory' ]

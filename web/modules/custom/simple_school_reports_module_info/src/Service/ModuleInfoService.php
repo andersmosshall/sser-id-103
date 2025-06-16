@@ -5,15 +5,17 @@ namespace Drupal\simple_school_reports_module_info\Service;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_module_info\Events\GetHelpPagesEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class ModuleInfoServiceInterface
  */
-class ModuleInfoService implements ModuleInfoServiceInterface {
+class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberInterface {
   use StringTranslationTrait;
 
   public function __construct(
@@ -22,6 +24,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
     protected StateInterface $state,
     protected ModuleHandlerInterface $moduleHandler,
     protected EventDispatcherInterface $dispatcher,
+    protected LoggerChannelFactoryInterface $loggerChannelFactory,
   ) {}
 
 
@@ -508,5 +511,20 @@ class ModuleInfoService implements ModuleInfoServiceInterface {
       return isset($this->getModuleNameMap()[$module_name]);
     }
     return $this->getModuleType($module_name) === $module_type;
+  }
+
+  public static function getSubscribedEvents() {
+    $events['ssr_post_deploy'][] = 'onSsrPostDeploy';
+    return $events;
+  }
+
+  public function onSsrPostDeploy() {
+    $result = $this->syncModuleInfo();
+    if ($result) {
+      $this->loggerChannelFactory->get('simple_school_reports_module_info')->info('Module info sync completed successfully.');
+    }
+    else {
+      $this->loggerChannelFactory->get('simple_school_reports_module_info')->error('Module info sync failed.');
+    }
   }
 }
