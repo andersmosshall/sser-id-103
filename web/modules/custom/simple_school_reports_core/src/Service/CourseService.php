@@ -36,12 +36,23 @@ class CourseService implements CourseServiceInterface {
       ->accessCheck(FALSE)
       ->condition('roles', 'student')
       ->condition('status', 1)
-      ->condition('field_grade', 99, '<>')
       ->sort('field_grade')
       ->sort('field_first_name')
       ->sort('field_last_name')
       ->execute();
     $ordered_student_uids = array_values($ordered_student_uids);
+
+    $uids_to_skip = $this->entityTypeManager->getStorage('user')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('roles', 'student')
+      ->condition('field_grade', 99, '=')
+      // Future prep for new student has quit grade. // reference unset($grades[-99]);
+      ->condition('field_grade', 999999, '=')
+      ->execute();
+    $uids_to_skip = array_values($uids_to_skip);
+
+    $ordered_student_uids = array_diff($ordered_student_uids, $uids_to_skip);
 
     $active_course_ids = $this->entityTypeManager->getStorage('node')
       ->getQuery()
