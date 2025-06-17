@@ -1,0 +1,18 @@
+diff --git a/modules/views/src/Plugin/views/field/BulkForm.php b/modules/views/src/Plugin/views/field/BulkForm.php
+index c7b27ea5..3f5759e3 100644
+--- a/modules/views/src/Plugin/views/field/BulkForm.php
++++ b/modules/views/src/Plugin/views/field/BulkForm.php
+@@ -422,6 +422,13 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface,
+         }
+         // Skip execution if the user did not have access.
+         if (!$action->getPlugin()->access($entity, $this->view->getUser())) {
++          $plugin_definition = $action->getPluginDefinition();
++          if (is_array($plugin_definition) && !empty($plugin_definition['skip_access_denied_message'])) {
++            // Skip the access denied message if the action plugin explicitly
++            // requested it.
++            continue;
++          }
++
+           $this->messenger->addError($this->t('No access to execute %action on the @entity_type_label %entity_label.', [
+             '%action' => $action->label(),
+             '@entity_type_label' => $entity->getEntityType()->getLabel(),

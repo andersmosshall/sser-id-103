@@ -3355,11 +3355,11 @@ msgstr "Avvikelser från schema kan förekomma."
 msgid "If %identifier is a valid account, an email will be sent with instructions to reset your password."
 msgstr "Om %identifier är ett giltigt konto kommer ett e-postmeddelande att skickas med instruktioner för att återställa ditt lösenord."
 
-msgid ""
-msgstr ""
+msgid "No access to execute %action on the @entity_type_label %entity_label."
+msgstr "Ingen behörighet att utföra \"%action\" för %entity_label."
 
-msgid ""
-msgstr ""
+msgid "User"
+msgstr "Användare"
 
 msgid ""
 msgstr ""

@@ -90,6 +90,17 @@ class MailStudents extends ActionBase implements ContainerFactoryPluginInterface
   /**
    * {@inheritdoc}
    */
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    if (is_array($definition)) {
+      $definition['skip_access_denied_message'] = TRUE;
+    }
+    return $definition;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function executeMultiple(array $entities) {
     $this->tempStoreFactory->get('mail_multiple_users')->set($this->currentUser->id(), $entities);
   }

@@ -100,6 +100,18 @@ class MailCaregivers extends ActionBase implements ContainerFactoryPluginInterfa
     $this->tempStoreFactory->get('mail_caregivers')->set($this->currentUser->id(), $recipient_data);
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    if (is_array($definition)) {
+      $definition['skip_access_denied_message'] = TRUE;
+    }
+    return $definition;
+  }
+
   /**
    * {@inheritdoc}
    */
