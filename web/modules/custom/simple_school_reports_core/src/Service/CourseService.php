@@ -142,6 +142,44 @@ class CourseService implements CourseServiceInterface {
     return $map;
   }
 
+  protected function getTeacherCourseMap(): array {
+    $cid = 'teachers_ids_course_map';
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
+    $map = [];
+
+    $active_course_ids = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'course')
+      ->condition('status', 1)
+      ->execute();
+
+    $course_query = $this->connection->select('node__field_teacher', 'ct');
+    $course_query->condition('ct.deleted', 0);
+    $course_query->condition('ct.bundle', 'course');
+    $course_query->condition('ct.entity_id', $active_course_ids, 'IN');
+    $course_query->fields('ct', ['entity_id', 'field_teacher_target_id']);
+    $course_query->orderBy('ct.entity_id');
+    $results = $course_query->execute();
+
+    foreach ($results as $result) {
+      $course_id = $result->entity_id;
+      $teacher_id = $result->field_teacher_target_id;
+
+      if (!isset($map[$teacher_id])) {
+        $map[$teacher_id] = [];
+      }
+      if (!in_array($course_id, $map[$teacher_id])) {
+        $map[$teacher_id][] = $course_id;
+      }
+    }
+    $this->lookup[$cid] = $map;
+    return $map;
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -173,6 +211,11 @@ class CourseService implements CourseServiceInterface {
       }
     }
     return array_unique($course_ids);
+  }
+
+  public function getTeacherActiveCourseIds(int|string $teacher_id): array {
+    $map = $this->getTeacherCourseMap();
+    return $map[$teacher_id] ?? [];
   }
 
   /**

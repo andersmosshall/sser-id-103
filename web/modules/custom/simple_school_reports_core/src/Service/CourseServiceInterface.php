@@ -13,6 +13,8 @@ interface CourseServiceInterface {
 
   public function getStudentActiveCourseIds(int|string $student_id): array;
 
+  public function getTeacherActiveCourseIds(int|string $teacher_id): array;
+
   public function getCourseName(int|string $course_id, string $sub_group = 'default'): string;
 
   public function getSubGroupName(int|string $course_id, string $sub_group): string;

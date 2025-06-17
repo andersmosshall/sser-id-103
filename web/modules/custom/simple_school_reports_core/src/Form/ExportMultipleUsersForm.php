@@ -198,14 +198,15 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
     // Do the validation...
     $uids = $this->getUids($form_state);
 
+    $service = $this->getExportService($form_state);
+    $options = $this->getExportOptions($form_state);
+
+    $uids = $service->modifyUidsList($uids, $options);
 
     if (empty($uids)) {
       $form_state->setError($form['accounts'], $this->t('Please select at least one user.'));
       return;
     }
-
-    $service = $this->getExportService($form_state);
-    $options = $this->getExportOptions($form_state);
 
     $errors = $service->getErrors($uids, $options);
 
@@ -232,6 +233,8 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
     $uids = $this->getUids($form_state);
     $service = $this->getExportService($form_state);
     $options = $this->getExportOptions($form_state);
+
+    $uids = $service->modifyUidsList($uids, $options);
 
     // Initialize batch (to set title).
     $batch = [

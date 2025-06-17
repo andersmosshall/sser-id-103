@@ -24,6 +24,7 @@ module:
   simple_school_reports_attendance_analyse: 10
   simple_school_reports_attendance_period_analyse: 10
   simple_school_reports_pmo_export: 10
+  simple_school_reports_skolon_export: 10
   simple_school_reports_leave_application: 10
   simple_school_reports_special_diet: 10
   simple_school_reports_maillog_mini: 10

@@ -11,6 +11,7 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 /**
  * Class TermService
@@ -501,6 +502,41 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     return $grades_map[$uid] ?? NULL;
+  }
+
+
+  public function getUserSchoolGradeAndType(string $uid): array {
+    $grade = $this->getUserGrade($uid);
+    $school_type_grade = NULL;
+
+    if ($grade !== NULL) {
+      $school_type_grade = $grade % 100;
+    }
+
+    if ($grade === 0) {
+      return [$grade, 'FKLASS'];
+    }
+
+    if ($grade < 0) {
+      return [$grade, 'FS'];
+    }
+
+    if ($grade >= 1 && $grade < 100) {
+      return [$grade, 'GR'];
+    }
+
+    if ($grade >= 1001 && $grade < 1100) {
+      return [$school_type_grade, 'GY'];
+    }
+
+    // Default school type.
+    $default_school_type = 'GR';
+    $school_types = SchoolTypeHelper::getSchoolTypes();
+    if (!empty($school_types)) {
+      $default_school_type = array_pop($school_types);
+    }
+
+    return [NULL, $default_school_type];
   }
 
   public function getUserRelativeGrade(?\DateTime $date = NULL): int {

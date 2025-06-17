@@ -27,6 +27,8 @@ interface ExportUsersServiceInterface {
 
   public static function getOptionsWithDefaults(array $options): array;
 
+  public function modifyUidsList(array $uids, array $options): array;
+
   /**
    * @param array $uids
    * @param array $options
