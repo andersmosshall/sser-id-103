@@ -36,7 +36,7 @@ class SkolonExportUsersService extends ExportUsersServiceBase {
     return $this->t('Skolon');
   }
 
-  protected function supportedRoles(): array {
+  public function supportedRoles(): array {
     return [
       'student' => $this->t('Student'),
       'teacher' => $this->t('Teacher'),
@@ -209,13 +209,22 @@ class SkolonExportUsersService extends ExportUsersServiceBase {
     $this->getErrors([$user->id()], $options);
 
     $ssn = $this->getSsnIfValid($user);
+
+    if (!$ssn && !empty($options['enforce_pnum'])) {
+      $ssn = $options['enforce_pnum'];
+    }
+
     if (!empty($this->getErrors([$user->id()], []))) {
-      $this->messenger->addError($this->t('Skipping @name due to unknown error. Try again.', ['@name' => $user->getDisplayName()]));
+      if (empty($options['skip_message'])) {
+        $this->messenger->addError($this->t('Skipping @name due to unknown error. Try again.', ['@name' => $user->getDisplayName()]));
+      }
       return NULL;
     }
 
     if (!$ssn) {
-      $this->messenger->addWarning($this->t('Skipping @name due to missing personal number.', ['@name' => $user->getDisplayName()]));
+      if (empty($options['skip_message'])) {
+        $this->messenger->addWarning($this->t('Skipping @name due to missing personal number.', ['@name' => $user->getDisplayName()]));
+      }
       return NULL;
     }
 
@@ -290,7 +299,7 @@ class SkolonExportUsersService extends ExportUsersServiceBase {
       'idp_identifier' => '',
       'home_phone' => $is_mobile ? '' : $phone_number,
       'mobile_phone' => $is_mobile ? $phone_number : '',
-      'address' => $adress['address'] ?? '',
+      'address' => $adress['adress'] ?? '',
       'city' => $adress['city'] ?? '',
       'postal_code' => $adress['postal_code'] ?? '',
       'birth_date' => $birth_date,

@@ -1,1 +1,149 @@
 <?php
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function simple_school_reports_skolon_export_user_update(\Drupal\user\UserInterface $user) {
+  $new_user = $user;
+  $old_user = $user->original;
+  if (!$new_user instanceof \Drupal\user\UserInterface || !$old_user instanceof \Drupal\user\UserInterface) {
+    return;
+  }
+
+  // If user does not have any of the supported roles, ignore this check.
+  $supported_roles = [
+    'student',
+    'teacher',
+  ];
+  $has_supported_role = FALSE;
+  foreach ($supported_roles as $role) {
+    if ($new_user->hasRole($role)) {
+      $has_supported_role = TRUE;
+      break;
+    }
+  }
+  if (!$has_supported_role) {
+    return;
+  }
+
+  // If any of these fields has been changed, we consider it as if the user has
+  // not changed.
+  $unchanged_fields = [
+    'field_make_up_time_reminded',
+    'field_dnp_username',
+    'field_invalid_absence',
+  ];
+  foreach ($unchanged_fields as $field_name) {
+    if (!$new_user->get($field_name)->equals($old_user->get($field_name))) {
+      return;
+    }
+  }
+
+  $uid = $user->id();
+  $state = \Drupal::state();
+  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
+  $skolon_changed_user['users'][$uid] = TRUE;
+  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
+  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_skolon_export_user_insert(\Drupal\user\UserInterface $user) {
+  $uid = $user->id();
+
+  $state = \Drupal::state();
+  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
+  $skolon_changed_user['users'][$uid] = TRUE;
+  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
+  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function simple_school_reports_skolon_export_node_update(\Drupal\node\NodeInterface $node) {
+  if ($node->bundle() === 'course') {
+    $new_course = $node;
+    $old_course = $node->original;
+
+    if (!$new_course instanceof \Drupal\node\NodeInterface || !$old_course instanceof \Drupal\node\NodeInterface) {
+      return;
+    }
+
+    $new_student_uids = array_column($node->get('field_student')->getValue(), 'target_id');
+    $new_teacher_uids = array_column($node->get('field_teacher')->getValue(), 'target_id');
+    $new_uids = array_merge($new_student_uids, $new_teacher_uids);
+
+    $old_student_uids = array_column($old_course->get('field_student')->getValue(), 'target_id');
+    $old_teacher_uids = array_column($old_course->get('field_teacher')->getValue(), 'target_id');
+    $old_uids = array_merge($old_student_uids, $old_teacher_uids);
+
+    if (json_encode($new_uids) === json_encode($old_uids) && $new_course->label() === $old_course->label()) {
+      return;
+    }
+
+    $affected_uids = array_merge($old_uids, $new_uids);
+
+    $state = \Drupal::state();
+    $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
+    foreach ($affected_uids as $uid) {
+      $skolon_changed_user['users'][$uid] = TRUE;
+    }
+    $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
+    $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function simple_school_reports_skolon_export_node_insert(\Drupal\node\NodeInterface $node) {
+  if ($node->bundle() === 'course') {
+    $student_uids = array_column($node->get('field_student')->getValue(), 'target_id');
+    $teacher_uids = array_column($node->get('field_teacher')->getValue(), 'target_id');
+    $uids = array_merge($student_uids, $teacher_uids);
+
+    if (empty($uids)) {
+      return;
+    }
+
+    $state = \Drupal::state();
+    $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
+    foreach ($uids as $uid) {
+      $skolon_changed_user['users'][$uid] = TRUE;
+    }
+    $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
+    $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function simple_school_reports_skolon_export_ssr_school_class_update(\Drupal\simple_school_reports_class_support\SchoolClassInterface $class) {
+  $new_class = $class;
+  $old_class = $class->original;
+  if (!$new_class instanceof \Drupal\simple_school_reports_class_support\SchoolClassInterface || !$old_class instanceof \Drupal\simple_school_reports_class_support\SchoolClassInterface) {
+    return;
+  }
+
+  if ($class->label() === $old_class->label()) {
+    return;
+  }
+
+  /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
+  $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
+  $student_uids = $class_service->getStudentIdsByClassId($class->id());
+  if (empty($student_uids)) {
+    return;
+  }
+  $state = \Drupal::state();
+  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
+  foreach ($student_uids as $uid) {
+    $skolon_changed_user['users'][$uid] = TRUE;
+  }
+  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
+  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+}
