@@ -136,6 +136,9 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
       return;
     }
 
+    $course_from = $course->get('field_from')->value;
+    $course_to = $course->get('field_to')->value;
+
     $sync_from = $from;
     $sync_to = $to;
 
@@ -155,9 +158,12 @@ class CalendarEventsSyncService implements CalendarEventsSyncServiceInterface {
     elseif ($sync_to <= $current_term_start || $sync_from >= $current_term_end) {
       $do_dispatch = FALSE;
     }
+    elseif ($course_from && $course_to && ($sync_to <= $course_from || $sync_from >= $course_to)) {
+      $do_dispatch = FALSE;
+    }
     else {
-      $sync_to = min($sync_to, $current_term_end);
-      $sync_from = max($sync_from, $current_term_start);
+      $sync_to = min($sync_to, $current_term_end, ($course_to ?? $current_term_end));
+      $sync_from = max($sync_from, $current_term_start, ($course_from ?? $current_term_start));
     }
 
     $event = new MakeCourseCalendarEvent($course_id, $sync_from, $sync_to, $is_bulk_action);

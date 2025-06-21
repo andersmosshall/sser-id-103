@@ -57,9 +57,13 @@ class TimestampDateWidget extends WidgetBase {
     $summary = [];
 
     $end_of_day = $this->getSetting('end_of_day');
+    $noon = $this->getSetting('noon');
+
+    $summary[] = t('Start of day: @setting', ['@setting' => !$end_of_day && !$noon ? t('Yes') : t('No')]);
+
+    $end_of_day = $this->getSetting('end_of_day');
     $summary[] = t('End of day: @setting', ['@setting' => $end_of_day ? t('Yes') : t('No')]);
 
-    $noon = $this->getSetting('noon');
     $summary[] = t('Noon: @setting', ['@setting' => $noon ? t('Yes') : t('No')]);
 
     return $summary;
