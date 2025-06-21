@@ -25,7 +25,7 @@ class SkolonExportUsersService extends ExportUsersServiceBase {
   }
 
   public function getServiceId(): string {
-    return 'simple_school_reports_skolon_export:export_users_skolon';
+    return 'simple_school_reports_skolon_export.export_users_skolon';
   }
 
   public function getFileExtension(): string {

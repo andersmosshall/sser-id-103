@@ -1413,3 +1413,13 @@ function simple_school_reports_extension_proxy_views_query_alter(\Drupal\views\V
     }
   }
 }
+
+function modules_setup_queue() {
+  // Call modules setup queue functions.
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+
+  if ($module_handler->moduleExists('simple_school_reports_skolon_export')) {
+    call_user_func('simple_school_reports_skolon_export_setup_queue');
+  }
+}

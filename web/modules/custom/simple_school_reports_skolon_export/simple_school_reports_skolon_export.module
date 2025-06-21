@@ -1,149 +1,126 @@
 <?php
 
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function simple_school_reports_skolon_export_user_update(\Drupal\user\UserInterface $user) {
-  $new_user = $user;
-  $old_user = $user->original;
-  if (!$new_user instanceof \Drupal\user\UserInterface || !$old_user instanceof \Drupal\user\UserInterface) {
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\user\UserInterface;
+
+function  simple_school_reports_skolon_export_resolve_queue_trigger(EntityInterface $entity, string $action): void {
+  $type = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+  $types_to_handle = [
+    'node' => ['course'],
+    'user' => ['user'],
+    'ssr_school_class' => ['ssr_school_class'],
+  ];
+  if (!isset($types_to_handle[$type]) || !in_array($bundle, $types_to_handle[$type])) {
     return;
   }
 
-  // If user does not have any of the supported roles, ignore this check.
-  $supported_roles = [
-    'student',
-    'teacher',
-  ];
-  $has_supported_role = FALSE;
-  foreach ($supported_roles as $role) {
-    if ($new_user->hasRole($role)) {
-      $has_supported_role = TRUE;
-      break;
-    }
-  }
-  if (!$has_supported_role) {
+  $state = \Drupal::state();
+
+  if ($action === 'delete' && $entity instanceof UserInterface) {
+    $deleted_user_notify_queue  = $state->get('deleted_user_notify_queue', []);
+    $deleted_user_notify_queue[$entity->id()] = $entity->getDisplayName();
+    $state->set('deleted_user_notify_queue',  $deleted_user_notify_queue);
     return;
   }
 
-  // If any of these fields has been changed, we consider it as if the user has
-  // not changed.
-  $unchanged_fields = [
-    'field_make_up_time_reminded',
-    'field_dnp_username',
-    'field_invalid_absence',
-  ];
-  foreach ($unchanged_fields as $field_name) {
-    if (!$new_user->get($field_name)->equals($old_user->get($field_name))) {
-      return;
-    }
+  /** @var \Drupal\Component\Uuid\UuidInterface $uuid */
+  $uuid = \Drupal::service('uuid');
+
+  $active_skolon_queue = $state->get('active_skolon_queue', []);
+  $active_skolon_queue['queue_id'] = $uuid->generate();
+  $active_skolon_queue['uids'] = [];
+  $state->set('active_skolon_queue', $active_skolon_queue);
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function simple_school_reports_skolon_export_entity_insert(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'insert');
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function simple_school_reports_skolon_export_entity_update(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'update');
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function simple_school_reports_skolon_export_entity_delete(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'delete');
+}
+
+function simple_school_reports_skolon_export_setup_queue() {
+  $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+  if (empty($ssr_bug_report_email)) {
+    return;
   }
 
-  $uid = $user->id();
+  // Notify of deleted users.
   $state = \Drupal::state();
-  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
-  $skolon_changed_user['users'][$uid] = TRUE;
-  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
-  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
-}
+  $deleted_user_notify_queue = $state->get('deleted_user_notify_queue', []);
 
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function simple_school_reports_skolon_export_user_insert(\Drupal\user\UserInterface $user) {
-  $uid = $user->id();
+  if (!empty($deleted_user_notify_queue)) {
+    $subject = t('Deleted users from @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+    $message = t('The following users have been deleted from @school_name and should be removed from Skolon:', ['@school_name' => Settings::get('ssr_school_name', '-')]);
 
-  $state = \Drupal::state();
-  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
-  $skolon_changed_user['users'][$uid] = TRUE;
-  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
-  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
-}
+    $message .= PHP_EOL;
+    $message .= PHP_EOL;
 
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function simple_school_reports_skolon_export_node_update(\Drupal\node\NodeInterface $node) {
-  if ($node->bundle() === 'course') {
-    $new_course = $node;
-    $old_course = $node->original;
-
-    if (!$new_course instanceof \Drupal\node\NodeInterface || !$old_course instanceof \Drupal\node\NodeInterface) {
-      return;
+    foreach ($deleted_user_notify_queue as $name) {
+      $message .= '* ' . $name . PHP_EOL;
     }
 
-    $new_student_uids = array_column($node->get('field_student')->getValue(), 'target_id');
-    $new_teacher_uids = array_column($node->get('field_teacher')->getValue(), 'target_id');
-    $new_uids = array_merge($new_student_uids, $new_teacher_uids);
-
-    $old_student_uids = array_column($old_course->get('field_student')->getValue(), 'target_id');
-    $old_teacher_uids = array_column($old_course->get('field_teacher')->getValue(), 'target_id');
-    $old_uids = array_merge($old_student_uids, $old_teacher_uids);
-
-    if (json_encode($new_uids) === json_encode($old_uids) && $new_course->label() === $old_course->label()) {
-      return;
-    }
-
-    $affected_uids = array_merge($old_uids, $new_uids);
-
-    $state = \Drupal::state();
-    $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
-    foreach ($affected_uids as $uid) {
-      $skolon_changed_user['users'][$uid] = TRUE;
-    }
-    $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
-    $state->set('ssr_skolon_changed_user', $skolon_changed_user);
+    /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+    $email_service = \Drupal::service('simple_school_reports_core.email_service');
+    if ($email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+      'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+      'no_reply_to' => TRUE,
+    ])) {
+      // Clear the queue after notifying.
+      $state->set('deleted_user_notify_queue', []);
+    };
   }
-}
 
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function simple_school_reports_skolon_export_node_insert(\Drupal\node\NodeInterface $node) {
-  if ($node->bundle() === 'course') {
-    $student_uids = array_column($node->get('field_student')->getValue(), 'target_id');
-    $teacher_uids = array_column($node->get('field_teacher')->getValue(), 'target_id');
-    $uids = array_merge($student_uids, $teacher_uids);
+  // Setup the Skolon export calculation queue.
+  $active_skolon_queue = $state->get('active_skolon_queue', []);
+  if (!empty($active_skolon_queue['queue_id']) && empty($active_skolon_queue['initiated'])) {
+    /** @var \Drupal\simple_school_reports_skolon_export\Service\SkolonExportUsersService $export_service */
+    $export_service = \Drupal::service('simple_school_reports_skolon_export.export_users_skolon');
+
+    $uids = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('status', 1)
+      ->condition('roles', array_keys($export_service->supportedRoles()), 'IN')
+      ->execute();
 
     if (empty($uids)) {
-      return;
+      // No users to export, clear the queue.
+      $state->set('active_skolon_queue', []);
     }
-
-    $state = \Drupal::state();
-    $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
-    foreach ($uids as $uid) {
-      $skolon_changed_user['users'][$uid] = TRUE;
+    else {
+      $queue = \Drupal::service('queue')->get('calculate_skolon_export');
+      $queue->createQueue();
+      foreach ($uids as $uid) {
+        $queue->createItem([
+          'queue_id' => $active_skolon_queue['queue_id'],
+          'uid' => $uid,
+        ]);
+      }
+      $queue->createItem([
+        'queue_id' => $active_skolon_queue['queue_id'],
+        'uid' => NULL,
+        'notify_to' => $ssr_bug_report_email,
+      ]);
+      $active_skolon_queue['initiated'] = TRUE;
+      $state->set('active_skolon_queue', $active_skolon_queue);
     }
-    $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
-    $state->set('ssr_skolon_changed_user', $skolon_changed_user);
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function simple_school_reports_skolon_export_ssr_school_class_update(\Drupal\simple_school_reports_class_support\SchoolClassInterface $class) {
-  $new_class = $class;
-  $old_class = $class->original;
-  if (!$new_class instanceof \Drupal\simple_school_reports_class_support\SchoolClassInterface || !$old_class instanceof \Drupal\simple_school_reports_class_support\SchoolClassInterface) {
-    return;
-  }
-
-  if ($class->label() === $old_class->label()) {
-    return;
-  }
-
-  /** @var \Drupal\simple_school_reports_class_support\Service\SsrClassServiceInterface $class_service */
-  $class_service = \Drupal::service('simple_school_reports_class_support.class_service');
-  $student_uids = $class_service->getStudentIdsByClassId($class->id());
-  if (empty($student_uids)) {
-    return;
-  }
-  $state = \Drupal::state();
-  $skolon_changed_user = $state->get('ssr_skolon_changed_user', []);
-  foreach ($student_uids as $uid) {
-    $skolon_changed_user['users'][$uid] = TRUE;
-  }
-  $skolon_changed_user['last_updated'] = \Drupal::time()->getRequestTime();
-  $state->set('ssr_skolon_changed_user', $skolon_changed_user);
 }
