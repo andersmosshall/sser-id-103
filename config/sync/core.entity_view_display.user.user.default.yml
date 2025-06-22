@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.user.user.field_adapted_studies
     - field.field.user.user.field_address
+    - field.field.user.user.field_adult_student_settings
     - field.field.user.user.field_allow_login
     - field.field.user.user.field_birth_date
     - field.field.user.user.field_birth_date_source
@@ -67,6 +68,13 @@ content:
       link: ''
     third_party_settings: {  }
     weight: 12
+    region: content
+  field_adult_student_settings:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 23
     region: content
   field_allow_login:
     type: boolean
@@ -218,7 +226,7 @@ content:
   masquerade:
     settings: {  }
     third_party_settings: {  }
-    weight: 23
+    weight: 24
     region: content
   roles:
     settings: {  }

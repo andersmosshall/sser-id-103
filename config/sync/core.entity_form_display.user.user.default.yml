@@ -6,6 +6,7 @@ dependencies:
     - core.entity_form_mode.user.caregiver_ief
     - field.field.user.user.field_adapted_studies
     - field.field.user.user.field_address
+    - field.field.user.user.field_adult_student_settings
     - field.field.user.user.field_allow_login
     - field.field.user.user.field_birth_date
     - field.field.user.user.field_birth_date_source
@@ -101,6 +102,12 @@ content:
         add_above: '0'
         collapse_edit_all: '0'
         duplicate: '0'
+    third_party_settings: {  }
+  field_adult_student_settings:
+    type: options_buttons
+    weight: 21
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_allow_login:
     type: boolean_checkbox

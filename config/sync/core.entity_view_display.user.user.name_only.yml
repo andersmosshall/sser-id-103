@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.user.name_only
     - field.field.user.user.field_adapted_studies
     - field.field.user.user.field_address
+    - field.field.user.user.field_adult_student_settings
     - field.field.user.user.field_allow_login
     - field.field.user.user.field_birth_date
     - field.field.user.user.field_birth_date_source
@@ -47,6 +48,7 @@ hidden:
   caregiver_for: true
   field_adapted_studies: true
   field_address: true
+  field_adult_student_settings: true
   field_allow_login: true
   field_birth_date: true
   field_birth_date_source: true

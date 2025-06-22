@@ -49,6 +49,12 @@ function simple_school_reports_core_allowed_user_grade() : array {
   return $return;
 }
 
+function simple_school_reports_core_adult_student_settings_options(): array {
+  return [
+    'caregiver_continued_access' => t('Allow caregivers to continue accessing student information'),
+  ];
+}
+
 /**
  * Implements hook_form_alter().
  */

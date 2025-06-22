@@ -1,0 +1,21 @@
+uuid: 95804d1b-12fe-4750-9c59-c3af75d5ce5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_adult_student_settings
+  module:
+    - options
+    - user
+id: user.user.field_adult_student_settings
+field_name: field_adult_student_settings
+entity_type: user
+bundle: user
+label: 'Settings for students of 18 years old'
+description: 'IMPORTANT: Make sure student has given consent in a proper way for the options selected.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
