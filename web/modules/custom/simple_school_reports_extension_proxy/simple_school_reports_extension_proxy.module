@@ -882,10 +882,14 @@ function clean_up_custom_entities() {
     $entities = $student_leave_application_storage->loadMultiple($ids);
     $student_leave_application_storage->delete($entities);
   }
+}
+
+function clean_up_ssr_lookup() {
+  $now = new \DateTime();
+  $lookup_storage = \Drupal::entityTypeManager()->getStorage('ssr_lookup');
+  $connection = \Drupal::service('database');
 
   // Clean up old expired lookups.
-  $lookup_storage = \Drupal::entityTypeManager()->getStorage('ssr_lookup');
-
   $ids_to_remove = $lookup_storage
     ->getQuery()
     ->accessCheck(FALSE)
@@ -898,6 +902,25 @@ function clean_up_custom_entities() {
     $lookup_storage->delete($lookups);
   }
 
+  // Clean up invalidated lookups due to removed user entities.
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [lu].[dependency_entity_target_id]');
+  $results = $connection->select('ssr_lookup', 'lu')
+    ->notExists($subquery)
+    ->condition('dependency_entity_type', 'user')
+    ->fields('lu', ['id'])
+    ->range(0, 50)
+    ->execute();
+  $ids_to_remove = [];
+  foreach ($results as $result) {
+    $ids_to_remove[$result->id] = $result->id;
+  }
+  if (!empty($ids_to_remove)) {
+    $ids_to_remove = array_values($ids_to_remove);
+    $lookups = $lookup_storage->loadMultiple($ids_to_remove);
+    $lookup_storage->delete($lookups);
+  }
 }
 
 function ssr_meeting_reminder_meeting() {

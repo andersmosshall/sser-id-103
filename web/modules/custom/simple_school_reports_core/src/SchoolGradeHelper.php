@@ -1,0 +1,144 @@
+<?php
+
+namespace Drupal\simple_school_reports_core;
+
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Site\Settings;
+
+class SchoolGradeHelper {
+
+  public const UNKNOWN_GRADE = -9999999;
+  public const QUITED_GRADE = 9999999;
+
+  public static function useGradeSuffix(): bool {
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    $types = 0;
+    $use_gr = $module_handler->moduleExists('simple_school_reports_core_gr');
+    $use_gy = $module_handler->moduleExists('simple_school_reports_core_gy');
+
+    // TEMP!!!!!!!!!
+    $use_gr = $module_handler->moduleExists('simple_school_reports_core');
+    $use_gy = $module_handler->moduleExists('simple_school_reports_core');
+
+    if ($use_gr) {
+      $types++;
+    }
+    if ($use_gy) {
+      $types++;
+    }
+
+    return $types > 1;
+  }
+
+  public static function getSchoolGradesMap(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
+
+    $school_type_filter = $school_type_filter === NULL
+      ? ['GR', 'GY']
+      : $school_type_filter;
+
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    $use_gr = $module_handler->moduleExists('simple_school_reports_core_gr');
+    $use_gy = $module_handler->moduleExists('simple_school_reports_core_gy');
+
+    // TEMP!!!!!
+    $use_gr = in_array('GR', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
+    $use_gy = in_array('GY', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
+
+    $return = [];
+
+    if ($include_unknown) {
+      $return[-99] = t('Unknown grade');
+    }
+
+    $use_type_suffix = self::useGradeSuffix();
+
+    $grade_from = Settings::get('ssr_grade_from', 0);
+    $grade_to = Settings::get('ssr_grade_to', 9);
+
+    if ($use_gr && is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
+      $grade_adjust = 0;
+      for ($i = $grade_from; $i <= $grade_to; $i++) {
+        if ($i === 0) {
+          $return[0] = t('Pre school class');
+          continue;
+        }
+
+        if ($i < 1) {
+          continue;
+        }
+
+        $grade_value = $grade_adjust + $i;
+        $grade_label = $i;
+        if ($use_type_suffix) {
+          $grade_label .= ' (GR)';
+        }
+
+        $return[$grade_value] = $grade_label;
+      }
+    }
+
+    $grade_from = Settings::get('ssr_gy_grade_from', 1);
+    $grade_to = Settings::get('ssr_gy_grade_to', 3);
+    if ($use_gy && is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
+      $grade_adjust = 10000;
+      for ($i = $grade_from; $i <= $grade_to; $i++) {
+        if ($i < 1) {
+          continue;
+        }
+
+        $grade_value = $grade_adjust + $i;
+        $grade_label = $i;
+        if ($use_type_suffix) {
+          $grade_label .= ' (GY)';
+        }
+
+        $return[$grade_value] = $grade_label;
+      }
+    }
+
+
+    if ($include_quited) {
+      $return[99] = t('Student has quit');
+    }
+    return $return;
+  }
+
+  public static function getSchoolGradesShortName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
+    return [];
+  }
+
+  public static function getSchoolGradesLongName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
+    return [];
+  }
+
+  public static function getSchoolGradeValues(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
+    return array_keys(self::getSchoolGradesMap($school_type_filter, $include_unknown, $include_quited));
+  }
+
+  public static function getSchoolTypeByGrade(int $grade): ?string {
+    if ($grade === self::UNKNOWN_GRADE) {
+      return NULL;
+    }
+    if ($grade === self::QUITED_GRADE) {
+      return NULL;
+    }
+
+    if ($grade < 0) {
+      return 'FS';
+    }
+    if ($grade === 0) {
+      return 'FKLASS';
+    }
+    if ($grade >= 1 && $grade <= 100) {
+      return 'GR';
+    }
+    if ($grade > 10000 && $grade < 10100) {
+      return 'GY';
+    }
+
+    return 'AU';
+  }
+}

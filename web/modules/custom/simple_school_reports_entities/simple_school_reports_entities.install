@@ -329,4 +329,28 @@ function simple_school_reports_entities_update_10014() {
   }
 }
 
+/**
+ * Install new fields on ssr lookup
+ */
+function simple_school_reports_entities_update_10015() {
+  $fields = [];
 
+  $fields['dependency_entity_type'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Dependency entity type'))
+    ->setRequired(TRUE)
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['dependency_entity_target_id'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Dependency entity target id'))
+    ->setRequired(TRUE)
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_lookup', 'simple_school_reports_entities', $storage_definition);
+  }
+}

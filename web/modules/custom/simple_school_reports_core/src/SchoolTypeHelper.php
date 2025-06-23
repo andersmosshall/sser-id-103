@@ -46,15 +46,10 @@ class SchoolTypeHelper {
   }
 
   public static function getSchoolTypes(): array {
-    $grades = array_keys(simple_school_reports_core_allowed_user_grade());
-    $grades_to_ignore = [-99, 99];
+    $grades = SchoolGradeHelper::getSchoolGradeValues();
     $school_types = [];
 
     foreach ($grades as $grade) {
-      if (in_array($grade, $grades_to_ignore)) {
-        continue;
-      }
-
       if ($grade < 0) {
         $school_types['FS'] = TRUE;
       }
@@ -63,6 +58,9 @@ class SchoolTypeHelper {
       }
       elseif ($grade >= 1 && $grade <= 9) {
         $school_types['GR'] = TRUE;
+      }
+      elseif ($grade > 10000 && $grade < 20000) {
+        $school_types['GY'] = TRUE;
       }
     }
 

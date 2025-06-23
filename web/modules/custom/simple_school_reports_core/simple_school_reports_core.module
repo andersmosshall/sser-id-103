@@ -14,39 +14,13 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 
 /**
  * Allowed values function for user grade field.
  */
 function simple_school_reports_core_allowed_user_grade() : array {
-  $map = [
-    0 => t('Pre school class'),
-    1 => 1,
-    2 => 2,
-    3 => 3,
-    4 => 4,
-    5 => 5,
-    6 => 6,
-    7 => 7,
-    8 => 8,
-    9 => 9,
-  ];
-
-  $return = [
-    -99 => t('Unknown grade'),
-  ];
-  $grade_from = Settings::get('ssr_grade_from', 0);
-  $grade_to = Settings::get('ssr_grade_to', 9);
-
-  if (is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
-    for ($i = $grade_from; $i <= $grade_to; $i++) {
-      if (isset($map[$i])) {
-        $return[$i] = $map[$i];
-      }
-    }
-  }
-  $return[99] = t('Student has quit');
-  return $return;
+  return SchoolGradeHelper::getSchoolGradesMap(NULL, TRUE, TRUE);
 }
 
 function simple_school_reports_core_adult_student_settings_options(): array {

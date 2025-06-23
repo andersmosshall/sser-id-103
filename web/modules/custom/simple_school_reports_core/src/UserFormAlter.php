@@ -48,9 +48,13 @@ class UserFormAlter {
 
     if (!empty($form['#form_mode'])) {
       if ($form['#form_mode'] === 'register' || $form['#form_mode'] === 'default') {
-        $student_fields = ['field_grade', 'field_caregivers', 'field_mentor', 'field_adapted_studies', 'field_class'];
+        $student_fields = ['field_grade', 'field_caregivers', 'field_mentor', 'field_adapted_studies', 'field_class', 'field_adult_student_settings'];
 
         foreach ($student_fields as $student_field) {
+          if (!isset($form[$student_field])) {
+            continue;
+          }
+
           $form[$student_field]['#states']['visible'][] = [
             ':input[name="roles[student]"]' => [
               'checked' => TRUE,
@@ -59,6 +63,24 @@ class UserFormAlter {
           $form[$student_field]['#states']['disabled'][] = [
             ':input[name="roles[student]"]' => [
               'checked' => FALSE,
+            ],
+          ];
+        }
+      }
+    }
+
+    // Handle field_adult_student_settings states.
+    if (isset($form['field_grade']) && isset($form['field_adult_student_settings'])) {
+      // Grades that supports adult settings.
+      $adult_settings_grades = SchoolGradeHelper::getSchoolGradeValues(['GY']);
+      if (empty($adult_settings_grades)) {
+        $form['field_adult_student_settings']['#access'] = FALSE;
+      }
+      else {
+        foreach ($adult_settings_grades as $adult_settings_grade) {
+          $form['field_adult_student_settings']['widget']['#states']['visible'][] = [
+            'select[name="field_grade"]' => [
+              'value' => $adult_settings_grade
             ],
           ];
         }
