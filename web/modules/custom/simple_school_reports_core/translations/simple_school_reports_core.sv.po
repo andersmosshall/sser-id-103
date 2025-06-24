@@ -476,6 +476,9 @@ msgstr "Meddela vårdnadshavare om ogiltig frånvaro"
 msgid "@student misses caregiver(s) with email address set."
 msgstr "@student saknar vårdnadshavare med e-postadress."
 
+msgid "@student does not have a valid email address set."
+msgstr "@student har inte en giltig e-postadress."
+
 msgid "Mail will only be sent for students for which invalid absence has been changed."
 msgstr "Meddelande skickas endast för elever vars ogiltiga frånvaro har ändrats."
 

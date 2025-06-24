@@ -35,7 +35,7 @@ class SchoolGradeHelper {
   public static function getSchoolGradesMap(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
 
     $school_type_filter = $school_type_filter === NULL
-      ? ['GR', 'GY']
+      ? ['FKLASS', 'GR', 'GY']
       : $school_type_filter;
 
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
@@ -44,6 +44,7 @@ class SchoolGradeHelper {
     $use_gy = $module_handler->moduleExists('simple_school_reports_core_gy');
 
     // TEMP!!!!!
+    $use_fklass = in_array('FKLASS', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
     $use_gr = in_array('GR', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
     $use_gy = in_array('GY', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
 
@@ -53,30 +54,27 @@ class SchoolGradeHelper {
       $return[-99] = t('Unknown grade');
     }
 
-    $use_type_suffix = self::useGradeSuffix();
-
     $grade_from = Settings::get('ssr_grade_from', 0);
     $grade_to = Settings::get('ssr_grade_to', 9);
+
+    if ($use_fklass && is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
+      for ($i = $grade_from; $i <= $grade_to; $i++) {
+        if ($i === 0) {
+          $return[0] = t('Pre school class');
+          break;
+        }
+      }
+    }
 
     if ($use_gr && is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
       $grade_adjust = 0;
       for ($i = $grade_from; $i <= $grade_to; $i++) {
-        if ($i === 0) {
-          $return[0] = t('Pre school class');
-          continue;
-        }
-
         if ($i < 1) {
           continue;
         }
 
         $grade_value = $grade_adjust + $i;
-        $grade_label = $i;
-        if ($use_type_suffix) {
-          $grade_label .= ' (GR)';
-        }
-
-        $return[$grade_value] = $grade_label;
+        $return[$grade_value] = 'Åk ' . $i;
       }
     }
 
@@ -90,12 +88,7 @@ class SchoolGradeHelper {
         }
 
         $grade_value = $grade_adjust + $i;
-        $grade_label = $i;
-        if ($use_type_suffix) {
-          $grade_label .= ' (GY)';
-        }
-
-        $return[$grade_value] = $grade_label;
+        $return[$grade_value] = 'Gy ' . $i;
       }
     }
 
@@ -107,7 +100,17 @@ class SchoolGradeHelper {
   }
 
   public static function getSchoolGradesShortName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
-    return [];
+    $return = self::getSchoolGradesMap($school_type_filter, $include_unknown, $include_quited);
+    if (isset($return[-99])) {
+      $return[-99] = 'O';
+    }
+    if (isset($return[0])) {
+      $return[0] = 'Åk F';
+    }
+    if (isset($return[99])) {
+      $return[99] = 'S';
+    }
+    return $return;
   }
 
   public static function getSchoolGradesLongName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {

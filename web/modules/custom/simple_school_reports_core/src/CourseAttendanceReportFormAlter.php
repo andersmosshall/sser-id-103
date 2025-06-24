@@ -529,6 +529,9 @@ class CourseAttendanceReportFormAlter {
 
     $course = self::getCourseNode($form_state);
 
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+
     $duration = 1440;
     if ($node->isNew()) {
       $step1_values = $form_state->get('step1_values', []);
@@ -574,10 +577,16 @@ class CourseAttendanceReportFormAlter {
 
     $form['send_mail'] = [
       '#type' => 'checkbox',
-      '#title' => t('Mail caregivers about invalid absence'),
+      '#title' => t('Send message about invalid absence'),
       '#default_value' => TRUE,
       '#description'=> $description,
       '#weight' => 997,
+    ];
+
+    $t_is_adult = $user_meta_data->isAdult(\Drupal::currentUser()->id());
+    $t_cha = $user_meta_data->caregiversHasAccess(\Drupal::currentUser()->id());
+    $form['tmp_debug'] = [
+      '#markup' => ($t_is_adult ? 'Is adult' : 'Is not adult') . ' - ' . ($t_cha ? 'Cargiver access' : 'Caregiver not access'),
     ];
 
     $form['report'] = [
@@ -618,6 +627,13 @@ class CourseAttendanceReportFormAlter {
         '#attributes' => [
           'class' => ['student-row--info-wrapper'],
         ],
+      ];
+
+
+      $t_is_adult = $user_meta_data->isAdult($id);
+      $t_cha = $user_meta_data->caregiversHasAccess($id);
+      $form['report'][$id]['student']['info']['tmp'] = [
+        '#markup' => ($t_is_adult ? 'Is adult' : 'Is not adult') . ' - ' . ($t_cha ? 'Cargiver access' : 'Caregiver not access'),
       ];
 
       $form['report'][$id]['student']['info']['name'] = [
@@ -851,9 +867,15 @@ class CourseAttendanceReportFormAlter {
         }
 
         if ($send_mail && $old_invalid_absence !== (int) $invalid_absence) {
+          /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+          $email_service = \Drupal::service('simple_school_reports_core.email_service');
+
           $mail_data[] = [
             'student_uid' => $data['user']->id(),
             'student_name' => $data['user']->getDisplayName(),
+            'student_first_name' => $data['user']->get('field_first_name')->value,
+            'student_last_name' => $data['user']->get('field_last_name')->value,
+            'student_mail' => $email_service->getUserEmail($data['user']),
             'invalid_absence' => $invalid_absence,
           ];
         }
@@ -922,6 +944,8 @@ class CourseAttendanceReportFormAlter {
         $email_service = \Drupal::service('simple_school_reports_core.email_service');
         /** @var \Drupal\simple_school_reports_core\Service\MessageTemplateServiceInterface $template_service */
         $template_service = \Drupal::service('simple_school_reports_core.message_template_service');
+        /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+        $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
 
         $message_template = $template_service->getMessageTemplates('attendance_report', 'email');
         $subject_template = !empty($message_template['subject']) ? $message_template['subject'] : NULL;
@@ -932,26 +956,44 @@ class CourseAttendanceReportFormAlter {
         }
 
         foreach ($mail_data as $data) {
-          $recipient_data = $email_service->getCaregiverRecipients($data['student_uid']);
-          if (empty($recipient_data)) {
-            \Drupal::messenger()->addWarning(t('@student misses caregiver(s) with email address set.', ['@student' => $data['student_name']]));
-          }
-          else {
-            foreach ($recipient_data as $caregiver_uid => $caregiver_mail_data) {
-              $replace_context = [
-                ReplaceTokenServiceInterface::STUDENT_REPLACE_TOKENS => ['target_id' => $data['student_uid'], 'entity_type' => 'user'],
-                ReplaceTokenServiceInterface::RECIPIENT_REPLACE_TOKENS => ['target_id' => $caregiver_uid, 'entity_type' => 'user'],
-                ReplaceTokenServiceInterface::CURRENT_USER_REPLACE_TOKENS => ['target_id' => \Drupal::currentUser()->id(), 'entity_type' => 'user'],
-                ReplaceTokenServiceInterface::ATTENDANCE_REPORT_TOKENS => ['target_id' => $node->id(), 'entity_type' => 'node'],
-                ReplaceTokenServiceInterface::INVALID_ABSENCE_TOKENS => $data['invalid_absence'],
-              ];
+          $recipient_data = [];
+          $student_uid = $data['student_uid'];
 
-              $options = [
-                'maillog_student_context' => $data['student_uid'],
-                'maillog_mail_type' => SsrMaillogInterface::MAILLOG_TYPE_COURSE_ATTENDANCE,
-              ];
-              $batch['operations'][] = [[EmailService::class, 'batchSendMail'], [$caregiver_mail_data['mail'], $subject_template, $message_template, $replace_context, [], $options]];
+          if ($user_meta_data->caregiversHasAccess($student_uid)) {
+            $recipient_data = $email_service->getCaregiverRecipients($data['student_uid']) ?? [];
+            if (empty($recipient_data)) {
+              \Drupal::messenger()->addWarning(t('@student misses caregiver(s) with email address set.', ['@student' => $data['student_name']]));
             }
+          }
+
+          if ($user_meta_data->isAdult($student_uid)) {
+            if (!empty($data['student_mail'])) {
+              $recipient_data[$student_uid] = [
+                'mail' => $data['student_mail'],
+                'first_name' => $data['student_first_name'],
+                'last_name' => $data['student_last_name'],
+                'full_name' => $data['student_first_name'] . ' ' . $data['student_last_name'],
+              ];
+            }
+            else {
+              \Drupal::messenger()->addWarning(t('@student does not have a valid email address set.', ['@student' => $data['student_name']]));
+            }
+          }
+
+          foreach ($recipient_data as $recipient_uid => $caregiver_mail_data) {
+            $replace_context = [
+              ReplaceTokenServiceInterface::STUDENT_REPLACE_TOKENS => ['target_id' => $data['student_uid'], 'entity_type' => 'user'],
+              ReplaceTokenServiceInterface::RECIPIENT_REPLACE_TOKENS => ['target_id' => $recipient_uid, 'entity_type' => 'user'],
+              ReplaceTokenServiceInterface::CURRENT_USER_REPLACE_TOKENS => ['target_id' => \Drupal::currentUser()->id(), 'entity_type' => 'user'],
+              ReplaceTokenServiceInterface::ATTENDANCE_REPORT_TOKENS => ['target_id' => $node->id(), 'entity_type' => 'node'],
+              ReplaceTokenServiceInterface::INVALID_ABSENCE_TOKENS => $data['invalid_absence'],
+            ];
+
+            $options = [
+              'maillog_student_context' => $data['student_uid'],
+              'maillog_mail_type' => SsrMaillogInterface::MAILLOG_TYPE_COURSE_ATTENDANCE,
+            ];
+            $batch['operations'][] = [[EmailService::class, 'batchSendMail'], [$caregiver_mail_data['mail'], $subject_template, $message_template, $replace_context, [], $options]];
           }
         }
 

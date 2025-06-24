@@ -8,6 +8,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
+use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,6 +42,8 @@ class MailCaregivers extends ActionBase implements ContainerFactoryPluginInterfa
    */
   protected $emailService;
 
+  protected UserMetaDataServiceInterface $userMetaDataService;
+
   /**
    * Constructs a CancelUser object.
    *
@@ -61,11 +64,13 @@ class MailCaregivers extends ActionBase implements ContainerFactoryPluginInterfa
       $plugin_definition,
       PrivateTempStoreFactory $temp_store_factory,
       AccountInterface $current_user,
-      EmailServiceInterface $email_service
+      EmailServiceInterface $email_service,
+      UserMetaDataServiceInterface $user_meta_data_service,
   ) {
     $this->currentUser = $current_user;
     $this->tempStoreFactory = $temp_store_factory;
     $this->emailService = $email_service;
+    $this->userMetaDataService = $user_meta_data_service;
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -80,7 +85,8 @@ class MailCaregivers extends ActionBase implements ContainerFactoryPluginInterfa
       $plugin_definition,
       $container->get('tempstore.private'),
       $container->get('current_user'),
-      $container->get('simple_school_reports_core.email_service')
+      $container->get('simple_school_reports_core.email_service'),
+      $container->get('simple_school_reports_core.user_meta_data')
     );
   }
 
@@ -126,7 +132,12 @@ class MailCaregivers extends ActionBase implements ContainerFactoryPluginInterfa
 
     /** @var \Drupal\user\UserInterface $object */
     $access = AccessResult::allowedIf($object->access('update', $account, FALSE) && $object->hasRole('student') && $account->hasPermission('mail caregivers'));
-    if ($access->isAllowed()) {
+
+    if ($access->isAllowed() && !$this->userMetaDataService->caregiversHasAccess($object->id())) {
+      $this->messenger()->addWarning($this->t('@student is an adult and has not complied to share information with caregivers.', ['@student' => $object->getDisplayName()]));
+      $access = AccessResult::forbidden();
+    }
+    elseif ($access->isAllowed()) {
       $recipient_data = $this->emailService->getCaregiverRecipients($object->id());
       if (empty($recipient_data)) {
         $access = AccessResult::forbidden();

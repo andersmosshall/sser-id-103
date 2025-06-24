@@ -151,23 +151,41 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCaregiverStudentsData(string $uid): array {
+  public function getCaregiverStudentsData(string $uid, bool $check_caregiver_access = FALSE): array {
     if (!isset($this->calculatedData['caregiver_students_data' . $uid])) {
       $caregiver_students_map = $this->getCaregiverStudentsMap();
       $students_data = $caregiver_students_map[$uid] ?? [];
 
       $this->calculatedData['caregiver_students_data' . $uid] = $students_data;
     }
+
+    if ($check_caregiver_access) {
+      $students_data = $this->calculatedData['caregiver_students_data' . $uid];
+      foreach ($students_data as $student_uid => $data) {
+        if (!$this->caregiversHasAccess($student_uid)) {
+          unset($students_data[$student_uid]);
+        }
+      }
+      return $students_data;
+    }
+
     return $this->calculatedData['caregiver_students_data' . $uid];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCaregiverStudents(string $uid): array {
+  public function getCaregiverStudents(string $uid, bool $check_caregiver_access = FALSE): array {
     if (!isset($this->calculatedData['caregiver_students_' . $uid])) {
       $this->calculatedData['caregiver_students_' . $uid] = array_keys($this->getCaregiverStudentsData($uid));
     }
+
+    if ($check_caregiver_access) {
+      return array_filter($this->calculatedData['caregiver_students_' . $uid], function ($student_uid) {
+        return $this->caregiversHasAccess($student_uid);
+      });
+    }
+
     return $this->calculatedData['caregiver_students_' . $uid];
   }
 
@@ -537,6 +555,83 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     return $grade_diff;
+  }
+
+  public function isAdult(string $uid): bool {
+    $cid = 'adult_user_map';
+
+    if (is_array($this->calculatedData[$cid] ?? NULL)) {
+      $adult_map = $this->calculatedData[$cid];
+    }
+    else {
+      $adult_map = [];
+
+      $adult_roles = ['caregiver', 'teacher', 'administrator', 'principle', 'super_admin', 'budget_administrator', 'budget_reviewer'];
+      $adult_birth_date = new \DateTime();
+      $adult_birth_date->setTimestamp(strtotime('-18 years'));
+      $adult_birth_date->setTime(23, 59, 59);
+
+      $query = $this->entityTypeManager->getStorage('user')->getQuery()
+        ->accessCheck(FALSE);
+
+      $or_condition = $query->orConditionGroup();
+      $or_condition->condition('roles', $adult_roles, 'IN');
+      $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
+
+      $adult_uids = $query
+        ->condition($or_condition)
+        ->execute();
+
+      foreach ($adult_uids as $adult_uid) {
+        $adult_map[$adult_uid] = TRUE;
+      }
+
+      $this->calculatedData[$cid] = $adult_map;
+    }
+
+    return array_key_exists($uid, $adult_map) ? $adult_map[$uid] : FALSE;
+  }
+
+  public function caregiversHasAccess(string $uid): bool {
+    $cid = 'caregivers_has_access_map';
+
+    if (is_array($this->calculatedData[$cid] ?? NULL)) {
+      $caregivers_has_access_map = $this->calculatedData[$cid];
+    }
+    else {
+      $caregivers_has_access_map = [];
+
+      $adult_birth_date = new \DateTime();
+      $adult_birth_date->setTimestamp(strtotime('-18 years'));
+      $adult_birth_date->setTime(23, 59, 59);
+
+      $query = $this->entityTypeManager->getStorage('user')->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('roles', 'student');
+
+      $or_condition = $query->orConditionGroup();
+
+      $or_condition->condition('field_birth_date', NULL);
+      $or_condition->notExists('field_birth_date');
+      $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '>');
+
+      $adult_allowed_caregiver_condition = $query->andConditionGroup();
+      $adult_allowed_caregiver_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
+      $adult_allowed_caregiver_condition->condition('field_adult_student_settings', 'caregiver_continued_access');
+
+      $or_condition->condition($adult_allowed_caregiver_condition);
+
+      $query->condition($or_condition);
+      $caregiver_access_uids = $query->execute();
+
+      foreach ($caregiver_access_uids as $caregiver_access_uid) {
+        $caregivers_has_access_map[$caregiver_access_uid] = TRUE;
+      }
+
+      $this->calculatedData[$cid] = $caregivers_has_access_map;
+    }
+
+    return array_key_exists($uid, $caregivers_has_access_map) ? $caregivers_has_access_map[$uid] : FALSE;
   }
 
 }

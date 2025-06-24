@@ -209,12 +209,7 @@ function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInter
       if ($suffix_type === 'default' || $suffix_type === 'class_grade') {
         $grade = $user->get('field_grade')->value;
         if ($grade) {
-          if ($grade >= 1 && $grade <= 9) {
-            $grade_formatted = t('Gr @grade', ['@grade' => $grade]);
-          }
-          if ($grade == 0) {
-            $grade_formatted = t('Gr @grade', ['@grade' => 'F']);
-          }
+          $grade_formatted = SchoolGradeHelper::getSchoolGradesShortName(['FKLASS', 'GR', 'GY'])[$grade] ?? NULL;
         }
       }
 
@@ -945,13 +940,13 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
     $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
 
-    $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+    $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
     if (in_array($user->id(), $caregiving_students) || $user->id() == $account->id()) {
       if ($operation === 'view' || $operation === 'view label' || $allow_handle_self) {
-        $access = AccessResult::allowed();
+        $access = AccessResult::allowed()->addCacheContexts(['current_day']);
       }
       else {
-        $access = AccessResult::forbidden();
+        $access = AccessResult::forbidden()->addCacheContexts(['current_day']);
       }
     }
     else {
@@ -971,7 +966,7 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
       $access = AccessResult::allowed();
     }
     else {
-      $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+      $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
       if (in_array($user->id(), $caregiving_students)) {
         $access = AccessResult::allowed();
       }
@@ -1020,12 +1015,12 @@ function simple_school_reports_core_paragraph_access(\Drupal\paragraphs\Paragrap
       else {
         /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
         $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-        $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+        $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
         if (in_array($student_uid, $caregiving_students)) {
-          $access = AccessResult::allowed();
+          $access = AccessResult::allowed()->addCacheContexts(['current_day']);
         }
         else {
-          $access = AccessResult::forbidden();
+          $access = AccessResult::forbidden()->addCacheContexts(['current_day']);
         }
       }
       $access->addCacheTags(['user_list:student']);

@@ -21,14 +21,14 @@ interface UserMetaDataServiceInterface {
    *
    * @return array
    */
-  public function getCaregiverStudentsData(string $uid): array;
+  public function getCaregiverStudentsData(string $uid, bool $check_caregiver_access = FALSE): array;
 
   /**
    * @param string $uid
    *
    * @return array
    */
-  public function getCaregiverStudents(string $uid): array;
+  public function getCaregiverStudents(string $uid, bool $check_caregiver_access = FALSE): array;
 
   /**
    * @param string $uid
@@ -80,10 +80,21 @@ interface UserMetaDataServiceInterface {
 
   /**
    * @param string $uid
+   *
+   * @return array
+   */
+  public function getUserSchoolGradeAndType(string $uid): array;
+
+  /**
+   * @param string $uid
    * @param \DateTime|null $date
    *
    * @return int
    */
   public function getUserRelativeGrade(?\DateTime $date = NULL): int;
+
+  public function isAdult(string $uid): bool;
+
+  public function caregiversHasAccess(string $uid): bool;
 
 }
