@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 
 class WrittenReviewRoundFormAlter {
 
@@ -84,9 +85,7 @@ class WrittenReviewRoundFormAlter {
       return;
     }
 
-    $grade_options = simple_school_reports_core_allowed_user_grade();
-    unset($grade_options[-99]);
-    unset($grade_options[99]);
+    $grade_options = SchoolGradeHelper::getSchoolGradesMap();
 
     $written_reviews_subject_map = self::getWrittenReviewsSubjectMap($form_state);
 

@@ -248,14 +248,6 @@ simple_school_reports_core.file-generator:
   requirements:
     _permission: 'administer simple school reports settings'
 
-simple_school_reports_core.ssr_import:
-  path: '/ssr-import'
-  defaults:
-    _form: '\Drupal\simple_school_reports_core\Form\SSRImportForm'
-    _title: 'Import'
-  requirements:
-    _permission: 'administer modules'
-
 simple_school_reports_core.test_mail:
   path: '/test-mail'
   defaults:

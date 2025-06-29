@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\user\UserInterface;
 
 /**
  * Class TermService
@@ -129,9 +130,11 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       }
 
       $name = strip_tags($result->field_first_name_value . ' ' . $result->field_last_name_value);
+      $grade_name_suffix_map = SchoolGradeHelper::getSchoolGradesShortName(['FKLASS', 'GR', 'GY']);
       if ($grade = $result->field_grade_value) {
-        if ($grade >= 1 && $grade <= 9) {
-          $name .= ' (' . $this->t('Gr @grade', ['@grade' => $grade]) . ')';
+        $grade = (int) $grade;
+        if (isset($grade_name_suffix_map[$grade])) {
+          $name .= ' (' . $this->t($grade_name_suffix_map[$grade]) . ')';
         }
       }
       $url = Url::fromRoute('entity.user.canonical', ['user' => $student_uid]);
@@ -187,6 +190,21 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     return $this->calculatedData['caregiver_students_' . $uid];
+  }
+
+  public function getCaregiverUids(UserInterface $child, bool $only_caregivers_with_access = FALSE): array {
+    if ($only_caregivers_with_access && !$this->caregiversHasAccess($child->id())) {
+      return [];
+    }
+    return array_column($child->get('field_caregivers')->getValue(), 'target_id');
+  }
+
+  public function getCaregivers(UserInterface $child, bool $only_caregivers_with_access = FALSE): array {
+    $caregivers_uid = $this->getCaregiverUids($child, $only_caregivers_with_access);
+    if (empty($caregivers_uid)) {
+      return [];
+    }
+    return $this->entityTypeManager->getStorage('user')->loadMultiple($caregivers_uid);
   }
 
   /**
@@ -275,7 +293,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       $uid = $result->uid;
 
       if ($result->field_grade_value !== NULL) {
-        $raw_grades[$uid] = $result->field_grade_value;
+        $raw_grades[$uid] = (int) $result->field_grade_value;
       }
       $uids[$uid] = $uid;
 
@@ -283,8 +301,8 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
         $date = new \DateTime('now', new \DateTimeZone('utc'));
         $date->setTimestamp($result->field_birth_date_value);
         $age = $now->diff($date)->y;
-        if ($age > 0 && $age <= 21) {
-          $raw_ages[$uid] = $age;
+        if ($age > 0 && $age <= 999) {
+          $raw_ages[$uid] = (int) $age;
 
           $next_birth_date = new \DateTime($this_year . '-' . $date->format('m-d H:i:s'), new \DateTimeZone('utc'));
           if ($next_birth_date < $now) {
@@ -303,14 +321,14 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     $grades = [
-      '-99' => 0,
+      SchoolGradeHelper::UNKNOWN_GRADE => 0,
     ];
     $ages = [
-      '-99' => 0,
+      self::UNKNOWN_AGE => 0,
       'total' => 0,
     ];
 
-    $grade_map = simple_school_reports_core_allowed_user_grade();
+    $grade_map = SchoolGradeHelper::getSchoolGradeValues(NULL, TRUE, !$skip_ended);
 
     foreach ($uids as $uid) {
       if (isset($raw_grades[$uid]) && isset($grade_map[$raw_grades[$uid]])) {
@@ -319,22 +337,22 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
         }
 
         if (!isset($grades[$raw_grades[$uid]])) {
-          $grades[(string) $raw_grades[$uid]] = 0;
+          $grades[$raw_grades[$uid]] = 0;
         }
-        $grades[(string) $raw_grades[$uid]]++;
+        $grades[$raw_grades[$uid]]++;
       }
       else {
-        $grades['-99']++;
+        $grades[SchoolGradeHelper::UNKNOWN_GRADE]++;
       }
 
       if (isset($raw_ages[$uid])) {
         if (!isset($ages[$raw_ages[$uid]])) {
-          $ages[(string) $raw_ages[$uid]] = 0;
+          $ages[$raw_ages[$uid]] = 0;
         }
-        $ages[(string) $raw_ages[$uid]]++;
+        $ages[$raw_ages[$uid]]++;
       }
       else {
-        $ages['-99']++;
+        $ages[self::UNKNOWN_AGE]++;
       }
       $ages['total']++;
     }
@@ -501,9 +519,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
     else {
       // Resolve grades map.
-      $supported_grades = simple_school_reports_core_allowed_user_grade();
-      unset($supported_grades[-99]);
-      unset($supported_grades[99]);
+      $supported_grades = SchoolGradeHelper::getSchoolGradesMap();
 
       $results = $this->connection->select('user__field_grade', 'g')
         ->fields('g', ['entity_id', 'field_grade_value'])

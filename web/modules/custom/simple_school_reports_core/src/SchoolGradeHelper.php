@@ -8,10 +8,15 @@ use Drupal\Core\Site\Settings;
 
 class SchoolGradeHelper {
 
-  public const UNKNOWN_GRADE = -9999999;
-  public const QUITED_GRADE = 9999999;
+  // ToDo: Change to these...
+//  public const UNKNOWN_GRADE = -9999999;
+//  public const QUITED_GRADE = 9999999;
 
-  public static function useGradeSuffix(): bool {
+  public const UNKNOWN_GRADE = -99;
+  public const QUITED_GRADE = 99;
+
+
+  public static function hasMultipleSchoolTypes(): bool {
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
     $module_handler = \Drupal::service('module_handler');
     $types = 0;
@@ -51,7 +56,7 @@ class SchoolGradeHelper {
     $return = [];
 
     if ($include_unknown) {
-      $return[-99] = t('Unknown grade');
+      $return[self::UNKNOWN_GRADE] = t('Unknown grade');
     }
 
     $grade_from = Settings::get('ssr_grade_from', 0);
@@ -94,27 +99,55 @@ class SchoolGradeHelper {
 
 
     if ($include_quited) {
-      $return[99] = t('Student has quit');
+      $return[self::QUITED_GRADE] = t('Student has quit');
     }
     return $return;
   }
 
+  public static function getSchoolGradesMapAll(): array {
+    return self::getSchoolGradesMap(NULL, TRUE, TRUE);
+  }
+
   public static function getSchoolGradesShortName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
     $return = self::getSchoolGradesMap($school_type_filter, $include_unknown, $include_quited);
-    if (isset($return[-99])) {
-      $return[-99] = 'O';
+    if (isset($return[self::UNKNOWN_GRADE])) {
+      $return[self::UNKNOWN_GRADE] = 'O';
     }
     if (isset($return[0])) {
       $return[0] = 'Åk F';
     }
-    if (isset($return[99])) {
-      $return[99] = 'S';
+    if (isset($return[self::QUITED_GRADE])) {
+      $return[self::QUITED_GRADE] = 'S';
     }
     return $return;
   }
 
   public static function getSchoolGradesLongName(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {
-    return [];
+    $return = self::getSchoolGradesMap($school_type_filter, $include_unknown, $include_quited);
+
+    $use_suffix = is_array($school_type_filter) && $school_type_filter <= 1
+      ? FALSE
+      : self::hasMultipleSchoolTypes();
+
+    foreach ($return as $grade => $label) {
+      if ($grade === self::UNKNOWN_GRADE || $grade === self::QUITED_GRADE) {
+        continue;
+      }
+      if ($grade < 0) {
+        continue;
+      }
+
+      $grade_value = $grade % 100;
+      $label = t('Grade @grade', ['@grade' => $grade_value]);
+      if ($use_suffix) {
+        $school_type = self::getSchoolTypeByGrade($grade);
+        $label .= ' (' . $school_type . ')';
+      }
+
+      $return[$grade] = $label;
+    }
+
+    return $return;
   }
 
   public static function getSchoolGradeValues(?array $school_type_filter = NULL, bool $include_unknown = FALSE, bool $include_quited = FALSE): array {

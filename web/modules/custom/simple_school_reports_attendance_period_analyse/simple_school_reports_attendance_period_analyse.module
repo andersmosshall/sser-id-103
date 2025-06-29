@@ -116,8 +116,7 @@ function simple_school_reports_attendance_period_analyse_views_post_execute(View
       if (!empty($data['grade'])) {
         $grade_build = [];
 
-        $grades_labels = simple_school_reports_core_allowed_user_grade();
-
+        $grades_labels = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMapAll();
 
         foreach ($data['grade'] as $grade => $grade_data) {
           $grade_label = $grades_labels[$grade] ?? $grade;

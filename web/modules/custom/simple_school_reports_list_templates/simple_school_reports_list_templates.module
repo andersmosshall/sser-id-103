@@ -52,7 +52,7 @@ function simple_school_reports_list_templates_views_query_alter(ViewExecutable $
 
 
     $grade_filter = [];
-    foreach (simple_school_reports_core_allowed_user_grade() as $key => $label) {
+    foreach (\Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMapAll() as $key => $label) {
       $grade_filter[$key] = (string) $key;
     }
     $explicit_uids = [];

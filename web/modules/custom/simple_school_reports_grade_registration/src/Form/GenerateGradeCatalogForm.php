@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\Pnum;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GradeRoundFormAlter;
 use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
@@ -187,7 +188,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       if ($this->useExtentExport) {
         $extens_export_grades = [6, 7, 8, 9];
 
-        $grade_options = simple_school_reports_core_allowed_user_grade();
+        $grade_options = SchoolGradeHelper::getSchoolGradesMap(['GR']);
         $extens_export_grade_options = [];
         $extens_default_value = [];
 
@@ -222,7 +223,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       }
 
       if ($this->useSCBExport) {
-        $grade_options = simple_school_reports_core_allowed_user_grade();
+        $grade_options = SchoolGradeHelper::getSchoolGradesMap(['GR']);
         if (!empty($grade_options[6]) || !empty($grade_options[9])) {
           $form['scb_export_wrapper'] = [
             '#type' => 'details',
@@ -473,9 +474,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
     if (!empty($batch['operations'])) {
       // Setup callbacks for file generation.
-      $grade_options = simple_school_reports_core_allowed_user_grade();
-      unset($grade_options[-99]);
-      unset($grade_options[99]);
+      $grade_options = SchoolGradeHelper::getSchoolGradesMap();
 
       $document_date = '';
       $timestamp = $grade_round->get('field_document_date')->value;
@@ -886,9 +885,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         ? (int) $student_group_node->get('field_grade')->value
         : NULL;
       if ($student_grade >= 0) {
-        $grade_options = simple_school_reports_core_allowed_user_grade();
-        unset($grade_options[-99]);
-        unset($grade_options[99]);
+        $grade_options = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
         if (isset($grade_options[$student_grade])) {
           if ($student_grade === 0) {
             $search_replace_map['!sg!'] = 'Förskoleklass';

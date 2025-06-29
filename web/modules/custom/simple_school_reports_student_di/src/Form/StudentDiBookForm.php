@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SsrMeetingInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,9 +19,12 @@ class StudentDiBookForm extends ConfirmFormBase {
 
   protected EntityTypeManagerInterface $entityTypeManager;
 
+  protected UserMetaDataServiceInterface $userMetaDataService;
+
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->userMetaDataService = $container->get('simple_school_reports_core.user_meta_data');
     return $instance;
   }
 
@@ -107,7 +111,7 @@ class StudentDiBookForm extends ConfirmFormBase {
       '#type' => 'container',
       '#weight' => 400,
     ];
-    $caregivers = $student->get('field_caregivers')->referencedEntities();
+    $caregivers = $this->userMetaDataService->getCaregivers($student, TRUE);
 
     if (!empty($caregivers)) {
       $caregiver_options = [];

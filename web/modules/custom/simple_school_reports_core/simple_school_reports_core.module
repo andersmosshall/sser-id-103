@@ -20,7 +20,7 @@ use Drupal\simple_school_reports_core\SchoolGradeHelper;
  * Allowed values function for user grade field.
  */
 function simple_school_reports_core_allowed_user_grade() : array {
-  return SchoolGradeHelper::getSchoolGradesMap(NULL, TRUE, TRUE);
+  return SchoolGradeHelper::getSchoolGradesMapAll();
 }
 
 function simple_school_reports_core_adult_student_settings_options(): array {
@@ -343,9 +343,10 @@ function simple_school_reports_core_paragraph_delete(EntityInterface $entity) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function simple_school_reports_core_user_presave(\Drupal\user\UserInterface $user) {
-  if ($user->hasRole('student') && !$user->get('field_caregivers')->isEmpty()) {
-    /** @var \Drupal\user\UserInterface $caregiver */
-    foreach ($user->get('field_caregivers')->referencedEntities() as $caregiver) {
+  if ($user->hasRole('student')) {
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+    foreach ($user_meta_data->getCaregivers($user) as $caregiver) {
       if (!$caregiver->hasRole('caregiver')) {
         $caregiver->addRole('caregiver');
         $caregiver->save();
@@ -446,7 +447,9 @@ function simple_school_reports_core_node_insert(\Drupal\node\NodeInterface $node
  * Implements hook_ENTITY_TYPE_delete().
  */
 function simple_school_reports_core_user_delete(\Drupal\user\UserInterface $user) {
-  $caregiver_uids = array_column($user->get('field_caregivers')->getValue(), 'target_id');
+  /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+  $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+  $caregiver_uids = $user_meta_data->getCaregiverUids($user);
   if (!empty($caregiver_uids)) {
     $queue = \Drupal::service('queue')->get('check_caregiver_queue');
     $queue->createQueue();

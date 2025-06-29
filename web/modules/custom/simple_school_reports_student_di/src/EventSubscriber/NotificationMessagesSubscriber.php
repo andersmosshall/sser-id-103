@@ -50,7 +50,7 @@ class NotificationMessagesSubscriber implements EventSubscriberInterface {
       if (!in_array('caregiver', $event->getCurrentUser()->getRoles())) {
         return $this->returnNoMessage($cache);
       }
-      $caregiving_students = $this->userMetaDataService->getCaregiverStudentsData($uid);
+      $caregiving_students = $this->userMetaDataService->getCaregiverStudentsData($uid, TRUE);
       if (empty($caregiving_students)) {
         return $this->returnNoMessage($cache);
       }

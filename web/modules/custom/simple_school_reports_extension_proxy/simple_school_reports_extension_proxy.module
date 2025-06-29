@@ -1153,7 +1153,7 @@ function ssr_views_access_to_caregivers_my_meetings_block() {
 
   if (in_array('caregiver', $account->getRoles())) {
     $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-    $attending = $user_meta_data->getCaregiverStudents($account->id());
+    $attending = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
     $attending[] = $account->id();
 
     $meeting_exists = \Drupal::entityTypeManager()->getStorage('ssr_meeting')
@@ -1373,9 +1373,7 @@ function simple_school_reports_extension_proxy_iup_prefill_options() {
   ];
 
   if (\Drupal::moduleHandler()->moduleExists('simple_school_reports_grade_stats')) {
-    $grade_options = simple_school_reports_core_allowed_user_grade();
-    unset($grade_options[-99]);
-    unset($grade_options[99]);
+    $grade_options = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMap();
 
     foreach ($grade_options as $grade => $label) {
       if ($grade >= 6 && $grade <= 9) {

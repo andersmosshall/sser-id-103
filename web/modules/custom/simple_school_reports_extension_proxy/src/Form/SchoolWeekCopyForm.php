@@ -7,6 +7,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -48,9 +49,7 @@ class SchoolWeekCopyForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $options = [];
 
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap(NULL, TRUE, FALSE);
 
     foreach ($grades as $grade => $label) {
       $label = $grade > 0 ? $this->t('Grade @grade', ['@grade' => $grade]) : $label;

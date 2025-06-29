@@ -361,7 +361,7 @@ class NodeGrantsService implements NodeAccessGrantsInterface {
     $is_admin = $account->hasPermission('administer simple school reports settings');
 
     $mentor_student_uids = $this->userMetaData->getMentorStudents($uid);
-    $caregiver_student_uids = $this->userMetaData->getCaregiverStudents($uid);
+    $caregiver_student_uids = $this->userMetaData->getCaregiverStudents($uid, TRUE);
 
     $grants['node_owner'][] = $uid;
 

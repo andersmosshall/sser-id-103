@@ -70,9 +70,7 @@ function simple_school_reports_entities_signing_types() {
 }
 
 function simple_school_reports_entities_school_week_deviation_grades() {
-  $grades = simple_school_reports_core_allowed_user_grade();
-  unset($grades[-99]);
-  unset($grades[99]);
+  $grades = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMap();
 
   // @todo check if grade has a school week setting, suffix name if not.
 
