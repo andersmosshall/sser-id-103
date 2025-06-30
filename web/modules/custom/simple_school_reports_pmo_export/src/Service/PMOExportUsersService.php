@@ -148,7 +148,7 @@ class PMOExportUsersService extends ExportUsersServiceBase {
 
     $ssn_map = [];
 
-    $grades = SchoolGradeHelper::getSchoolGradesMap();
+    $grades = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
 
     /** @var \Drupal\user\UserInterface $student */
     foreach ($users as $student) {
