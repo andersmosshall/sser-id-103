@@ -13,7 +13,7 @@ dependencies:
 id: ssr_base_views_block__consent_user_list_per_consent
 theme: ssr_base
 region: content
-weight: -3
+weight: -5
 provider: null
 plugin: 'views_block:consent_user-list_per_consent'
 settings:

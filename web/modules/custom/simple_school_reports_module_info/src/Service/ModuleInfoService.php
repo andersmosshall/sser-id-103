@@ -43,6 +43,9 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       case 'core_annual':
         $price = self::CORE_ANNUAL_FEE;
         break;
+      case 'core_big_annual':
+        $price = self::CORE_BIG_ANNUAL_FEE;
+        break;
       case 'module_annual':
         $price = self::MODULE_ANNUAL_FEE;
         break;
@@ -62,6 +65,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     $text = str_replace('[[MODULE_PRICE]]', $this->getFormattedPrice('module'), $text);
     $text = str_replace('[[MINI_MODULE_PRICE]]', $this->getFormattedPrice('mini_module'), $text);
     $text = str_replace('[[CORE_ANNUAL_FEE]]', $this->getFormattedPrice('core_annual'), $text);
+    $text = str_replace('[[CORE_BIG_ANNUAL_FEE]]', $this->getFormattedPrice('core_big_annual'), $text);
     $text = str_replace('[[MODULE_ANNUAL_FEE]]', $this->getFormattedPrice('module_annual'), $text);
     $text = str_replace('[[MINI_MODULE_ANNUAL_FEE]]', $this->getFormattedPrice('mini_module_annual'), $text);
     return $text;
@@ -72,7 +76,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
 
     $is_ssr_promo = $this->moduleHandler->moduleExists('ssr_promo_core');
 
-    $core_description = '<p>Simple school reports kärna innefattar grundläggande funktionalitet för att kunna skapa elever, lärare och andra användare. I denna modul finns även inkluderat möjlighet att skicka ut mail till vårdnadshavare, registrera närvaro på lektioner samt registrera frånvaro för hela eller delar av dagar.</p>';
+    $core_description = '<p>Simple school reports kärna för grundskolan innefattar grundläggande funktionalitet för att kunna skapa elever, lärare och andra användare. I denna modul finns även inkluderat möjlighet att skicka ut mail till vårdnadshavare, registrera närvaro på lektioner samt registrera frånvaro för hela eller delar av dagar.</p>';
 
     if ($is_ssr_promo) {
 //      $core_description = '
@@ -92,13 +96,23 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     }
 
     $map[] = [
-      'module' => 'simple_school_reports_core',
-      'label' => 'Simple school report kärna',
+      'module' => 'simple_school_reports_core_gr',
+      'label' => 'Simple school report kärna för grundskolan',
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[CORE_PRICE]]',
       'annual_fee' => '[[CORE_ANNUAL_FEE]]',
       'description' => $core_description,
+    ];
+
+    $map[] = [
+      'module' => 'simple_school_reports_core_gy',
+      'label' => 'Simple school report kärna för gymnasiet',
+      'required_modules' => [],
+      'recommended_modules' => [],
+      'price' => '[[CORE_PRICE]]',
+      'annual_fee' => '[[CORE_BIG_ANNUAL_FEE]]',
+      'description' => '<p>Simple school reports kärna för gymnasiet innefattar innefattar samma grundfunktionalitet som kärnan för grundskolan men anpassad för gymnasieskolan. Både Gy2011 och Gy2025</p>',
     ];
 
     $map[] = [
@@ -441,6 +455,8 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     return [
       // Core modules.
       'simple_school_reports_core' => $this->t('Simple school report core'),
+      'simple_school_reports_core_gr' => $this->t('Simple school report core for elementary school'),
+      'simple_school_reports_core_gy' => $this->t('Simple school report core for upper secondary school'),
 
       // Ordinary modules.
       'simple_school_reports_absence_make_up' => $this->t('Make up time'),
@@ -496,7 +512,9 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     }
 
     return match ($module_name) {
-      'simple_school_reports_core' => 'core',
+      'simple_school_reports_core',
+      'simple_school_reports_core_gr',
+      'simple_school_reports_core_gy' => 'core',
       'simple_school_reports_extens_grade_export',
       'simple_school_reports_special_diet',
       'simple_school_reports_maillog_mini',

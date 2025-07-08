@@ -12,7 +12,7 @@ dependencies:
 id: views_block__registered_absence_student_register_absence_list
 theme: ssr_base
 region: content
-weight: -9
+weight: -11
 provider: null
 plugin: 'views_block:registered_absence-student_register_absence_list'
 settings:

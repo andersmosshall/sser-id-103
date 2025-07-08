@@ -8,12 +8,12 @@ use Drupal\Core\Site\Settings;
 
 class SchoolGradeHelper {
 
-  // ToDo: Change to these...
-//  public const UNKNOWN_GRADE = -9999999;
-//  public const QUITED_GRADE = 9999999;
 
-  public const UNKNOWN_GRADE = -99;
-  public const QUITED_GRADE = 99;
+  public const UNKNOWN_GRADE = -9999999;
+  public const QUITED_GRADE = 9999999;
+
+//  public const UNKNOWN_GRADE = -99;
+//  public const QUITED_GRADE = 99;
 
 
   public static function hasMultipleSchoolTypes(): bool {

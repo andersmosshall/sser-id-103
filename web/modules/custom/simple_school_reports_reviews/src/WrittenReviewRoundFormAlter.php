@@ -85,7 +85,7 @@ class WrittenReviewRoundFormAlter {
       return;
     }
 
-    $grade_options = SchoolGradeHelper::getSchoolGradesMap();
+    $grade_options = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
 
     $written_reviews_subject_map = self::getWrittenReviewsSubjectMap($form_state);
 

@@ -12,7 +12,7 @@ dependencies:
 id: ssr_base_views_block__consents_on_user_tab_to_handle
 theme: ssr_base
 region: content
-weight: -2
+weight: -4
 provider: null
 plugin: 'views_block:consents_on_user_tab-to_handle'
 settings:

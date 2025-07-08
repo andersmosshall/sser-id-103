@@ -3364,17 +3364,17 @@ msgstr "Ingen behörighet att utföra \"%action\" för %entity_label."
 msgid "User"
 msgstr "Användare"
 
-msgid ""
-msgstr ""
+msgid "Allow caregivers to continue accessing student information"
+msgstr "Tillåt vårdnadshavare att få fortsatt åtkomst till elevinformation"
 
-msgid ""
-msgstr ""
+msgid "Send message about invalid absence"
+msgstr "Skicka meddelande om ogiltig frånvaro"
 
-msgid ""
-msgstr ""
+msgid "@student is an adult and has not complied to share information with caregivers."
+msgstr "@student är vuxen och har inte samtyckt till att dela information med vårdnadshavare."
 
-msgid ""
-msgstr ""
+msgid "Consent for caregivers to @student may not be relevant or valid since @student is an adult."
+msgstr "Samtycke för vårdnadshavare till @student kanske inte är lämpligt eller giltigt eftersom @student är vuxen."
 
 msgid ""
 msgstr ""

@@ -66,7 +66,7 @@ class NotificationMessagesSubscriber implements EventSubscriberInterface {
           if (!empty($this->studentDiMeetingsService->getAvailableMeetingIds($student_id, $group_id, TRUE, TRUE))) {
             $link = Link::createFromRoute($this->t('here'),'simple_school_reports_student_di.di_user_tab', ['user' => $student_id])->toString();
             $messages[] = $this->t('There are development meetings available for @name to book. You may book meeting @link.', ['@name' => $data['name'], '@link' => $link]);
-            break 2;
+            break;
           }
         }
       }

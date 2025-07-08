@@ -12,7 +12,7 @@ dependencies:
 id: views_block__written_review_school_efforts
 theme: ssr_base
 region: content
-weight: -4
+weight: -6
 provider: null
 plugin: 'views_block:written_review_school_efforts_preview-school_efforts'
 settings:

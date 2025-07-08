@@ -583,12 +583,6 @@ class CourseAttendanceReportFormAlter {
       '#weight' => 997,
     ];
 
-    $t_is_adult = $user_meta_data->isAdult(\Drupal::currentUser()->id());
-    $t_cha = $user_meta_data->caregiversHasAccess(\Drupal::currentUser()->id());
-    $form['tmp_debug'] = [
-      '#markup' => ($t_is_adult ? 'Is adult' : 'Is not adult') . ' - ' . ($t_cha ? 'Cargiver access' : 'Caregiver not access'),
-    ];
-
     $form['report'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -627,13 +621,6 @@ class CourseAttendanceReportFormAlter {
         '#attributes' => [
           'class' => ['student-row--info-wrapper'],
         ],
-      ];
-
-
-      $t_is_adult = $user_meta_data->isAdult($id);
-      $t_cha = $user_meta_data->caregiversHasAccess($id);
-      $form['report'][$id]['student']['info']['tmp'] = [
-        '#markup' => ($t_is_adult ? 'Is adult' : 'Is not adult') . ' - ' . ($t_cha ? 'Cargiver access' : 'Caregiver not access'),
       ];
 
       $form['report'][$id]['student']['info']['name'] = [

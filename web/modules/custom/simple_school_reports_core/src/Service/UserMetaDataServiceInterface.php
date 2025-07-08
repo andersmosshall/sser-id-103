@@ -114,6 +114,8 @@ interface UserMetaDataServiceInterface {
 
   public function isAdult(string $uid): bool;
 
+  public function getAdultUids(): array;
+
   public function caregiversHasAccess(string $uid): bool;
 
 }

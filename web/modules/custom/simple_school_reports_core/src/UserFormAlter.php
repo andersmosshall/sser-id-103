@@ -113,6 +113,12 @@ class UserFormAlter {
       ];
     }
 
+    if (!empty($form['field_adult_student_settings']['widget']['#description'])) {
+      if ($user->id() == \Drupal::routeMatch()->getRawParameter('user')) {
+        unset($form['field_adult_student_settings']['widget']['#description']);
+      }
+    }
+
     self::addGuards($form, $account, TRUE);
     $form['#after_build'][] = [self::class, 'userFormAfterBuild'];
   }

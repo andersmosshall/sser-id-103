@@ -10,8 +10,10 @@ use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsButtonsWidget;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SsrMeetingInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'ssr_di_attending_select_widget' widget.
@@ -26,6 +28,14 @@ use Drupal\user\UserInterface;
  * )
  */
 class DIAttendingSelectWidget extends OptionsButtonsWidget {
+
+  protected UserMetaDataServiceInterface $userMetaDataService;
+
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->userMetaDataService = $container->get('simple_school_reports_core.user_meta_data');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -107,7 +117,7 @@ class DIAttendingSelectWidget extends OptionsButtonsWidget {
 
     foreach ($students as $student) {
       $options[$student->id()] = $student->getDisplayName();
-      foreach ($student->get('field_caregivers')->referencedEntities() as $caregiver) {
+      foreach ($this->userMetaDataService->getCaregivers($student, TRUE) as $caregiver) {
         $options[$caregiver->id()] = $caregiver->getDisplayName();
       }
     }

@@ -573,39 +573,46 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     return $grade_diff;
   }
 
-  public function isAdult(string $uid): bool {
+  protected function getAdultMap(): array {
     $cid = 'adult_user_map';
 
     if (is_array($this->calculatedData[$cid] ?? NULL)) {
-      $adult_map = $this->calculatedData[$cid];
-    }
-    else {
-      $adult_map = [];
-
-      $adult_roles = ['caregiver', 'teacher', 'administrator', 'principle', 'super_admin', 'budget_administrator', 'budget_reviewer'];
-      $adult_birth_date = new \DateTime();
-      $adult_birth_date->setTimestamp(strtotime('-18 years'));
-      $adult_birth_date->setTime(23, 59, 59);
-
-      $query = $this->entityTypeManager->getStorage('user')->getQuery()
-        ->accessCheck(FALSE);
-
-      $or_condition = $query->orConditionGroup();
-      $or_condition->condition('roles', $adult_roles, 'IN');
-      $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
-
-      $adult_uids = $query
-        ->condition($or_condition)
-        ->execute();
-
-      foreach ($adult_uids as $adult_uid) {
-        $adult_map[$adult_uid] = TRUE;
-      }
-
-      $this->calculatedData[$cid] = $adult_map;
+      return $this->calculatedData[$cid];
     }
 
+    $adult_map = [];
+
+    $adult_roles = ['caregiver', 'teacher', 'administrator', 'principle', 'super_admin', 'budget_administrator', 'budget_reviewer'];
+    $adult_birth_date = new \DateTime();
+    $adult_birth_date->setTimestamp(strtotime('-18 years'));
+    $adult_birth_date->setTime(23, 59, 59);
+
+    $query = $this->entityTypeManager->getStorage('user')->getQuery()
+      ->accessCheck(FALSE);
+
+    $or_condition = $query->orConditionGroup();
+    $or_condition->condition('roles', $adult_roles, 'IN');
+    $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
+
+    $adult_uids = $query
+      ->condition($or_condition)
+      ->execute();
+
+    foreach ($adult_uids as $adult_uid) {
+      $adult_map[$adult_uid] = $adult_uid;
+    }
+
+    $this->calculatedData[$cid] = $adult_map;
+    return $adult_map;
+  }
+
+  public function isAdult(string $uid): bool {
+    $adult_map = $this->getAdultMap();
     return array_key_exists($uid, $adult_map) ? $adult_map[$uid] : FALSE;
+  }
+
+  public function getAdultUids(): array {
+    return array_values($this->getAdultMap());
   }
 
   public function caregiversHasAccess(string $uid): bool {

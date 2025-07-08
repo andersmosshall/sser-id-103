@@ -234,8 +234,11 @@ class BulkUpdateGradeForm extends ConfirmFormBase {
           $grade_to_set = SchoolGradeHelper::UNKNOWN_GRADE;
         }
       }
-      elseif (isset($grade_options[$grade])) {
-        $grade_to_set = $grade;
+      else {
+        $new_grade_values_key = array_search($grade, $grade_values);
+        if ($new_grade_values_key !== FALSE) {
+          $grade_to_set = $grade;
+        }
       }
 
       $user->set('field_grade', $grade_to_set);

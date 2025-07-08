@@ -11,7 +11,7 @@ id: user.user.field_adult_student_settings
 field_name: field_adult_student_settings
 entity_type: user
 bundle: user
-label: 'Settings for students of 18 years old'
+label: 'Settings for students over 18 years old'
 description: 'IMPORTANT: Make sure student has given consent in a proper way for the options selected.'
 required: false
 translatable: false

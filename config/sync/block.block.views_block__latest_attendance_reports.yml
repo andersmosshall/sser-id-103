@@ -13,7 +13,7 @@ dependencies:
 id: views_block__latest_attendance_reports
 theme: ssr_base
 region: content
-weight: -10
+weight: -12
 provider: null
 plugin: 'views_block:latest_attendance_reports-latest_attendance_reports'
 settings:

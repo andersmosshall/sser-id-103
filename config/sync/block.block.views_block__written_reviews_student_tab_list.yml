@@ -12,7 +12,7 @@ dependencies:
 id: views_block__written_reviews_student_tab_list
 theme: ssr_base
 region: content
-weight: 3
+weight: 5
 provider: null
 plugin: 'views_block:written_reviews_student_tab-list'
 settings:
