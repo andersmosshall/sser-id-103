@@ -185,7 +185,9 @@ class SkolonExportUsersService extends ExportUsersServiceBase {
         ]);
         continue;
       }
-      $ssn_map[$ssn][] = $user->getDisplayName();
+      if ($ssn) {
+        $ssn_map[$ssn][] = $user->getDisplayName();
+      }
     }
 
     // Check that all ssn are unique.
