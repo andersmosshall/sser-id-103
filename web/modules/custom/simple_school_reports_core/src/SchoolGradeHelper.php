@@ -8,12 +8,8 @@ use Drupal\Core\Site\Settings;
 
 class SchoolGradeHelper {
 
-
   public const UNKNOWN_GRADE = -9999999;
   public const QUITED_GRADE = 9999999;
-
-//  public const UNKNOWN_GRADE = -99;
-//  public const QUITED_GRADE = 99;
 
 
   public static function hasMultipleSchoolTypes(): bool {
@@ -22,10 +18,6 @@ class SchoolGradeHelper {
     $types = 0;
     $use_gr = $module_handler->moduleExists('simple_school_reports_core_gr');
     $use_gy = $module_handler->moduleExists('simple_school_reports_core_gy');
-
-    // TEMP!!!!!!!!!
-    $use_gr = $module_handler->moduleExists('simple_school_reports_core');
-    $use_gy = $module_handler->moduleExists('simple_school_reports_core');
 
     if ($use_gr) {
       $types++;
@@ -45,13 +37,10 @@ class SchoolGradeHelper {
 
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
     $module_handler = \Drupal::service('module_handler');
-    $use_gr = $module_handler->moduleExists('simple_school_reports_core_gr');
-    $use_gy = $module_handler->moduleExists('simple_school_reports_core_gy');
 
-    // TEMP!!!!!
-    $use_fklass = in_array('FKLASS', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
-    $use_gr = in_array('GR', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
-    $use_gy = in_array('GY', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core');
+    $use_fklass = in_array('FKLASS', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core_gr');
+    $use_gr = in_array('GR', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core_gr');
+    $use_gy = in_array('GY', $school_type_filter) && $module_handler->moduleExists('simple_school_reports_core_gy');
 
     $return = [];
 
