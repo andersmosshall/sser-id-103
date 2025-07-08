@@ -84,3 +84,15 @@ entity.ssr_lookup.collection:
   description: 'List of ssr lookups.'
   route_name: entity.ssr_lookup.collection
   parent: system.admin_content
+
+entity.ssr_organization.settings:
+  title: 'SSR Organization'
+  description: 'Configure a SSR Organization entity type.'
+  route_name:  entity.ssr_organization.settings
+  parent: system.admin_structure
+
+entity.ssr_organization.collection:
+  title: 'SSR Organizations'
+  description: 'List of ssr organizations.'
+  route_name: entity.ssr_organization.collection
+  parent: system.admin_content

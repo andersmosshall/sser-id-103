@@ -14,39 +14,19 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 
 /**
  * Allowed values function for user grade field.
  */
 function simple_school_reports_core_allowed_user_grade() : array {
-  $map = [
-    0 => t('Pre school class'),
-    1 => 1,
-    2 => 2,
-    3 => 3,
-    4 => 4,
-    5 => 5,
-    6 => 6,
-    7 => 7,
-    8 => 8,
-    9 => 9,
-  ];
+  return SchoolGradeHelper::getSchoolGradesMapAll();
+}
 
-  $return = [
-    -99 => t('Unknown grade'),
+function simple_school_reports_core_adult_student_settings_options(): array {
+  return [
+    'caregiver_continued_access' => t('Allow caregivers to continue accessing student information'),
   ];
-  $grade_from = Settings::get('ssr_grade_from', 0);
-  $grade_to = Settings::get('ssr_grade_to', 9);
-
-  if (is_numeric($grade_from) && is_numeric($grade_to) && $grade_to >= $grade_from) {
-    for ($i = $grade_from; $i <= $grade_to; $i++) {
-      if (isset($map[$i])) {
-        $return[$i] = $map[$i];
-      }
-    }
-  }
-  $return[99] = t('Student has quit');
-  return $return;
 }
 
 /**
@@ -229,12 +209,7 @@ function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInter
       if ($suffix_type === 'default' || $suffix_type === 'class_grade') {
         $grade = $user->get('field_grade')->value;
         if ($grade) {
-          if ($grade >= 1 && $grade <= 9) {
-            $grade_formatted = t('Gr @grade', ['@grade' => $grade]);
-          }
-          if ($grade == 0) {
-            $grade_formatted = t('Gr @grade', ['@grade' => 'F']);
-          }
+          $grade_formatted = SchoolGradeHelper::getSchoolGradesShortName(['FKLASS', 'GR', 'GY'])[$grade] ?? NULL;
         }
       }
 
@@ -368,9 +343,10 @@ function simple_school_reports_core_paragraph_delete(EntityInterface $entity) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function simple_school_reports_core_user_presave(\Drupal\user\UserInterface $user) {
-  if ($user->hasRole('student') && !$user->get('field_caregivers')->isEmpty()) {
-    /** @var \Drupal\user\UserInterface $caregiver */
-    foreach ($user->get('field_caregivers')->referencedEntities() as $caregiver) {
+  if ($user->hasRole('student')) {
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+    foreach ($user_meta_data->getCaregivers($user) as $caregiver) {
       if (!$caregiver->hasRole('caregiver')) {
         $caregiver->addRole('caregiver');
         $caregiver->save();
@@ -471,7 +447,9 @@ function simple_school_reports_core_node_insert(\Drupal\node\NodeInterface $node
  * Implements hook_ENTITY_TYPE_delete().
  */
 function simple_school_reports_core_user_delete(\Drupal\user\UserInterface $user) {
-  $caregiver_uids = array_column($user->get('field_caregivers')->getValue(), 'target_id');
+  /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+  $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+  $caregiver_uids = $user_meta_data->getCaregiverUids($user);
   if (!empty($caregiver_uids)) {
     $queue = \Drupal::service('queue')->get('check_caregiver_queue');
     $queue->createQueue();
@@ -965,13 +943,13 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
     /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
     $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
 
-    $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+    $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
     if (in_array($user->id(), $caregiving_students) || $user->id() == $account->id()) {
       if ($operation === 'view' || $operation === 'view label' || $allow_handle_self) {
-        $access = AccessResult::allowed();
+        $access = AccessResult::allowed()->addCacheContexts(['current_day']);
       }
       else {
-        $access = AccessResult::forbidden();
+        $access = AccessResult::forbidden()->addCacheContexts(['current_day']);
       }
     }
     else {
@@ -991,7 +969,7 @@ function simple_school_reports_core_user_access(UserInterface $user, $operation,
       $access = AccessResult::allowed();
     }
     else {
-      $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+      $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
       if (in_array($user->id(), $caregiving_students)) {
         $access = AccessResult::allowed();
       }
@@ -1040,12 +1018,12 @@ function simple_school_reports_core_paragraph_access(\Drupal\paragraphs\Paragrap
       else {
         /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
         $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-        $caregiving_students = $user_meta_data->getCaregiverStudents($account->id());
+        $caregiving_students = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
         if (in_array($student_uid, $caregiving_students)) {
-          $access = AccessResult::allowed();
+          $access = AccessResult::allowed()->addCacheContexts(['current_day']);
         }
         else {
-          $access = AccessResult::forbidden();
+          $access = AccessResult::forbidden()->addCacheContexts(['current_day']);
         }
       }
       $access->addCacheTags(['user_list:student']);
@@ -1955,4 +1933,14 @@ function simple_school_reports_core_preprocess_block(&$variables) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_deploy().
+ */
+function simple_school_reports_core_deploy() {
+  /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+  $dispatcher = \Drupal::service('event_dispatcher');
+  $event = new \Drupal\simple_school_reports_core\Events\SsrPostDeployEvent();
+  $dispatcher->dispatch($event, \Drupal\simple_school_reports_core\Events\SsrCoreEvents::SSR_POST_DEPLOY);
 }

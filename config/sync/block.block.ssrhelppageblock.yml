@@ -10,7 +10,7 @@ dependencies:
 id: ssrhelppageblock
 theme: ssr_base
 region: content
-weight: 6
+weight: 8
 provider: null
 plugin: ssr_help_page_block
 settings:

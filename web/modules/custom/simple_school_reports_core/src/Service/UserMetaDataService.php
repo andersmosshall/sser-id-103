@@ -11,6 +11,9 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\user\UserInterface;
 
 /**
  * Class TermService
@@ -127,9 +130,11 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       }
 
       $name = strip_tags($result->field_first_name_value . ' ' . $result->field_last_name_value);
+      $grade_name_suffix_map = SchoolGradeHelper::getSchoolGradesShortName(['FKLASS', 'GR', 'GY']);
       if ($grade = $result->field_grade_value) {
-        if ($grade >= 1 && $grade <= 9) {
-          $name .= ' (' . $this->t('Gr @grade', ['@grade' => $grade]) . ')';
+        $grade = (int) $grade;
+        if (isset($grade_name_suffix_map[$grade])) {
+          $name .= ' (' . $this->t($grade_name_suffix_map[$grade]) . ')';
         }
       }
       $url = Url::fromRoute('entity.user.canonical', ['user' => $student_uid]);
@@ -149,24 +154,57 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCaregiverStudentsData(string $uid): array {
+  public function getCaregiverStudentsData(string $uid, bool $check_caregiver_access = FALSE): array {
     if (!isset($this->calculatedData['caregiver_students_data' . $uid])) {
       $caregiver_students_map = $this->getCaregiverStudentsMap();
       $students_data = $caregiver_students_map[$uid] ?? [];
 
       $this->calculatedData['caregiver_students_data' . $uid] = $students_data;
     }
+
+    if ($check_caregiver_access) {
+      $students_data = $this->calculatedData['caregiver_students_data' . $uid];
+      foreach ($students_data as $student_uid => $data) {
+        if (!$this->caregiversHasAccess($student_uid)) {
+          unset($students_data[$student_uid]);
+        }
+      }
+      return $students_data;
+    }
+
     return $this->calculatedData['caregiver_students_data' . $uid];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCaregiverStudents(string $uid): array {
+  public function getCaregiverStudents(string $uid, bool $check_caregiver_access = FALSE): array {
     if (!isset($this->calculatedData['caregiver_students_' . $uid])) {
       $this->calculatedData['caregiver_students_' . $uid] = array_keys($this->getCaregiverStudentsData($uid));
     }
+
+    if ($check_caregiver_access) {
+      return array_filter($this->calculatedData['caregiver_students_' . $uid], function ($student_uid) {
+        return $this->caregiversHasAccess($student_uid);
+      });
+    }
+
     return $this->calculatedData['caregiver_students_' . $uid];
+  }
+
+  public function getCaregiverUids(UserInterface $child, bool $only_caregivers_with_access = FALSE): array {
+    if ($only_caregivers_with_access && !$this->caregiversHasAccess($child->id())) {
+      return [];
+    }
+    return array_column($child->get('field_caregivers')->getValue(), 'target_id');
+  }
+
+  public function getCaregivers(UserInterface $child, bool $only_caregivers_with_access = FALSE): array {
+    $caregivers_uid = $this->getCaregiverUids($child, $only_caregivers_with_access);
+    if (empty($caregivers_uid)) {
+      return [];
+    }
+    return $this->entityTypeManager->getStorage('user')->loadMultiple($caregivers_uid);
   }
 
   /**
@@ -255,7 +293,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       $uid = $result->uid;
 
       if ($result->field_grade_value !== NULL) {
-        $raw_grades[$uid] = $result->field_grade_value;
+        $raw_grades[$uid] = (int) $result->field_grade_value;
       }
       $uids[$uid] = $uid;
 
@@ -263,8 +301,8 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
         $date = new \DateTime('now', new \DateTimeZone('utc'));
         $date->setTimestamp($result->field_birth_date_value);
         $age = $now->diff($date)->y;
-        if ($age > 0 && $age <= 21) {
-          $raw_ages[$uid] = $age;
+        if ($age > 0 && $age <= 999) {
+          $raw_ages[$uid] = (int) $age;
 
           $next_birth_date = new \DateTime($this_year . '-' . $date->format('m-d H:i:s'), new \DateTimeZone('utc'));
           if ($next_birth_date < $now) {
@@ -283,14 +321,14 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     $grades = [
-      '-99' => 0,
+      SchoolGradeHelper::UNKNOWN_GRADE => 0,
     ];
     $ages = [
-      '-99' => 0,
+      self::UNKNOWN_AGE => 0,
       'total' => 0,
     ];
 
-    $grade_map = simple_school_reports_core_allowed_user_grade();
+    $grade_map = SchoolGradeHelper::getSchoolGradeValues(NULL, TRUE, !$skip_ended);
 
     foreach ($uids as $uid) {
       if (isset($raw_grades[$uid]) && isset($grade_map[$raw_grades[$uid]])) {
@@ -299,22 +337,22 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
         }
 
         if (!isset($grades[$raw_grades[$uid]])) {
-          $grades[(string) $raw_grades[$uid]] = 0;
+          $grades[$raw_grades[$uid]] = 0;
         }
-        $grades[(string) $raw_grades[$uid]]++;
+        $grades[$raw_grades[$uid]]++;
       }
       else {
-        $grades['-99']++;
+        $grades[SchoolGradeHelper::UNKNOWN_GRADE]++;
       }
 
       if (isset($raw_ages[$uid])) {
         if (!isset($ages[$raw_ages[$uid]])) {
-          $ages[(string) $raw_ages[$uid]] = 0;
+          $ages[$raw_ages[$uid]] = 0;
         }
-        $ages[(string) $raw_ages[$uid]]++;
+        $ages[$raw_ages[$uid]]++;
       }
       else {
-        $ages['-99']++;
+        $ages[self::UNKNOWN_AGE]++;
       }
       $ages['total']++;
     }
@@ -481,9 +519,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
     else {
       // Resolve grades map.
-      $supported_grades = simple_school_reports_core_allowed_user_grade();
-      unset($supported_grades[-99]);
-      unset($supported_grades[99]);
+      $supported_grades = SchoolGradeHelper::getSchoolGradesMap();
 
       $results = $this->connection->select('user__field_grade', 'g')
         ->fields('g', ['entity_id', 'field_grade_value'])
@@ -503,6 +539,28 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     return $grades_map[$uid] ?? NULL;
   }
 
+
+  public function getUserSchoolGradeAndType(string $uid): array {
+    $grade = $this->getUserGrade($uid);
+    $school_type_grade = NULL;
+
+    if ($grade === NULL) {
+      // Default school type.
+      $default_school_type = 'AU';
+      $school_types = SchoolTypeHelper::getSchoolTypes();
+      if (!empty($school_types)) {
+        $default_school_type = array_pop($school_types);
+      }
+
+      return [NULL, $default_school_type];
+    }
+
+    $school_type_grade = $grade % 100;
+    $school_type = SchoolGradeHelper::getSchoolTypeByGrade($grade) ?? 'AU';
+
+    return [$school_type_grade, $school_type];
+  }
+
   public function getUserRelativeGrade(?\DateTime $date = NULL): int {
     $grade_diff = 0;
     if ($date) {
@@ -513,6 +571,90 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
     }
 
     return $grade_diff;
+  }
+
+  protected function getAdultMap(): array {
+    $cid = 'adult_user_map';
+
+    if (is_array($this->calculatedData[$cid] ?? NULL)) {
+      return $this->calculatedData[$cid];
+    }
+
+    $adult_map = [];
+
+    $adult_roles = ['caregiver', 'teacher', 'administrator', 'principle', 'super_admin', 'budget_administrator', 'budget_reviewer'];
+    $adult_birth_date = new \DateTime();
+    $adult_birth_date->setTimestamp(strtotime('-18 years'));
+    $adult_birth_date->setTime(23, 59, 59);
+
+    $query = $this->entityTypeManager->getStorage('user')->getQuery()
+      ->accessCheck(FALSE);
+
+    $or_condition = $query->orConditionGroup();
+    $or_condition->condition('roles', $adult_roles, 'IN');
+    $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
+
+    $adult_uids = $query
+      ->condition($or_condition)
+      ->execute();
+
+    foreach ($adult_uids as $adult_uid) {
+      $adult_map[$adult_uid] = $adult_uid;
+    }
+
+    $this->calculatedData[$cid] = $adult_map;
+    return $adult_map;
+  }
+
+  public function isAdult(string $uid): bool {
+    $adult_map = $this->getAdultMap();
+    return array_key_exists($uid, $adult_map) ? $adult_map[$uid] : FALSE;
+  }
+
+  public function getAdultUids(): array {
+    return array_values($this->getAdultMap());
+  }
+
+  public function caregiversHasAccess(string $uid): bool {
+    $cid = 'caregivers_has_access_map';
+
+    if (is_array($this->calculatedData[$cid] ?? NULL)) {
+      $caregivers_has_access_map = $this->calculatedData[$cid];
+    }
+    else {
+      $caregivers_has_access_map = [];
+
+      $adult_birth_date = new \DateTime();
+      $adult_birth_date->setTimestamp(strtotime('-18 years'));
+      $adult_birth_date->setTime(23, 59, 59);
+
+      $query = $this->entityTypeManager->getStorage('user')->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('roles', 'student');
+
+      $or_condition = $query->orConditionGroup();
+
+      $or_condition->condition('field_birth_date', NULL);
+      $or_condition->notExists('field_birth_date');
+      $or_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '>');
+
+      $adult_allowed_caregiver_condition = $query->andConditionGroup();
+      $adult_allowed_caregiver_condition->condition('field_birth_date', $adult_birth_date->getTimestamp(), '<=');
+      $adult_allowed_caregiver_condition->condition('field_adult_student_settings', 'caregiver_continued_access');
+
+      $or_condition->condition($adult_allowed_caregiver_condition);
+
+      $query->condition($or_condition);
+      $caregiver_access_uids = $query->execute();
+
+      foreach ($caregiver_access_uids as $caregiver_access_uid) {
+        $caregivers_has_access_map[$caregiver_access_uid] = TRUE;
+      }
+
+      $this->calculatedData[$cid] = $caregivers_has_access_map;
+    }
+
+    return array_key_exists($uid, $caregivers_has_access_map) ? $caregivers_has_access_map[$uid] : FALSE;
   }
 
 }

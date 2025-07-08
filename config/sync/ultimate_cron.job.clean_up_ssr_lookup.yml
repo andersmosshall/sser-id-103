@@ -1,0 +1,28 @@
+uuid: ba0431a8-b3f4-4244-8a98-24117262bba1
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Clean up ssr lookup'
+id: clean_up_ssr_lookup
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: clean_up_ssr_lookup
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */3 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

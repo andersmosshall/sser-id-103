@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 
 class GradeRoundFormAlter {
 
@@ -78,9 +79,7 @@ class GradeRoundFormAlter {
       '#default_value' => 'generate',
     ];
 
-    $grade_options = simple_school_reports_core_allowed_user_grade();
-    unset($grade_options[-99]);
-    unset($grade_options[99]);
+    $grade_options = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
 
     $default_student_grades = [];
     foreach ($grade_options as $key => $name) {

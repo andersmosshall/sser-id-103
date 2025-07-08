@@ -11,7 +11,7 @@ _core:
 id: ssr_base_content
 theme: ssr_base
 region: content
-weight: -17
+weight: -19
 provider: null
 plugin: system_main_block
 settings:

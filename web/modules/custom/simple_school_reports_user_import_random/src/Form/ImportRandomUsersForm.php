@@ -3,6 +3,7 @@
 namespace Drupal\simple_school_reports_user_import_random\Form;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_user_import_support\Form\ImportUsersFormBase;
 
 class ImportRandomUsersForm extends ImportUsersFormBase {
@@ -14,9 +15,7 @@ class ImportRandomUsersForm extends ImportUsersFormBase {
   }
 
   protected function buildIntiFormStep(array $form, FormStateInterface $form_state): array {
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap();
 
     foreach ($grades as $grade => $grade_name) {
       $form['grade_' . $grade] = [
@@ -97,9 +96,7 @@ class ImportRandomUsersForm extends ImportUsersFormBase {
   }
 
   protected function resolveUsersToImport(FormStateInterface $form_state): void {
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap();
 
     foreach ($grades as $grade => $grade_name) {
       $number_of_students = abs($form_state->getValue('grade_' . $grade, 0));

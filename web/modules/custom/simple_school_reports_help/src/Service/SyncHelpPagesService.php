@@ -33,7 +33,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom elevlistan och hur man arbetar med massåtgärder.',
         'vimeo' => 'https://vimeo.com/683903903',
         'context' => ['view.students.students', 'view.students.contact_info', '/admin/people'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Vikten av att ta bort elever och vårdnadshavare',
@@ -41,7 +41,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man tar bort elever och vårdnadshavare samt varför det är viktigt.',
         'vimeo' => 'https://vimeo.com/689931491',
         'context' => ['view.students.students', 'view.students.contact_info', '/admin/people'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Lägg till/hantera elever och vårdnadshavare',
@@ -49,7 +49,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man lägger till och hanterar elever och vårdnadshavare.',
         'vimeo' => 'https://vimeo.com/683903943',
         'context' => ['view.students.students', 'view.students.contact_info', 'view.caregivers.caregivers', 'user:student', 'user:caregiver'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Massåtgärder för vårdnadshavare',
@@ -57,7 +57,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur massuppdaterar vårdnadshavare.',
         'vimeo' => 'https://vimeo.com/683904017',
         'context' => ['view.students.students', 'view.caregivers.caregivers', 'user:caregiver'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       // Admin
       [
@@ -66,7 +66,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man lägger till och hanterar lärare och andra användare. På slutet av denna film visas hur man i efterhand kan skicka ut inloggningsinstruktioner, t.ex. till nya användare som aldrig loggat in tidigare.',
         'vimeo' => 'https://vimeo.com/683903991',
         'context' => ['/admin/people'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Rollbeskrivningar',
@@ -74,7 +74,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom roller och vad de innebär.',
         'vimeo' => 'https://vimeo.com/683904061',
         'context' => ['/admin/people', 'entity.user.canonical', 'entity.user.edit_form', 'user' ],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Exportera elever eller andra användare',
@@ -82,7 +82,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man kan exportera användare till andra system.',
         'vimeo' => 'https://vimeo.com/964116593',
         'context' => ['view.students.students', 'view.students.contact_info', '/admin/people'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       // Courses
       [
@@ -91,7 +91,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom kurser och kurslistan.',
         'vimeo' => 'https://vimeo.com/687701455',
         'context' => ['node:course', 'node:course_attendance_report', 'view.courses.my_courses', 'view.courses.all_courses'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Närvaro/frånvaro för kurs',
@@ -99,7 +99,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom närvaro/frånvaro för kurser.',
         'vimeo' => 'https://vimeo.com/687701437',
         'context' => ['node:course', 'node:course_attendance_report', 'view.courses.my_courses', 'view.courses.all_courses'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Schema för kurs',
@@ -107,7 +107,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hantering av schema för kurs.',
         'vimeo' => 'https://vimeo.com/1053720955',
         'context' => ['node:course', 'view.courses.my_courses', 'view.courses.all_courses'],
-        'module' => ['simple_school_reports_core', 'simple_school_reports_schema_ssr'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_schema_ssr'],
       ],
       // Day absence
       [
@@ -116,7 +116,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur dagfrånvaro registreras av skolpersonal.',
         'vimeo' => 'https://vimeo.com/687701413',
         'context' => ['view.students.students', 'user:student'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Dagsfrånvaro',
@@ -132,7 +132,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man tar fram statistik för frånvaro veckovis och hur det kan vara ett stöd för skolans EHT-arbete.',
         'vimeo' => 'https://vimeo.com/687701381',
         'context' => ['simple_school_reports_core.weekly_summary', 'user:student', 'simple_school_reports_core.statistics'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       // Make up time
       [
@@ -165,7 +165,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur lösenord eller annan information för användare ändras.',
         'vimeo' => 'https://vimeo.com/688778696',
         'context' => ['entity.user.canonical', 'entity.user.edit_form',],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Statistik för elev',
@@ -173,7 +173,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom vad du kan se för statistik för elever.',
         'vimeo' => 'https://vimeo.com/688778670',
         'context' => ['user:student',],
-        'module' => ['simple_school_reports_core', 'simple_school_reports_grade_stats', 'simple_school_reports_iup', 'simple_school_reports_reviews'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_grade_stats', 'simple_school_reports_iup', 'simple_school_reports_reviews'],
       ],
       // Admin menu
       [
@@ -182,7 +182,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom administration av ämnen.',
         'vimeo' => 'https://vimeo.com/688778643',
         'context' => ['simple_school_reports_core.admin', 'view.school_subjects.school_subjects', ],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
         'title' => 'Administration av meddelanden',
@@ -190,7 +190,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom administration av meddelanden.',
         'vimeo' => 'https://vimeo.com/688778606',
         'context' => ['simple_school_reports_core.admin', 'simple_school_reports_core.config_message_templates', ],
-        'module' => ['simple_school_reports_core', 'simple_school_reports_absence_make_up'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_absence_make_up'],
       ],
       [
         'title' => 'Administration av startsida',
@@ -198,7 +198,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom administration av startsida.',
         'vimeo' => 'https://vimeo.com/688778581',
         'context' => ['simple_school_reports_core.admin', 'simple_school_reports_core.config_start_page_content', ],
-        'module' => ['simple_school_reports_core', 'simple_school_reports_caregiver_login'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_caregiver_login'],
       ],
       [
         'title' => 'Administration av standardfraser för skriftliga omdömen',
@@ -348,7 +348,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man administrerar terminer.',
         'vimeo' => 'https://vimeo.com/682234848',
         'context' => ['/admin/config-simple-school-reports', '/admin/config-simple-school-reports/terms', 'term:term'],
-        'module' => ['simple_school_reports_core'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       // Special diet
       [
@@ -391,7 +391,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom frånvaro hantering i frånvaromatris.',
         'vimeo' => 'https://vimeo.com/873479281',
         'context' => ['/absence', '/absence-matrix', '/absence/history',],
-        'module' => ['simple_school_reports_core', 'simple_school_reports_absence_matrix'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_absence_matrix'],
       ],
       // Utvecklingssamtal.
       [
@@ -579,7 +579,12 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
           $enabled_modules++;
         }
 
-        if ($module === 'simple_school_reports_core' || $enabled) {
+        $core_modules = [
+          'simple_school_reports_core',
+          'simple_school_reports_core_gr',
+          'simple_school_reports_core_gy',
+        ];
+        if (in_array($module, $core_modules) || $enabled) {
           $body_suffix = '';
           continue;
         }

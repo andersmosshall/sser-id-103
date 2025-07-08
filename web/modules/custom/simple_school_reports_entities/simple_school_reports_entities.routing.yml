@@ -45,3 +45,11 @@ entity.ssr_lookup.settings:
     _title: 'SSR Lookup'
   requirements:
     _permission: 'administer ssr_lookup'
+
+entity.ssr_organization.settings:
+  path: 'admin/structure/ssr-organization'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SSROrganizationSettingsForm'
+    _title: 'SSR Organization'
+  requirements:
+    _permission: 'administer ssr_organization'

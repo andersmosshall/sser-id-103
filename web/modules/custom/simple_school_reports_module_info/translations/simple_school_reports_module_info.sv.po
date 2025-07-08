@@ -72,6 +72,12 @@ msgstr "Login för vårdnadshavare"
 msgid "Simple school report core"
 msgstr "Simple school report kärna"
 
+msgid "Simple school report core for elementary school"
+msgstr "Simple school report kärna för grundskolan"
+
+msgid "Simple school report core for upper secondary school"
+msgstr "Simple school report kärna för gymnasieskolan"
+
 msgid "Review grade registration"
 msgstr "Betygsregistrering - omdömen"
 

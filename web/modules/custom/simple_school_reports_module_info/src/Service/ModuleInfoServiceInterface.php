@@ -9,6 +9,7 @@ interface ModuleInfoServiceInterface {
 
   const CORE_PRICE = 8700;
   const CORE_ANNUAL_FEE = 3300;
+  const CORE_BIG_ANNUAL_FEE = 3900;
   const MODULE_PRICE = 4900;
   const MODULE_ANNUAL_FEE = 500;
   const MINI_MODULE_ANNUAL_FEE = 250;

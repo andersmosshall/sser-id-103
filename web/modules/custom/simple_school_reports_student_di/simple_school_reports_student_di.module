@@ -214,7 +214,7 @@ function simple_school_reports_student_di_views_query_alter(\Drupal\views\ViewEx
     if (in_array('caregiver', $current_user->getRoles())) {
       /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
       $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-      $attending = $user_meta_data->getCaregiverStudents($current_user->id());
+      $attending = $user_meta_data->getCaregiverStudents($current_user->id(), TRUE);
       $attending[] = $current_user->id();
 
       foreach ($query->where as &$condition_group) {
@@ -281,9 +281,12 @@ function simple_school_reports_student_di_ssr_meeting_presave(\Drupal\Core\Entit
       }
     }
 
+    /** @var \Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface $user_meta_data */
+    $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
+
     $allowed_values = array_merge($teachers, $students);
     foreach ($entity->get('field_student')->referencedEntities() as $student) {
-      foreach ($student->get('field_caregivers')->referencedEntities() as $caregiver) {
+      foreach ($user_meta_data->getCaregivers($student, TRUE) as $caregiver) {
         $allowed_values[] = $caregiver->id();
       }
     }

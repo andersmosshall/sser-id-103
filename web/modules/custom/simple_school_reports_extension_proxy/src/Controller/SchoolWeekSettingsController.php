@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 
 /**
@@ -18,9 +19,7 @@ class SchoolWeekSettingsController extends ControllerBase {
 
     $state = $this->state()->get('ssr_school_week_per_grade', []);
 
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap();
 
     $build['info_1'] = [
       '#type' => 'html_tag',

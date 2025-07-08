@@ -8,6 +8,7 @@
 namespace Drupal\simple_school_reports_core\Plugin\views\field;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -125,8 +126,8 @@ class AttendanceReportStudent extends FieldPluginBase {
         $valid_absence_time = $stats['valid_absence'] + $stats['leave_absence'] + $stats['reported_absence'];
         $title = '';
         if (!$is_current_grade) {
-          $grade_display = simple_school_reports_core_allowed_user_grade()[$user_grade_from] ?? '?';
-          $title = $this->t('Grade @grade', ['@grade' => $grade_display]) . ': ';
+          $title = SchoolGradeHelper::getSchoolGradesLongName(NULL, TRUE, TRUE)[$user_grade_from] ?? $this->t('Grade @grade', ['@grade' => '?']);
+          $title .= ': ';
         }
 
         $title .= $this->t('Attending: @attended %, Valid absence: @valid_absence %, Invalid absence: @invalid_absence %', [

@@ -12,7 +12,7 @@ dependencies:
 id: views_block__iup_student_tab_list
 theme: ssr_base
 region: content
-weight: -6
+weight: -8
 provider: null
 plugin: 'views_block:iup_student_tab-list'
 settings:

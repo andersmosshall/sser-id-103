@@ -10,7 +10,7 @@ dependencies:
 id: ssr_base_studentschemablock
 theme: ssr_base
 region: content
-weight: 0
+weight: 2
 provider: null
 plugin: student_schema_block
 settings:

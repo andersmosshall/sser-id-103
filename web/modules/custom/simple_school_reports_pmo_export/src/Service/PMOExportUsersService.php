@@ -5,6 +5,7 @@ namespace Drupal\simple_school_reports_pmo_export\Service;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\ExportUsersServiceBase;
 use Drupal\user\UserInterface;
 
@@ -147,9 +148,7 @@ class PMOExportUsersService extends ExportUsersServiceBase {
 
     $ssn_map = [];
 
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
 
     /** @var \Drupal\user\UserInterface $student */
     foreach ($users as $student) {
@@ -180,7 +179,7 @@ class PMOExportUsersService extends ExportUsersServiceBase {
       $ssn_map[$ssn][] = $student->getDisplayName();
 
       if ($options['include_caregivers']) {
-        $caregiver_users = $student->get('field_caregivers')->referencedEntities();
+        $caregiver_users = $this->userMetaDataService->getCaregivers($student);
         $caregivers_missing_ssn = [];
         $behavior = $options['ssn_caregivers_behavior'];
         foreach ($caregiver_users as $caregiver_user) {
@@ -291,9 +290,7 @@ class PMOExportUsersService extends ExportUsersServiceBase {
     $ssn = substr($ssn, 2);
 
     $grade_value = $user->get('field_grade')->value;
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap(['FKLASS', 'GR']);
 
     $grade = $grades[$grade_value] ?? 'Okänd';
     if ($grade_value > 0) {
@@ -316,7 +313,7 @@ class PMOExportUsersService extends ExportUsersServiceBase {
     ];
 
     if ($options['include_caregivers']) {
-      $caregiver_users = $user->get('field_caregivers')->referencedEntities();
+      $caregiver_users = $this->userMetaDataService->getCaregivers($user);
 
       // Limit to max 5 caregives.
       $caregiver_users = array_slice($caregiver_users, 0, 5);

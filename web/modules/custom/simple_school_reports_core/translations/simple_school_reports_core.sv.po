@@ -476,6 +476,9 @@ msgstr "Meddela vårdnadshavare om ogiltig frånvaro"
 msgid "@student misses caregiver(s) with email address set."
 msgstr "@student saknar vårdnadshavare med e-postadress."
 
+msgid "@student does not have a valid email address set."
+msgstr "@student har inte en giltig e-postadress."
+
 msgid "Mail will only be sent for students for which invalid absence has been changed."
 msgstr "Meddelande skickas endast för elever vars ogiltiga frånvaro har ändrats."
 
@@ -3352,68 +3355,65 @@ msgstr "Schema"
 msgid "Deviations from schema may occur."
 msgstr "Avvikelser från schema kan förekomma."
 
-msgid ""
-msgstr ""
+msgid "If %identifier is a valid account, an email will be sent with instructions to reset your password."
+msgstr "Om %identifier är ett giltigt konto kommer ett e-postmeddelande att skickas med instruktioner för att återställa ditt lösenord."
 
-msgid ""
-msgstr ""
+msgid "No access to execute %action on the @entity_type_label %entity_label."
+msgstr "Ingen behörighet att utföra \"%action\" för %entity_label."
 
-msgid ""
-msgstr ""
+msgid "User"
+msgstr "Användare"
 
-msgid ""
-msgstr ""
+msgid "Allow caregivers to continue accessing student information"
+msgstr "Tillåt vårdnadshavare att få fortsatt åtkomst till elevinformation"
 
-msgid ""
-msgstr ""
+msgid "Send message about invalid absence"
+msgstr "Skicka meddelande om ogiltig frånvaro"
 
-msgid ""
-msgstr ""
+msgid "@student is an adult and has not complied to share information with caregivers."
+msgstr "@student är vuxen och har inte samtyckt till att dela information med vårdnadshavare."
 
-msgid ""
-msgstr ""
+msgid "Consent for caregivers to @student may not be relevant or valid since @student is an adult."
+msgstr "Samtycke för vårdnadshavare till @student kanske inte är lämpligt eller giltigt eftersom @student är vuxen."
 
-msgid ""
-msgstr ""
+msgid "To export only affected users, please use the following link:"
+msgstr "För att exportera endast berörda användare, vänligen använd följande länk:"
 
-msgid ""
-msgstr ""
+msgid "Data has changed in @school_name affecting @count users, a new skolon export is needed."
+msgstr "Data har ändrats i @school_name som påverkar @count användare, en ny skolon-export behövs."
 
-msgid ""
-msgstr ""
+msgid "Skolon export for @school_name"
+msgstr "Skolon-export för @school_name"
 
-msgid ""
-msgstr ""
+msgid "Skipping @name due to missing personal number."
+msgstr "Hoppar över @name på grund av saknat personnummer."
 
-msgid ""
-msgstr ""
+msgid "This export will generate file with the selected users to be bulk imported to Skolon. NOTE: Only users with roles @roles will be included. Any other users will be ignored."
+msgstr "Denna export kommer att generera en fil med de valda användarna för att massimporteras till Skolon. OBSERVERA: Endast användare med rollerna @roles kommer att inkluderas. Alla andra användare kommer att ignoreras."
 
-msgid ""
-msgstr ""
+msgid "Automatically include mentors"
+msgstr "Automatiskt inkludera mentorer"
 
-msgid ""
-msgstr ""
+msgid "If any of the exported user are students and have mentors, those mentors will be included in the export."
+msgstr "Om någon av de exporterade användarna är elever och har mentorer, kommer dessa mentorer att inkluderas i exporten."
 
-msgid ""
-msgstr ""
+msgid "Behavior if user is missing personal number"
+msgstr "Beteende om användare saknar personnummer"
 
-msgid ""
-msgstr ""
+msgid "Ignore user with warning"
+msgstr "Ignore användare med ett varningsmeddelande"
 
-msgid ""
-msgstr ""
+msgid "User @name is not a active"
+msgstr "Användare @name är inte aktiv"
 
-msgid ""
-msgstr ""
+msgid "User @name does not have any supported roles @roles"
+msgstr "Användare @name har inte några stödjda roller @roles"
 
-msgid ""
-msgstr ""
+msgid "User @name is missing a valid personal number"
+msgstr "Användare @name saknar ett giltigt personnummer"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "Skipping @name due to missing personal number."
+msgstr "Hoppar över @name på grund av saknat personnummer."
 
 msgid ""
 msgstr ""

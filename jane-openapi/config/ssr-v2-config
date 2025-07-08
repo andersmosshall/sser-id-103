@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'openapi-file' => __DIR__ . '/../../web/modules/custom/simple_school_reports_api_support/files/ssr_api_definition_v2.yaml',
+    'namespace' => 'Drupal\simple_school_reports_api_support\client\ssr_v2',
+    'directory' => __DIR__  . '/../../web/modules/custom/simple_school_reports_api_support/src/client/ssr_v2',
+    'date-format' => 'Y-m-d\TH:i:sP',
+    'strict' => TRUE,
+];

@@ -42,6 +42,7 @@ module:
   link: 0
   locale: 0
   mail_login: 0
+  mailer_transport: 0
   masquerade: 0
   menu_link_content: 0
   menu_ui: 0
@@ -55,6 +56,9 @@ module:
   path_alias: 0
   phpass: 0
   real_aes: 0
+  rest: 0
+  restui: 0
+  serialization: 0
   simple_school_reports_class_support: 0
   simple_school_reports_core: 0
   simple_school_reports_dnp_support: 0

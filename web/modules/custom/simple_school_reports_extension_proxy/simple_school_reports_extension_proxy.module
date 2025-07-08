@@ -882,10 +882,14 @@ function clean_up_custom_entities() {
     $entities = $student_leave_application_storage->loadMultiple($ids);
     $student_leave_application_storage->delete($entities);
   }
+}
+
+function clean_up_ssr_lookup() {
+  $now = new \DateTime();
+  $lookup_storage = \Drupal::entityTypeManager()->getStorage('ssr_lookup');
+  $connection = \Drupal::service('database');
 
   // Clean up old expired lookups.
-  $lookup_storage = \Drupal::entityTypeManager()->getStorage('ssr_lookup');
-
   $ids_to_remove = $lookup_storage
     ->getQuery()
     ->accessCheck(FALSE)
@@ -898,6 +902,25 @@ function clean_up_custom_entities() {
     $lookup_storage->delete($lookups);
   }
 
+  // Clean up invalidated lookups due to removed user entities.
+  $subquery = $connection->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->where('[u].[uid] = [lu].[dependency_entity_target_id]');
+  $results = $connection->select('ssr_lookup', 'lu')
+    ->notExists($subquery)
+    ->condition('dependency_entity_type', 'user')
+    ->fields('lu', ['id'])
+    ->range(0, 50)
+    ->execute();
+  $ids_to_remove = [];
+  foreach ($results as $result) {
+    $ids_to_remove[$result->id] = $result->id;
+  }
+  if (!empty($ids_to_remove)) {
+    $ids_to_remove = array_values($ids_to_remove);
+    $lookups = $lookup_storage->loadMultiple($ids_to_remove);
+    $lookup_storage->delete($lookups);
+  }
 }
 
 function ssr_meeting_reminder_meeting() {
@@ -1130,7 +1153,7 @@ function ssr_views_access_to_caregivers_my_meetings_block() {
 
   if (in_array('caregiver', $account->getRoles())) {
     $user_meta_data = \Drupal::service('simple_school_reports_core.user_meta_data');
-    $attending = $user_meta_data->getCaregiverStudents($account->id());
+    $attending = $user_meta_data->getCaregiverStudents($account->id(), TRUE);
     $attending[] = $account->id();
 
     $meeting_exists = \Drupal::entityTypeManager()->getStorage('ssr_meeting')
@@ -1350,9 +1373,7 @@ function simple_school_reports_extension_proxy_iup_prefill_options() {
   ];
 
   if (\Drupal::moduleHandler()->moduleExists('simple_school_reports_grade_stats')) {
-    $grade_options = simple_school_reports_core_allowed_user_grade();
-    unset($grade_options[-99]);
-    unset($grade_options[99]);
+    $grade_options = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMap();
 
     foreach ($grade_options as $grade => $label) {
       if ($grade >= 6 && $grade <= 9) {
@@ -1411,5 +1432,15 @@ function simple_school_reports_extension_proxy_views_query_alter(\Drupal\views\V
         }
       }
     }
+  }
+}
+
+function modules_setup_queue() {
+  // Call modules setup queue functions.
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+
+  if ($module_handler->moduleExists('simple_school_reports_skolon_export')) {
+    call_user_func('simple_school_reports_skolon_export_setup_queue');
   }
 }
