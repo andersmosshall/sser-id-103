@@ -3376,14 +3376,14 @@ msgstr "@student är vuxen och har inte samtyckt till att dela information med v
 msgid "Consent for caregivers to @student may not be relevant or valid since @student is an adult."
 msgstr "Samtycke för vårdnadshavare till @student kanske inte är lämpligt eller giltigt eftersom @student är vuxen."
 
-msgid ""
-msgstr ""
+msgid "To export only affected users, please use the following link:"
+msgstr "För att exportera endast berörda användare, vänligen använd följande länk:"
 
-msgid ""
-msgstr ""
+msgid "Data has changed in @school_name affecting @count users, a new skolon export is needed."
+msgstr "Data har ändrats i @school_name som påverkar @count användare, en ny skolon-export behövs."
 
-msgid ""
-msgstr ""
+msgid "Skolon export for @school_name"
+msgstr "Skolon-export för @school_name"
 
 msgid ""
 msgstr ""
