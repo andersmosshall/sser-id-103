@@ -112,7 +112,7 @@ class CalculateSkolonExportQueue extends QueueWorkerBase implements ContainerFac
         }
 
         /** @var \Drupal\simple_school_reports_entities\SSRLookupInterface $lookup_item */
-        $lookup_item->set('expires', strtotime('+100 years'));
+        $lookup_item->set('expires', strtotime('+5 years'));
         $lookup_item->set('dependency_entity_type', 'user');
         $lookup_item->set('dependency_entity_target_id', $uid);
 
