@@ -3385,38 +3385,35 @@ msgstr "Data har ändrats i @school_name som påverkar @count användare, en ny 
 msgid "Skolon export for @school_name"
 msgstr "Skolon-export för @school_name"
 
-msgid ""
-msgstr ""
+msgid "Skipping @name due to missing personal number."
+msgstr "Hoppar över @name på grund av saknat personnummer."
 
-msgid ""
-msgstr ""
+msgid "This export will generate file with the selected users to be bulk imported to Skolon. NOTE: Only users with roles @roles will be included. Any other users will be ignored."
+msgstr "Denna export kommer att generera en fil med de valda användarna för att massimporteras till Skolon. OBSERVERA: Endast användare med rollerna @roles kommer att inkluderas. Alla andra användare kommer att ignoreras."
 
-msgid ""
-msgstr ""
+msgid "Automatically include mentors"
+msgstr "Automatiskt inkludera mentorer"
 
-msgid ""
-msgstr ""
+msgid "If any of the exported user are students and have mentors, those mentors will be included in the export."
+msgstr "Om någon av de exporterade användarna är elever och har mentorer, kommer dessa mentorer att inkluderas i exporten."
 
-msgid ""
-msgstr ""
+msgid "Behavior if user is missing personal number"
+msgstr "Beteende om användare saknar personnummer"
 
-msgid ""
-msgstr ""
+msgid "Ignore user with warning"
+msgstr "Ignore användare med ett varningsmeddelande"
 
-msgid ""
-msgstr ""
+msgid "User @name is not a active"
+msgstr "Användare @name är inte aktiv"
 
-msgid ""
-msgstr ""
+msgid "User @name does not have any supported roles @roles"
+msgstr "Användare @name har inte några stödjda roller @roles"
 
-msgid ""
-msgstr ""
+msgid "User @name is missing a valid personal number"
+msgstr "Användare @name saknar ett giltigt personnummer"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "Skipping @name due to missing personal number."
+msgstr "Hoppar över @name på grund av saknat personnummer."
 
 msgid ""
 msgstr ""
