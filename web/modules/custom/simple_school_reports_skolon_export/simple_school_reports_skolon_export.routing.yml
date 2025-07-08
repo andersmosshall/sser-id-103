@@ -1,0 +1,11 @@
+simple_school_reports_skolon_export.export_multiple_users:
+  path: '/export-multiple-users/skolon/{ssr_lookup}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_skolon_export\Form\ExportUsersFromListForm'
+    _title: 'Export users'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    parameters:
+      ssr_lookup:
+        type: 'entity:ssr_lookup'

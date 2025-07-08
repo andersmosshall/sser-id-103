@@ -12,6 +12,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_attendance_analyse\Service\AttendanceAnalyseServiceInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
@@ -386,7 +387,7 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
     ];
 
     if ($not_current_grade) {
-      $grade_display = simple_school_reports_core_allowed_user_grade()[$user_grade_from] ?? '?';
+      $grade_display = SchoolGradeHelper::getSchoolGradesMapAll()[$user_grade_from] ?? '?';
       $build['stat_wrapper']['not_current_grade_info'] = [
         '#type' => 'html_tag',
         '#tag' => 'em',

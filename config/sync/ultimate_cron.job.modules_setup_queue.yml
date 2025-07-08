@@ -1,0 +1,28 @@
+uuid: eafce2fb-341f-4489-90d9-ade039f0811e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_extension_proxy
+title: 'Modules setup queue'
+id: modules_setup_queue
+weight: 0
+module: simple_school_reports_extension_proxy
+callback: modules_setup_queue
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '*/15+@ * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: cache
+  configuration:
+    bin: ultimate_cron_logger
+    timeout: -1

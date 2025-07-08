@@ -476,6 +476,9 @@ msgstr "Meddela vårdnadshavare om ogiltig frånvaro"
 msgid "@student misses caregiver(s) with email address set."
 msgstr "@student saknar vårdnadshavare med e-postadress."
 
+msgid "@student does not have a valid email address set."
+msgstr "@student har inte en giltig e-postadress."
+
 msgid "Mail will only be sent for students for which invalid absence has been changed."
 msgstr "Meddelande skickas endast för elever vars ogiltiga frånvaro har ändrats."
 
@@ -3352,26 +3355,26 @@ msgstr "Schema"
 msgid "Deviations from schema may occur."
 msgstr "Avvikelser från schema kan förekomma."
 
-msgid ""
-msgstr ""
+msgid "If %identifier is a valid account, an email will be sent with instructions to reset your password."
+msgstr "Om %identifier är ett giltigt konto kommer ett e-postmeddelande att skickas med instruktioner för att återställa ditt lösenord."
 
-msgid ""
-msgstr ""
+msgid "No access to execute %action on the @entity_type_label %entity_label."
+msgstr "Ingen behörighet att utföra \"%action\" för %entity_label."
 
-msgid ""
-msgstr ""
+msgid "User"
+msgstr "Användare"
 
-msgid ""
-msgstr ""
+msgid "Allow caregivers to continue accessing student information"
+msgstr "Tillåt vårdnadshavare att få fortsatt åtkomst till elevinformation"
 
-msgid ""
-msgstr ""
+msgid "Send message about invalid absence"
+msgstr "Skicka meddelande om ogiltig frånvaro"
 
-msgid ""
-msgstr ""
+msgid "@student is an adult and has not complied to share information with caregivers."
+msgstr "@student är vuxen och har inte samtyckt till att dela information med vårdnadshavare."
 
-msgid ""
-msgstr ""
+msgid "Consent for caregivers to @student may not be relevant or valid since @student is an adult."
+msgstr "Samtycke för vårdnadshavare till @student kanske inte är lämpligt eller giltigt eftersom @student är vuxen."
 
 msgid ""
 msgstr ""

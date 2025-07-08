@@ -10,7 +10,7 @@ dependencies:
 id: startpageproxyblock
 theme: ssr_base
 region: content
-weight: -16
+weight: -18
 provider: null
 plugin: start_page_proxy_block
 settings:

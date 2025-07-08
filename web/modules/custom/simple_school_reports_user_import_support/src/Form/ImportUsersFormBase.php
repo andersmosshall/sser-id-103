@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\Pnum;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -207,17 +208,17 @@ abstract class ImportUsersFormBase extends FormBase {
       return in_array($role, ['student', 'teacher', 'caregiver', 'administrator', 'principle']);
     });
 
-    $grades = simple_school_reports_core_allowed_user_grade();
+    $grades = SchoolGradeHelper::getSchoolGradesMapAll();
     $grade = isset($grades[$grade]) ? $grade : NULL;
 
-    $import_priority = 1000000;
+    $import_priority = 1000000000;
     if (in_array('caregiver', $roles)) {
-      $import_priority = 100000;
+      $import_priority = 100000000;
     }
     if (in_array('student', $roles)) {
-      $import_priority = 10000;
+      $import_priority = 10000000;
       if ($grade) {
-        $import_priority = 10000 - $grade;
+        $import_priority = 10000000 - $grade;
       }
     }
 

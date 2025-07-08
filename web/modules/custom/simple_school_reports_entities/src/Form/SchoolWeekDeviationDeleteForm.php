@@ -6,6 +6,7 @@ namespace Drupal\simple_school_reports_entities\Form;
 
 use Drupal\Core\Entity\ContentEntityDeleteForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 
 /**
  * Form controller for the school week deviation entity edit forms.
@@ -22,7 +23,7 @@ final class SchoolWeekDeviationDeleteForm extends ContentEntityDeleteForm {
     if (count($grades) > 1) {
       sort($grades);
       $grade_labels = [];
-      $grade_labels_map = simple_school_reports_core_allowed_user_grade();
+      $grade_labels_map = SchoolGradeHelper::getSchoolGradesMapAll();
       foreach ($grades as $grade) {
         $grade_labels[] = $grade_labels_map[$grade] ?? $grade;
       }

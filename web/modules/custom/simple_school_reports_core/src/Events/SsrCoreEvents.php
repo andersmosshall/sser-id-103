@@ -12,4 +12,6 @@ final class SsrCoreEvents {
    */
   public const EXPORT_USERS_METHODS = 'ssr_export_users_methods';
 
+  public const SSR_POST_DEPLOY = 'ssr_post_deploy';
+
 }

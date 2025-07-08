@@ -1,0 +1,16 @@
+{
+    "name": "ssr/jane-openapi",
+    "description": "REST object generator for SSR.",
+    "type": "project",
+    "require-dev": {
+        "jane-php/open-api-3": "^7.9"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "require": {
+        "jane-php/open-api-runtime": "^7.9"
+    }
+}

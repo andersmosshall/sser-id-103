@@ -36,12 +36,23 @@ class CourseService implements CourseServiceInterface {
       ->accessCheck(FALSE)
       ->condition('roles', 'student')
       ->condition('status', 1)
-      ->condition('field_grade', 99, '<>')
       ->sort('field_grade')
       ->sort('field_first_name')
       ->sort('field_last_name')
       ->execute();
     $ordered_student_uids = array_values($ordered_student_uids);
+
+    $uids_to_skip = $this->entityTypeManager->getStorage('user')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('roles', 'student')
+      ->condition('field_grade', 99, '=')
+      // Future prep for new student has quit grade. // reference unset($grades[-99]);
+      ->condition('field_grade', 999999, '=')
+      ->execute();
+    $uids_to_skip = array_values($uids_to_skip);
+
+    $ordered_student_uids = array_diff($ordered_student_uids, $uids_to_skip);
 
     $active_course_ids = $this->entityTypeManager->getStorage('node')
       ->getQuery()
@@ -131,6 +142,44 @@ class CourseService implements CourseServiceInterface {
     return $map;
   }
 
+  protected function getTeacherCourseMap(): array {
+    $cid = 'teachers_ids_course_map';
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
+    $map = [];
+
+    $active_course_ids = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'course')
+      ->condition('status', 1)
+      ->execute();
+
+    $course_query = $this->connection->select('node__field_teacher', 'ct');
+    $course_query->condition('ct.deleted', 0);
+    $course_query->condition('ct.bundle', 'course');
+    $course_query->condition('ct.entity_id', $active_course_ids, 'IN');
+    $course_query->fields('ct', ['entity_id', 'field_teacher_target_id']);
+    $course_query->orderBy('ct.entity_id');
+    $results = $course_query->execute();
+
+    foreach ($results as $result) {
+      $course_id = $result->entity_id;
+      $teacher_id = $result->field_teacher_target_id;
+
+      if (!isset($map[$teacher_id])) {
+        $map[$teacher_id] = [];
+      }
+      if (!in_array($course_id, $map[$teacher_id])) {
+        $map[$teacher_id][] = $course_id;
+      }
+    }
+    $this->lookup[$cid] = $map;
+    return $map;
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -162,6 +211,11 @@ class CourseService implements CourseServiceInterface {
       }
     }
     return array_unique($course_ids);
+  }
+
+  public function getTeacherActiveCourseIds(int|string $teacher_id): array {
+    $map = $this->getTeacherCourseMap();
+    return $map[$teacher_id] ?? [];
   }
 
   /**

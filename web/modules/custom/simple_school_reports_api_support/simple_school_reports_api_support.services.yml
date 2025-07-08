@@ -1,0 +1,10 @@
+services:
+  access_policy.ssr_api_user:
+    class: Drupal\simple_school_reports_api_support\ApiUserAccessPolicy
+    arguments: ['@module_handler']
+    tags:
+      - { name: access_policy }
+
+  simple_school_reports_api_support.api_objects:
+    class: Drupal\simple_school_reports_api_support\Service\SsrApiObjectsService
+    arguments: [ '@entity_type.manager', '@database', '@cache.default', '@logger.factory' ]

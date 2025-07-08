@@ -12,7 +12,7 @@ dependencies:
 id: ssr_base_views_block__pending_leave_applications_student
 theme: ssr_base
 region: content
-weight: 2
+weight: 4
 provider: null
 plugin: 'views_block:pending_leave_applications-student'
 settings:

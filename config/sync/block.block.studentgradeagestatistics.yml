@@ -10,7 +10,7 @@ dependencies:
 id: studentgradeagestatistics
 theme: ssr_base
 region: content
-weight: -20
+weight: -23
 provider: null
 plugin: grade_age_statistics
 settings:

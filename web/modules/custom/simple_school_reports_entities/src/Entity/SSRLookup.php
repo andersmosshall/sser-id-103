@@ -122,6 +122,20 @@ final class SSRLookup extends ContentEntityBase implements SSRLookupInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['dependency_entity_type'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Dependency entity type'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['dependency_entity_target_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Dependency entity target id'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)

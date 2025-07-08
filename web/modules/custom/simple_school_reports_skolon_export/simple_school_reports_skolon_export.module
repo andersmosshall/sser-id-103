@@ -1,0 +1,126 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\user\UserInterface;
+
+function  simple_school_reports_skolon_export_resolve_queue_trigger(EntityInterface $entity, string $action): void {
+  $type = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+  $types_to_handle = [
+    'node' => ['course'],
+    'user' => ['user'],
+    'ssr_school_class' => ['ssr_school_class'],
+  ];
+  if (!isset($types_to_handle[$type]) || !in_array($bundle, $types_to_handle[$type])) {
+    return;
+  }
+
+  $state = \Drupal::state();
+
+  if ($action === 'delete' && $entity instanceof UserInterface) {
+    $deleted_user_notify_queue  = $state->get('deleted_user_notify_queue', []);
+    $deleted_user_notify_queue[$entity->id()] = $entity->getDisplayName();
+    $state->set('deleted_user_notify_queue',  $deleted_user_notify_queue);
+    return;
+  }
+
+  /** @var \Drupal\Component\Uuid\UuidInterface $uuid */
+  $uuid = \Drupal::service('uuid');
+
+  $active_skolon_queue = $state->get('active_skolon_queue', []);
+  $active_skolon_queue['queue_id'] = $uuid->generate();
+  $active_skolon_queue['uids'] = [];
+  $state->set('active_skolon_queue', $active_skolon_queue);
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function simple_school_reports_skolon_export_entity_insert(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'insert');
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function simple_school_reports_skolon_export_entity_update(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'update');
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function simple_school_reports_skolon_export_entity_delete(EntityInterface $entity) {
+  simple_school_reports_skolon_export_resolve_queue_trigger($entity, 'delete');
+}
+
+function simple_school_reports_skolon_export_setup_queue() {
+  $ssr_bug_report_email = Settings::get('ssr_bug_report_email', NULL);
+  if (empty($ssr_bug_report_email)) {
+    return;
+  }
+
+  // Notify of deleted users.
+  $state = \Drupal::state();
+  $deleted_user_notify_queue = $state->get('deleted_user_notify_queue', []);
+
+  if (!empty($deleted_user_notify_queue)) {
+    $subject = t('Deleted users from @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+    $message = t('The following users have been deleted from @school_name and should be removed from Skolon:', ['@school_name' => Settings::get('ssr_school_name', '-')]);
+
+    $message .= PHP_EOL;
+    $message .= PHP_EOL;
+
+    foreach ($deleted_user_notify_queue as $name) {
+      $message .= '* ' . $name . PHP_EOL;
+    }
+
+    /** @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface $email_service */
+    $email_service = \Drupal::service('simple_school_reports_core.email_service');
+    if ($email_service->sendMail($ssr_bug_report_email, $subject, $message, [
+      'maillog_mail_type' => \Drupal\simple_school_reports_maillog\SsrMaillogInterface::MAILLOG_TYPE_INFRASTRUCTURE,
+      'no_reply_to' => TRUE,
+    ])) {
+      // Clear the queue after notifying.
+      $state->set('deleted_user_notify_queue', []);
+    };
+  }
+
+  // Setup the Skolon export calculation queue.
+  $active_skolon_queue = $state->get('active_skolon_queue', []);
+  if (!empty($active_skolon_queue['queue_id']) && empty($active_skolon_queue['initiated'])) {
+    /** @var \Drupal\simple_school_reports_skolon_export\Service\SkolonExportUsersService $export_service */
+    $export_service = \Drupal::service('simple_school_reports_skolon_export.export_users_skolon');
+
+    $uids = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('status', 1)
+      ->condition('roles', array_keys($export_service->supportedRoles()), 'IN')
+      ->execute();
+
+    if (empty($uids)) {
+      // No users to export, clear the queue.
+      $state->set('active_skolon_queue', []);
+    }
+    else {
+      $queue = \Drupal::service('queue')->get('calculate_skolon_export');
+      $queue->createQueue();
+      foreach ($uids as $uid) {
+        $queue->createItem([
+          'queue_id' => $active_skolon_queue['queue_id'],
+          'uid' => $uid,
+        ]);
+      }
+      $queue->createItem([
+        'queue_id' => $active_skolon_queue['queue_id'],
+        'uid' => NULL,
+        'notify_to' => $ssr_bug_report_email,
+      ]);
+      $active_skolon_queue['initiated'] = TRUE;
+      $state->set('active_skolon_queue', $active_skolon_queue);
+    }
+  }
+}

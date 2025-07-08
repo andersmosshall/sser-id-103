@@ -10,7 +10,7 @@ dependencies:
 id: invalidabsencestudentstatistics
 theme: ssr_base
 region: content
-weight: -12
+weight: -14
 provider: null
 plugin: invalid_absence_student_statistics
 settings:

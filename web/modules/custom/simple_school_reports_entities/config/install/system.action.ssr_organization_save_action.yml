@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: ssr_organization_save_action
+label: 'Save ssr organizations'
+type: ssr_organization
+plugin: entity:save_action:ssr_organization
+configuration: {  }

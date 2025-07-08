@@ -84,8 +84,7 @@ class SSRExportUsersService extends ExportUsersServiceBase {
       $caregivers = [];
       $caregivers_row_data = [];
 
-
-      $caregiver_users = $user->get('field_caregivers')->referencedEntities();
+      $caregiver_users = $this->userMetaDataService->getCaregivers($user);
       /** @var \Drupal\user\UserInterface $caregiver_user */
       foreach ($caregiver_users as $caregiver_user) {
         $caregivers[] = $caregiver_user->uuid();

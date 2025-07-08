@@ -5,6 +5,7 @@ namespace Drupal\simple_school_reports_core\Form;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\EmailService;
+use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,9 +21,12 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
    */
   protected $emailService;
 
+  protected UserMetaDataServiceInterface $userMetaDataService;
+
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->emailService = $container->get('simple_school_reports_core.email_service');
+    $instance->userMetaDataService = $container->get('simple_school_reports_core.user_meta_data');
     return $instance;
   }
 
@@ -78,7 +82,7 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
 
     $caregivers_mail = [];
     $caregivers = [];
-    foreach ($user->get('field_caregivers')->referencedEntities() as $caregiver) {
+    foreach ($this->userMetaDataService->getCaregivers($user, TRUE) as $caregiver) {
       if ($mail = $this->emailService->getUserEmail($caregiver)) {
         $caregivers[] = $caregiver->getDisplayName();
         $caregivers_mail[] = $mail;

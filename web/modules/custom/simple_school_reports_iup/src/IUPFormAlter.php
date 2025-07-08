@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -52,10 +53,7 @@ class IUPFormAlter {
     $cache->addCacheableDependency($iup_round);
     $cache->applyTo($form);
 
-    $grades = simple_school_reports_core_allowed_user_grade();
-    unset($grades[0]);
-    unset($grades[-99]);
-    unset($grades[99]);
+    $grades = SchoolGradeHelper::getSchoolGradesMap(['GR']);
 
     if (!empty($form['field_grade_value'])) {
       $grade_options = [];

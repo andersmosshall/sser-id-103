@@ -83,6 +83,18 @@ class MultipleResetPassword extends ActionBase implements ContainerFactoryPlugin
     );
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    if (is_array($definition)) {
+      $definition['skip_access_denied_message'] = TRUE;
+    }
+    return $definition;
+  }
+
   /**
    * {@inheritdoc}
    */

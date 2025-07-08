@@ -12,7 +12,7 @@ dependencies:
 id: views_block__written_reviews_review_list_student
 theme: ssr_base
 region: content
-weight: -18
+weight: -20
 provider: null
 plugin: 'views_block:written_reviews_review_list-student'
 settings:

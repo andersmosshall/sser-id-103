@@ -10,6 +10,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -146,7 +147,7 @@ class BulkUpdateGradeForm extends ConfirmFormBase {
 
     $form['specific_grade'] = [
       '#type' => 'select',
-      '#options' => simple_school_reports_core_allowed_user_grade(),
+      '#options' => SchoolGradeHelper::getSchoolGradesMapAll(),
     ];
 
     $form['specific_grade']['#states']['visible'][] = [
@@ -205,42 +206,39 @@ class BulkUpdateGradeForm extends ConfirmFormBase {
     /** @var \Drupal\user\UserInterface $user */
     $user = $user_storage->load($uid);
     if ($user) {
-      $grade_to_set = -99;
+      $grade_to_set = SchoolGradeHelper::UNKNOWN_GRADE;
 
-      $grade_options = simple_school_reports_core_allowed_user_grade();
-
-      $grade_from = Settings::get('ssr_grade_from', 0);
-
+      $grade_values = array_keys(SchoolGradeHelper::getSchoolGradesMapAll());
       $user_grade = $user->get('field_grade')->value;
       if ($user_grade === NULL) {
-        $user_grade = -99;
+        $user_grade = SchoolGradeHelper::UNKNOWN_GRADE;
       }
 
+      $current_grade_values_key = array_search($user_grade, $grade_values) ?? 0;
+
       if ($grade === 'push_up') {
-        $grade_to_set = $user_grade + 1;
-        if (!isset($grade_options[$grade_to_set])) {
-          if ($grade_to_set < 0) {
-            $grade_to_set = $grade_from;
-          }
-          else {
-            $grade_to_set = 99;
-          }
+        $new_grade_values_key = $current_grade_values_key + 1;
+        if (isset($grade_values[$new_grade_values_key])) {
+          $grade_to_set = $grade_values[$new_grade_values_key];
+        }
+        else {
+          $grade_to_set = SchoolGradeHelper::QUITED_GRADE;
         }
       }
       elseif ($grade === 'pull_down') {
-        $grade_to_set = $user_grade - 1;
-        if (!isset($grade_options[$grade_to_set])) {
-          if ($grade_to_set < 0) {
-            $grade_to_set = -99;
-          }
-          else {
-            \Drupal::messenger()->addWarning(t('User @name has grade quit and can not be pulled down.', ['@name' => $user->getDisplayName()]));
-            $grade_to_set = 99;
-          }
+        $new_grade_values_key = $current_grade_values_key - 1;
+        if (isset($grade_values[$new_grade_values_key])) {
+          $grade_to_set = $grade_values[$new_grade_values_key];
+        }
+        else {
+          $grade_to_set = SchoolGradeHelper::UNKNOWN_GRADE;
         }
       }
-      elseif (isset($grade_options[$grade])) {
-        $grade_to_set = $grade;
+      else {
+        $new_grade_values_key = array_search($grade, $grade_values);
+        if ($new_grade_values_key !== FALSE) {
+          $grade_to_set = $grade;
+        }
       }
 
       $user->set('field_grade', $grade_to_set);

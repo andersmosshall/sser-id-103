@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.course.field_class
+    - field.field.node.course.field_from
     - field.field.node.course.field_school_subject
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
     - field.field.node.course.field_teacher
+    - field.field.node.course.field_to
     - node.type.course
   module:
     - user
@@ -22,7 +24,27 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 4
+    region: content
+  field_from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
     region: content
   field_school_subject:
     type: entity_reference_label
@@ -38,7 +60,7 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 4
+    weight: 6
     region: content
   field_student:
     type: entity_reference_label
@@ -46,7 +68,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 5
     region: content
   field_teacher:
     type: entity_reference_label
@@ -54,7 +76,27 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 1
+    weight: 3
+    region: content
+  field_to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   langcode: true

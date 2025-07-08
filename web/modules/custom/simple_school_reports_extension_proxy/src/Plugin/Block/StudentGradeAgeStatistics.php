@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -129,7 +130,7 @@ class StudentGradeAgeStatistics extends BlockBase implements ContainerFactoryPlu
         '#value' => $this->t('Students in grade'),
       ];
 
-      $grade_map = simple_school_reports_core_allowed_user_grade();
+      $grade_map = SchoolGradeHelper::getSchoolGradesMapAll();
 
       foreach ($grades as $grade => $value) {
         if (!$value) {
@@ -137,9 +138,6 @@ class StudentGradeAgeStatistics extends BlockBase implements ContainerFactoryPlu
         }
         if (isset($grade_map[$grade])) {
           $label = $grade_map[$grade];
-          if ($grade >= 0 && $grade < 30) {
-            $label =  $this->t('Gr @grade', ['@grade' => $label]);
-          }
         }
         else if ($grade === 'total') {
           $label = $this->t('Sum');
@@ -169,14 +167,14 @@ class StudentGradeAgeStatistics extends BlockBase implements ContainerFactoryPlu
       ];
 
       foreach ($ages as $age => $value) {
-        if (!$value && ($age == -99 || $age == 'total')) {
+        if (!$value && ($age == UserMetaDataServiceInterface::UNKNOWN_AGE || $age == 'total')) {
           continue;
         }
 
         if ($age === 'total') {
           $label = $this->t('Sum');
         }
-        elseif ($age == -99) {
+        elseif ($age == UserMetaDataServiceInterface::UNKNOWN_AGE) {
           $label = $this->t('Unknown age');
         }
         else {

@@ -10,7 +10,7 @@ dependencies:
 id: ssr_base_attendancestatisticsperday
 theme: ssr_base
 region: content
-weight: -13
+weight: -15
 provider: null
 plugin: attendance_statistics_per_day
 settings:

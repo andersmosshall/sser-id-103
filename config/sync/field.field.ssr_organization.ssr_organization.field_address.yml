@@ -1,0 +1,67 @@
+uuid: 9bcd91b1-56ce-4978-a32f-1c883bd5c6d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_organization.field_address
+    - paragraphs.paragraphs_type.address
+  module:
+    - entity_reference_revisions
+    - simple_school_reports_entities
+id: ssr_organization.ssr_organization.field_address
+field_name: field_address
+entity_type: ssr_organization
+bundle: ssr_organization
+label: Address
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      address: address
+    negate: 0
+    target_bundles_drag_drop:
+      address:
+        weight: 14
+        enabled: true
+      budget_row:
+        weight: 15
+        enabled: false
+      budget_row_label:
+        weight: 16
+        enabled: false
+      budget_sum:
+        weight: 17
+        enabled: false
+      consent_target_caregivers:
+        weight: 18
+        enabled: false
+      consent_target_role:
+        weight: 19
+        enabled: false
+      consent_target_student:
+        weight: 20
+        enabled: false
+      extra_adaptation:
+        weight: 21
+        enabled: false
+      grade_registration:
+        weight: 22
+        enabled: false
+      grade_statistics_data_source:
+        weight: 23
+        enabled: false
+      list_template_field:
+        weight: 24
+        enabled: false
+      student_course_attendance:
+        weight: 25
+        enabled: false
+      written_review:
+        weight: 26
+        enabled: false
+field_type: entity_reference_revisions

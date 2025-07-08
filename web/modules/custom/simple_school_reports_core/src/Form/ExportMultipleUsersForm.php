@@ -99,10 +99,10 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?array $accounts = NULL, ?string $method = NULL) {
     // Retrieve the accounts to be canceled from the temp store.
     /** @var \Drupal\user\Entity\User[] $accounts */
-    $accounts = $this->tempStoreFactory
+    $accounts = $accounts ?? $this->tempStoreFactory
       ->get('export_multiple_users')
       ->get($this->currentUser()->id());
     if (empty($accounts)) {
@@ -142,6 +142,14 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
       '#empty_option' => $this->t('Select export method'),
       '#required' => TRUE,
     ];
+
+    if ($method && isset($options[$method])) {
+      unset( $form['method']['#empty_option']);
+      $form['method']['#default_value'] = $method;
+      $form['method']['#options'] = [
+        $method => $options[$method],
+      ];
+    }
 
     $form['export_method'] = ['#tree' => TRUE];
 
@@ -198,14 +206,15 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
     // Do the validation...
     $uids = $this->getUids($form_state);
 
+    $service = $this->getExportService($form_state);
+    $options = $this->getExportOptions($form_state);
+
+    $uids = $service->modifyUidsList($uids, $options);
 
     if (empty($uids)) {
       $form_state->setError($form['accounts'], $this->t('Please select at least one user.'));
       return;
     }
-
-    $service = $this->getExportService($form_state);
-    $options = $this->getExportOptions($form_state);
 
     $errors = $service->getErrors($uids, $options);
 
@@ -232,6 +241,8 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
     $uids = $this->getUids($form_state);
     $service = $this->getExportService($form_state);
     $options = $this->getExportOptions($form_state);
+
+    $uids = $service->modifyUidsList($uids, $options);
 
     // Initialize batch (to set title).
     $batch = [

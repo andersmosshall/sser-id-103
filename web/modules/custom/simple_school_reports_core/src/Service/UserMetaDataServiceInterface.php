@@ -3,11 +3,14 @@
 namespace Drupal\simple_school_reports_core\Service;
 
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Provides an interface defining UserMetaDataService.
  */
 interface UserMetaDataServiceInterface {
+
+  public const UNKNOWN_AGE = -99;
 
   /**
    * @param string $uid
@@ -21,14 +24,30 @@ interface UserMetaDataServiceInterface {
    *
    * @return array
    */
-  public function getCaregiverStudentsData(string $uid): array;
+  public function getCaregiverStudentsData(string $uid, bool $check_caregiver_access = FALSE): array;
 
   /**
    * @param string $uid
    *
    * @return array
    */
-  public function getCaregiverStudents(string $uid): array;
+  public function getCaregiverStudents(string $uid, bool $check_caregiver_access = FALSE): array;
+
+  /**
+   * @param \Drupal\user\UserInterface $child
+   * @param bool $only_caregivers_with_access
+   *
+   * @return string[]
+   */
+  public function getCaregiverUids(UserInterface $child, bool $only_caregivers_with_access = FALSE): array;
+
+  /**
+   * @param $child_uid
+   * @param bool $only_caregivers_with_access
+   *
+   * @return \Drupal\user\UserInterface[]
+   */
+  public function getCaregivers(UserInterface $child, bool $only_caregivers_with_access = FALSE): array;
 
   /**
    * @param string $uid
@@ -80,10 +99,23 @@ interface UserMetaDataServiceInterface {
 
   /**
    * @param string $uid
+   *
+   * @return array
+   */
+  public function getUserSchoolGradeAndType(string $uid): array;
+
+  /**
+   * @param string $uid
    * @param \DateTime|null $date
    *
    * @return int
    */
   public function getUserRelativeGrade(?\DateTime $date = NULL): int;
+
+  public function isAdult(string $uid): bool;
+
+  public function getAdultUids(): array;
+
+  public function caregiversHasAccess(string $uid): bool;
 
 }

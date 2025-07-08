@@ -85,3 +85,14 @@ entity.ssr_lookup.delete_form:
   group: ssr_lookup
   title: 'Delete'
   weight: 10
+
+entity.ssr_organization.edit_form:
+  route_name: entity.ssr_organization.edit_form
+  group: ssr_organization
+  title: 'Edit'
+
+entity.ssr_organization.delete_form:
+  route_name: entity.ssr_organization.delete_form
+  group: ssr_organization
+  title: 'Delete'
+  weight: 10

@@ -21,51 +21,19 @@ abstract class ExportUsersServiceBase implements ExportUsersServiceInterface, Ev
 
   use StringTranslationTrait;
 
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-
-  protected AccountInterface $currentUser;
-
-  protected Pnum $pnumService;
-
-  protected EmailServiceInterface $emailService;
-
-  protected MessengerInterface $messenger;
-
-  protected TermServiceInterface $termService;
-
   protected array $lookup;
 
-
   public function __construct(
-    Connection $connection,
-    EntityTypeManagerInterface $entity_type_manager,
-    AccountInterface $current_user,
-    Pnum $pnum_service,
-    EmailService $email_service,
-    MessengerInterface $messenger,
-    TermServiceInterface $term_service,
-  ) {
-    $this->connection = $connection;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
-    $this->pnumService = $pnum_service;
-    $this->emailService = $email_service;
-    $this->messenger = $messenger;
-    $this->termService = $term_service;
-  }
+    protected Connection $connection,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected AccountInterface $currentUser,
+    protected Pnum $pnumService,
+    protected EmailServiceInterface $emailService,
+    protected MessengerInterface $messenger,
+    protected TermServiceInterface $termService,
+    protected UserMetaDataService $userMetaDataService,
+    protected CourseServiceInterface $courseService,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -105,6 +73,14 @@ abstract class ExportUsersServiceBase implements ExportUsersServiceInterface, Ev
    */
   public function getOptionsForm(): array {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function modifyUidsList(array $uids, array $options): array {
+    // This method can be overridden to modify the list of user IDs before export.
+    return $uids;
   }
 
   /**

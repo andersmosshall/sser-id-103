@@ -120,3 +120,49 @@ function simple_school_reports_core_update_10002() {
 
   \Drupal::state()->set('ssr_file_templates', $fids);
 }
+
+/**
+ * Update unknown grade values.
+ */
+function simple_school_reports_core_update_10003() {
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $uids = $user_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('field_grade', -99)
+    ->execute();
+
+  if (!empty($uids)) {
+    foreach ($uids as $uid) {
+      /** @var \Drupal\user\UserInterface $user */
+      $user = $user_storage->load($uid);
+      if ($user) {
+        $user->set('field_grade', -9999999);
+        $user->save();
+      }
+    }
+  }
+}
+
+/**
+ * Update quited grade values.
+ */
+function simple_school_reports_core_update_10004() {
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $uids = $user_storage
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('field_grade', 99)
+    ->execute();
+
+  if (!empty($uids)) {
+    foreach ($uids as $uid) {
+      /** @var \Drupal\user\UserInterface $user */
+      $user = $user_storage->load($uid);
+      if ($user) {
+        $user->set('field_grade', 9999999);
+        $user->save();
+      }
+    }
+  }
+}

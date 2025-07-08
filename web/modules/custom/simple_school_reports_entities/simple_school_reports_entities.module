@@ -5,14 +5,9 @@
  * Provides a signing entity type.
  */
 
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Render\Element;
-use Drupal\simple_school_reports_entities\Entity\SsrSigning;
 use Drupal\simple_school_reports_entities\SsrConsentAnswerInterface;
-use Drupal\user\UserInterface;
 use Drupal\simple_school_reports_entities\SsrSigningInterface;
-use Drupal\simple_school_reports_entities\Entity\SsrMeeting;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -44,6 +39,9 @@ function simple_school_reports_entities_theme() {
     'ssr_lookup' => [
       'render element' => 'elements',
     ],
+    'ssr_organization' => [
+      'render element' => 'elements',
+    ],
   ];
 }
 
@@ -72,9 +70,7 @@ function simple_school_reports_entities_signing_types() {
 }
 
 function simple_school_reports_entities_school_week_deviation_grades() {
-  $grades = simple_school_reports_core_allowed_user_grade();
-  unset($grades[-99]);
-  unset($grades[99]);
+  $grades = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesMap();
 
   // @todo check if grade has a school week setting, suffix name if not.
 
@@ -126,6 +122,20 @@ function simple_school_reports_entities_lookup_types() {
     'default' => t('Not specified'),
     'ssr_version' => t('SSR Version'),
   ];
+}
+
+
+function simple_school_reports_entities_organization_types() {
+  return [
+    'school_organiser' => t('School organizer'),
+    'school' => t('School'),
+    'school_unit' => t('School unit'),
+    'other' => t('Other'),
+  ];
+}
+
+function simple_school_reports_entities_school_types() {
+  return \Drupal\simple_school_reports_core\SchoolTypeHelper::getSupportedSchoolTypes();
 }
 
 /**
@@ -269,3 +279,20 @@ function simple_school_reports_entities_views_data_alter(array &$data) {
   }
 }
 
+/**
+ * Prepares variables for ssr organization templates.
+ *
+ * Default template: ssr-organization.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the ssr organization information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_organization(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}

@@ -335,8 +335,10 @@ function simple_school_reports_reviews_node_presave(\Drupal\Core\Entity\EntityIn
     $options_map = $school_subject_service->getSchoolSubjectOptionList(TRUE);
 
     $label = 'Årskurs';
-    if ($grade = $entity->get('field_grade')->value) {
-      $label .= ' ' . $grade;
+    $grades = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesLongName();
+    $grade = $entity->get('field_grade')->value;
+    if (isset($grades[$grade])) {
+      $label = $grades[$grade];
     }
     if ($class = $entity->get('field_class')->entity) {
       $label .= ' (' . $class->label() . ')';

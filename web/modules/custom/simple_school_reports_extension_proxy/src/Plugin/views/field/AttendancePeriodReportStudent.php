@@ -9,6 +9,7 @@ namespace Drupal\simple_school_reports_extension_proxy\Plugin\views\field;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -191,8 +192,7 @@ class AttendancePeriodReportStudent extends FieldPluginBase {
 
         $title = '';
         if (!$is_current_grade) {
-          $grade_display = simple_school_reports_core_allowed_user_grade()[$user_grade_from] ?? '?';
-          $title = $this->t('Grade @grade', ['@grade' => $grade_display]) . ': ';
+          $title = SchoolGradeHelper::getSchoolGradesLongName(NULL, TRUE, TRUE)[$user_grade_from] ?? $this->t('Grade @grade', ['@grade' => '?']);
         }
       }
 

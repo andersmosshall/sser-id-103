@@ -15,12 +15,8 @@
           let $thisGrade = $row.find('td.views-field-field-grade').first();
           if ($thisGrade.length && $thisGrade.text().trim()) {
             let thisGradeString =  $thisGrade.text().trim();
-            if (currentGrade === null) {
-              currentGrade = thisGradeString;
-            }
-
             if (currentGrade !== thisGradeString) {
-              $('<tr><td colspan="' + cellCount + '"><em>' + Drupal.t('Grade @grade', {'@grade': thisGradeString}) + '</em></td></tr>').insertBefore($row);
+              $('<tr><td colspan="' + cellCount + '"><em>' + thisGradeString + '</em></td></tr>').insertBefore($row);
               currentGrade = thisGradeString;
             }
           }

@@ -12,7 +12,7 @@ dependencies:
 id: ssr_base_views_block__student_di_user_list_caregivers_meetings
 theme: ssr_base
 region: content
-weight: 5
+weight: 7
 provider: null
 plugin: 'views_block:student_di_user_list-caregivers_my_meetings'
 settings:

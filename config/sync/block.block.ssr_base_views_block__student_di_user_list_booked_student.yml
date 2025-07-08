@@ -12,7 +12,7 @@ dependencies:
 id: ssr_base_views_block__student_di_user_list_booked_student
 theme: ssr_base
 region: content
-weight: 0
+weight: 1
 provider: null
 plugin: 'views_block:student_di_user_list-booked_student'
 settings:
