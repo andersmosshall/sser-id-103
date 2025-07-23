@@ -96,3 +96,15 @@ entity.ssr_organization.collection:
   description: 'List of ssr organizations.'
   route_name: entity.ssr_organization.collection
   parent: system.admin_content
+
+entity.ssr_syllabus.settings:
+  title: 'Syllabus'
+  description: 'Configure a Syllabus entity type.'
+  route_name:  entity.ssr_syllabus.settings
+  parent: system.admin_structure
+
+entity.ssr_syllabus.collection:
+  title: 'Syllabi'
+  description: 'List of syllabi.'
+  route_name: entity.ssr_syllabus.collection
+  parent: system.admin_content
