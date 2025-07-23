@@ -230,7 +230,7 @@ class StudentGradeStatisticsBlock extends BlockBase implements ContainerFactoryP
     $subject_options = [];
     /** @var \Drupal\taxonomy\TermInterface $subject */
     foreach ($subjects as $subject)  {
-      $code = $subject->get('field_subject_code')->value;
+      $code = $subject->get('field_subject_code_new')->value;
       if ($code) {
         $code_map[$subject->id()] = $code;
         $subject_options[$code] = $subject->label() . ' (' . $code . ')';

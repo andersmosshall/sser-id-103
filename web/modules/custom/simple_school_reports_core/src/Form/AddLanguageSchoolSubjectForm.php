@@ -19,6 +19,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class AddLanguageSchoolSubjectForm extends ConfirmFormBase {
 
+  // @ToDO: Convert to import CBT as a syllabus.
+
   /**
    * The entity type manager.
    *
@@ -112,7 +114,7 @@ class AddLanguageSchoolSubjectForm extends ConfirmFormBase {
     $subject_code = $form_state->getValue('subject_code');
     $language_code = $form_state->getValue('language_code');
 
-    $exist = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'field_subject_code' => $subject_code, 'field_language_code' => $language_code,]);
+    $exist = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'field_subject_code_new' => $subject_code, 'field_language_code' => $language_code,]);
     if ($exist) {
       $form_state->setError($form, $this->t('There is already a school subject with this settings.'));
     }
@@ -144,7 +146,7 @@ class AddLanguageSchoolSubjectForm extends ConfirmFormBase {
     $school_subject = $this->entityTypeManager->getStorage('taxonomy_term')->create([
       'vid' => 'school_subject',
       'name' => $name,
-      'field_subject_code' => $subject_code,
+      'field_subject_code_new' => $subject_code,
       'field_language_code' => $language_code,
       'langcode' => 'sv',
     ]);

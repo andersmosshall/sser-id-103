@@ -325,8 +325,8 @@ class IUPRouter extends ControllerBase {
           $subject_suffix_parts = [];
 
           foreach ($extra_adaptation->get('field_school_subjects')->referencedEntities() as $subject) {
-            if ($subject->get('field_subject_code')->value) {
-              $subject_suffix_parts[] = $subject->get('field_subject_code')->value;
+            if ($subject->get('field_subject_code_new')->value) {
+              $subject_suffix_parts[] = $subject->get('field_subject_code_new')->value;
             }
             elseif ($subject->label() === 'NO/SO') {
               $subject_suffix_parts[] = 'NO/SO';

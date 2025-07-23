@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 class WrittenReviewRoundFormAlter {
 
@@ -144,7 +145,7 @@ class WrittenReviewRoundFormAlter {
     $subject_options = [];
     $default_subjects = [];
 
-    $subjects = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'status' => 1]);
+    $subjects = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'field_school_type_versioned' => SchoolTypeHelper::getSchoolTypeVersions('GR'), 'status' => 1]);
     /** @var \Drupal\taxonomy\TermInterface $subject */
     $catalog_ids = Settings::get('ssr_written_reviews_catalog_id');
 
@@ -152,7 +153,7 @@ class WrittenReviewRoundFormAlter {
 
     /** @var \Drupal\taxonomy\TermInterface $subject */
     foreach ($subjects as $subject) {
-      $code = $subject->get('field_subject_code')->value;
+      $code = $subject->get('field_subject_code_new')->value;
       if (!$code || !isset($catalog_ids[$code])) {
         continue;
       }

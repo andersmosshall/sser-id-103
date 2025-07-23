@@ -9,6 +9,8 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_extension_proxy\Service\GradeSupportServiceInterface;
 
 /**
@@ -371,6 +373,7 @@ class GradeStatisticsService implements GradeStatisticsServiceInterface {
       $ids = $termStorage
         ->getQuery()
         ->condition('vid', 'school_subject')
+        ->condition('field_school_type_versioned', SchoolTypeHelper::getSchoolTypeVersions('GR'), 'IN')
         ->condition('field_mandatory', TRUE)
         ->accessCheck(FALSE)
         ->execute();
@@ -402,12 +405,12 @@ class GradeStatisticsService implements GradeStatisticsServiceInterface {
 
     if (!is_array($this->codeMap)) {
       $code_map = [];
-      $results = $this->connection->select('taxonomy_term__field_subject_code', 'c')
-        ->fields('c', ['entity_id', 'field_subject_code_value'])
+      $results = $this->connection->select('taxonomy_term__field_subject_code_new', 'c')
+        ->fields('c', ['entity_id', 'field_subject_code_new_value'])
         ->execute();
 
       foreach ($results as $result) {
-        $code_map[$result->entity_id] = $result->field_subject_code_value;
+        $code_map[$result->entity_id] = $result->field_subject_code_new_value;
       }
 
       $this->codeMap = $code_map;

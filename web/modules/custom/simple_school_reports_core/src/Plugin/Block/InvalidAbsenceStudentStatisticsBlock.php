@@ -52,7 +52,7 @@ class InvalidAbsenceStudentStatisticsBlock extends StatisticsBlockBase implement
         $from = $this->currentRequest->get('from');
         $to = $this->currentRequest->get('to');
         if ($uid && $from && $to) {
-          $subject_map = $this->schoolSubjectService->getSchoolSubjectOptionList(TRUE);
+          $subject_map = $this->schoolSubjectService->getSchoolSubjectOptionList(NULL, TRUE);
           asort($subject_map);
           $absence_data = [];
 

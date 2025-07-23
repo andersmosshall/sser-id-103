@@ -47,19 +47,6 @@ function simple_school_reports_extra_adaptations_form_alter(&$form, \Drupal\Core
 }
 
 /**
- * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
- */
-function simple_school_reports_extra_adaptations_field_widget_single_element_paragraphs_form_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
-  if (!empty($element['#paragraph_type']) && $element['#paragraph_type'] === 'extra_adaptation') {
-    $element['#attached']['library'][] = 'simple_school_reports_extra_adaptations/extra_adaptations_paragraph_form';
-    /** @var \Drupal\simple_school_reports_extra_adaptations\Service\ExtraAdaptationsServiceInterface $extra_adaptation_service */
-    $extra_adaptation_service = \Drupal::service('simple_school_reports_extra_adaptations.extra_adaptations_service');
-    $extra_adaptation_subject_map = $extra_adaptation_service->getExtraAdaptationSubjectMap();
-    $element['#attached']['drupalSettings']['extraAdaptationSubjectMap'] = $extra_adaptation_subject_map;
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_presave().
  */
 function simple_school_reports_extra_adaptations_paragraph_presave(\Drupal\paragraphs\ParagraphInterface $entity) {
@@ -67,17 +54,6 @@ function simple_school_reports_extra_adaptations_paragraph_presave(\Drupal\parag
     $extra_adaptation_target_id = $entity->get('field_extra_adaptation')->target_id;
     if (!$extra_adaptation_target_id) {
       $entity->set('field_school_subjects', []);
-      return;
     }
-
-    /** @var \Drupal\simple_school_reports_extra_adaptations\Service\ExtraAdaptationsServiceInterface $extra_adaptation_service */
-    $extra_adaptation_service = \Drupal::service('simple_school_reports_extra_adaptations.extra_adaptations_service');
-    $allowed_subjects = $extra_adaptation_service->getExtraAdaptationSubjectMap()[$extra_adaptation_target_id] ?? [];
-    $selected_school_subjects = array_column($entity->get('field_school_subjects')->getValue(), 'target_id');
-
-    $new_school_subjects = array_intersect($selected_school_subjects, $allowed_subjects);
-    $entity->set('field_school_subjects', array_map(function ($target_id) {
-      return ['target_id' => $target_id];
-    }, $new_school_subjects));
   }
 }

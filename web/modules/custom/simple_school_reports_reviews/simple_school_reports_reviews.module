@@ -332,7 +332,7 @@ function simple_school_reports_reviews_node_presave(\Drupal\Core\Entity\EntityIn
   if ($entity->bundle() === 'written_reviews_subject_state') {
     /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
     $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
-    $options_map = $school_subject_service->getSchoolSubjectOptionList(TRUE);
+    $options_map = $school_subject_service->getSchoolSubjectOptionList(['GR'], TRUE);
 
     $label = 'Årskurs';
     $grades = \Drupal\simple_school_reports_core\SchoolGradeHelper::getSchoolGradesLongName();

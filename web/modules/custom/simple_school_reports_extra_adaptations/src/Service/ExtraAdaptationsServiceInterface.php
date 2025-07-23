@@ -7,11 +7,4 @@ namespace Drupal\simple_school_reports_extra_adaptations\Service;
  */
 interface ExtraAdaptationsServiceInterface {
 
-  /**
-   * @return array
-   *   Map to school subject ids for extra adaptations, keyed by extra
-   *   adaptation term id.
-   */
-  public function getExtraAdaptationSubjectMap(): array;
-
 }

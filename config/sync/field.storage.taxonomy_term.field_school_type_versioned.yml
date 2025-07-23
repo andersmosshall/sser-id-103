@@ -1,0 +1,21 @@
+uuid: aa876f56-dea2-4438-abd4-279f29555190
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_school_type_versioned
+field_name: field_school_type_versioned
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_core_school_type_versioned_options
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

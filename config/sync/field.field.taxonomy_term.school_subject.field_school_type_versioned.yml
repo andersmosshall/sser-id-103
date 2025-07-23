@@ -1,19 +1,19 @@
-uuid: 20470bdf-1cdf-4cda-87ef-3799ce960b9f
+uuid: 5a929ef9-e8af-4f0d-820c-8bdb43a9a148
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_subject_code
+    - field.storage.taxonomy_term.field_school_type_versioned
     - taxonomy.vocabulary.school_subject
   module:
     - options
-id: taxonomy_term.school_subject.field_subject_code
-field_name: field_subject_code
+id: taxonomy_term.school_subject.field_school_type_versioned
+field_name: field_school_type_versioned
 entity_type: taxonomy_term
 bundle: school_subject
-label: 'Subject code (DEPRECATED)'
+label: 'School type'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

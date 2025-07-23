@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.paragraph.field_school_subjects
     - paragraphs.paragraphs_type.extra_adaptation
-    - taxonomy.vocabulary.school_subject
 id: paragraph.extra_adaptation.field_school_subjects
 field_name: field_school_subjects
 entity_type: paragraph
@@ -17,13 +16,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    target_bundles:
-      school_subject: school_subject
-    sort:
-      field: name
-      direction: asc
-    auto_create: false
-    auto_create_bundle: ''
+    view:
+      view_name: grade_school_subject
+      display_name: all_school_subjects
+      arguments: {  }
 field_type: entity_reference
