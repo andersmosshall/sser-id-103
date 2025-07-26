@@ -107,7 +107,7 @@ class SchoolSubjectService implements SchoolSubjectServiceInterface {
 
   public function getSubjectShortNames(): array {
     $cid = 'short_name_map';
-    if (is_array($this->lookup[$cid])) {
+    if (isset($this->lookup[$cid]) && is_array($this->lookup[$cid])) {
       return $this->lookup[$cid];
     }
 
