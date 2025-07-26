@@ -100,7 +100,7 @@ final class DnpProvSettingsForm extends ContentEntityForm {
         $subject_tids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
           ->accessCheck(FALSE)
           ->condition('vid', 'school_subject')
-          ->condition('field_subject_code', $subject_code)
+          ->condition('field_subject_code_new', $subject_code)
           ->execute();
 
         if (!empty($subject_tids) && !empty($student_uids)) {

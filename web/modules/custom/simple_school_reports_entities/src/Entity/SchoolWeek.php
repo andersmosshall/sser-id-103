@@ -250,7 +250,7 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     $from = NULL;
     $to = NULL;
     foreach ($this->getBaseLessons($day_index) as $lesson) {
-      if ($lesson['subject'] === 'CBT') {
+      if ($lesson['subject'] === 'CBT' || $lesson['subject'] === 'BT') {
         continue;
       }
 

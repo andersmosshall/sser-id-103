@@ -111,18 +111,12 @@ class GenerateGradeSingleDocForm extends GenerateGradeCatalogForm {
         $label = preg_replace('/\(.+\)\s/', '', $label);
       }
 
-      $subject_ids = $this->entityTypeManager
-        ->getStorage('taxonomy_term')
-        ->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('vid', 'school_subject')
-        ->sort('name')
-        ->execute();
+      $subject_ids = array_keys($this->schoolSubjectService->getSchoolSubjectOptionList(['GR'], TRUE));
       $weight = 1;
 
       if (!empty($subject_ids)) {
         foreach ($this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($subject_ids) as $subject) {
-          $code = $subject->get('field_subject_code')->value;
+          $code = $subject->get('field_subject_code_new')->value;
           if (!$code || !isset($catalog_ids[$code]) || !isset($code_options[$code])) {
             continue;
           }

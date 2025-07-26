@@ -96,3 +96,14 @@ entity.ssr_organization.delete_form:
   group: ssr_organization
   title: 'Delete'
   weight: 10
+
+entity.ssr_syllabus.edit_form:
+  route_name: entity.ssr_syllabus.edit_form
+  group: ssr_syllabus
+  title: 'Edit'
+
+entity.ssr_syllabus.delete_form:
+  route_name: entity.ssr_syllabus.delete_form
+  group: ssr_syllabus
+  title: 'Delete'
+  weight: 10

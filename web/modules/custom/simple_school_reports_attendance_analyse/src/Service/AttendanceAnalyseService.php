@@ -351,8 +351,8 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
 
       $subject_short_name = SchoolSubjectHelper::getSubjectShortName($subject_id);
 
-      // Special treatment for CBT (Bonustimme).
-      if ($subject_short_name === 'CBT') {
+      // Special treatment for BT (Bonustimme).
+      if ($subject_short_name === 'BT') {
         if ($ad_type !== 'attending' || $ad_invalid_absence >= 0) {
           continue;
         }

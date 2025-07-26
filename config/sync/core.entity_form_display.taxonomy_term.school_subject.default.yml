@@ -6,7 +6,9 @@ dependencies:
     - field.field.taxonomy_term.school_subject.field_block_parent
     - field.field.taxonomy_term.school_subject.field_language_code
     - field.field.taxonomy_term.school_subject.field_mandatory
+    - field.field.taxonomy_term.school_subject.field_school_type_versioned
     - field.field.taxonomy_term.school_subject.field_subject_code
+    - field.field.taxonomy_term.school_subject.field_subject_code_new
     - field.field.taxonomy_term.school_subject.field_subject_specify
     - taxonomy.vocabulary.school_subject
 id: taxonomy_term.school_subject.default
@@ -16,7 +18,7 @@ mode: default
 content:
   field_block_parent:
     type: entity_reference_autocomplete
-    weight: 6
+    weight: 5
     region: content
     settings:
       match_operator: CONTAINS
@@ -26,26 +28,34 @@ content:
     third_party_settings: {  }
   field_language_code:
     type: options_select
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_mandatory:
     type: boolean_checkbox
-    weight: 8
+    weight: 7
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-  field_subject_code:
+  field_school_type_versioned:
     type: options_select
     weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_subject_code_new:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_subject_specify:
     type: string_textfield
-    weight: 3
+    weight: 4
     region: content
     settings:
       size: 60
@@ -61,12 +71,13 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 7
+    weight: 6
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
 hidden:
   description: true
+  field_subject_code: true
   langcode: true
   path: true
