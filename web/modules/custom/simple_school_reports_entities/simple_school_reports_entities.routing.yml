@@ -53,3 +53,11 @@ entity.ssr_organization.settings:
     _title: 'SSR Organization'
   requirements:
     _permission: 'administer ssr_organization'
+
+entity.ssr_syllabus.settings:
+  path: 'admin/structure/ssr-syllabus'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\SyllabusSettingsForm'
+    _title: 'Syllabus'
+  requirements:
+    _permission: 'administer ssr_syllabus'

@@ -63,13 +63,7 @@ function simple_school_reports_core_update_9001() {
  * Update school subject names.
  */
 function simple_school_reports_core_update_9002() {
-  $properties = ['vid' => 'school_subject'];
-  $subjects = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties($properties);
-  /** @var \Drupal\taxonomy\TermInterface $subject */
-  foreach ($subjects as $subject) {
-    // The presave hook takes care of the new name.
-    $subject->save();
-  }
+  // Deprecated function, no longer needed.
 }
 
 /**

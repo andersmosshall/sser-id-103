@@ -186,7 +186,7 @@ function simple_school_reports_grade_registration_node_presave(\Drupal\Core\Enti
   if ($entity->bundle() === 'grade_student_group') {
     /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
     $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
-    $options_map = $school_subject_service->getSchoolSubjectOptionList(TRUE);
+    $options_map = $school_subject_service->getSchoolSubjectOptionList(['GR'],TRUE);
 
     $node_storage = \Drupal::entityTypeManager()
       ->getStorage('node');

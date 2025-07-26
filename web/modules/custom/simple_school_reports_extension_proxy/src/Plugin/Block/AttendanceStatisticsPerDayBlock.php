@@ -251,7 +251,7 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
 
           $name = $lesson['subject'] ?? 'n/a';
 
-          if ($name === 'CBT') {
+          if ($name === 'CBT' || $name === 'BT') {
             if ($lesson_type === 'not_reported') {
               continue;
             }

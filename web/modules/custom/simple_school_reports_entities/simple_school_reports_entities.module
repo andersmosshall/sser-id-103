@@ -42,6 +42,9 @@ function simple_school_reports_entities_theme() {
     'ssr_organization' => [
       'render element' => 'elements',
     ],
+    'ssr_syllabus' => [
+      'render element' => 'elements',
+    ],
   ];
 }
 
@@ -295,4 +298,29 @@ function template_preprocess_ssr_organization(array &$variables): void {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
+}
+
+/**
+ * Prepares variables for syllabus templates.
+ *
+ * Default template: ssr-syllabus.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the syllabus information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_syllabus(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+function simple_school_reports_entities_grade_vid_options(): array {
+  return [
+    'none' => t('Not grading'),
+    'af_grade_system' => t('A-F grade system'),
+  ];
 }

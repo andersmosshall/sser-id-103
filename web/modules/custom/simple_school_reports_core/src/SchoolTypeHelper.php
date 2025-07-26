@@ -66,4 +66,26 @@ class SchoolTypeHelper {
 
     return array_keys($school_types);
   }
+
+  public static function getSchoolTypesVersioned(): array {
+    return [
+      'GR:22' => 'GR',
+      'GY:11' => 'Gy 11',
+      'GY:25' => 'Gy 25',
+    ];
+  }
+
+  public static function getSchoolTypeVersions(string $school_type): array {
+    $versioned_school_types = array_keys(self::getSchoolTypesVersioned());
+    $versions = [];
+    foreach ($versioned_school_types as $versioned_school_type) {
+      if ($school_type === $versioned_school_type) {
+        return [$versioned_school_type];
+      }
+      if (str_starts_with($versioned_school_type, $school_type . ':')) {
+        $versions[] = $versioned_school_type;
+      }
+    }
+    return $versions;
+  }
 }

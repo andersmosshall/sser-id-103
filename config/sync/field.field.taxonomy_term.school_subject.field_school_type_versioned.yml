@@ -1,0 +1,21 @@
+uuid: 5a929ef9-e8af-4f0d-820c-8bdb43a9a148
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_school_type_versioned
+    - taxonomy.vocabulary.school_subject
+  module:
+    - options
+id: taxonomy_term.school_subject.field_school_type_versioned
+field_name: field_school_type_versioned
+entity_type: taxonomy_term
+bundle: school_subject
+label: 'School type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

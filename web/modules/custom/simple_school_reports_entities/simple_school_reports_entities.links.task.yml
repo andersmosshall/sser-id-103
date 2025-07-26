@@ -212,3 +212,26 @@ entity.ssr_organization.collection:
   route_name: entity.ssr_organization.collection
   base_route: system.admin_content
   weight: 10
+
+entity.ssr_syllabus.settings:
+  title: 'Settings'
+  route_name: entity.ssr_syllabus.settings
+  base_route: entity.ssr_syllabus.settings
+entity.ssr_syllabus.view:
+  title: 'View'
+  route_name: entity.ssr_syllabus.canonical
+  base_route: entity.ssr_syllabus.canonical
+entity.ssr_syllabus.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_syllabus.edit_form
+  base_route: entity.ssr_syllabus.canonical
+entity.ssr_syllabus.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_syllabus.delete_form
+  base_route: entity.ssr_syllabus.canonical
+  weight: 10
+entity.ssr_syllabus.collection:
+  title: 'Syllabi'
+  route_name: entity.ssr_syllabus.collection
+  base_route: system.admin_content
+  weight: 10

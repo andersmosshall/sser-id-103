@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 class StudentGroupIEFormAlter {
 
@@ -49,8 +50,7 @@ class StudentGroupIEFormAlter {
       $this_grade_round = $form_object->getEntity()->id();
     }
 
-    $subjects = $entity_type_manager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'status' => 1]);
-
+    $subjects = $entity_type_manager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'school_subject', 'field_school_type_versioned' => SchoolTypeHelper::getSchoolTypeVersions('GR'), 'status' => 1]);
 
     $query = $entity_type_manager->getStorage('node')->getQuery()
       ->accessCheck(TRUE)
@@ -89,7 +89,7 @@ class StudentGroupIEFormAlter {
 
     /** @var \Drupal\taxonomy\TermInterface $subject */
     foreach ($subjects as $subject) {
-      $code = $subject->get('field_subject_code')->value;
+      $code = $subject->get('field_subject_code_new')->value;
       if (!$code || !isset($catalog_ids[$code])) {
         continue;
       }

@@ -558,7 +558,7 @@ class CourseAttendanceReportFormAlter {
 
     $subject = current($course->get('field_school_subject')->referencedEntities());
     if ($subject instanceof TermInterface) {
-      $subject_code = $subject->get('field_subject_code')->value ?? '';
+      $subject_code = $subject->get('field_subject_code_new')->value ?? '';
        $context = [
         'subject_code' => $subject_code,
         'handled' => FALSE,

@@ -4,6 +4,8 @@
  * Implements HOOK_deploy_NAME().
  */
 function simple_school_reports_absence_make_up_deploy_9001() {
+  // @ToDO: Convert to import CBT as a syllabus.
+
   $vid = 'school_subject';
   /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
   $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -12,8 +14,8 @@ function simple_school_reports_absence_make_up_deploy_9001() {
   $subjects = $termStorage->loadTree($vid, 0, NULL, TRUE);
   $subject_code_exist = [];
   foreach ($subjects as $subject) {
-    if ($subject->get('field_subject_code')->value) {
-      $subject_code_exist[$subject->get('field_subject_code')->value] = TRUE;
+    if ($subject->get('field_subject_code_new')->value) {
+      $subject_code_exist[$subject->get('field_subject_code_new')->value] = TRUE;
     }
   }
 
@@ -37,7 +39,7 @@ function simple_school_reports_absence_make_up_deploy_9001() {
           'name' => $label,
           'vid' => $vid,
           'langcode' => 'sv',
-          'field_subject_code' => $code,
+          'field_subject_code_new' => $code,
         ]);
 
         if (isset($mandatory[$code])) {

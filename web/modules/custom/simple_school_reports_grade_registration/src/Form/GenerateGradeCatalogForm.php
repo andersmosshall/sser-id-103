@@ -18,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\Pnum;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface;
+use Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GradeRoundFormAlter;
 use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
 use Drupal\taxonomy\TermInterface;
@@ -49,6 +50,8 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
    */
   protected $uuid;
 
+  protected SchoolSubjectServiceInterface $schoolSubjectService;
+
   /**
    * @var \Drupal\simple_school_reports_core\Pnum
    */
@@ -64,11 +67,12 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
 
 
-  public function __construct(FileTemplateServiceInterface $file_template_service, EntityTypeManagerInterface $entity_type_manager, Connection $connection,  UuidInterface $uuid, Pnum $pnum, ModuleHandlerInterface $module_handler) {
+  public function __construct(FileTemplateServiceInterface $file_template_service, EntityTypeManagerInterface $entity_type_manager, Connection $connection,  UuidInterface $uuid, Pnum $pnum, ModuleHandlerInterface $module_handler, SchoolSubjectServiceInterface $school_subject_service) {
     $this->fileTemplateService = $file_template_service;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->uuid = $uuid;
+    $this->schoolSubjectService = $school_subject_service;
     $this->pnum = $pnum;
     $this->useExtentExport = $module_handler->moduleExists('simple_school_reports_extens_grade_export');
     $this->useSCBExport = $module_handler->moduleExists('simple_school_reports_scb_grade_export');
@@ -84,7 +88,8 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       $container->get('database'),
       $container->get('uuid'),
       $container->get('simple_school_reports_core.pnum'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('simple_school_reports_core.school_subjects')
     );
   }
 
@@ -322,18 +327,12 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
         $label = preg_replace('/\(.+\)\s/', '', $label);
       }
 
-      $subject_ids = $this->entityTypeManager
-        ->getStorage('taxonomy_term')
-        ->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('vid', 'school_subject')
-        ->sort('name')
-        ->execute();
+      $subject_ids = array_keys($this->schoolSubjectService->getSchoolSubjectOptionList(['GR'], TRUE));
       $weight = 1;
 
       if (!empty($subject_ids)) {
         foreach ($this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($subject_ids) as $subject) {
-          $code = $subject->get('field_subject_code')->value;
+          $code = $subject->get('field_subject_code_new')->value;
           if (!$code || !isset($catalog_ids[$code]) || !isset($code_options[$code])) {
             continue;
           }

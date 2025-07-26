@@ -6,7 +6,9 @@ dependencies:
     - field.field.taxonomy_term.school_subject.field_block_parent
     - field.field.taxonomy_term.school_subject.field_language_code
     - field.field.taxonomy_term.school_subject.field_mandatory
+    - field.field.taxonomy_term.school_subject.field_school_type_versioned
     - field.field.taxonomy_term.school_subject.field_subject_code
+    - field.field.taxonomy_term.school_subject.field_subject_code_new
     - field.field.taxonomy_term.school_subject.field_subject_specify
     - taxonomy.vocabulary.school_subject
   module:
@@ -21,7 +23,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_mandatory:
     type: boolean
@@ -31,14 +33,22 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
-  field_subject_code:
+  field_school_type_versioned:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_subject_code_new:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
     region: content
   field_subject_specify:
     type: string
@@ -46,9 +56,10 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
 hidden:
   description: true
   field_block_parent: true
+  field_subject_code: true
   langcode: true

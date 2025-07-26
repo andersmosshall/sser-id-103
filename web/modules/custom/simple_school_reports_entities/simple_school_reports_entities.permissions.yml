@@ -108,3 +108,15 @@ delete ssr_organization:
   title: 'Delete ssr organization'
 create ssr_organization:
   title: 'Create ssr organization'
+
+administer ssr_syllabus:
+  title: 'Administer syllabi'
+  restrict access: true
+view ssr_syllabus:
+  title: 'View syllabus'
+edit ssr_syllabus:
+  title: 'Edit syllabus'
+delete ssr_syllabus:
+  title: 'Delete syllabus'
+create ssr_syllabus:
+  title: 'Create syllabus'

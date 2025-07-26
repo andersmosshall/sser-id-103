@@ -15,6 +15,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 /**
  * Allowed values function for user grade field.
@@ -27,6 +28,10 @@ function simple_school_reports_core_adult_student_settings_options(): array {
   return [
     'caregiver_continued_access' => t('Allow caregivers to continue accessing student information'),
   ];
+}
+
+function simple_school_reports_core_school_type_versioned_options(): array {
+  return SchoolTypeHelper::getSchoolTypesVersioned();
 }
 
 /**
@@ -110,13 +115,20 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
       /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
       $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
 
-      $options_map = $school_subject_service->getSchoolSubjectOptionList();
+      $subjects_options = [
+        'All' => t('All subjects'),
+      ] + $school_subject_service->getSchoolSubjectOptionList();
+      $form['field_school_subject_target_id']['#options'] = $subjects_options;
+    }
 
-      foreach ($form['field_school_subject_target_id']['#options'] as $key => &$option) {
-        if (isset($options_map[$key])) {
-          $option = $options_map[$key];
-        }
-      }
+    if (!empty($form['field_school_subjects_target_id']['#options'])) {
+      /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+      $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
+
+      $subjects_options = [
+        'All' => t('All subjects'),
+      ] + $school_subject_service->getSchoolSubjectOptionList();
+      $form['field_school_subjects_target_id']['#options'] = $subjects_options;
     }
   }
 
@@ -256,7 +268,7 @@ function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInter
 function simple_school_reports_core_taxonomy_term_presave(EntityInterface $entity) {
   if ($entity->bundle() === 'school_subject') {
     SchoolSubjectHelper::$subjectShortNameMap = NULL;
-    if ($subject_code = $entity->get('field_subject_code')->value) {
+    if ($subject_code = $entity->get('field_subject_code_new')->value) {
       if ($language_code = $entity->get('field_language_code')->value) {
         $subject_options = SchoolSubjectHelper::getSupportedLanguageSubjectCodes();
         $raw_name = $subject_options[$subject_code] ?? '() ?';

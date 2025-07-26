@@ -203,15 +203,13 @@ function simple_school_reports_examinations_form_alter(&$form, \Drupal\Core\Form
         \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
 
         if (!empty($form['subject_target_id'])) {
-          $vid = 'school_subject';
-          /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
-          $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-          $subjects = $termStorage->loadTree($vid);
+          /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+          $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
           $subjects_options = [
             '' => t('All subjects'),
           ];
-          foreach ($subjects as $subject) {
-            $subjects_options[$subject->tid] = $subject->name;
+          foreach ($school_subject_service->getSchoolSubjectOptionList() as $tid => $subject_name) {
+            $subjects_options[$tid] = $subject_name;
           }
           unset($form['subject_target_id']['#size']);
           $form['subject_target_id']['#type'] = 'select';
@@ -223,15 +221,13 @@ function simple_school_reports_examinations_form_alter(&$form, \Drupal\Core\Form
         \Drupal\simple_school_reports_core\UserFormAlter::exposedFilterByTeacher($form, $form_state, TRUE);
 
         if (!empty($form['subject_target_id'])) {
-          $vid = 'school_subject';
-          /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
-          $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-          $subjects = $termStorage->loadTree($vid);
+          /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $school_subject_service */
+          $school_subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
           $subjects_options = [
             '' => t('All subjects'),
           ];
-          foreach ($subjects as $subject) {
-            $subjects_options[$subject->tid] = $subject->name;
+          foreach ($school_subject_service->getSchoolSubjectOptionList() as $tid => $subject_name) {
+            $subjects_options[$tid] = $subject_name;
           }
           unset($form['subject_target_id']['#size']);
           $form['subject_target_id']['#type'] = 'select';

@@ -233,62 +233,14 @@ class SchoolSubjectHelper {
   }
 
   public static function getSubjectShortName(?string $subject_tid): string {
-    if (!$subject_tid) {
-      return 'n/a';
-    }
-    if (self::$subjectShortNameMap === NULL) {
-      $map = [];
-
-      $vid = 'school_subject';
-      /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
-      $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-
-      /** @var \Drupal\taxonomy\TermInterface[] $subjects */
-      $subjects = $termStorage->loadTree($vid, 0, NULL, TRUE);
-      foreach ($subjects as $subject) {
-        $short_name = NULL;
-        $subject_code = $subject->get('field_subject_code')->value;
-
-        if ($subject_code) {
-          $short_name = $subject_code;
-          if ($subject->get('field_language_code')->value) {
-            $short_name .= ':' . $subject->get('field_language_code')->value;
-          }
-        }
-
-        if (!$short_name) {
-          // Explode nameparts by ' ' or '/'.
-          $name_parts = preg_split('/[ \/]/', $subject->label());
-          if (!$name_parts || count($name_parts) === 1) {
-            $name_parts = [$subject->label()];
-          }
-
-          if (count($name_parts) > 1) {
-            $short_name = '';
-            foreach ($name_parts as $name_part) {
-              $short_name .= mb_substr($name_part, 0, 1);
-              if (mb_strlen($short_name) >= 3) {
-                break;
-              }
-            }
-          }
-          else {
-            $short_name = mb_substr($name_parts[0], 0, 2);
-          }
-          $short_name = mb_strtoupper($short_name);
-        }
-
-        $map[$subject->id()] = $short_name;
-      }
-
-
-      self::$subjectShortNameMap = $map;
-    }
-
-    return self::$subjectShortNameMap[$subject_tid] ?? 'n/a';
+    /** @var \Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface $subject_service */
+    $subject_service = \Drupal::service('simple_school_reports_core.school_subjects');
+    return $subject_service->getSubjectShortName($subject_tid);
   }
 
   public static function importSubjects() {
+    // @ToDO: Convert to import CBT as a syllabus. REMEMBER TO CHECK MAKE UP MODULE.
+
     $vid = 'school_subject';
     /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
     $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -297,8 +249,8 @@ class SchoolSubjectHelper {
     $subjects = $termStorage->loadTree($vid, 0, NULL, TRUE);
     $subject_code_exist = [];
     foreach ($subjects as $subject) {
-      if ($subject->get('field_subject_code')->value) {
-        $subject_code_exist[$subject->get('field_subject_code')->value] = TRUE;
+      if ($subject->get('field_subject_code_new')->value) {
+        $subject_code_exist[$subject->get('field_subject_code_new')->value] = TRUE;
       }
     }
 
@@ -365,7 +317,7 @@ class SchoolSubjectHelper {
             'name' => $term_label,
             'vid' => $vid,
             'langcode' => 'sv',
-            'field_subject_code' => $code,
+            'field_subject_code_new' => $code,
             'status' => $status,
           ]);
 
