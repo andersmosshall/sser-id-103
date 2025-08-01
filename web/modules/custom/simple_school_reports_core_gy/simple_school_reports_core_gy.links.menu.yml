@@ -1,0 +1,11 @@
+simple_school_reports_core.config_syllabuses_gy11:
+  title: 'Course syllabuses in gymnasieskolan 2011'
+  parent: simple_school_reports_core.config_syllabuses
+  description: 'List and handle course syllabuses Gymnasieskolan 2011.'
+  route_name: view.syllabus.gy11
+
+simple_school_reports_core.config_syllabuses_gy25:
+  title: 'Course syllabuses in gymnasieskolan 2025'
+  parent: simple_school_reports_core.config_syllabuses
+  description: 'List and handle course syllabuses in Gymnasieskolan 2025.'
+  route_name: view.syllabus.gy25

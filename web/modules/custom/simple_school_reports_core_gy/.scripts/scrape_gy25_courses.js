@@ -40,6 +40,7 @@
             const text = linkInArticle.textContent.trim();
             const match = text.match(/(.+?),\s*(\d+)\s*poäng/);
             if (match) {
+              console.log(`Parsing points for ${subjectName}: ${match[1].trim()} - ${match[2]} poäng`);
               pointsMap[match[1].trim()] = match[2];
             }
           }
@@ -148,13 +149,18 @@
         ? courseDetails.filter(item => item.levelName.slice(-1) === lastChar).map(item => item.courseCode)
         : courseDetails.map(item => item.courseCode);
 
+      if (!pointsMap[course.levelName]) {
+        console.error(`❌ No points found for ${course.levelName} in ${subjectName}.`);
+        throw new Error(`❌ Missing points for ${course.levelName} in ${subjectName}.`);
+      }
+
       csvData.push([
         `${subjectName} - ${course.levelName}`,
         course.courseCode,
         subjectName,
         subjectCode,
         course.link,
-        pointsMap[course.levelName] || 'N/A',
+        pointsMap[course.levelName],
         relatedLevels.join(',')
       ]);
     });

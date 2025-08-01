@@ -20,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Ämnesplaner | Grundskolan'
+      title: 'Ämnesplaner - Grundskolan'
       fields:
         label:
           id: label
@@ -585,6 +585,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
+      title: 'Kursplanner - Gymnasieskolan 2011'
       filters:
         school_type_versioned:
           id: school_type_versioned
@@ -632,6 +633,7 @@ display:
         groups:
           1: AND
       defaults:
+        title: false
         filters: false
         filter_groups: false
       display_description: ''
@@ -646,12 +648,13 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  page_2:
-    id: page_2
+  gy25:
+    id: gy25
     display_title: GY25
     display_plugin: page
     position: 3
     display_options:
+      title: 'Kursplaner - Gymnasieskolan 2025'
       filters:
         school_type_versioned:
           id: school_type_versioned
@@ -699,6 +702,7 @@ display:
         groups:
           1: AND
       defaults:
+        title: false
         filters: false
         filter_groups: false
       display_description: ''

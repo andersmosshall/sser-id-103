@@ -295,3 +295,14 @@ simple_school_reports_core.invoice_support:
     _title: 'Invoice support'
   requirements:
     _permission: 'administer modules'
+
+
+simple_school_reports_core.config_syllabuses:
+  path: '/admin/syllabuses'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Subject/Course syllabuses'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
