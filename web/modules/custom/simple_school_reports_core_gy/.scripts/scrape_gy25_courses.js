@@ -3,69 +3,135 @@
 // The open terminal and run the following command js commnd.
 
 (async function(){
-  // Define the new headers for the CSV file
-  const headers = ['Course', 'Course code', 'Subject', 'Subject code', 'Link', 'Points', 'Levels'];
-  const csvData = [headers];
-  console.log("🚀 Starting CSV export process...");
+  /**
+   * A helper function to pause execution for a specified duration.
+   * @param {number} ms - The number of milliseconds to sleep.
+   * @returns {Promise<void>}
+   */
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // Select all the table wrappers within the main result list
-  const tableWrappers = document.querySelectorAll('.result_list .table-wrapper');
+  /**
+   * Fetches and parses the points for a given subject URL with a retry mechanism.
+   * The attempt is considered a failure if the network request fails or if no points data can be parsed.
+   * @param {string} url - The URL to fetch data from.
+   * @param {string} subjectName - The name of the subject for logging purposes.
+   * @param {object} config - Configuration for retries and delay.
+   * @returns {Promise<object>} A promise that resolves to a map of level names to points.
+   */
+  async function fetchAndParsePointsWithRetry(url, subjectName, config) {
+    const { MAX_RETRIES, RETRY_DELAY } = config;
 
-  // Use a for...of loop to correctly handle asynchronous operations inside the loop
-  for (const wrapper of tableWrappers) {
-    const table = wrapper.querySelector('table.searchresult');
-    if (!table) continue;
-
-    // --- 1. Extract Basic Subject Information ---
-    const headerCell = table.querySelector('thead tr:first-child th');
-    if (!headerCell) continue;
-
-    const subjectName = headerCell.querySelector('a').textContent.trim();
-    const subjectCodeMatch = headerCell.textContent.match(/Kod:\s*(\S+)/);
-    const subjectCode = subjectCodeMatch ? subjectCodeMatch[1] : '';
-    console.log(`Processing Subject: ${subjectName} (${subjectCode})`);
-
-    // --- 2. Fetch and Parse Points Data (once per subject) ---
-    const pointsMap = {};
-    const firstCourseLinkEl = table.querySelector('tbody tr th a');
-
-    if (firstCourseLinkEl) {
-      // Construct the full URL to fetch
-      const fetchUrl = window.location.origin + firstCourseLinkEl.getAttribute('href');
-      console.log(` -> Fetching points data from: ${fetchUrl}`);
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
-        const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const htmlText = await response.text();
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-        // Use DOMParser to parse the fetched HTML without rendering it
+        const htmlText = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
 
-        // Find all course articles and extract points
+        const pointsMap = {};
         const courseArticles = doc.querySelectorAll('.courses-wrapper article');
         courseArticles.forEach(article => {
           const linkInArticle = article.querySelector('h3 a');
           if (linkInArticle) {
             const text = linkInArticle.textContent.trim();
-            // Regex to capture level name and points, e.g., "Nivå 1a, 100 poäng"
             const match = text.match(/(.+?),\s*(\d+)\s*poäng/);
             if (match) {
-              const levelName = match[1].trim();
-              const points = match[2];
-              pointsMap[levelName] = points;
+              pointsMap[match[1].trim()] = match[2];
             }
           }
         });
-        console.log(` -> Found points for ${Object.keys(pointsMap).length} levels.`);
+
+        // CRITICAL: Treat as failure if no points were found on a seemingly valid page.
+        if (Object.keys(pointsMap).length === 0) {
+          throw new Error("Parsing succeeded, but no points data was found.");
+        }
+
+        console.log(`✅ Success fetching points for ${subjectName}.`);
+        return pointsMap; // Success, exit the loop and return data
+
       } catch (error) {
-        console.error(` -> Failed to fetch or parse points for ${subjectName}:`, error);
+        console.warn(`Attempt ${attempt}/${MAX_RETRIES} failed for ${subjectName}: ${error.message}`);
+        if (attempt === MAX_RETRIES) {
+          // This is the last attempt, re-throw the error to abort the script
+          throw new Error(`Failed to fetch data for ${subjectName} after ${MAX_RETRIES} attempts.`);
+        }
+        // Wait before the next retry
+        await sleep(RETRY_DELAY * attempt); // Increase delay for subsequent retries
       }
     }
+  }
 
-    // --- 3. Gather and Process All Course Data for the Subject ---
-    const allRows = table.querySelectorAll('tbody tr');
-    const courseDetails = Array.from(allRows).map(row => {
+  // --- Configuration ---
+  const BATCH_SIZE = 15; // How many subjects to fetch in parallel
+  const MAX_RETRIES = 5;
+  const RETRY_DELAY = 10000; // in milliseconds
+
+  console.log(`🚀 Starting CSV export... (Batch Size: ${BATCH_SIZE}, Max Retries: ${MAX_RETRIES})`);
+
+  const headers = ['Course', 'Course code', 'Subject', 'Subject code', 'Link', 'Points', 'Levels'];
+  const tableWrappers = document.querySelectorAll('.result_list .table-wrapper');
+  const pointsCache = new Map(); // Cache for storing fetched points data
+
+  // --- 1. Collect all unique fetch jobs ---
+  const fetchJobs = new Map();
+  tableWrappers.forEach(wrapper => {
+    const table = wrapper.querySelector('table.searchresult');
+    const headerCell = table?.querySelector('thead tr:first-child th');
+    const firstCourseLinkEl = table?.querySelector('tbody tr th a');
+
+    if (headerCell && firstCourseLinkEl) {
+      const subjectName = headerCell.querySelector('a').textContent.trim();
+      const fetchUrl = window.location.origin + firstCourseLinkEl.getAttribute('href');
+      if (!fetchJobs.has(fetchUrl)) {
+        fetchJobs.set(fetchUrl, { subjectName });
+      }
+    }
+  });
+
+  // --- 2. Execute fetch jobs in parallel batches ---
+  const allJobPromises = Array.from(fetchJobs.entries()).map(([url, { subjectName }]) =>
+    async () => {
+      await sleep(Math.random() * 2000); // Random delay to avoid hitting the server too hard
+      const pointsData = await fetchAndParsePointsWithRetry(url, subjectName, { MAX_RETRIES, RETRY_DELAY });
+      pointsCache.set(url, pointsData);
+    }
+  );
+
+  try {
+    for (let i = 0; i < allJobPromises.length; i += BATCH_SIZE) {
+      const batch = allJobPromises.slice(i, i + BATCH_SIZE);
+      console.log(`Fetching batch ${i / BATCH_SIZE + 1}...`);
+      await Promise.all(batch.map(job => job()));
+    }
+  } catch (error) {
+    console.error(`❌ SCRIPT ABORTED: ${error.message}`);
+    alert(`Script aborted: Could not fetch all required data. Check the console for details.`);
+    return; // Abort the function
+  }
+
+  console.log("👍 All data fetched successfully. Now building CSV...");
+
+  // --- 3. Process tables and build CSV from cached data ---
+  const csvData = [headers];
+  tableWrappers.forEach(wrapper => {
+    // This part now runs synchronously using the pre-fetched data
+    const table = wrapper.querySelector('table.searchresult');
+    const headerCell = table?.querySelector('thead tr:first-child th');
+    const firstCourseLinkEl = table?.querySelector('tbody tr th a');
+    if (!headerCell || !firstCourseLinkEl) return;
+
+    const subjectName = headerCell.querySelector('a').textContent.trim();
+    const subjectCode = headerCell.textContent.match(/Kod:\s*(\S+)/)?.[1] || '';
+    const fetchUrl = window.location.origin + firstCourseLinkEl.getAttribute('href');
+    const pointsMap = pointsCache.get(fetchUrl);
+
+    if (!pointsMap) return; // Skip if data for this subject failed for some reason
+
+    const courseDetails = Array.from(table.querySelectorAll('tbody tr')).map(row => {
       const linkEl = row.querySelector('th a');
       const codeEl = row.querySelector('td');
       if (!linkEl || !codeEl) return null;
@@ -74,63 +140,36 @@
         courseCode: codeEl.textContent.trim(),
         link: window.location.origin + linkEl.getAttribute('href')
       };
-    }).filter(Boolean); // Filter out any null entries from malformed rows
+    }).filter(Boolean);
 
-    // --- 4. Build Final CSV Rows ---
     courseDetails.forEach(course => {
-      // Determine the related levels (same logic as before)
-      let relatedLevels = [];
       const lastChar = course.levelName.slice(-1);
-      if (lastChar.match(/[a-zA-Z]/)) {
-        relatedLevels = courseDetails
-          .filter(item => item.levelName.slice(-1) === lastChar)
-          .map(item => item.courseCode);
-      } else {
-        relatedLevels = courseDetails.map(item => item.courseCode);
-      }
+      const relatedLevels = lastChar.match(/[a-zA-Z]/)
+        ? courseDetails.filter(item => item.levelName.slice(-1) === lastChar).map(item => item.courseCode)
+        : courseDetails.map(item => item.courseCode);
 
-      // Look up the points from the map created in step 2
-      const points = pointsMap[course.levelName] || 'N/A';
-
-      // Construct the row for the CSV file
-      const csvRow = [
-        `${subjectName} - ${course.levelName}`, // Course
-        course.courseCode,                      // Course code
-        subjectName,                            // Subject
-        subjectCode,                            // Subject code
-        course.link,                            // Link
-        points,                                 // Points
-        relatedLevels.join(',')                 // Levels
-      ];
-      csvData.push(csvRow);
+      csvData.push([
+        `${subjectName} - ${course.levelName}`,
+        course.courseCode,
+        subjectName,
+        subjectCode,
+        course.link,
+        pointsMap[course.levelName] || 'N/A',
+        relatedLevels.join(',')
+      ]);
     });
-  }
+  });
 
-  // --- 5. Format and Download the CSV File ---
-  if (csvData.length > 1) {
-    // Helper function to correctly quote fields containing commas or quotes
-    const escapeCsvCell = (cell) => {
-      const strCell = String(cell == null ? '' : cell); // handle null/undefined
-      if (strCell.includes(',') || strCell.includes('"') || strCell.includes('\n')) {
-        return `"${strCell.replace(/"/g, '""')}"`; // Escape quotes by doubling them
-      }
-      return strCell;
-    };
+  // --- 4. Format and Download the CSV File ---
+  const escapeCsvCell = (cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`;
+  const csvContent = csvData.map(row => row.map(escapeCsvCell).join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'course_catalog_gy25.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 
-    const csvContent = csvData.map(row => row.map(escapeCsvCell).join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'course_catalog_gy25.csv');
-    link.style.visibility = 'hidden';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    console.log(`✅ Success! CSV file with ${csvData.length - 1} courses has been downloaded.`);
-  } else {
-    console.log("No course data was found to create a CSV file.");
-  }
+  console.log(`✅ Success! CSV file with ${csvData.length - 1} courses has been downloaded.`);
 })();

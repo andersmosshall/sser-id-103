@@ -20,12 +20,12 @@ use Drupal\user\EntityOwnerTrait;
  * @ContentEntityType(
  *   id = "ssr_syllabus",
  *   label = @Translation("Syllabus"),
- *   label_collection = @Translation("Syllabi"),
+ *   label_collection = @Translation("Syllabus"),
  *   label_singular = @Translation("syllabus"),
- *   label_plural = @Translation("syllabi"),
+ *   label_plural = @Translation("Syllabus"),
  *   label_count = @PluralTranslation(
- *     singular = "@count syllabi",
- *     plural = "@count syllabi",
+ *     singular = "@count Syllabus",
+ *     plural = "@count Syllabus",
  *   ),
  *   handlers = {
  *     "list_builder" = "Drupal\simple_school_reports_entities\SyllabusListBuilder",
@@ -86,7 +86,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       throw new \LogicException('Identifier cannot be empty.');
     }
 
-    // Official syllabi cannot be custom.
+    // Official Syllabus cannot be custom.
     if ($this->get('official')->value) {
       $this->set('custom', FALSE);
     }
@@ -108,7 +108,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['short_label'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Label'))
+      ->setLabel(t('Short Label'))
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setSetting('max_length', 12)
@@ -130,7 +130,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Author'))
+      ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
       ->setDisplayConfigurable('form', TRUE)
@@ -168,7 +168,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['school_type_versioned'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('Lookup type'))
+      ->setLabel(t('School type'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
       ->setDefaultValue('default')
@@ -197,28 +197,28 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['subject_name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Subject name'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['subject_designation'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Subject designation'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 50)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['course_code'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Course code'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 50)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['language_code'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Language code'))
       ->setSetting('max_length', 5)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
