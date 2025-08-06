@@ -1,0 +1,4 @@
+services:
+  simple_school_reports_core_gr.course_data:
+    class: Drupal\simple_school_reports_core_gr\Service\CourseDataServiceGr
+    arguments: [ '@entity_type.manager', '@file_system','@module_handler', ]

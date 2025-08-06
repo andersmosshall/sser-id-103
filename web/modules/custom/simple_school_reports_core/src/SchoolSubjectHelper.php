@@ -193,7 +193,7 @@ class SchoolSubjectHelper {
       'SPA' => 'Spanska',
       'SWA' => 'Swahili',
       'SYR' => 'Syriska',
-      'AII' => 'Swadaya)',
+      'AII' => 'Swadaya',
       'CLD' => 'Syriska, Nyöstarameiska, Keldanska, Fallani, Kilani, Soorath, Suras, Sureth)',
       'TRU' => 'Syriska, Turoyo, nyarameiska, Suryoyo, Syryoyo, Surayt, Suriani, Turani)',
       'TGL' => 'Tagalog, (Filippinerna)',

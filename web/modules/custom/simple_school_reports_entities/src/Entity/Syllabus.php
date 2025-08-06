@@ -10,9 +10,11 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\simple_school_reports_entities\Plugin\Field\FieldType\SyllabusLevels;
 use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\Core\Entity\EntityPublishedTrait;
 
 /**
  * Defines the syllabus entity class.
@@ -67,6 +69,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
+  use EntityPublishedTrait;
 
   /**
    * {@inheritdoc}
@@ -78,6 +81,13 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       $this->setOwnerId(0);
     }
 
+    // Official Syllabus cannot be custom.
+    if ($this->get('official')->value) {
+      $this->set('custom', FALSE);
+    }
+  }
+
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     if ($this->get('school_subject')->isEmpty()) {
       throw new \LogicException('The school subject id cannot be empty.');
     }
@@ -85,11 +95,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
     if ($this->get('identifier')->isEmpty()) {
       throw new \LogicException('Identifier cannot be empty.');
     }
-
-    // Official Syllabus cannot be custom.
-    if ($this->get('official')->value) {
-      $this->set('custom', FALSE);
-    }
+    parent::postSave($storage, $update);
   }
 
   /**
@@ -119,7 +125,9 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('Identifier'))
       ->addConstraint('UniqueField')
       ->setRequired(TRUE)
-      ->setSetting('max_length', 255);
+      ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
@@ -161,7 +169,6 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
 
     $fields['group_for'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Group for'))
-      ->setRequired(TRUE)
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'ssr_syllabus')
       ->setDisplayConfigurable('form', TRUE)
@@ -262,7 +269,16 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('Grade system'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_entities_grade_vid_options')
-      ->setDefaultValue('default')
+      ->setDefaultValue('none')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['link'] = BaseFieldDefinition::create('link')
+      ->setLabel(t('Link'))
+      ->setSettings([
+        'link_type' => LinkItemInterface::LINK_GENERIC,
+        'title' => DRUPAL_OPTIONAL,
+      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

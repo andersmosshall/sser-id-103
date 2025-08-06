@@ -2,7 +2,7 @@
 // https://www.skolverket.se/undervisning/gymnasieskolan/program-och-amnen-i-gymnasieskolan/hitta-program-och-amnen-i-gymnasieskolan-gy25?url=907561864%2Fsyllabuscw%2Fjsp%2Fsearchgy2025.htm%3FalphaSearchString%3D%26searchType%3DFREETEXT%26searchRange%3DGRADE_SUBJECT%26subjectCategory%3D%26searchString%3D&sv.url=12.2b12d9b318c46bc9c3661
 // The open terminal and run the following command js commnd.
 
-(async function(){
+(async function() {
   /**
    * A helper function to pause execution for a specified duration.
    * @param {number} ms - The number of milliseconds to sleep.
@@ -12,13 +12,14 @@
 
   /**
    * Fetches and parses the points for a given subject URL with a retry mechanism.
-   * The attempt is considered a failure if the network request fails or if no points data can be parsed.
+   * Now validates that all expected levels are found after parsing.
    * @param {string} url - The URL to fetch data from.
    * @param {string} subjectName - The name of the subject for logging purposes.
+   * @param {string[]} expectedLevels - An array of level names that must be found.
    * @param {object} config - Configuration for retries and delay.
    * @returns {Promise<object>} A promise that resolves to a map of level names to points.
    */
-  async function fetchAndParsePointsWithRetry(url, subjectName, config) {
+  async function fetchAndParsePointsWithRetry(url, subjectName, expectedLevels, config) {
     const { MAX_RETRIES, RETRY_DELAY } = config;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -40,18 +41,21 @@
             const text = linkInArticle.textContent.trim();
             const match = text.match(/(.+?),\s*(\d+)\s*poäng/);
             if (match) {
-              console.log(`Parsing points for ${subjectName}: ${match[1].trim()} - ${match[2]} poäng`);
+              // Log has been moved from here for cleaner output
               pointsMap[match[1].trim()] = match[2];
             }
           }
         });
 
-        // CRITICAL: Treat as failure if no points were found on a seemingly valid page.
-        if (Object.keys(pointsMap).length === 0) {
-          throw new Error("Parsing succeeded, but no points data was found.");
+        // CRITICAL VALIDATION: Check if all expected levels were found.
+        const parsedLevels = Object.keys(pointsMap);
+        const missingLevels = expectedLevels.filter(level => !parsedLevels.includes(level));
+
+        if (missingLevels.length > 0) {
+          throw new Error(`Parsing failed to find all levels. Missing: ${missingLevels.join(', ')}`);
         }
 
-        console.log(`✅ Success fetching points for ${subjectName}.`);
+        console.log(`✅ Success fetching and validating points for ${subjectName}.`);
         return pointsMap; // Success, exit the loop and return data
 
       } catch (error) {
@@ -69,7 +73,7 @@
   // --- Configuration ---
   const BATCH_SIZE = 15; // How many subjects to fetch in parallel
   const MAX_RETRIES = 5;
-  const RETRY_DELAY = 10000; // in milliseconds
+  const RETRY_DELAY = 5000; // in milliseconds
 
   console.log(`🚀 Starting CSV export... (Batch Size: ${BATCH_SIZE}, Max Retries: ${MAX_RETRIES})`);
 
@@ -77,7 +81,7 @@
   const tableWrappers = document.querySelectorAll('.result_list .table-wrapper');
   const pointsCache = new Map(); // Cache for storing fetched points data
 
-  // --- 1. Collect all unique fetch jobs ---
+  // --- 1. Collect all unique fetch jobs and their expected levels ---
   const fetchJobs = new Map();
   tableWrappers.forEach(wrapper => {
     const table = wrapper.querySelector('table.searchresult');
@@ -87,17 +91,29 @@
     if (headerCell && firstCourseLinkEl) {
       const subjectName = headerCell.querySelector('a').textContent.trim();
       const fetchUrl = window.location.origin + firstCourseLinkEl.getAttribute('href');
+
+      // If seeing this subject's URL for the first time, initialize it
       if (!fetchJobs.has(fetchUrl)) {
-        fetchJobs.set(fetchUrl, { subjectName });
+        fetchJobs.set(fetchUrl, { subjectName, expectedLevels: [] });
       }
+
+      // Add all level names from this table to the job's expectedLevels array
+      const job = fetchJobs.get(fetchUrl);
+      const courseRows = table.querySelectorAll('tbody tr');
+      courseRows.forEach(row => {
+        const levelName = row.querySelector('th a')?.textContent.trim();
+        if (levelName && !job.expectedLevels.includes(levelName)) {
+          job.expectedLevels.push(levelName);
+        }
+      });
     }
   });
 
   // --- 2. Execute fetch jobs in parallel batches ---
-  const allJobPromises = Array.from(fetchJobs.entries()).map(([url, { subjectName }]) =>
+  const allJobPromises = Array.from(fetchJobs.entries()).map(([url, { subjectName, expectedLevels }]) =>
     async () => {
       await sleep(Math.random() * 2000); // Random delay to avoid hitting the server too hard
-      const pointsData = await fetchAndParsePointsWithRetry(url, subjectName, { MAX_RETRIES, RETRY_DELAY });
+      const pointsData = await fetchAndParsePointsWithRetry(url, subjectName, expectedLevels, { MAX_RETRIES, RETRY_DELAY });
       pointsCache.set(url, pointsData);
     }
   );
@@ -105,7 +121,7 @@
   try {
     for (let i = 0; i < allJobPromises.length; i += BATCH_SIZE) {
       const batch = allJobPromises.slice(i, i + BATCH_SIZE);
-      console.log(`Fetching batch ${i / BATCH_SIZE + 1}...`);
+      console.log(`Fetching batch ${Math.floor(i / BATCH_SIZE) + 1} of ${Math.ceil(allJobPromises.length / BATCH_SIZE)}...`);
       await Promise.all(batch.map(job => job()));
     }
   } catch (error) {
@@ -119,7 +135,6 @@
   // --- 3. Process tables and build CSV from cached data ---
   const csvData = [headers];
   tableWrappers.forEach(wrapper => {
-    // This part now runs synchronously using the pre-fetched data
     const table = wrapper.querySelector('table.searchresult');
     const headerCell = table?.querySelector('thead tr:first-child th');
     const firstCourseLinkEl = table?.querySelector('tbody tr th a');
@@ -130,7 +145,10 @@
     const fetchUrl = window.location.origin + firstCourseLinkEl.getAttribute('href');
     const pointsMap = pointsCache.get(fetchUrl);
 
-    if (!pointsMap) return; // Skip if data for this subject failed for some reason
+    if (!pointsMap) {
+      console.error(`❌ No points data found for ${subjectName}. This should not happen!`);
+      return; // Skip this table if no points data is available
+    }
 
     const courseDetails = Array.from(table.querySelectorAll('tbody tr')).map(row => {
       const linkEl = row.querySelector('th a');

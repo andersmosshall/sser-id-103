@@ -107,7 +107,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
 
     $map[] = [
       'module' => 'simple_school_reports_core_gy',
-      'label' => 'Simple school report kärna för gymnasiet',
+      'label' => 'Simple school report kärna för gymnasiet (UNDER UTVECKLING)',
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[CORE_PRICE]]',
