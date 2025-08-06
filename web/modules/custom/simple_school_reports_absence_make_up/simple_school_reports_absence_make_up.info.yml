@@ -7,5 +7,6 @@ version: 11.0.0
 dependencies:
   - simple_school_reports_core:simple_school_reports_core
   - simple_school_reports_extension_proxy:simple_school_reports_extension_proxy
+  - simple_school_reports_core_gr:simple_school_reports_core_gr
 interface translation project: simple_school_reports_absence_make_up
 interface translation server pattern: modules/custom/simple_school_reports_core/translations/%project.%language.po

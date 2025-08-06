@@ -36,6 +36,14 @@ content:
     third_party_settings: {  }
     weight: 10
     region: content
+  group_for:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 12
+    region: content
   label:
     type: string
     label: above
@@ -117,7 +125,6 @@ content:
     region: content
 hidden:
   created: true
-  group_for: true
   identifier: true
   langcode: true
   levels_display: true

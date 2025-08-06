@@ -53,14 +53,22 @@ class ActivateSyllabusFormGr extends ActivateSyllabusFormBase {
 
   protected function getCourseShortLabel(array $course_data): string {
     $subject_code = $course_data['subject_code'] ?? '?';
+    $language_code = $course_data['language_code'] ?? NULL;
+
+    return self::calculateCourseShortLabel($subject_code, $language_code);
+  }
+
+  public static function calculateCourseShortLabel(?string $subject_code, ?string $language_code = NULL): string {
+    $subject_code = $subject_code ?? '?';
+    $subject_code = mb_strtoupper($subject_code);
     if ($subject_code && str_starts_with($subject_code, 'C')) {
       // Remove 'C' prefix.
       $subject_code = mb_substr($subject_code, 1);
     }
 
     $short_name = $subject_code;
-    if (!empty($course_data['language_code'])) {
-      $short_name .= ':' . $course_data['language_code'];
+    if ($language_code) {
+      $short_name .= ':' . mb_strtoupper($language_code);
     }
 
     return $short_name;

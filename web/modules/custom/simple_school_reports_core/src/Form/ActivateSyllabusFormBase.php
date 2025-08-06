@@ -157,8 +157,6 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
         continue;
       }
 
-      $data['school_type_versioned'] = $school_type_versioned;
-
       if (!empty($data['use_langcode'])) {
         if (empty($language_codes)) {
           $this->messenger()->addWarning($this->t('Language is required for %course. Skipping.', ['%course' => $data['label']]));
@@ -295,6 +293,10 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
     }
 
     $syllabus->set('grade_vid', $data['grade_vid'] ?? 'none');
+
+    if (!empty($data['subject_target_id'])) {
+      $syllabus->set('school_subject', ['target_id' => $data['subject_target_id']]);
+    }
 
     $violations = $syllabus->validate();
     if (count($violations) > 0) {

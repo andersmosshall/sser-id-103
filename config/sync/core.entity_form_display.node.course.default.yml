@@ -6,8 +6,10 @@ dependencies:
     - field.field.node.course.field_class
     - field.field.node.course.field_from
     - field.field.node.course.field_school_subject
+    - field.field.node.course.field_school_type_versioned
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
+    - field.field.node.course.field_syllabus
     - field.field.node.course.field_teacher
     - field.field.node.course.field_to
     - node.type.course
@@ -21,28 +23,22 @@ mode: default
 content:
   field_class:
     type: options_select
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   field_from:
     type: ssr_date_timestamp
-    weight: 3
+    weight: 4
     region: content
     settings:
       end_of_day: 0
       noon: 0
       placeholder: ''
     third_party_settings: {  }
-  field_school_subject:
-    type: options_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_ssr_schema:
     type: inline_entity_form_complex
-    weight: 7
+    weight: 8
     region: content
     settings:
       form_mode: default
@@ -60,9 +56,19 @@ content:
     third_party_settings: {  }
   field_student:
     type: options_select
-    weight: 6
+    weight: 7
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_syllabus:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_teacher:
     type: entity_reference_autocomplete
@@ -76,7 +82,7 @@ content:
     third_party_settings: {  }
   field_to:
     type: ssr_date_timestamp
-    weight: 4
+    weight: 5
     region: content
     settings:
       end_of_day: '1'
@@ -85,7 +91,7 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 8
+    weight: 9
     region: content
     settings:
       display_label: true
@@ -100,6 +106,8 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_school_subject: true
+  field_school_type_versioned: true
   langcode: true
   path: true
   promote: true

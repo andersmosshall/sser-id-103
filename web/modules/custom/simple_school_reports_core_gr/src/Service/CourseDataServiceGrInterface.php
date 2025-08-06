@@ -36,6 +36,7 @@ interface CourseDataServiceGrInterface {
    *    - 'group_for': The course codes this cours is a group for, if applicable.
    *    - 'levels': The course codes this course is levels for, if applicable.
    *    - 'grade_vid': The vocabulary ID for the grade taxonomy term, or 'none'.
+   *    - 'school_type_versioned': School type version, e.g. GR:22.
    */
   public function getCourseData(): array;
 

@@ -158,6 +158,18 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
     }
   }
 
+  if ($form_id === 'node_course_edit_form') {
+    $course = $form_state->getFormObject()->getEntity();
+    if (
+      $course instanceof \Drupal\node\NodeInterface &&
+      $course->bundle() === 'course' &&
+      !$course->get('field_syllabus')->isEmpty() &&
+      !empty($form['field_syllabus']['widget'][0]['target_id'])
+    ) {
+      $form['field_syllabus']['widget'][0]['target_id']['#disabled'] = TRUE;
+    }
+  }
+
 }
 
 /**
@@ -307,6 +319,14 @@ function simple_school_reports_core_node_presave(EntityInterface $entity) {
     /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
     $course_service = \Drupal::service('simple_school_reports_core.course_service');
     $course_service->clearLookup();
+
+    $syllabus = $entity->get('field_syllabus')->entity;
+    if (!$syllabus) {
+      throw new \Exception('Syllabus field is required for course nodes.');
+    }
+
+    $entity->set('field_school_subject', $syllabus->get('school_subject')->entity);
+    $entity->set('field_school_type_versioned', $syllabus->get('school_type_versioned')->value);
   }
 }
 

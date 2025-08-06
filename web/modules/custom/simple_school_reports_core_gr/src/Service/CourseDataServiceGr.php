@@ -41,7 +41,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
 
     $course_data = [];
     $language_code_subjects = ['M1', 'M2', 'ML'];
-    $no_subjects = ['BI', 'KE', 'FY', 'TK'];
+    $no_subjects = ['BI', 'KE', 'FY'];
     $so_subjects = ['RE', 'SH', 'HI', 'GE'];
 
     $no_courses = [];
@@ -85,6 +85,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
         'grade_vid' => 'af_grade_system',
         'group_for' => [],
         'levels' => [],
+        'school_type_versioned' => 'GR:22',
       ];
     }
     fclose($handle);
@@ -102,6 +103,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
         'grade_vid' => 'af_grade_system',
         'group_for' => array_values($no_courses),
         'levels' => [],
+        'school_type_versioned' => 'GR:22',
       ];
     }
 
@@ -115,8 +117,9 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
         'use_langcode' => FALSE,
         'official' => FALSE,
         'grade_vid' => 'af_grade_system',
-        'group_for' => array_values($no_courses),
+        'group_for' => array_values($so_courses),
         'levels' => [],
+        'school_type_versioned' => 'GR:22',
       ];
     }
 
@@ -132,6 +135,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
         'grade_vid' => 'none',
         'group_for' => array_merge(array_values($no_courses), array_values($so_courses)),
         'levels' => [],
+        'school_type_versioned' => 'GR:22',
       ];
     }
 
@@ -147,6 +151,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
         'grade_vid' => 'none',
         'group_for' => [],
         'levels' => [],
+        'school_type_versioned' => 'GR:22',
       ];
     }
 

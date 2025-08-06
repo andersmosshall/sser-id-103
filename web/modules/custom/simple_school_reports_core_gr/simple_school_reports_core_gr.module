@@ -2,6 +2,8 @@
 
 use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core_gr\Form\ActivateSyllabusFormGr;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -44,20 +46,15 @@ function simple_school_reports_core_gr_ssr_syllabus_presave(SyllabusInterface $s
     $school_subject_alts = $school_subject_storage->loadByProperties($load_properties);
     /** @var \Drupal\taxonomy\TermInterface $school_subject_alt */
     foreach ($school_subject_alts as $school_subject_alt) {
+      if (!$school_subject_alt->get('field_subject_specify')->isEmpty()) {
+        continue;
+      }
       if ($school_subject_alt->get('field_language_code')->value === $language_code) {
         $school_subject = $school_subject_alt;
         break;
       }
     }
     if (!$school_subject) {
-
-      $t = [
-        'vid' => 'school_subject',
-        'name' => $syllabus->get('subject_name')->value,
-        'field_subject_code_new' => $syllabus->get('subject_code')->value,
-        'field_school_type_versioned' => 'GR:22',
-      ];
-
       // Create a new school subject if it does not exist.
       $school_subject = $school_subject_storage->create([
         'vid' => 'school_subject',

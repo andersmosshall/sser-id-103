@@ -1,0 +1,21 @@
+uuid: 9555525b-ea88-4330-a181-6ab501a8a401
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_school_type_versioned
+    - node.type.course
+  module:
+    - options
+id: node.course.field_school_type_versioned
+field_name: field_school_type_versioned
+entity_type: node
+bundle: course
+label: 'School type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
