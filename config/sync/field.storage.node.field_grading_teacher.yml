@@ -1,12 +1,12 @@
-uuid: 89138b4a-3e8c-407b-9210-0598a2059061
+uuid: b850a193-86fc-471f-ac8c-199514a72153
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - user
-id: node.field_teacher
-field_name: field_teacher
+id: node.field_grading_teacher
+field_name: field_grading_teacher
 entity_type: node
 type: entity_reference
 settings:

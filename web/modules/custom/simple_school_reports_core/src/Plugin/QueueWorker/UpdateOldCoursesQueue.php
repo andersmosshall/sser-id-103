@@ -65,11 +65,11 @@ class UpdateOldCoursesQueue extends QueueWorkerBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function processItem($data) {
-    try {
-      if (!is_array($data) || empty($data['course_nid'])) {
-        return;
-      }
+    if (!is_array($data) || empty($data['course_nid'])) {
+      return;
+    }
 
+    try {
       /** @var \Drupal\node\NodeInterface|null $course */
       $course = $this->entityTypeManager->getStorage('node')->load($data['course_nid']);
       if (!$course || $course->bundle() !== 'course') {
@@ -102,7 +102,7 @@ class UpdateOldCoursesQueue extends QueueWorkerBase implements ContainerFactoryP
       $course->save();
     }
     catch (\Exception $e) {
-      \Drupal::logger('simple_school_reports_core')->error('Error processing item in UpdateOldCoursesQueue: @message', ['@message' => $e->getMessage()]);
+      \Drupal::logger('simple_school_reports_core')->error('Error processing item @id in UpdateOldCoursesQueue: @message', ['@id' => $data['course_nid'], '@message' => $e->getMessage()]);
     }
   }
 }

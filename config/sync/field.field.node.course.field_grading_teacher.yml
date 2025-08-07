@@ -1,15 +1,15 @@
-uuid: 00ad5602-4444-4dda-a620-f3a6c898784f
+uuid: a7ab4126-14e3-4be4-937b-0cc4b83e7afb
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_teacher
+    - field.storage.node.field_grading_teacher
     - node.type.course
-id: node.course.field_teacher
-field_name: field_teacher
+id: node.course.field_grading_teacher
+field_name: field_grading_teacher
 entity_type: node
 bundle: course
-label: Teachers
+label: 'Grading teachers'
 description: ''
 required: false
 translatable: false

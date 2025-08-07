@@ -327,6 +327,15 @@ function simple_school_reports_core_node_presave(EntityInterface $entity) {
 
     $entity->set('field_school_subject', $syllabus->get('school_subject')->entity);
     $entity->set('field_school_type_versioned', $syllabus->get('school_type_versioned')->value);
+
+
+    // Make sure field_teacher includes all teachers in field_grading_teacher.
+    $grading_teacher_uids = array_column($entity->get('field_grading_teacher')->getValue(), 'target_id');
+    $teacher_uids = array_column($entity->get('field_teacher')->getValue(), 'target_id');
+    $teacher_uids = array_unique(array_merge($teacher_uids, $grading_teacher_uids));
+    $entity->set('field_teacher', array_map(function ($uid) {
+      return ['target_id' => $uid];
+    }, $teacher_uids));
   }
 }
 

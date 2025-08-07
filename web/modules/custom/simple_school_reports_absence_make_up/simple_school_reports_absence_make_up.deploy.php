@@ -76,44 +76,44 @@ function simple_school_reports_absence_make_up_deploy_9001() {
   }
 }
 
-///**
-// * Create Bonustimme syllabus.
-// */
-//function simple_school_reports_absence_make_up_deploy_9002() {
-//  $connection = \Drupal::database();
-//
-//  /** @var \Drupal\simple_school_reports_core_gr\Service\CourseDataServiceGrInterface $course_data_service */
-//  $course_data_service = \Drupal::service('simple_school_reports_core_gr.course_data');
-//
-//  $syllabus_exists = [];
-//  $query = $connection->select('ssr_syllabus_field_data', 's');
-//  $query->fields('s', ['course_code']);
-//  $results = $query->execute();
-//  foreach ($results as $result) {
-//    $syllabus_exists[$result->course_code] = TRUE;
-//  }
-//
-//  $data = $course_data_service->getCourseData()['GRCBT'];
-//  if (empty($data)) {
-//    return;
-//  }
-//  $course_data = [
-//    'GRCBT' => $data,
-//  ];
-//
-//  foreach ($course_data as $course_code => $data) {
-//    if (!empty($data['use_langcode'])) {
-//      continue;
-//    }
-//    if (!empty($syllabus_exists[$course_code])) {
-//      continue;
-//    }
-//
-//    $data['short_label'] = ActivateSyllabusFormGr::calculateCourseShortLabel($data['subject_code'], $data['language_code'] ?? NULL);
-//
-//    $stored = ActivateSyllabusFormBase::activateCourse($course_code, $data);
-//    if (!$stored) {
-//      \Drupal::logger('simple_school_reports_core_gr')->error('Failed to activate course ' . $course_code);
-//    }
-//  }
-//}
+/**
+ * Create Bonustimme syllabus.
+ */
+function simple_school_reports_absence_make_up_deploy_9002() {
+  $connection = \Drupal::database();
+
+  /** @var \Drupal\simple_school_reports_core_gr\Service\CourseDataServiceGrInterface $course_data_service */
+  $course_data_service = \Drupal::service('simple_school_reports_core_gr.course_data');
+
+  $syllabus_exists = [];
+  $query = $connection->select('ssr_syllabus_field_data', 's');
+  $query->fields('s', ['course_code']);
+  $results = $query->execute();
+  foreach ($results as $result) {
+    $syllabus_exists[$result->course_code] = TRUE;
+  }
+
+  $data = $course_data_service->getCourseData()['GRCBT'];
+  if (empty($data)) {
+    return;
+  }
+  $course_data = [
+    'GRCBT' => $data,
+  ];
+
+  foreach ($course_data as $course_code => $data) {
+    if (!empty($data['use_langcode'])) {
+      continue;
+    }
+    if (!empty($syllabus_exists[$course_code])) {
+      continue;
+    }
+
+    $data['short_label'] = ActivateSyllabusFormGr::calculateCourseShortLabel($data['subject_code'], $data['language_code'] ?? NULL);
+
+    $stored = ActivateSyllabusFormBase::activateCourse($course_code, $data);
+    if (!$stored) {
+      \Drupal::logger('simple_school_reports_core_gr')->error('Failed to activate course ' . $course_code);
+    }
+  }
+}

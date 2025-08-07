@@ -380,6 +380,13 @@ class UserFormAlter {
   }
 
   public static function handleAbsenceField(ParagraphInterface $paragraph, bool $deleted = FALSE) {
+    if ($paragraph->hasField('field_subject') && $paragraph->hasField('field_syllabus')) {
+      $syllabus = $paragraph->get('field_syllabus')->entity;
+      if ($syllabus) {
+        $paragraph->set('field_subject', $syllabus->get('school_subject')->entity);
+      }
+    }
+
     if ($paragraph->hasField('field_invalid_absence') && $paragraph->hasField('field_student') && !$paragraph->get('field_student')->isEmpty()) {
       $invalid_absence_change = 0;
 

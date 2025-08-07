@@ -326,4 +326,17 @@ function simple_school_reports_core_gr_deploy_10002() {
   foreach ($course_nids as $id) {
     $queue->createItem(['course_nid' => $id]);
   }
+
+  // Take the opportunity to queue all course attendance reports for updates.
+  $course_nids = \Drupal::entityTypeManager()->getStorage('node')
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'course_attendance_report')
+    ->execute();
+
+  $queue = \Drupal::service('queue')->get('ssr_update_course_attendance_report');
+  $queue->createQueue();
+  foreach ($course_nids as $id) {
+    $queue->createItem(['course_attendance_report_nid' => $id]);
+  }
 }
