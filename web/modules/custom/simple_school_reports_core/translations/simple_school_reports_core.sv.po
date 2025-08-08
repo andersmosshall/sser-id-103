@@ -3415,6 +3415,177 @@ msgstr "Användare @name saknar ett giltigt personnummer"
 msgid "Skipping @name due to missing personal number."
 msgstr "Hoppar över @name på grund av saknat personnummer."
 
+msgid "No syllabus found for this course. Please update the course."
+msgstr "Ingen ämnes-/kursplan hittades för denna kurs. Vänligen uppdatera kursen."
+
+msgid "Subjects have been activated."
+msgstr "Ämnen har aktiverats."
+
+msgid "Activate school subjects"
+msgstr "Aktivera skolämnen"
+
+msgid "List and handle school subjects in Grundskolan."
+msgstr "Lista och hantera skolämnen i Grundskolan."
+
+msgid "Subject syllabuses in grundskolan"
+msgstr "Kursplaner i grundskolan"
+
+msgid "Add custom syllabus"
+msgstr "Lägg till egen kursplan"
+
+msgid "Activate syllabus"
+msgstr "Aktivera kursplan"
+
+msgid "Syllabus @name created."
+msgstr "Kursplanen @name har skapats."
+
+msgid "The course code is already occupied."
+msgstr "Kurskoden är redan upptagen."
+
+msgid "The course code is already occupied with one or more of the selected languages."
+msgstr "Kurskoden är redan upptagen med ett eller flera av de valda språken."
+
+msgid "Type to search for course syllabuses"
+msgstr "Skriv för att söka efter kursplaner"
+
+msgid "Type to search for languages"
+msgstr "Skriv för att söka efter språk"
+
+msgid "Select language(s) to enable for the course that supports language. Ignore if this course does not support different languages."
+msgstr "Välj språk att aktivera för kursen som stöder språk. Ignorera om kursen inte stöder olika språk."
+
+msgid "Select language(s) to enable for the subject that supports languages. Ignore if this course does not support different languages."
+msgstr "Välj språk att aktivera för ämnet som stöder språk. Ignorera om kursen inte stöder olika språk."
+
+msgid "Grade system"
+msgstr "Betygssystem"
+
+msgid "Points"
+msgstr "Poäng"
+
+msgid "Link to detailed course information"
+msgstr "Länk till detaljerad kursinformation"
+
+msgid "Course code"
+msgstr "Kurskod"
+
+msgid "Course short label"
+msgstr "Kortnamn för kurs"
+
+msgid "Course label"
+msgstr "Kursnamn"
+
+msgid "Create syllabus"
+msgstr "Skapa kursplan"
+
+msgid "Syllabuses have been activated."
+msgstr "Kursplaner har aktiverats."
+
+msgid "Failed to activate course %course"
+msgstr "Misslyckades med att aktivera kursen %course"
+
+msgid "Activate courses"
+msgstr "Aktivera kurser"
+
+msgid "No valid courses selected."
+msgstr "Inga giltiga kurser valda."
+
+msgid "Language is required for %course. Skipping."
+msgstr "Språk krävs för %course. Hoppar över."
+
+msgid "Select language(s) to enable for courses that supports languages. For courses that do not support languages, this option will be ignored."
+msgstr "Välj språk att aktivera för kurser som stöder språk. För kurser som inte stöder språk ignoreras detta val."
+
+msgid "Course syllabuses"
+msgstr "Kurskursplaner"
+
+msgid "Select school type to list and handle Subject/Course syllabuses."
+msgstr "Välj skoltyp för att lista och hantera ämnes-/kursplaner."
+
+msgid "Subject/Course syllabuses"
+msgstr "Ämnes-/kursplaner"
+
+msgid "The course code %code already exists."
+msgstr "Kurskoden %code finns redan."
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 

@@ -8,6 +8,7 @@ dependencies:
     - field.field.paragraph.student_course_attendance.field_invalid_absence_original
     - field.field.paragraph.student_course_attendance.field_student
     - field.field.paragraph.student_course_attendance.field_subject
+    - field.field.paragraph.student_course_attendance.field_syllabus
     - paragraphs.paragraphs_type.student_course_attendance
 id: paragraph.student_course_attendance.default
 targetEntityType: paragraph
@@ -37,7 +38,7 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_subject:
+  field_syllabus:
     type: entity_reference_autocomplete
     weight: 3
     region: content
@@ -50,4 +51,5 @@ content:
 hidden:
   created: true
   field_invalid_absence_original: true
+  field_subject: true
   status: true

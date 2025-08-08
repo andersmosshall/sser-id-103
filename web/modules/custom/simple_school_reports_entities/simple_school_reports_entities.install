@@ -7,6 +7,7 @@
 
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\link\LinkItemInterface;
 
 /**
  * Install meeting entity type.
@@ -366,5 +367,26 @@ function simple_school_reports_entities_update_10016() {
     \Drupal::entityTypeManager()->clearCachedDefinitions();
     \Drupal::entityDefinitionUpdateManager()
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_syllabus'));
+  }
+}
+
+/**
+ * Install ssr syllabus link field.
+ */
+function simple_school_reports_entities_update_10017() {
+  $fields = [];
+
+  $fields['link'] = BaseFieldDefinition::create('link')
+    ->setLabel(t('Link'))
+    ->setSettings([
+      'link_type' => LinkItemInterface::LINK_GENERIC,
+      'title' => DRUPAL_OPTIONAL,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_syllabus', 'simple_school_reports_entities', $storage_definition);
   }
 }

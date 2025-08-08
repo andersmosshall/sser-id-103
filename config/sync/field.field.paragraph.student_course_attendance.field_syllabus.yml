@@ -1,0 +1,26 @@
+uuid: 82b75635-83ba-45d0-80b2-ef4a3e04641d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_syllabus
+    - paragraphs.paragraphs_type.student_course_attendance
+id: paragraph.student_course_attendance.field_syllabus
+field_name: field_syllabus
+entity_type: paragraph
+bundle: student_course_attendance
+label: 'Subject/Course syllabus'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:ssr_syllabus'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

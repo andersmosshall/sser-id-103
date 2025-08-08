@@ -6,9 +6,12 @@ dependencies:
     - core.entity_view_mode.node.number_of_students
     - field.field.node.course.field_class
     - field.field.node.course.field_from
+    - field.field.node.course.field_grading_teacher
     - field.field.node.course.field_school_subject
+    - field.field.node.course.field_school_type_versioned
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
+    - field.field.node.course.field_syllabus
     - field.field.node.course.field_teacher
     - field.field.node.course.field_to
     - node.type.course
@@ -27,9 +30,12 @@ content:
 hidden:
   field_class: true
   field_from: true
+  field_grading_teacher: true
   field_school_subject: true
+  field_school_type_versioned: true
   field_ssr_schema: true
   field_student: true
+  field_syllabus: true
   field_teacher: true
   field_to: true
   langcode: true

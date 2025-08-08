@@ -8,6 +8,7 @@ dependencies:
     - field.field.paragraph.student_course_attendance.field_invalid_absence_original
     - field.field.paragraph.student_course_attendance.field_student
     - field.field.paragraph.student_course_attendance.field_subject
+    - field.field.paragraph.student_course_attendance.field_syllabus
     - paragraphs.paragraphs_type.student_course_attendance
   module:
     - options
@@ -39,6 +40,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_syllabus:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   field_invalid_absence_original: true

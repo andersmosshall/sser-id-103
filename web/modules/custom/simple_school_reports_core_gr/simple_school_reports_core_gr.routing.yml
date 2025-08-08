@@ -1,0 +1,20 @@
+simple_school_reports_core_gr.activate_syllabus:
+  path: '/admin/syllabuses/gr/activate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gr\Form\ActivateSyllabusFormGr'
+    _title: 'Activate syllabus'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core_gr.add_custom_syllabus:
+  path: '/admin/syllabuses/gr/add-custom'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gr\Form\AddCustomSyllabusFormGr'
+    _title: 'Add custom syllabus'
+  requirements:
+    _permission: 'super user permissions'
+  options:
+    _admin_route: TRUE
+

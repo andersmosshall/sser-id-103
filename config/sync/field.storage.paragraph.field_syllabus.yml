@@ -1,0 +1,20 @@
+uuid: 5ef96e82-0a2f-4d48-9c10-40a0c7075456
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - simple_school_reports_entities
+id: paragraph.field_syllabus
+field_name: field_syllabus
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: ssr_syllabus
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

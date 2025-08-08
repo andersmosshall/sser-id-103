@@ -1,0 +1,11 @@
+simple_school_reports_core_gr.activate_syllabus:
+  title: 'Activate syllabus'
+  route_name: simple_school_reports_core_gr.activate_syllabus
+  appears_on:
+    - view.syllabus.gr
+
+simple_school_reports_core_gr.add_custom_syllabus:
+  title: 'Add custom syllabus'
+  route_name: simple_school_reports_core_gr.add_custom_syllabus
+  appears_on:
+    - view.syllabus.gr

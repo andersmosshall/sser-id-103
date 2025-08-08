@@ -5,13 +5,17 @@ dependencies:
   config:
     - field.field.node.course.field_class
     - field.field.node.course.field_from
+    - field.field.node.course.field_grading_teacher
     - field.field.node.course.field_school_subject
+    - field.field.node.course.field_school_type_versioned
     - field.field.node.course.field_ssr_schema
     - field.field.node.course.field_student
+    - field.field.node.course.field_syllabus
     - field.field.node.course.field_teacher
     - field.field.node.course.field_to
     - node.type.course
   module:
+    - options
     - user
 id: node.course.default
 targetEntityType: node
@@ -24,7 +28,7 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 4
+    weight: 7
     region: content
   field_from:
     type: timestamp
@@ -44,15 +48,30 @@ content:
         refresh: 60
         description: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
-  field_school_subject:
+  field_grading_teacher:
     type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 6
+    region: content
+  field_school_subject:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_school_type_versioned:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
   field_ssr_schema:
     type: entity_reference_label
@@ -60,7 +79,7 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 9
     region: content
   field_student:
     type: entity_reference_label
@@ -68,7 +87,15 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 8
+    region: content
+  field_syllabus:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
     region: content
   field_teacher:
     type: entity_reference_label
@@ -76,7 +103,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 5
     region: content
   field_to:
     type: timestamp
@@ -96,7 +123,7 @@ content:
         refresh: 60
         description: ''
     third_party_settings: {  }
-    weight: 2
+    weight: 4
     region: content
 hidden:
   langcode: true

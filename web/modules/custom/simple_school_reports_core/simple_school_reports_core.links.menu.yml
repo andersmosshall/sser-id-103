@@ -83,11 +83,17 @@ simple_school_reports_core.config_terms:
   description: 'Add new term or change existing terms.'
   route_name: view.terms.terms
 
-simple_school_reports_core.config_school_subject:
-  title: 'School subjects'
+#simple_school_reports_core.config_school_subject:
+#  title: 'School subjects'
+#  parent: simple_school_reports_core.config
+#  description: 'List school subjects and add new language subjects.'
+#  route_name: view.syllabus.gr
+
+simple_school_reports_core.config_syllabuses:
+  title: 'Subject/Course syllabuses'
   parent: simple_school_reports_core.config
-  description: 'List school subjects and add new language subjects.'
-  route_name: view.school_subjects.school_subjects
+  description: 'Select school type to list and handle Subject/Course syllabuses.'
+  route_name: simple_school_reports_core.config_syllabuses
 
 simple_school_reports_core.config_message_templates:
   title: 'Message templates config'
