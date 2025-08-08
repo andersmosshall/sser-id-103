@@ -157,3 +157,12 @@ blur_secret_fields:
     - core/jquery
     - core/once
     - core/drupal
+
+ssr_multi_select:
+  version: VERSION
+  js:
+    js/ssr_multi_select.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

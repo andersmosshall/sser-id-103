@@ -280,6 +280,19 @@ function simple_school_reports_entities_views_data_alter(array &$data) {
       ],
     ];
   }
+
+  if (isset($data['ssr_syllabus'])) {
+    $data['ssr_syllabus']['syllabus_levels'] = [
+      'title' => t('Syllabus levels'),
+      'help' => t('Syllabus levels'),
+      'field' => [
+        'id' => 'syllabus_levels',
+      ],
+    ];
+  }
+
+
+
 }
 
 /**

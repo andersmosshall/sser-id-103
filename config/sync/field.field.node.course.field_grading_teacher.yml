@@ -1,0 +1,38 @@
+uuid: a7ab4126-14e3-4be4-937b-0cc4b83e7afb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grading_teacher
+    - node.type.course
+id: node.course.field_grading_teacher
+field_name: field_grading_teacher
+entity_type: node
+bundle: course
+label: 'Grading teachers'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: field_first_name
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        teacher: teacher
+        student: '0'
+        caregiver: '0'
+        administrator: '0'
+        principle: '0'
+        budget_reviewer: '0'
+        budget_administrator: '0'
+        super_admin: '0'
+    include_anonymous: false
+field_type: entity_reference

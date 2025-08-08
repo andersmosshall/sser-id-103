@@ -158,6 +158,18 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
     }
   }
 
+  if ($form_id === 'node_course_edit_form') {
+    $course = $form_state->getFormObject()->getEntity();
+    if (
+      $course instanceof \Drupal\node\NodeInterface &&
+      $course->bundle() === 'course' &&
+      !$course->get('field_syllabus')->isEmpty() &&
+      !empty($form['field_syllabus']['widget'][0]['target_id'])
+    ) {
+      $form['field_syllabus']['widget'][0]['target_id']['#disabled'] = TRUE;
+    }
+  }
+
 }
 
 /**
@@ -271,6 +283,7 @@ function simple_school_reports_core_taxonomy_term_presave(EntityInterface $entit
     if ($subject_code = $entity->get('field_subject_code_new')->value) {
       if ($language_code = $entity->get('field_language_code')->value) {
         $subject_options = SchoolSubjectHelper::getSupportedLanguageSubjectCodes();
+        $subject_options['COA'] = 'Övriga ämnen';
         $raw_name = $subject_options[$subject_code] ?? '() ?';
         $parts = explode(') ', $raw_name);
         $name = count($parts) >= 2 ? $parts[1] : $raw_name;
@@ -306,6 +319,23 @@ function simple_school_reports_core_node_presave(EntityInterface $entity) {
     /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
     $course_service = \Drupal::service('simple_school_reports_core.course_service');
     $course_service->clearLookup();
+
+    $syllabus = $entity->get('field_syllabus')->entity;
+    if (!$syllabus) {
+      throw new \Exception('Syllabus field is required for course nodes.');
+    }
+
+    $entity->set('field_school_subject', $syllabus->get('school_subject')->entity);
+    $entity->set('field_school_type_versioned', $syllabus->get('school_type_versioned')->value);
+
+
+    // Make sure field_teacher includes all teachers in field_grading_teacher.
+    $grading_teacher_uids = array_column($entity->get('field_grading_teacher')->getValue(), 'target_id');
+    $teacher_uids = array_column($entity->get('field_teacher')->getValue(), 'target_id');
+    $teacher_uids = array_unique(array_merge($teacher_uids, $grading_teacher_uids));
+    $entity->set('field_teacher', array_map(function ($uid) {
+      return ['target_id' => $uid];
+    }, $teacher_uids));
   }
 }
 
@@ -594,6 +624,11 @@ function simple_school_reports_core_views_pre_view(ViewExecutable $view, $displa
     $view->element['#cache']['contexts'][] = 'user.node_grants';
   }
 
+  // Add cache user permissions on views that is rendering nodes.
+  if ($view->getBaseEntityType() && $view->getBaseEntityType()->id() === 'ssr_syllabus') {
+    $view->element['#cache']['contexts'][] = 'user.permissions';
+  }
+
   if ($view->id() === 'registered_absence') {
     $view->element['#cache']['contexts'][] = 'current_day';
     $view->element['#cache']['contexts'][] = 'user';
@@ -844,6 +879,24 @@ function simple_school_reports_core_entity_operation_alter(array &$operations, \
         ];
       }
 
+    }
+  }
+
+  if ($entity instanceof \Drupal\simple_school_reports_entities\SyllabusInterface) {
+    $status = $entity->get('status')->value;
+    if ($status) {
+      $operations['deactivate'] = [
+        'title' => t('Deactivate'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_deactivate_syllabus', ['ssr_syllabus' => $entity->id(), 'status' => 'deactivate'], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+    }
+    else {
+      $operations['activate'] = [
+        'title' => t('Activate'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_deactivate_syllabus', ['ssr_syllabus' => $entity->id(), 'status' => 'activate'], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
     }
   }
 }

@@ -13,6 +13,7 @@ use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseAttendanceReportFormAlter {
 
@@ -35,6 +36,13 @@ class CourseAttendanceReportFormAlter {
       }
 
       $course = self::getCourseNode($form_state);
+
+      $syllabus = $course->get('field_syllabus')->entity;
+      if (!$syllabus) {
+        \Drupal::messenger()->addError(t('No syllabus found for this course. Please update the course.'));
+        throw new NotFoundHttpException('Missing syllabus for course node ' . $course->id());
+      }
+
       if ($course && !$course->get('field_ssr_schema')->isEmpty()) {
         /** @var \Drupal\simple_school_reports_core\Service\CourseServiceInterface $course_service */
         $course_service = \Drupal::service('simple_school_reports_core.course_service');
@@ -846,6 +854,7 @@ class CourseAttendanceReportFormAlter {
         $paragraph->set('field_invalid_absence_original', $invalid_absence);
 
         $paragraph->set('field_student', $data['user']);
+        $paragraph->set('field_syllabus', ['target_id' => $course->get('field_syllabus')->target_id]);
         $paragraph->set('field_subject', ['target_id' => $course->get('field_school_subject')->target_id]);
         $paragraph->setNewRevision(FALSE);
 

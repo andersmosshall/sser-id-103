@@ -10,9 +10,11 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\simple_school_reports_entities\Plugin\Field\FieldType\SyllabusLevels;
 use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\Core\Entity\EntityPublishedTrait;
 
 /**
  * Defines the syllabus entity class.
@@ -20,12 +22,12 @@ use Drupal\user\EntityOwnerTrait;
  * @ContentEntityType(
  *   id = "ssr_syllabus",
  *   label = @Translation("Syllabus"),
- *   label_collection = @Translation("Syllabi"),
+ *   label_collection = @Translation("Syllabus"),
  *   label_singular = @Translation("syllabus"),
- *   label_plural = @Translation("syllabi"),
+ *   label_plural = @Translation("Syllabus"),
  *   label_count = @PluralTranslation(
- *     singular = "@count syllabi",
- *     plural = "@count syllabi",
+ *     singular = "@count Syllabus",
+ *     plural = "@count Syllabus",
  *   ),
  *   handlers = {
  *     "list_builder" = "Drupal\simple_school_reports_entities\SyllabusListBuilder",
@@ -67,6 +69,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
+  use EntityPublishedTrait;
 
   /**
    * {@inheritdoc}
@@ -78,6 +81,13 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       $this->setOwnerId(0);
     }
 
+    // Official Syllabus cannot be custom.
+    if ($this->get('official')->value) {
+      $this->set('custom', FALSE);
+    }
+  }
+
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     if ($this->get('school_subject')->isEmpty()) {
       throw new \LogicException('The school subject id cannot be empty.');
     }
@@ -85,11 +95,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
     if ($this->get('identifier')->isEmpty()) {
       throw new \LogicException('Identifier cannot be empty.');
     }
-
-    // Official syllabi cannot be custom.
-    if ($this->get('official')->value) {
-      $this->set('custom', FALSE);
-    }
+    parent::postSave($storage, $update);
   }
 
   /**
@@ -108,7 +114,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['short_label'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Label'))
+      ->setLabel(t('Short Label'))
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setSetting('max_length', 12)
@@ -119,7 +125,9 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('Identifier'))
       ->addConstraint('UniqueField')
       ->setRequired(TRUE)
-      ->setSetting('max_length', 255);
+      ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
@@ -130,7 +138,7 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Author'))
+      ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
       ->setDisplayConfigurable('form', TRUE)
@@ -161,14 +169,13 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
 
     $fields['group_for'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Group for'))
-      ->setRequired(TRUE)
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'ssr_syllabus')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['school_type_versioned'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('Lookup type'))
+      ->setLabel(t('School type'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
       ->setDefaultValue('default')
@@ -197,28 +204,28 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['subject_name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Subject name'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['subject_designation'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Subject designation'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 50)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['course_code'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Course code'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 50)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['language_code'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Subject code'))
+      ->setLabel(t('Language code'))
       ->setSetting('max_length', 5)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -262,7 +269,16 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('Grade system'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_entities_grade_vid_options')
-      ->setDefaultValue('default')
+      ->setDefaultValue('none')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['link'] = BaseFieldDefinition::create('link')
+      ->setLabel(t('Link'))
+      ->setSettings([
+        'link_type' => LinkItemInterface::LINK_GENERIC,
+        'title' => DRUPAL_OPTIONAL,
+      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
