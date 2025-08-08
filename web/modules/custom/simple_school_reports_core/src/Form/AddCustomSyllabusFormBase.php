@@ -148,7 +148,7 @@ abstract class AddCustomSyllabusFormBase extends ConfirmFormBase {
     $form['language_codes'] = [
       '#type' => 'ssr_multi_select',
       '#title' => $this->t('Language'),
-      '#description' => $this->t('Select language(s) to enable for the subject that supports languages. Ignore if this course does not support different languages.'),
+      '#description' => $this->t('Select language(s) to enable for the course that supports language. Ignore if this course does not support different languages.'),
       '#options' => SchoolSubjectHelper::getSupportedLanguageCodes(),
       '#filter_placeholder' => $this->t('Type to search for languages'),
     ];

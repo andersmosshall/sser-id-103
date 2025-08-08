@@ -99,6 +99,15 @@ class UpdateOldCoursesQueue extends QueueWorkerBase implements ContainerFactoryP
       }
 
       $course->set('field_syllabus', $syllabus);
+
+      // If grading teacher is not set, use the first teacher from the syllabus.
+      if ($course->get('field_grading_teacher')->isEmpty()) {
+        $first_teacher = current($course->get('field_teacher')->referencedEntities());
+        if (!empty($first_teacher)) {
+          $course->set('field_grading_teacher', $first_teacher);
+        }
+      }
+
       $course->save();
     }
     catch (\Exception $e) {

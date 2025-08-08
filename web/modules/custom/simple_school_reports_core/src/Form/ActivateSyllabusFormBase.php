@@ -4,11 +4,9 @@ namespace Drupal\simple_school_reports_core\Form;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\link\LinkItemInterface;
 use Drupal\simple_school_reports_core\SchoolSubjectHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -141,16 +139,12 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $courses = $form_state->getValue('courses');
 
-
     $language_codes = $form_state->getValue('language_code', []);
-    $school_type_versioned = $this->getSchoolTypeVersioned();
 
     $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE);
 
-
     $course_data_src = $this->getCourseData();
     $course_data = [];
-
 
     foreach ($course_data_src as $course_code => $data) {
       if (!in_array($course_code, $courses)) {
@@ -319,7 +313,7 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
       \Drupal::messenger()->addStatus(self::getSuccessMessage());
     }
     else {
-      \Drupal::messenger()->addError('Something went wrong.');
+      \Drupal::messenger()->addError(t('Something went wrong.'));
     }
   }
 }

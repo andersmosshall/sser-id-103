@@ -348,21 +348,21 @@ class GradeRoundFormAlter {
     /** @var \Drupal\Core\Database\Connection $connection */
     $connection = \Drupal::service('database');
 
-    $query = $connection->select('node__field_teacher', 't');
+    $query = $connection->select('node__field_grading_teacher', 't');
     $query->innerJoin('node__field_student', 's', 's.entity_id = t.entity_id');
     $query->innerJoin('node__field_school_subject', 'sub', 'sub.entity_id = t.entity_id');
     $query->condition('t.bundle', 'course')
       ->condition('sub.field_school_subject_target_id', $subject_ids, 'IN')
       ->condition('s.field_student_target_id', $student_uids, 'IN')
-      ->condition('t.field_teacher_target_id', $allowed_teachers, 'IN')
+      ->condition('t.field_grading_teacher_target_id', $allowed_teachers, 'IN')
       ->fields('sub',['field_school_subject_target_id'])
-      ->fields('t',['field_teacher_target_id']);
+      ->fields('t',['field_grading_teacher_target_id']);
     $results = $query->execute();
 
     $teachers = [];
 
     foreach ($results as $result) {
-      $teachers[$result->field_school_subject_target_id][$result->field_teacher_target_id] = ['target_id' => $result->field_teacher_target_id];
+      $teachers[$result->field_school_subject_target_id][$result->field_grading_teacher_target_id] = ['target_id' => $result->field_grading_teacher_target_id];
     }
 
     $subject_ids = array_keys($teachers);
