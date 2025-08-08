@@ -142,6 +142,7 @@ class CalculateSkolonExportQueue extends QueueWorkerBase implements ContainerFac
             'label' => 'Skolon export list ' . $active_skolon_queue['queue_id'],
             'meta' => Json::encode($active_skolon_queue['uids']),
           ]);
+          $lookup_item->set('expires', strtotime('+1 month'));
           $lookup_item->save();
 
           $subject = t('Skolon export for @school_name', ['@school_name' => Settings::get('ssr_school_name', '-')]);
