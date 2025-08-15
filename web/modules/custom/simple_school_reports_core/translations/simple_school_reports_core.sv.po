@@ -3583,11 +3583,11 @@ msgstr "Program"
 msgid "Select school type to list and handle programmes."
 msgstr "Välj skoltyp för att lista och hantera program."
 
-msgid ""
-msgstr ""
+msgid "Are you sure you want to activate syllabus?"
+msgstr "Är du säker på att du vill aktivera kursplanen?"
 
-msgid ""
-msgstr ""
+msgid "Are you sure you want to deactivate syllabus?"
+msgstr "Är du säker på att du vill inaktivera kursplanen?"
 
 msgid ""
 msgstr ""

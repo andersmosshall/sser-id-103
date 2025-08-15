@@ -191,7 +191,6 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('Levels'))
       ->setComputed(TRUE)
       ->setReadOnly(TRUE)
-      ->setSetting('target_type', 'user')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setClass(SyllabusLevels::class)
       ->setDisplayConfigurable('view', TRUE);
