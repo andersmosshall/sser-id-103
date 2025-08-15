@@ -1,0 +1,12 @@
+<?php
+
+use Drupal\simple_school_reports_entities\SyllabusInterface;
+use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_core_gy_ssr_syllabus_presave(SyllabusInterface $syllabus) {
+  ActivateSyllabusFormBase::handleSubjectTarget($syllabus, 'GY:2011');
+  ActivateSyllabusFormBase::handleSubjectTarget($syllabus, 'GY:2025');
+}

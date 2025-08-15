@@ -108,3 +108,15 @@ entity.ssr_syllabus.collection:
   description: 'List of syllabi.'
   route_name: entity.ssr_syllabus.collection
   parent: system.admin_content
+
+entity.ssr_programme.settings:
+  title: 'Programme'
+  description: 'Configure a Programme entity type.'
+  route_name:  entity.ssr_programme.settings
+  parent: system.admin_structure
+
+entity.ssr_programme.collection:
+  title: 'Programmes'
+  description: 'List of programmes.'
+  route_name: entity.ssr_programme.collection
+  parent: system.admin_content

@@ -8,6 +8,7 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -141,7 +142,7 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
 
     $language_codes = $form_state->getValue('language_code', []);
 
-    $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE);
+    $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE, TRUE);
 
     $course_data_src = $this->getCourseData();
     $course_data = [];
@@ -314,6 +315,72 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
     }
     else {
       \Drupal::messenger()->addError(t('Something went wrong.'));
+    }
+  }
+
+  public static function handleSubjectTarget(SyllabusInterface $syllabus, string $school_type) {
+    if ($syllabus->get('school_type_versioned')->value !== $school_type) {
+      return;
+    }
+
+    $syllabus->set('identifier', self::calculateSyllabusIdentifier($syllabus->get('course_code')->value, $syllabus->get('language_code')->value));
+
+    /** @var \Drupal\taxonomy\TermInterface|null $school_subject */
+    $school_subject = $syllabus->get('school_subject')->entity;
+    if ($school_subject && $syllabus->isPublished() && !$school_subject->isPublished()) {
+      $school_subject->setPublished(TRUE);
+      $school_subject->save();
+    }
+
+    if (!$school_subject) {
+      // Load school subject or create a new one if it does not exist.
+      $subject_code = $syllabus->get('subject_code')->value;
+      if (!$subject_code) {
+        $subject_code = 'COA';
+        $syllabus->set('subject_code', 'COA');
+        $syllabus->set('subject_designation', 'COA');
+        $syllabus->set('subject_name', 'Övriga ämnen');
+      }
+
+      $load_properties = [
+        'vid' => 'school_subject',
+        'field_subject_code_new' => $subject_code,
+        'field_school_type_versioned' => $school_type,
+      ];
+      $language_code = $syllabus->get('language_code')->value ?? NULL;
+      if ($language_code) {
+        $load_properties['field_language_code'] = $language_code;
+      }
+
+      $school_subject_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+      $school_subject = NULL;
+      $school_subject_alts = $school_subject_storage->loadByProperties($load_properties);
+      /** @var \Drupal\taxonomy\TermInterface $school_subject_alt */
+      foreach ($school_subject_alts as $school_subject_alt) {
+        if (!$school_subject_alt->get('field_subject_specify')->isEmpty()) {
+          continue;
+        }
+        if ($school_subject_alt->get('field_language_code')->value === $language_code) {
+          $school_subject = $school_subject_alt;
+          break;
+        }
+      }
+      if (!$school_subject) {
+        // Create a new school subject if it does not exist.
+        $school_subject = $school_subject_storage->create([
+          'vid' => 'school_subject',
+          'name' => $syllabus->get('subject_name')->value,
+          'field_subject_code_new' => $syllabus->get('subject_code')->value,
+          'field_school_type_versioned' => $school_type,
+        ]);
+        if ($language_code) {
+          $school_subject->set('field_language_code', $language_code);
+        }
+      }
+
+      $school_subject->setPublished(TRUE);
+      $school_subject->save();
+      $syllabus->set('school_subject', $school_subject);
     }
   }
 }

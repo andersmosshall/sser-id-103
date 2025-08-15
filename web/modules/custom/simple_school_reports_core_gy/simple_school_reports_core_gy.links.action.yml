@@ -1,0 +1,23 @@
+simple_school_reports_core_gy.activate_syllabus_gy11:
+  title: 'Activate syllabus'
+  route_name: simple_school_reports_core_gy.activate_syllabus_gy11
+  appears_on:
+    - view.syllabus.gy11
+    -
+simple_school_reports_core_gy.add_custom_syllabus_gy11:
+  title: 'Add custom syllabus'
+  route_name: simple_school_reports_core_gy.add_custom_syllabus_gy11
+  appears_on:
+    - view.syllabus.gy11
+
+simple_school_reports_core_gy.activate_syllabus_gy25:
+  title: 'Activate syllabus'
+  route_name: simple_school_reports_core_gy.activate_syllabus_gy25
+  appears_on:
+    - view.syllabus.gy25
+
+simple_school_reports_core_gy.add_custom_syllabus_gy25:
+  title: 'Add custom syllabus'
+  route_name: simple_school_reports_core_gy.add_custom_syllabus_gy25
+  appears_on:
+    - view.syllabus.gy25

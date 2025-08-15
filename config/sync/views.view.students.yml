@@ -100,6 +100,7 @@ display:
             - simple_school_reports_core_mail_caregivers_action
             - simple_school_reports_core_reset_invalid_absence
             - ssr_assign_to_class
+            - ssr_assign_to_programme
             - ssr_export_users
             - ssr_mail_students
             - user_cancel_user_action
@@ -1175,6 +1176,7 @@ display:
             trim: false
             preserve_tags: ''
             html: false
+            destination: 0
           element_type: ''
           element_class: ''
           element_label_type: ''
@@ -1196,6 +1198,7 @@ display:
             - simple_school_reports_core_mail_caregivers_action
             - simple_school_reports_core_reset_invalid_absence
             - ssr_assign_to_class
+            - ssr_assign_to_programme
             - ssr_mail_students
             - user_cancel_user_action
         field_first_name:
@@ -2622,6 +2625,7 @@ display:
             trim: false
             preserve_tags: ''
             html: false
+            destination: 0
           element_type: ''
           element_class: ''
           element_label_type: ''
@@ -2643,6 +2647,7 @@ display:
             - simple_school_reports_core_mail_caregivers_action
             - simple_school_reports_core_reset_invalid_absence
             - ssr_assign_to_class
+            - ssr_assign_to_programme
             - ssr_mail_students
             - user_cancel_user_action
         field_first_name:

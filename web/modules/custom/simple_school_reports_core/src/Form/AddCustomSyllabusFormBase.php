@@ -208,7 +208,7 @@ abstract class AddCustomSyllabusFormBase extends ConfirmFormBase {
       $language_codes[] = 'no_language';
     }
 
-    $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE);
+    $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE, TRUE);
 
     foreach ($language_codes as $language_code) {
       if ($language_code === 'no_language') {

@@ -277,39 +277,6 @@ function _simple_school_reports_core_resolve_name(&$name, \Drupal\user\UserInter
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function simple_school_reports_core_taxonomy_term_presave(EntityInterface $entity) {
-  if ($entity->bundle() === 'school_subject') {
-    SchoolSubjectHelper::$subjectShortNameMap = NULL;
-    if ($subject_code = $entity->get('field_subject_code_new')->value) {
-      if ($language_code = $entity->get('field_language_code')->value) {
-        $subject_options = SchoolSubjectHelper::getSupportedLanguageSubjectCodes();
-        $subject_options['COA'] = 'Övriga ämnen';
-        $raw_name = $subject_options[$subject_code] ?? '() ?';
-        $parts = explode(') ', $raw_name);
-        $name = count($parts) >= 2 ? $parts[1] : $raw_name;
-
-        $language_options = SchoolSubjectHelper::getSupportedLanguageCodes();
-        $raw_name = $language_options[$language_code] ?? '() ?';
-        $parts = explode(' ', $raw_name);
-        // First part is the code.
-        array_shift($parts);
-        $language_name = implode(' ', $parts);
-        $language_name = mb_strtolower($language_name);
-
-        if (strlen($language_name) >= 25) {
-          $language_name = substr($language_name, 0, 22) . '...';
-        }
-        $name .= ', ' . $language_name;
-        $entity->set('name', $name);
-      }
-    }
-  }
-}
-
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
 function simple_school_reports_core_node_presave(EntityInterface $entity) {
   if ($entity->bundle() === 'day_absence') {
     AbsenceDayHandler::preSave($entity);
@@ -895,6 +862,24 @@ function simple_school_reports_core_entity_operation_alter(array &$operations, \
       $operations['activate'] = [
         'title' => t('Activate'),
         'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_deactivate_syllabus', ['ssr_syllabus' => $entity->id(), 'status' => 'activate'], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+    }
+  }
+
+  if ($entity instanceof \Drupal\simple_school_reports_entities\ProgrammeInterface) {
+    $status = $entity->get('status')->value;
+    if ($status) {
+      $operations['deactivate'] = [
+        'title' => t('Deactivate'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_deactivate_programme', ['ssr_programme' => $entity->id(), 'status' => 'deactivate'], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+    }
+    else {
+      $operations['activate'] = [
+        'title' => t('Activate'),
+        'url' => \Drupal\Core\Url::fromRoute('simple_school_reports_core.activate_deactivate_programme', ['ssr_programme' => $entity->id(), 'status' => 'activate'], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
         'weight' => -99,
       ];
     }

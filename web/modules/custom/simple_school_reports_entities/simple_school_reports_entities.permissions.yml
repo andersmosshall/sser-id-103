@@ -120,3 +120,15 @@ delete ssr_syllabus:
   title: 'Delete syllabus'
 create ssr_syllabus:
   title: 'Create syllabus'
+
+administer ssr_programme:
+  title: 'Administer programmes'
+  restrict access: true
+view ssr_programme:
+  title: 'View programme'
+edit ssr_programme:
+  title: 'Edit programme'
+delete ssr_programme:
+  title: 'Delete programme'
+create ssr_programme:
+  title: 'Create programme'

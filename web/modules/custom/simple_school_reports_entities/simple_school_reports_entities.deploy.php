@@ -26,10 +26,6 @@ function simple_school_reports_entities_deploy_10001() {
     'Studiedag',
   ];
 
-  /**
-   * Create links in personalisation group to medlemsform.
-   * $type is not a fully loaded term, BTW.
-   */
   foreach ($to_import as $label) {
     if (empty($deviation_type_exists[$label])) {
       $term = $termStorage->create([

@@ -23,7 +23,7 @@ class AddCustomSyllabusFormGr extends AddCustomSyllabusFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    $course_data = $this->getCourseData();
+    $course_data = $this->courseDataService->getCourseData();
     $course_code = $form_state->getValue('course_code');
     if (isset($course_data[$course_code])) {
       $form_state->setErrorByName('course_code', $this->t('The course code %code already exists.', ['%code' => $course_code]));

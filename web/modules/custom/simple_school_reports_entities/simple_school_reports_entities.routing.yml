@@ -61,3 +61,19 @@ entity.ssr_syllabus.settings:
     _title: 'Syllabus'
   requirements:
     _permission: 'administer ssr_syllabus'
+
+entity.ssr_programme.settings:
+  path: 'admin/structure/ssr-programme'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\ProgrammeSettingsForm'
+    _title: 'Programme'
+  requirements:
+    _permission: 'administer ssr_programme'
+
+simple_school_reports_entities.ssr_assign_to_programme:
+  path: '/student/assign-to-programme'
+  defaults:
+    _form: '\Drupal\simple_school_reports_entities\Form\AssignToProgrammeForm'
+    _title: 'Assign to programme'
+  requirements:
+    _permission: 'school staff permissions'

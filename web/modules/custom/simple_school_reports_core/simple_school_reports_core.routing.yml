@@ -311,7 +311,7 @@ simple_school_reports_core.activate_deactivate_syllabus:
   path: '/admin/syllabuses/{status}/{ssr_syllabus}'
   defaults:
     _form: '\Drupal\simple_school_reports_core\Form\ActivateDeactivateSchoolSubjectForm'
-    _title: 'Activate syllabus'
+    _title: 'Handle syllabus status'
   requirements:
     _permission: 'administer simple school reports settings'
   options:
@@ -319,6 +319,34 @@ simple_school_reports_core.activate_deactivate_syllabus:
     parameters:
       ssr_syllabus:
         type: 'entity:ssr_syllabus'
+      status:
+        type: 'string'
+        options:
+          '1': 'activate'
+          '0': 'deactivate'
+
+simple_school_reports_core.config_programmes:
+  path: '/admin/programmes'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Programmes'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core.activate_deactivate_programme:
+  path: '/admin/programmes/{status}/{ssr_programme}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core\Form\ActivateDeactivateProgrammeForm'
+    _title: 'Handle programme status'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+    parameters:
+      ssr_programme:
+        type: 'entity:ssr_programme'
       status:
         type: 'string'
         options:

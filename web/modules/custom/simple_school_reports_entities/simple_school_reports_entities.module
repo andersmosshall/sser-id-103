@@ -45,6 +45,9 @@ function simple_school_reports_entities_theme() {
     'ssr_syllabus' => [
       'render element' => 'elements',
     ],
+    'ssr_programme' => [
+      'render element' => 'elements',
+    ],
   ];
 }
 
@@ -337,3 +340,29 @@ function simple_school_reports_entities_grade_vid_options(): array {
     'af_grade_system' => t('A-F grade system'),
   ];
 }
+
+function simple_school_reports_entities_programme_type_options(): array {
+  return [
+    'programme' => t('Programme'),
+    'programme_focus' => t('Programme focus'),
+  ];
+}
+
+/**
+ * Prepares variables for programme templates.
+ *
+ * Default template: ssr-programme.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the programme information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_programme(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+

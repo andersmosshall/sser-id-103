@@ -28,4 +28,6 @@ permissions:
   - 'view school week'
   - 'view school_week_deviation'
   - 'view ssr_module_info'
+  - 'view ssr_programme'
   - 'view ssr_school_class'
+  - 'view ssr_syllabus'

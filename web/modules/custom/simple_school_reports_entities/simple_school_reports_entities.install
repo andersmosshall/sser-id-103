@@ -390,3 +390,17 @@ function simple_school_reports_entities_update_10017() {
       ->installFieldStorageDefinition($field_name, 'ssr_syllabus', 'simple_school_reports_entities', $storage_definition);
   }
 }
+
+/**
+ * Install ssr programme entity type.
+ */
+function simple_school_reports_entities_update_10018() {
+  $database = \Drupal::database();
+
+  // Install ssr_calendar_event.
+  if(!$database->schema()->tableExists('ssr_programme')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_programme'));
+  }
+}

@@ -1,0 +1,8 @@
+services:
+  simple_school_reports_core_gy11.course_data:
+    class: Drupal\simple_school_reports_core_gy\Service\CourseDataServiceGy11
+    arguments: [ '@entity_type.manager', '@file_system','@module_handler', ]
+
+  simple_school_reports_core_gy25.course_data:
+    class: Drupal\simple_school_reports_core_gy\Service\CourseDataServiceGy25
+    arguments: [ '@entity_type.manager', '@file_system','@module_handler', ]

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: ssr_programme_delete_action
+label: 'Delete programmes'
+type: ssr_programme
+plugin: entity:delete_action:ssr_programme
+configuration: {  }

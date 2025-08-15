@@ -1220,6 +1220,12 @@ msgstr "Mentor sparad"
 msgid "Bulk update grade"
 msgstr "Massuppdatera årskurs"
 
+msgid "Bulk update class"
+msgstr "Massuppdatera klass"
+
+msgid "Bulk update programme"
+msgstr "Massuppdatera program"
+
 msgid "Bulk update mentor"
 msgstr "Massuppdatera mentor"
 
@@ -3508,17 +3514,74 @@ msgstr "Ämnes-/kursplaner"
 msgid "The course code %code already exists."
 msgstr "Kurskoden %code finns redan."
 
-msgid ""
-msgstr ""
+msgid "Handle syllabus status"
+msgstr "Hantera status för kursplan"
 
-msgid ""
-msgstr ""
+msgid "Hantera programme status"
+msgstr "Hantera programstatus"
 
-msgid ""
-msgstr ""
+msgid "List and handle course syllabuses in Gymnasieskolan 2025."
+msgstr "Lista och hantera kursplaner i gymnasieskolan 2025."
 
-msgid ""
-msgstr ""
+msgid "List and handle programmes in Gymnasieskolan 2025."
+msgstr "Lista och hantera program i gymnasieskolan 2025."
+
+msgid "Programmes in gymnasieskolan 2025"
+msgstr "Program i gymnasieskolan 2025"
+
+msgid "List and handle programmes Gymnasieskolan 2011."
+msgstr "Lista och hantera program i gymnasieskolan 2011."
+
+msgid "Programmes in gymnasieskolan 2011"
+msgstr "Program i gymnasieskolan 2011"
+
+msgid "Course syllabuses in gymnasieskolan 2025"
+msgstr "Kursplaner i gymnasieskolan 2025"
+
+msgid "List and handle course syllabuses Gymnasieskolan 2011."
+msgstr "Lista och hantera kursplaner i gymnasieskolan 2011."
+
+msgid "Course syllabuses in gymnasieskolan 2011"
+msgstr "Kursplaner i gymnasieskolan 2011"
+
+msgid "Assign to programme"
+msgstr "Tilldela till program"
+
+msgid "Programme assigned"
+msgstr "Program tilldelat"
+
+msgid "Bulk update programme"
+msgstr "Massuppdatera program"
+
+msgid "You must select a programme to assign the students to."
+msgstr "Du måste välja ett program att tilldela eleverna till."
+
+msgid "Select the programme to assign the students to."
+msgstr "Välj det program som eleverna ska tilldelas."
+
+msgid "Programme"
+msgstr "Program"
+
+msgid "If checked, the programme will be removed from the students."
+msgstr "Om markerad tas programmet bort från eleverna."
+
+msgid "Remove programme"
+msgstr "Ta bort program"
+
+msgid "Programme updated."
+msgstr "Program uppdaterat."
+
+msgid "Are you sure you want to deactivate programme?"
+msgstr "Är du säker på att du vill inaktivera programmet?"
+
+msgid "Are you sure you want to activate programme?"
+msgstr "Är du säker på att du vill aktivera programmet?"
+
+msgid "Programmes"
+msgstr "Program"
+
+msgid "Select school type to list and handle programmes."
+msgstr "Välj skoltyp för att lista och hantera program."
 
 msgid ""
 msgstr ""

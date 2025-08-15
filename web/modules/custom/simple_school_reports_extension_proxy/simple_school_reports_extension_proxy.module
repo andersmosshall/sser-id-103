@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_grade_stats\Plugin\Block\GradeStatisticsBlock;
 use Drupal\simple_school_reports_list_templates\Plugin\Block\ListBlock;
 use Drupal\Core\Access\AccessResult;
@@ -24,6 +25,24 @@ function simple_school_reports_extension_proxy_form_alter(&$form, FormStateInter
 
   if (str_starts_with($form_id, 'views_form_')) {
     ViewsFormAlter::userFormAlter($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_extension_proxy_user_presave(\Drupal\user\UserInterface $user) {
+  if (!$user->hasRole('student')) {
+    $user->set('field_programme', NULL);
+    $user->set('field_class', NULL);
+    $user->set('field_grade', NULL);
+  }
+  elseif (!$user->get('field_programme')->isEmpty()) {
+    $grade = $user->get('field_grade')->value;
+    $programme_grades = SchoolGradeHelper::getSchoolGradeValues(['GY']);
+    if (!in_array($grade, $programme_grades)) {
+      $user->set('field_programme', NULL);
+    }
   }
 }
 
@@ -144,6 +163,17 @@ function simple_school_reports_extension_proxy_views_data_alter(array &$data) {
     $data['school_week_deviation']['school_week_deviation_comment']['help'] =  t('School week deviation comment');
     $data['school_week_deviation']['school_week_deviation_comment']['field'] = [
       'id' => 'school_week_deviation_comment',
+    ];
+  }
+
+  if (!empty($data['ssr_programme_field_data']['id'])) {
+    // Copy id data to ssr_programme_number_of_students.
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students'] = $data['ssr_programme_field_data']['id'];
+    // Override title and override views field.
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['title'] = t('Programme number of students');
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['help'] =  t('Programme number of students');
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['field'] = [
+      'id' => 'ssr_programme_number_of_students',
     ];
   }
 }

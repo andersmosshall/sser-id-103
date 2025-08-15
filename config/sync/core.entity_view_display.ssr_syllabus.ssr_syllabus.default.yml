@@ -60,6 +60,14 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
+  levels_display:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 13
+    region: content
   link:
     type: link
     label: above
@@ -127,7 +135,6 @@ hidden:
   created: true
   identifier: true
   langcode: true
-  levels_display: true
   specialisation_description: true
   specialisation_label: true
   subject_designation: true
