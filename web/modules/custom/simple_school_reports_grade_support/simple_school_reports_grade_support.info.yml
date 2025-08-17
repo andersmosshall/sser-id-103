@@ -1,8 +1,8 @@
-name: Simple School Reports Extension Proxy
+name: Simple School Reports Grade Support
 type: module
-description: Simple School Reports Extension Proxy
+description: Simple School Reports Grade Support
 core_version_requirement: ^10 || ^11
 package: 'Simple School Reports'
-version: 11.1.0
+version: 11.0.0
 dependencies:
   - simple_school_reports_core:simple_school_reports_core
