@@ -319,6 +319,7 @@ class ConsentsService implements ConsentsServiceServiceInterface {
         ->condition('a.consent', array_keys($consent_uid_map), 'IN')
         ->condition('a.uid', array_keys($uid_consent_map), 'IN')
         ->fields('a', ['label', 'id', 'consent', 'answer', 'target_uid', 'uid'])
+        ->orderBy('a.id', 'DESC')
         ->execute();
 
       foreach ($results as $result) {
@@ -327,6 +328,11 @@ class ConsentsService implements ConsentsServiceServiceInterface {
         $target_uid = $result->target_uid;
         $status = $result->answer;
         $status_display = $result->label;
+
+        // Ignore answers that are currently not relevant.
+        if (empty($consent_uid_map[$consent_id][$target_uid][$uid])) {
+          continue;
+        }
 
         $consent_uid_map[$consent_id][$target_uid][$uid] = [
           'status' => $status,
