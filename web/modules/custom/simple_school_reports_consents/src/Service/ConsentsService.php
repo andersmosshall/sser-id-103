@@ -319,7 +319,7 @@ class ConsentsService implements ConsentsServiceServiceInterface {
         ->condition('a.consent', array_keys($consent_uid_map), 'IN')
         ->condition('a.uid', array_keys($uid_consent_map), 'IN')
         ->fields('a', ['label', 'id', 'consent', 'answer', 'target_uid', 'uid'])
-        ->orderBy('a.id', 'DESC')
+        ->orderBy('a.id', 'ASC')
         ->execute();
 
       foreach ($results as $result) {
