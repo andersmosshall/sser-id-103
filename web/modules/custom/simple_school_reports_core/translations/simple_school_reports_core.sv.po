@@ -3595,8 +3595,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "The email %name is not valid."
+msgstr "E-postadressen %name är inte giltig."
 
 msgid ""
 msgstr ""
