@@ -12,7 +12,7 @@ class UserLoginFormAlter {
       $form['#validate'] = [];
     }
 
-    $form['#validate'] = array_merge([self::class, 'preValidateLoginMail'], $form['#validate']);
+    $form['#validate'] = array_merge([[self::class, 'preValidateLoginMail']], $form['#validate']);
     $form['#validate'][] = [self::class, 'validateLoginAccess'];
     $form['#submit'][] = [self::class, 'handleRedirect'];
   }
