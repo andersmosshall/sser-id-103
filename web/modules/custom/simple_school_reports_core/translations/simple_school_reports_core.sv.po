@@ -1992,6 +1992,9 @@ msgstr "Beteende om vårdnadshavare saknar personnummer"
 msgid "This export will generate file with the selected users to be compatible with PMO systems. Use this if you want to import users to a PMO system."
 msgstr "Denna export kommer att generera en fil med de valda användarna för att vara kompatibel med PMO-system. Använd detta om du vill importera användare till ett PMO-system."
 
+msgid "This export will generate file with the selected users to be compatible with Prorenata systems. Use this if you want to import users to a Prorenata system."
+msgstr "Denna export kommer att generera en fil med de valda användarna för att vara kompatibel med Prorenata-system. Använd detta om du vill importera användare till ett Prorenata-system."
+
 msgid "Caregiver for"
 msgstr "Vårdnadshavare för"
 
@@ -3598,11 +3601,11 @@ msgstr ""
 msgid "The email %name is not valid."
 msgstr "E-postadressen %name är inte giltig."
 
-msgid ""
-msgstr ""
+msgid "Include protected data"
+msgstr "Inkludera skyddade uppgifter"
 
-msgid ""
-msgstr ""
+msgid "If checked, protected data will be included even if the user has secrecy marking."
+msgstr "Om markerad kommer skyddade uppgifter inkluderas även om användaren har sekretessmarkering."
 
 msgid ""
 msgstr ""

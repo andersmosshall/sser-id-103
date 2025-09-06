@@ -555,7 +555,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       return [NULL, $default_school_type];
     }
 
-    $school_type_grade = $grade % 100;
+    $school_type_grade = SchoolGradeHelper::parseGradeValueToActualGrade($grade);
     $school_type = SchoolGradeHelper::getSchoolTypeByGrade($grade) ?? 'AU';
 
     return [$school_type_grade, $school_type];

@@ -78,6 +78,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'written_reviews' => NULL,
       'iup' => NULL,
       'dnp_empty' => NULL,
+      'prorenta_export_empty' => NULL,
       'doc_logo_left' => NULL,
       'doc_logo_center' => NULL,
       'doc_logo_right' => NULL,
@@ -129,6 +130,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'written_reviews' => $template_file_path_base . 'SO.docx',
       'iup' => $template_file_path_base . 'IUP.docx',
       'dnp_empty' => $template_file_path_base . 'dnp-empty-1.5.2.xlsx',
+      'prorenta_export_empty' => $template_file_path_base . 'prorenata-import-empty-1.0.0.xlsx',
     ];
 
     if (isset($local_templates[$key]) && file_exists($local_templates[$key])) {
