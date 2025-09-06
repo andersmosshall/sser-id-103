@@ -82,7 +82,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'body' => 'Denna film går igenom hur man kan exportera användare till andra system.',
         'vimeo' => 'https://vimeo.com/964116593',
         'context' => ['view.students.students', 'view.students.contact_info', '/admin/people'],
-        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
+        'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy', 'simple_school_reports_pmo_export', 'simple_school_reports_prorenata_export', 'simple_school_reports_skolon_export'],
       ],
       // Courses
       [

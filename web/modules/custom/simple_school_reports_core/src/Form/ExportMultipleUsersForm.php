@@ -298,7 +298,9 @@ class ExportMultipleUsersForm extends ConfirmFormBase {
       return;
     }
 
-    $file_name = 'export-' . $now->format('Y-m-d-His') . '.' . $service->getFileExtension();
+    $file_suffix = $service->getFileSuffix() ? mb_strtolower($service->getFileSuffix()) . '-' : '';
+
+    $file_name = $file_suffix . 'ssr-export-' . $now->format('Y-m-d-His') . '.' . $service->getFileExtension();
 
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');

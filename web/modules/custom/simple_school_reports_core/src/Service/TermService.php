@@ -224,12 +224,19 @@ class TermService implements TermServiceInterface {
       $end_year = ($relative_year + 1);
     }
 
-    $start = new \DateTime($start_year . '-07-15 00:00:00');
-    $end_year = new \DateTime($end_year . '-07-14 23:59:59');
+    $start = new \DateTime($start_year . '-08-10 00:00:00');
+    $term_switch = new \DateTime($end_year . '-01-07 00:00:00');
+    $end = new \DateTime($end_year . '-08-09 23:59:59');
+
+    $ht_term_index_date_source = new \DateTime($start_year . '-10-01 00:00:00');
+    $vt_term_index_date_source = new \DateTime($end_year . '-03-01 00:00:00');
 
     return [
       'start' => $start,
-      'end' => $end_year,
+      'end' => $end,
+      'term_switch' => $term_switch,
+      'ht_term_index' => $ht_term_index_date_source->getTimestamp(),
+      'vt_term_index' => $vt_term_index_date_source->getTimestamp(),
     ];
   }
 

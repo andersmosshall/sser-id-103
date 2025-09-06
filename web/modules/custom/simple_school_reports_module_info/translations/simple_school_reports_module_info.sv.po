@@ -138,8 +138,8 @@ msgstr "Extensexport (MGBETYG)"
 msgid "SSR schema"
 msgstr "SSR-schema"
 
-msgid ""
-msgstr ""
+msgid "Student/User export - @name"
+msgstr "Elev-/Användarexport - @name"
 
 msgid ""
 msgstr ""

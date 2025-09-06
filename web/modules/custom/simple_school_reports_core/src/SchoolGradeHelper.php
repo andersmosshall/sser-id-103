@@ -126,11 +126,16 @@ class SchoolGradeHelper {
         continue;
       }
 
-      $grade_value = $grade % 100;
+      $grade_value = self::parseGradeValueToActualGrade($grade);
       $label = t('Grade @grade', ['@grade' => $grade_value]);
+
       if ($use_suffix) {
         $school_type = self::getSchoolTypeByGrade($grade);
         $label .= ' (' . $school_type . ')';
+      }
+
+      if ($grade_value === 0) {
+        $label = t('Pre school class');
       }
 
       $return[$grade] = $label;
@@ -165,5 +170,9 @@ class SchoolGradeHelper {
     }
 
     return 'AU';
+  }
+
+  public static function parseGradeValueToActualGrade(int $grade): int {
+    return $grade % 100;
   }
 }

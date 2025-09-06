@@ -120,8 +120,8 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'label' => 'Frånvaromatris',
       'required_modules' => [],
       'recommended_modules' => [],
-      'price' => '[[MODULE_PRICE]]',
-      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'price' => '[[MINI_MODULE_PRICE]]',
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>I minimodulen Frånvaromatris kan man ange dagsfrånvaro för eleverna i en matrisvy för hela veckor. Detta ger en bättre överblick över registerade frånvarodagar och man kan snabbare registera frånvaro.</p>',
     ];
 
@@ -316,6 +316,36 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     ];
 
     $map[] = [
+      'module' => 'simple_school_reports_pmo_export',
+      'label' => 'Elev-/användarexport - PMO',
+      'required_modules' => [],
+      'recommended_modules' => [],
+      'price' => '[[MINI_MODULE_PRICE]]',
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'description' => '<p>Elev-/användarexport för inläsning till PMO.</p>',
+    ];
+
+    $map[] = [
+      'module' => 'simple_school_reports_prorenata_export',
+      'label' => 'Elev-/användarexport - PRORENATA',
+      'required_modules' => [],
+      'recommended_modules' => [],
+      'price' => '[[MINI_MODULE_PRICE]]',
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'description' => '<p>Elev-/användarexport för inläsning till PRORENATA.</p>',
+    ];
+
+    $map[] = [
+      'module' => 'simple_school_reports_skolon_export',
+      'label' => 'Elev-/användarexport - SKOLON',
+      'required_modules' => [],
+      'recommended_modules' => [],
+      'price' => '[[MINI_MODULE_PRICE]]',
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'description' => '<p>Elev-/användarexport för inläsning till SKOLON.</p>',
+    ];
+
+    $map[] = [
       'module' => 'simple_school_reports_class',
       'label' => 'Klasser',
       'required_modules' => [],
@@ -485,6 +515,9 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'simple_school_reports_maillog_mini' => $this->t('Mail log'),
       'simple_school_reports_email_attachments' => $this->t('Email attachments'),
       'simple_school_reports_absence_matrix' => $this->t('Absence matrix'),
+      'simple_school_reports_skolon_export' => $this->t('Student/User export - @name', ['@name' => 'SKOLON']),
+      'simple_school_reports_prorenata_export' => $this->t('Student/User export - @name', ['@name' => 'PRORENATA']),
+      'simple_school_reports_pmo_export' => $this->t('Student/User export - @name', ['@name' => 'PMO']),
     ];
   }
 
@@ -519,7 +552,10 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'simple_school_reports_special_diet',
       'simple_school_reports_maillog_mini',
       'simple_school_reports_email_attachments',
-      'simple_school_reports_absence_matrix' => 'mini_module',
+      'simple_school_reports_absence_matrix',
+      'simple_school_reports_skolon_export',
+      'simple_school_reports_prorenata_export',
+      'simple_school_reports_pmo_export', => 'mini_module',
       default => 'module',
     };
   }
