@@ -1,5 +1,5 @@
 name: ssr-drupal9
-recipe: drupal9
+recipe: drupal10
 
 config:
   webroot: web

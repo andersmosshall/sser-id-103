@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_signing_delete_action
+label: 'Delete grade signings'
+type: ssr_grade_signing
+plugin: entity:delete_action:ssr_grade_signing
+configuration: {  }

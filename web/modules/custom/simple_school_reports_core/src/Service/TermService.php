@@ -213,7 +213,7 @@ class TermService implements TermServiceInterface {
 
     $relative_year = (int) $relative_date->format('Y');
 
-    $school_year_switch = new \DateTime($relative_year . '-07-15 00:00:00');
+    $school_year_switch = new \DateTime($relative_year . '-08-10 00:00:00');
 
     if ($relative_date < $school_year_switch) {
       $start_year = ($relative_year - 1);
@@ -254,6 +254,52 @@ class TermService implements TermServiceInterface {
   public function getDefaultSchoolYearEnd(bool $as_object = TRUE, ?\DateTime $relative_date = NULL): \DateTime|int {
     $default_school_year = $this->getDefaultSchoolYear($relative_date);
     return $as_object ? $default_school_year['end'] : $default_school_year['end']->getTimestamp();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultTermIndex(?\DateTime $date = NULL): int {
+    if (!$date) {
+      $date = new \DateTime();
+    }
+    $default_school_year = $this->getDefaultSchoolYear($date);
+    if ($date->getTimestamp() < $default_school_year['term_switch']->getTimestamp()) {
+      return $default_school_year['ht_term_index'];
+    }
+    return $default_school_year['vt_term_index'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function parseDefaultTermIndex(int $term_index): array {
+    $date = new \DateTime();
+    $date->setTimestamp($term_index);
+    $default_school_year = $this->getDefaultSchoolYear($date);
+
+    if ($date->getTimestamp() < $default_school_year['term_switch']->getTimestamp()) {
+      $term_end = new \DateTime();
+      $term_end->setTimestamp($default_school_year['term_switch']->getTimestamp() - 1);
+
+      return [
+        'term_start' => $default_school_year['start'],
+        'term_end' => $term_end,
+        'school_year' => $default_school_year['start']->format('Y'),
+        'semester' => self::SEMESTER_HT,
+        'semester_name' => 'HT' . $default_school_year['start']->format('Y'),
+        'semester_name_short' => 'HT' . $default_school_year['start']->format('y'),
+      ];
+    }
+
+    return [
+      'term_start' => $default_school_year['term_switch'],
+      'term_end' => $default_school_year['end'],
+      'school_year' => $default_school_year['end']->format('Y'),
+      'semester' => self::SEMESTER_VT,
+      'semester_name' => 'VT' . $default_school_year['end']->format('Y'),
+      'semester_name_short' => 'VT' . $default_school_year['end']->format('y'),
+    ];
   }
 
 }

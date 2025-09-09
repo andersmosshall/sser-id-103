@@ -1,0 +1,7 @@
+simple_school_reports_grading_gy.grade_round_create:
+  route_name: entity.ssr_grade_reg_round.add_form
+  title: 'Add grade registration round'
+  route_parameters:
+    ssr_grade_reg_round_type: 'gy'
+  appears_on:
+    - view.ssr_grade_reg_rounds.gy

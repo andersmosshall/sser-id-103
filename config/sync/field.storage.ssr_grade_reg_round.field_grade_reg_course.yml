@@ -1,0 +1,19 @@
+uuid: c6416b74-1821-41bd-a0f4-8857de527442
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_reg_round.field_grade_reg_course
+field_name: field_grade_reg_course
+entity_type: ssr_grade_reg_round
+type: entity_reference
+settings:
+  target_type: ssr_grade_reg_course
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

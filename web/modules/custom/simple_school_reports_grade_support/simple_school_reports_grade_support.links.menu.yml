@@ -1,0 +1,77 @@
+entity.ssr_grade.settings:
+  title: 'Grade'
+  description: 'Configure a Grade entity type.'
+  route_name:  entity.ssr_grade.settings
+  parent: system.admin_structure
+
+entity.ssr_grade.collection:
+  title: 'Grades'
+  description: 'List of grades.'
+  route_name: entity.ssr_grade.collection
+  parent: system.admin_content
+
+entity.ssr_grade_snapshot.settings:
+  title: 'Grade snapshot'
+  description: 'Configure a Grade snapshot entity type.'
+  route_name:  entity.ssr_grade_snapshot.settings
+  parent: system.admin_structure
+
+entity.ssr_grade_snapshot.collection:
+  title: 'Grade snapshots'
+  description: 'List of grade snapshots.'
+  route_name: entity.ssr_grade_snapshot.collection
+  parent: system.admin_content
+
+entity.ssr_grade_reg_round_type.collection:
+  title: 'Grade registration round types'
+  description: 'Manage and CRUD actions on Grade registration round type.'
+  parent: system.admin_structure
+  route_name: entity.ssr_grade_reg_round_type.collection
+
+entity.ssr_grade_reg_round.collection:
+  title: 'Grade registration rounds'
+  description: 'List of grade registration rounds.'
+  route_name: entity.ssr_grade_reg_round.collection
+  parent: system.admin_content
+
+entity.ssr_grade_reg_course_type.collection:
+  title: 'Course to grade types'
+  description: 'Manage and CRUD actions on Course to grade type.'
+  parent: system.admin_structure
+  route_name: entity.ssr_grade_reg_course_type.collection
+
+entity.ssr_grade_reg_course.collection:
+  title: 'Course to grades'
+  description: 'List of course to grades.'
+  route_name: entity.ssr_grade_reg_course.collection
+  parent: system.admin_content
+
+entity.ssr_grade_signing.settings:
+  title: 'Grade signing'
+  description: 'Configure a GradeSigning entity type.'
+  route_name:  entity.ssr_grade_signing.settings
+  parent: system.admin_structure
+
+entity.ssr_grade_signing.collection:
+  title: 'Grade signings'
+  description: 'List of grade signings.'
+  route_name: entity.ssr_grade_signing.collection
+  parent: system.admin_content
+
+entity.ssr_grade_snapshot_period.settings:
+  title: 'Grade snapshot period'
+  description: 'Configure a Grade snapshot period entity type.'
+  route_name:  entity.ssr_grade_snapshot_period.settings
+  parent: system.admin_structure
+
+entity.ssr_grade_snapshot_period.collection:
+  title: 'Grade snapshot periods'
+  description: 'List of grade snapshot periods.'
+  route_name: entity.ssr_grade_snapshot_period.collection
+  parent: system.admin_content
+
+simple_school_reports_grade_support.grade_registration_types:
+  title: 'Grade registration'
+  description: 'Select school type to handle grade registration.'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_grade_support.grade_registration_types

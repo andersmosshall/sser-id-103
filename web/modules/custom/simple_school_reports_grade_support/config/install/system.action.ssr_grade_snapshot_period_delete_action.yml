@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_snapshot_period_delete_action
+label: 'Delete grade snapshot periods'
+type: ssr_grade_snapshot_period
+plugin: entity:delete_action:ssr_grade_snapshot_period
+configuration: {  }

@@ -1,0 +1,43 @@
+uuid: e84f6d2a-4aec-45a7-8f8b-3e3fb1ff176d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_grade_reg_round.gy.field_grade_reg_course
+    - simple_school_reports_grade_support.ssr_grade_reg_round_type.gy
+id: ssr_grade_reg_round.gy.default
+targetEntityType: ssr_grade_reg_round
+bundle: gy
+mode: default
+content:
+  field_grade_reg_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  open:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true

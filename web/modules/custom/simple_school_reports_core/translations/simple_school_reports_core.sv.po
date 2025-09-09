@@ -606,6 +606,9 @@ msgstr "Status"
 msgid "Grade"
 msgstr "Betyg"
 
+msgid "Grades"
+msgstr "Betyg"
+
 msgid "Short comment"
 msgstr "Kort kommentar"
 
@@ -1123,7 +1126,7 @@ msgid "The current term has ended. Administer terms @link."
 msgstr "Nuvarande termin har avslutats. Administrera terminer @link"
 
 msgid "Published"
-msgstr "Publiserad"
+msgstr "Publicerad"
 
 msgid "Sorry to hear that you found an issue. Please describe the issue below and we will try to make Simple School Reports better together."
 msgstr "Tråkigt att höra att du hittat ett problem. Var vänlig och beskriv problemet nedan så försöker vi tillsammans göra Simple School Reports bättre."
@@ -2781,9 +2784,6 @@ msgstr "Alla ämnen"
 msgid "Edit result"
 msgstr "Hantera resultat"
 
-msgid "Published"
-msgstr "Publicerad"
-
 msgid "Not in assessment group"
 msgstr "Ej i bedömningsgrupp"
 
@@ -3592,11 +3592,13 @@ msgstr "Är du säker på att du vill aktivera kursplanen?"
 msgid "Are you sure you want to deactivate syllabus?"
 msgstr "Är du säker på att du vill inaktivera kursplanen?"
 
-msgid ""
-msgstr ""
+msgctxt "gender"
+msgid "Male"
+msgstr "Man"
 
-msgid ""
-msgstr ""
+msgctxt "gender"
+msgid "Female"
+msgstr "Kvinna"
 
 msgid "The email %name is not valid."
 msgstr "E-postadressen %name är inte giltig."

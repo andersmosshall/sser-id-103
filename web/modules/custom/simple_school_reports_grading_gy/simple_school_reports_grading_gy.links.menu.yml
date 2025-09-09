@@ -1,0 +1,5 @@
+simple_school_reports_grading_gy.grade_rounds_list_gy:
+  title: 'Grade registration - Gymnasiet'
+  description: 'Handle grades and grade rounds for Gymnasiet'
+  parent: simple_school_reports_grade_support.grade_registration_types
+  route_name: view.ssr_grade_reg_rounds.gy

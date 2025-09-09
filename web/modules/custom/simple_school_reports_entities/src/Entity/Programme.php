@@ -127,7 +127,6 @@ final class Programme extends ContentEntityBase implements ProgrammeInterface {
       ->setLabel(t('School type'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
-      ->setDefaultValue('default')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

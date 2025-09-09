@@ -1,0 +1,52 @@
+uuid: a361de70-10dc-45c8-b8a4-2c847d84b091
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_grade_reg_round.gy.field_grade_reg_course
+    - simple_school_reports_grade_support.ssr_grade_reg_round_type.gy
+  module:
+    - inline_entity_form
+id: ssr_grade_reg_round.gy.default
+targetEntityType: ssr_grade_reg_round
+bundle: gy
+mode: default
+content:
+  field_grade_reg_course:
+    type: inline_entity_form_complex
+    weight: 2
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: true
+      collapsed: false
+      revision: false
+      removed_reference: keep
+    third_party_settings: {  }
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  open:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true

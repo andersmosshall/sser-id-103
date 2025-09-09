@@ -23,37 +23,17 @@ class SyllabusLevels extends FieldItemList {
       return;
     }
 
+    /** @var \Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface $syllabus_service */
+    $syllabus_service = \Drupal::service('simple_school_reports_entities.syllabus_service');
 
-    $syllabus_identifier = $syllabus->get('identifier')->value ?? '?';
-    $syllabus_language_code = $syllabus->get('language_code')->value ?? NULL;
-
-    $levels_json = $syllabus->get('levels')->value ?? '[]';
-    try {
-      $level_course_codes = Json::decode($levels_json);
-    }
-    catch (\Exception $e) {
-      $level_course_codes = [];
-    }
-
-    if (empty($level_course_codes)) {
-      return;
-    }
-
-    $level_identifiers = [];
-    $level_identifiers[$syllabus_identifier] = $syllabus_identifier;
-    foreach ($level_course_codes as $level_course_code) {
-      $level_identifier = ActivateSyllabusFormBase::calculateSyllabusIdentifier($level_course_code, $syllabus_language_code);
-      $level_identifiers[$level_identifier] = $level_identifier;
-    }
-
-    // Skip if only own identifier is present.
-    if (count($level_identifiers) === 1) {
+    $level_syllabus_ids = $syllabus_service->getSyllabusLevelIds($syllabus->id());;
+    if (empty($level_syllabus_ids)) {
       return;
     }
 
     $syllabuses = \Drupal::entityTypeManager()
       ->getStorage('ssr_syllabus')
-      ->loadByProperties(['identifier' => array_values($level_identifiers)]);
+      ->loadMultiple($level_syllabus_ids);
 
     if (empty($syllabuses) || count($syllabuses) === 1) {
       return;

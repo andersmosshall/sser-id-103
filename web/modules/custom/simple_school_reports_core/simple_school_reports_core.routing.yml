@@ -232,14 +232,6 @@ simple_school_reports_core.actions:
   requirements:
     _permission: 'school staff permissions+budget review+administer budget'
 
-simple_school_reports_core.ssn_key_gen:
-  path: '/admin/ssn-key-generator'
-  defaults:
-    _form: '\Drupal\simple_school_reports_core\Form\GenerateSsnKeyForm'
-    _title: 'Personal number key generator'
-  requirements:
-    _permission: 'administer simple school reports settings'
-
 simple_school_reports_core.file-generator:
   path: '/file-generator/{id}'
   defaults:

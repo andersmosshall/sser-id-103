@@ -85,6 +85,27 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
     if ($this->get('official')->value) {
       $this->set('custom', FALSE);
     }
+
+    // DO NOT ALLOW CHANGE OF COURSE CODE, SUBJECT CODE or LANGUAGE CODE.
+    if (!$this->isNew()) {
+      /** @var \Drupal\simple_school_reports_entities\SyllabusInterface|null $original */
+      $original = $this->original;
+      if (!$original) {
+        throw new \LogicException('The original syllabus could not be found id: ' . $this->id());
+      }
+
+      $fields_to_check = [
+        'subject_code',
+        'course_code',
+        'language_code',
+      ];
+
+      foreach ($fields_to_check as $field_name) {
+        if ($this->get($field_name)->value !== $original->get($field_name)->value) {
+          throw new \LogicException('The ' . $field_name . ' cannot be changed in syllabus: ' . $this->id());
+        }
+      }
+    }
   }
 
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
@@ -178,7 +199,6 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       ->setLabel(t('School type'))
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
-      ->setDefaultValue('default')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

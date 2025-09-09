@@ -1,0 +1,13 @@
+uuid: a4bef9e8-eeba-4272-b44d-977f75621faa
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: geejlQlaRIEMYjkK0gcZkayBshaJUdk96ySdlheP5yY
+id: ssr_grade_snapshot_save_action
+label: 'Save grade snapshots'
+type: ssr_grade_snapshot
+plugin: 'entity:save_action:ssr_grade_snapshot'
+configuration: {  }

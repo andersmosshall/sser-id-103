@@ -1,0 +1,34 @@
+uuid: aed00fe3-e8d7-488c-8d44-debc87330b30
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_school_reports_grade_support.ssr_grade_reg_course_type.gy
+  module:
+    - options
+id: ssr_grade_reg_course.gy.default
+targetEntityType: ssr_grade_reg_course
+bundle: gy
+mode: default
+content:
+  course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  registration_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  label: true
+  postpone: true
+  status: true
+  uid: true

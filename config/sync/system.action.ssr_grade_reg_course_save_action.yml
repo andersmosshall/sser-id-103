@@ -1,0 +1,13 @@
+uuid: 41ea060c-6cc9-4639-a6ab-7c8beacaf71d
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: SazRbto2ocNknRfG_q_Ud94KHCmCNJlQ-Juck3hjGdU
+id: ssr_grade_reg_course_save_action
+label: 'Save course to grades'
+type: ssr_grade_reg_course
+plugin: 'entity:save_action:ssr_grade_reg_course'
+configuration: {  }

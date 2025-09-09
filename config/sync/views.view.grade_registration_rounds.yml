@@ -603,7 +603,7 @@ display:
     display_options:
       display_description: ''
       display_extenders: {  }
-      path: grade-registration
+      path: grade-registration/gr
     cache_metadata:
       max-age: -1
       contexts:
@@ -726,7 +726,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: grade-registration/anonymized
+      path: grade-registration/gr/anonymized
     cache_metadata:
       max-age: -1
       contexts:

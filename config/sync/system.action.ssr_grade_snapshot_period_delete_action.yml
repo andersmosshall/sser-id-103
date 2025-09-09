@@ -1,0 +1,13 @@
+uuid: 6a5de9f1-a909-4fe2-b36a-44dac250f948
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: gYfGCbm_HEAPdXNQ_X9xByoYonSVWu4r_jhKaZOSSDs
+id: ssr_grade_snapshot_period_delete_action
+label: 'Delete grade snapshot periods'
+type: ssr_grade_snapshot_period
+plugin: 'entity:delete_action:ssr_grade_snapshot_period'
+configuration: {  }

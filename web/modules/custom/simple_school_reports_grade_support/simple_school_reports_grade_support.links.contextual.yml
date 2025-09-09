@@ -1,0 +1,65 @@
+entity.ssr_grade.edit_form:
+  route_name: entity.ssr_grade.edit_form
+  group: ssr_grade
+  title: 'Edit'
+
+entity.ssr_grade.delete_form:
+  route_name: entity.ssr_grade.delete_form
+  group: ssr_grade
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_grade_snapshot.edit_form:
+  route_name: entity.ssr_grade_snapshot.edit_form
+  group: ssr_grade_snapshot
+  title: 'Edit'
+
+entity.ssr_grade_snapshot.delete_form:
+  route_name: entity.ssr_grade_snapshot.delete_form
+  group: ssr_grade_snapshot
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_grade_reg_course.edit_form:
+  route_name: entity.ssr_grade_reg_course.edit_form
+  group: ssr_grade_reg_course
+  title: 'Edit'
+
+entity.ssr_grade_reg_course.delete_form:
+  route_name: entity.ssr_grade_reg_course.delete_form
+  group: ssr_grade_reg_course
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_grade_signing.edit_form:
+  route_name: entity.ssr_grade_signing.edit_form
+  group: ssr_grade_signing
+  title: 'Edit'
+
+entity.ssr_grade_signing.delete_form:
+  route_name: entity.ssr_grade_signing.delete_form
+  group: ssr_grade_signing
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_grade_snapshot_period.edit_form:
+  route_name: entity.ssr_grade_snapshot_period.edit_form
+  group: ssr_grade_snapshot_period
+  title: 'Edit'
+
+entity.ssr_grade_snapshot_period.delete_form:
+  route_name: entity.ssr_grade_snapshot_period.delete_form
+  group: ssr_grade_snapshot_period
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_grade_reg_round.edit_form:
+  route_name: entity.ssr_grade_reg_round.edit_form
+  group: ssr_grade_reg_round
+  title: 'Edit'
+
+entity.ssr_grade_reg_round.delete_form:
+  route_name: entity.ssr_grade_reg_round.delete_form
+  group: ssr_grade_reg_round
+  title: 'Delete'
+  weight: 10

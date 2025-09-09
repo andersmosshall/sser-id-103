@@ -1,0 +1,13 @@
+uuid: a9572974-be8f-45f1-af1a-5611b8f1f744
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: LwvpWR6ZnP_Yu7LZnL2yfcsj5bMjMSjOgsfRKqrdOFE
+id: ssr_grade_signing_save_action
+label: 'Save grade signings'
+type: ssr_grade_signing
+plugin: 'entity:save_action:ssr_grade_signing'
+configuration: {  }

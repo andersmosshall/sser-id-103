@@ -88,4 +88,9 @@ class SchoolTypeHelper {
     }
     return $versions;
   }
+
+  public static function getSchoolTypeFromSchoolTypeVersioned($school_type_versioned): ?string {
+    $school_type = explode(':', $school_type_versioned)[0];
+    return $school_type ?? NULL;
+  }
 }

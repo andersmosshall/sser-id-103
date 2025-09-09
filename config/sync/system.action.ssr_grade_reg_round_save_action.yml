@@ -1,0 +1,13 @@
+uuid: 342aab81-cd0f-4f5c-9071-8ee64891f07b
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: YODSoVDEPjPgSz8ur-esq7bFDkokknYbxdat-PV0lOA
+id: ssr_grade_reg_round_save_action
+label: 'Save grade registration rounds'
+type: ssr_grade_reg_round
+plugin: 'entity:save_action:ssr_grade_reg_round'
+configuration: {  }

@@ -35,6 +35,16 @@ function simple_school_reports_core_school_type_versioned_options(): array {
 }
 
 /**
+ * Allowed values function for user gender field.
+ */
+function simple_school_reports_core_gender_options() : array {
+  return [
+    'male' => t('Male', [], ['context' => 'gender']),
+    'female' => t('Female', [], ['context' => 'gender']),
+  ];
+}
+
+/**
  * Implements hook_form_alter().
  */
 function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -1100,7 +1110,6 @@ function simple_school_reports_core_entity_field_access($operation, \Drupal\Core
         'field_first_name',
         'field_middle_name',
         'field_last_name',
-        'field_gender',
         'field_telephone_number',
         'mail',
       ];

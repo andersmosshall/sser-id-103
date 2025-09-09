@@ -1,0 +1,28 @@
+uuid: 01cf9e34-2b09-41da-93f3-c73a3cb9237c
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_school_reports_grade_support.ssr_grade_reg_course_type.gy
+id: ssr_grade_reg_course.gy.default
+targetEntityType: ssr_grade_reg_course
+bundle: gy
+mode: default
+content:
+  course:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  postpone: true
+  registration_status: true
+  status: true
+  uid: true

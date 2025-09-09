@@ -1,0 +1,146 @@
+entity.ssr_grade.settings:
+  title: 'Settings'
+  route_name: entity.ssr_grade.settings
+  base_route: entity.ssr_grade.settings
+entity.ssr_grade.view:
+  title: 'View'
+  route_name: entity.ssr_grade.canonical
+  base_route: entity.ssr_grade.canonical
+entity.ssr_grade.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade.edit_form
+  base_route: entity.ssr_grade.canonical
+entity.ssr_grade.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade.delete_form
+  base_route: entity.ssr_grade.canonical
+  weight: 10
+entity.ssr_grade.collection:
+  title: 'Grades'
+  route_name: entity.ssr_grade.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_grade_snapshot.settings:
+  title: 'Settings'
+  route_name: entity.ssr_grade_snapshot.settings
+  base_route: entity.ssr_grade_snapshot.settings
+entity.ssr_grade_snapshot.view:
+  title: 'View'
+  route_name: entity.ssr_grade_snapshot.canonical
+  base_route: entity.ssr_grade_snapshot.canonical
+entity.ssr_grade_snapshot.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_snapshot.edit_form
+  base_route: entity.ssr_grade_snapshot.canonical
+entity.ssr_grade_snapshot.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade_snapshot.delete_form
+  base_route: entity.ssr_grade_snapshot.canonical
+  weight: 10
+entity.ssr_grade_snapshot.collection:
+  title: 'Grade snapshots'
+  route_name: entity.ssr_grade_snapshot.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_grade_reg_course.view:
+  title: 'View'
+  route_name: entity.ssr_grade_reg_course.canonical
+  base_route: entity.ssr_grade_reg_course.canonical
+entity.ssr_grade_reg_course.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_reg_course.edit_form
+  base_route: entity.ssr_grade_reg_course.canonical
+entity.ssr_grade_reg_course.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade_reg_course.delete_form
+  base_route: entity.ssr_grade_reg_course.canonical
+  weight: 10
+entity.ssr_grade_reg_course.collection:
+  title: 'Course to grades'
+  route_name: entity.ssr_grade_reg_course.collection
+  base_route: system.admin_content
+  weight: 10
+entity.ssr_grade_reg_course_type.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_reg_course_type.edit_form
+  base_route: entity.ssr_grade_reg_course_type.edit_form
+entity.ssr_grade_reg_course_type.collection:
+  title: 'List'
+  route_name: entity.ssr_grade_reg_course_type.collection
+  base_route: entity.ssr_grade_reg_course_type.collection
+
+entity.ssr_grade_signing.settings:
+  title: 'Settings'
+  route_name: entity.ssr_grade_signing.settings
+  base_route: entity.ssr_grade_signing.settings
+entity.ssr_grade_signing.view:
+  title: 'View'
+  route_name: entity.ssr_grade_signing.canonical
+  base_route: entity.ssr_grade_signing.canonical
+entity.ssr_grade_signing.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_signing.edit_form
+  base_route: entity.ssr_grade_signing.canonical
+entity.ssr_grade_signing.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade_signing.delete_form
+  base_route: entity.ssr_grade_signing.canonical
+  weight: 10
+entity.ssr_grade_signing.collection:
+  title: 'Grade signings'
+  route_name: entity.ssr_grade_signing.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_grade_snapshot_period.settings:
+  title: 'Settings'
+  route_name: entity.ssr_grade_snapshot_period.settings
+  base_route: entity.ssr_grade_snapshot_period.settings
+entity.ssr_grade_snapshot_period.view:
+  title: 'View'
+  route_name: entity.ssr_grade_snapshot_period.canonical
+  base_route: entity.ssr_grade_snapshot_period.canonical
+entity.ssr_grade_snapshot_period.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_snapshot_period.edit_form
+  base_route: entity.ssr_grade_snapshot_period.canonical
+entity.ssr_grade_snapshot_period.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade_snapshot_period.delete_form
+  base_route: entity.ssr_grade_snapshot_period.canonical
+  weight: 10
+entity.ssr_grade_snapshot_period.collection:
+  title: 'Grade snapshot periods'
+  route_name: entity.ssr_grade_snapshot_period.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_grade_reg_round.view:
+  title: 'View'
+  route_name: entity.ssr_grade_reg_round.canonical
+  base_route: entity.ssr_grade_reg_round.canonical
+entity.ssr_grade_reg_round.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_reg_round.edit_form
+  base_route: entity.ssr_grade_reg_round.canonical
+entity.ssr_grade_reg_round.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_grade_reg_round.delete_form
+  base_route: entity.ssr_grade_reg_round.canonical
+  weight: 10
+entity.ssr_grade_reg_round.collection:
+  title: 'GradeRegistrationRounds'
+  route_name: entity.ssr_grade_reg_round.collection
+  base_route: system.admin_content
+  weight: 10
+entity.ssr_grade_reg_round_type.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_grade_reg_round_type.edit_form
+  base_route: entity.ssr_grade_reg_round_type.edit_form
+entity.ssr_grade_reg_round_type.collection:
+  title: 'List'
+  route_name: entity.ssr_grade_reg_round_type.collection
+  base_route: entity.ssr_grade_reg_round_type.collection
+

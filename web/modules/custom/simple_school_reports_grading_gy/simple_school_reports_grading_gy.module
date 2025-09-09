@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function simple_school_reports_grading_gy_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
+  if (($operation === 'register_course_grades' || $operation === 'view_course_grades') && $entity->bundle() === 'course') {
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface $gradable_course_service */
+    $gradable_course_service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
+    $school_types = SchoolTypeHelper::getSchoolTypeVersions('GY');
+    $allowed_syllabuses = $gradable_course_service->getGradableSyllabusIds($school_types);
+    if (!in_array($entity->get('field_syllabus')->target_id, $allowed_syllabuses)) {
+      return AccessResult::neutral()->addCacheableDependency($entity);
+    }
+
+    return AccessResult::allowedIf($operation === 'register_course_grades'
+      ? $gradable_course_service->allowGradeRegistration($entity, $account)
+      : $gradable_course_service->allowViewGrades($entity, $account)
+    )->addCacheableDependency($entity)->addCacheContexts(['user']);
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_grading_gy_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'ssr_grade_reg_course') {
+    /** @var \Drupal\node\NodeInterface $course */
+    $course = $entity->get('course')->entity;
+    if ($course?->bundle() === 'course') {
+      $gradable_course_service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
+      $school_types = SchoolTypeHelper::getSchoolTypeVersions('GY');
+      $allowed_syllabuses = $gradable_course_service->getGradableSyllabusIds($school_types);
+      if (!in_array($course->get('field_syllabus')->target_id, $allowed_syllabuses)) {
+        return;
+      }
+
+      if ($course->access('register_course_grades')) {
+        $operations['register_grades'] = [
+          'title' => t('Register grades'),
+          'url' => Url::fromRoute('simple_school_reports_grading_gy.register_course_grades', ['node' => $course->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -99,
+        ];
+      }
+
+      if ($course->access('view_course_grades')) {
+        $operations['view_grades'] = [
+          'title' => t('View grades'),
+          'url' => Url::fromRoute('simple_school_reports_grading_gy.view_course_grades', ['node' => $course->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+          'weight' => -99,
+        ];
+      }
+    }
+  }
+}

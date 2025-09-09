@@ -604,7 +604,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: grade-registration/%node/subjects
+      path: grade-registration/gr/%node/subjects
     cache_metadata:
       max-age: -1
       contexts:

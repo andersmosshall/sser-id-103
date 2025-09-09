@@ -84,6 +84,12 @@ msgstr "Betygsregistrering - omdömen"
 msgid "Grade registration"
 msgstr "Betygsregistrering"
 
+msgid "Grade registration - Grundskolan"
+msgstr "Betygsregistrering - Grundskolan"
+
+msgid "Grade registration - Gymnasiet"
+msgstr "Betygsregistrering - Gymnasiet"
+
 msgid "Grade statistics"
 msgstr "Betygsstatistik"
 

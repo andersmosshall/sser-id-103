@@ -6,3 +6,7 @@ services:
   simple_school_reports_entities.programme_service:
     class: Drupal\simple_school_reports_entities\Service\ProgrammeService
     arguments: [ '@entity_type.manager', '@database', '@state', '@queue', '@current_user', '@messenger', '@module_handler' ]
+
+  simple_school_reports_entities.syllabus_service:
+    class: Drupal\simple_school_reports_entities\Service\SyllabusService
+    arguments: [ '@entity_type.manager', '@database' ]
