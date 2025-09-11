@@ -9,6 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\Controller\SsrCachedPageControllerBase;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface;
 use Drupal\simple_school_reports_grade_support\Service\GradeServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,6 +29,8 @@ abstract class ViewCourseGradesControllerBase extends SsrCachedPageControllerBas
     $instance->gradeService = $container->get('simple_school_reports_grade_support.grade_service');
     return $instance;
   }
+
+  abstract public function getSchoolTypeVersions(): array;
 
   /**
    * {@inheritdoc}
@@ -134,7 +137,8 @@ abstract class ViewCourseGradesControllerBase extends SsrCachedPageControllerBas
     }
     $base_access = parent::access($account, $node);
 
-    return $course->access('view_course_grades', $account, TRUE)->andIf($base_access);
+    $school_type = SchoolTypeHelper::getSchoolTypeFromSchoolTypeVersioned($this->getSchoolTypeVersions()[0] ?? '');
+    return $course->access('view_course_grades_' . (mb_strtolower($school_type)), $account, TRUE);
   }
 
 }

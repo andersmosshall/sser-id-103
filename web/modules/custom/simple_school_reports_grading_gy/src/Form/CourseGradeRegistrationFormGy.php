@@ -29,6 +29,13 @@ class CourseGradeRegistrationFormGy extends CourseGradeRegistrationFormBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getSchoolTypeVersions(): array {
+    return SchoolTypeHelper::getSchoolTypeVersions('GY');
+  }
+
+  /**
    * Access check for the form.
    *
    * @param \Drupal\Core\Session\AccountInterface|null $account
@@ -53,5 +60,4 @@ class CourseGradeRegistrationFormGy extends CourseGradeRegistrationFormBase {
 
     return $base_access->andIf($syllabus_access);
   }
-
 }

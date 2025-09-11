@@ -191,6 +191,8 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       ];
     }
 
+    $form['#attached']['library'][] = 'simple_school_reports_grade_support/grade_registration';
+    $form['#attributes']['class'][] = 'grade-registration-form';
     return parent::buildForm($form, $form_state);
   }
 
@@ -221,7 +223,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
   }
 
   protected function getFieldKey(int|string $syllabus_id, int|string $student_id, string $key): string {
-    return 's.' . $syllabus_id . '.u.' . $student_id . '.' . $key;
+    return 's_' . $syllabus_id . 'u_' . $student_id . '_' . $key;
   }
 
   protected function getFormValue(int|string $syllabus_id, int|string $student_id, string $key, FormStateInterface $form_state, mixed $fallback = NULL): mixed {
@@ -233,13 +235,13 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
    */
   protected function getGradeRegistrationCourses(NodeInterface $course, ?FormStateInterface $form_state = NULL): array {
     if (!$form_state) {
-      return $this->entityTypeManager->getStorage('simple_school_reports_grade_registration_course')->loadByProperties([
+      return $this->entityTypeManager->getStorage('ssr_grade_reg_course')->loadByProperties([
         'course' => $course->id(),
       ]);
     }
 
-    if ($form_state->get('grade_registration_courses') !== NULL) {
-      $grade_registration_courses = $this->entityTypeManager->getStorage('simple_school_reports_grade_registration_course')->loadByProperties([
+    if ($form_state->get('grade_registration_courses') === NULL) {
+      $grade_registration_courses = $this->entityTypeManager->getStorage('ssr_grade_reg_course')->loadByProperties([
         'course' => $course->id(),
       ]);
       $form_state->set('grade_registration_courses', $grade_registration_courses);
@@ -344,7 +346,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
       $joint_grading_teacher_options = $grading_teacher_options;
       $default_joint_grading_teachers = $grade_info?->jointGraders ?? [];
-      foreach ($grade_info?->jointGraders as $grader) {
+      foreach ($grade_info?->jointGraders ?? [] as $grader) {
         if (empty($grading_teacher_options[$grader])) {
           $grader_user = $this->entityTypeManager->getStorage('user')->load($grader);
           $joint_grading_teacher_options[$grader] = $grader_user?->getDisplayName() ?? '??? (' . $grader . ')';
@@ -352,11 +354,6 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       }
 
       $has_grade = !empty($grade_info?->grade);
-
-      $form[$this->getFieldKey($syllabus_id, $student_id, 'skip')] = [
-        '#type' => 'hidden',
-        '#default_value' => $has_grade,
-      ];
 
       $form['grade_registration'][$student_id]['student'] = [
         '#type' => 'container',
@@ -424,9 +421,9 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         $default_exclude_reason = $grade_info?->excludeReason;
       }
 
-      $exclude_key = $this->getFieldKey($syllabus_id, $student_id, 'exclude_reason');
+      $exclude_key = $this->getFieldKey($syllabus_id, $student_id, 'exclude');
 
-      $form[$exclude_key] = [
+      $form['grade_registration'][$student_id]['student']['grade_registration']['grade_info'][$exclude_key] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Exclude student / Set later'),
         '#default_value' => $default_exclude_reason !== NULL,
@@ -438,7 +435,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         '#type' => 'container',
         '#states' => [
           'visible' => [
-            ':input[name=" ' . $exclude_key . ' "]' => [
+            ':input[name="' . $exclude_key . '"]' => [
               'checked' => TRUE,
             ],
           ],
@@ -506,13 +503,17 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         ];
       }
 
-      $default_remark = $grade_info?->remark ?? '';;
+//      $default_remark = $grade_info?->remark ?? '';;
+//      $form['grade_registration'][$student_id]['student']['grade_registration']['grade_wrapper'][$this->getFieldKey($syllabus_id, $student_id, 'remark')] = [
+//        '#title' => t('Short comment'),
+//        '#description' => t('The short comment will be shown in generated grade document'),
+//        '#type' => 'textfield',
+//        '#default_value' => $default_remark,
+//        '#maxlength' => 10,
+//      ];
+      // TODO: Replace with remark above when/if we need it. For now use a filler.
       $form['grade_registration'][$student_id]['student']['grade_registration']['grade_wrapper'][$this->getFieldKey($syllabus_id, $student_id, 'remark')] = [
-        '#title' => t('Short comment'),
-        '#description' => t('The short comment will be shown in generated grade document'),
-        '#type' => 'textfield',
-        '#default_value' => $default_remark,
-        '#maxlength' => 10,
+        '#type' => 'container',
       ];
 
 
@@ -563,6 +564,10 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
+
+    $t_values = $form_state->getValues();
+
+
     $student_ids = $form_state->getValue('student_ids', []);
     $syllabus_ids = $form_state->getValue('syllabus_ids', []);
     $grade_references = $this->gradeService->getGradeReferences($student_ids, $syllabus_ids);
@@ -577,15 +582,12 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
     foreach ($syllabus_ids as $syllabus_id) {
       foreach ($student_ids as $student_id) {
-        $excluded = $this->getFormValue($syllabus_id, $student_id, 'exclude', $form_state, FALSE);
-        $exclude_reason = $this->getFormValue($syllabus_id, $student_id, 'exclude_reason', $form_state);
+        $excluded = (bool) $this->getFormValue($syllabus_id, $student_id, 'exclude', $form_state, FALSE);
+        $exclude_reason = $excluded
+          ? $this->getFormValue($syllabus_id, $student_id, 'exclude_reason', $form_state)
+          : NULL;
 
         if ($excluded && $is_done && $exclude_reason === 'pending') {
-          $form_state->setErrorByName(
-            $this->getFieldKey($syllabus_id, $student_id, 'exclude_reason'),
-            $this->t('Please set a grade for the student before setting the grade to pending.')
-          );
-
           $form_state->setErrorByName($this->getFieldKey($syllabus_id, $student_id, 'exclude_reason'), $this->t('You can not mark registration as done if there are pending grades to set.'));
           $form_state->setErrorByName('grade_registration_course_status', $this->t('You can not mark registration as done if there are pending grades to set.'));
           continue;
@@ -650,8 +652,10 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       $form_data_stash = [];
       foreach ($syllabus_ids as $syllabus_id) {
         foreach ($student_ids as $student_id) {
-          $excluded = $this->getFormValue($syllabus_id, $student_id, 'exclude', $form_state, FALSE);
-          $exclude_reason = $this->getFormValue($syllabus_id, $student_id, 'exclude_reason', $form_state);
+          $excluded = (bool) $this->getFormValue($syllabus_id, $student_id, 'exclude', $form_state, FALSE);
+          $exclude_reason = $excluded
+            ? $this->getFormValue($syllabus_id, $student_id, 'exclude_reason', $form_state)
+            : NULL;
 
           // If set to be kept, don't do anything.
           if ($excluded && $exclude_reason === 'keep') {
@@ -698,7 +702,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
           $grade->set('main_grader', ['target_id' => $this->getFormValue($syllabus_id, $student_id, 'main_grader', $form_state)]);
 
-          $joint_graders = $this->getFormValue($syllabus_id, $student_id, 'main_grader', $form_state);
+          $joint_graders = $this->getFormValue($syllabus_id, $student_id, 'joint_graders', $form_state, []);
           $joint_grading_by_value = [];
           foreach ($joint_graders as $uid => $value) {
             if (!$value) {
@@ -724,21 +728,32 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
           $grade->set('diploma_project_label', $this->getFormValue($syllabus_id, $student_id, 'diploma_project_label', $form_state));
           $grade->set('diploma_project_description', $this->getFormValue($syllabus_id, $student_id, 'diploma_project_description', $form_state));
-          $grade->setIdentifier();
 
+          $grade->sanitizeFields();
           if (!$grade->hasChanges($original_grade)) {
             continue;
           }
 
-
           $violations = $grade->validate();
-          if (!empty($violations)) {
-            \Drupal::logger('simple_school_reports_grade_support')->error('Grade validation failed for student @student_id and syllabus @syllabus_id, @violations', [
+          if (count($violations) > 0) {
+            $violation_messages = [];
+            foreach ($violations as $violation) {
+              $property_path = $violation->getPropertyPath();
+              $violation_messages[$property_path] = $violation->getMessage();
+            }
+
+            $log_message = 'Grade validation failed for student @student_id and syllabus @syllabus_id, @violations';
+            $tokens = [
               '@student_id' => $student_id,
               '@syllabus_id' => $syllabus_id,
-              '@violations' => Json::encode($violations),
-            ]);
-            throw new \Exception('Grade validation failed for student ' . $student_id . ' and syllabus ' . $syllabus_id);
+              '@violations' => Json::encode($violation_messages),
+            ];
+            // Replace tokens in log message.
+            foreach ($tokens as $token => $value) {
+              $log_message = str_replace($token, $value, $log_message);
+            }
+
+            throw new \Exception($log_message);
           }
 
           // TEMP!!!!!!!!
@@ -754,14 +769,16 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
       foreach ($grade_registration_courses as $grade_registration_course) {
         if ($grade_registration_course->get('registration_status')->value === GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE) {
+          $grade_registration_course->set('form_data_stash', NULL);
+          $grade_registration_course->save();
           continue;
         }
 
-        $grade_registration_course->set('registration_status', $new_grade_registration_courses_status);
-        $grade_registration_course->set('form_data_stash', Json::encode($form_data_stash));
+        $is_done = $new_grade_registration_courses_status === GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE;
 
-        // TEMP!!!!!!!!
-//        $grade_registration_course->save();
+        $grade_registration_course->set('registration_status', $new_grade_registration_courses_status);
+        $grade_registration_course->set('form_data_stash', $is_done ? NULL : Json::encode($form_data_stash));
+        $grade_registration_course->save();
       }
 
     } catch (\Exception $e) {

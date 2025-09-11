@@ -3,6 +3,8 @@
 namespace Drupal\simple_school_reports_grade_support\Service;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
@@ -18,6 +20,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     protected Connection $connection,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected TermServiceInterface $termService,
+    protected GradeServiceInterface $gradeService,
   ) {}
 
   /**
@@ -57,6 +60,95 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
 
     $this->lookup[$cid] = $id;
     return $id;
+  }
+
+  /**
+   * @param int|string $snapshot_period_id
+   * @param int|string $student_id
+   *
+   * @return string
+   */
+  protected function makeSnapshotIdentifier(int|string $snapshot_period_id, int|string $student_id): string {
+    return 's.' . $student_id . '.p.' . $snapshot_period_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function makeSnapshot(int|string $student_id): void {
+    $snapshot_period_id = $this->getSnapshotPeriodId();
+
+    $student = $this->entityTypeManager->getStorage('user')->load($student_id);
+    if (!$student) {
+      return;
+    }
+
+    $identifier = $this->makeSnapshotIdentifier($snapshot_period_id, $student_id);
+    $snapshot_storage = $this->entityTypeManager->getStorage('ssr_grade_snapshot');
+    /** @var \Drupal\simple_school_reports_grade_support\GradeSnapshotInterface|null $snapshot */
+    $snapshot = current($snapshot_storage->loadByProperties(['identifier' => $identifier]));
+
+    if (!$snapshot) {
+      $snapshot = $snapshot_storage->create([
+        'langcode' => 'sv',
+      ]);
+    }
+
+    $current_revision_ids = array_column($snapshot->get('field_grades')->getValue(), 'revision_id');
+    $current_revision_ids = array_unique($current_revision_ids);
+    sort($current_revision_ids);
+
+    $new_revision_ids = [];
+    $new_snapshot_grades = [];
+
+    $grade_references = $this->gradeService->getGradeReferences([$student_id]);
+
+    foreach ($grade_references as $grade_reference) {
+      $new_revision_ids[] = $grade_reference->revisionId;
+      $new_snapshot_grades[] = [
+        'revision_id' => $grade_reference->revisionId,
+        'target_id' => $grade_reference->id,
+      ];
+    }
+    $new_revision_ids = array_unique($new_revision_ids);
+    sort($new_revision_ids);
+
+    if ($new_revision_ids == $current_revision_ids) {
+      return;
+    }
+
+    $snapshot->set('identifier', $identifier);
+    $snapshot->set('label', $identifier);
+    $snapshot->set('grades', $new_snapshot_grades);
+    $snapshot->set('status', TRUE);
+    $snapshot->set('grade_snapshot_period', ['target_id' => $snapshot_period_id]);
+    $snapshot->set('student', ['target_id' => $student_id]);
+
+    $snapshot->set('school_grade', $student->get('field_grade')->value);
+    $snapshot->set('gender', $student->get('field_gender')->value);
+
+    $snapshot->set('grades', $new_snapshot_grades);
+
+    $violations = $snapshot->validate();
+    if (!empty($violations)) {
+      throw new \RuntimeException('Failed to create grade snapshot for student ' . $student_id . ': ' . Json::encode($violations));
+    }
+
+    $snapshot->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateSnapshotsForGrade(int|string $old_grade_revision_id, int|string $new_grade_revision_id): void {
+    if ((string) $old_grade_revision_id === (string) $new_grade_revision_id) {
+      return;
+    }
+    $this->connection->update('ssr_grade_snapshot__grades')
+      ->fields(['revision_id' => $new_grade_revision_id])
+      ->condition('revision_id', $old_grade_revision_id)
+      ->execute();
+    Cache::invalidateTags(['ssr_grade_snapshot_list']);;
   }
 
 }

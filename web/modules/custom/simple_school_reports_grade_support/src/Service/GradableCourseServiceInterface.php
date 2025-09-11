@@ -46,10 +46,23 @@ interface GradableCourseServiceInterface {
 
   /**
    * @param \Drupal\node\NodeInterface $course
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *
+   * @return bool
+   */
+  public function allowUnlockGradeRegistration(NodeInterface $course, ?AccountInterface $account = NULL): bool;
+
+  /**
+   * @param \Drupal\node\NodeInterface $course
    * @param \Drupal\user\UserInterface|null $account
    *
    * @return bool
    */
   public function allowViewGrades(NodeInterface $course, ?AccountInterface $account = NULL): bool;
+
+  /**
+   * @return void
+   */
+  public function clearLookup(): void;
 
 }

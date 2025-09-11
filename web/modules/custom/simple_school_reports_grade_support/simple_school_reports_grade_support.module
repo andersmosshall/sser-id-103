@@ -56,6 +56,26 @@ function simple_school_reports_grade_support_theme(): array {
 }
 
 /**
+ * Implements hook_entity_presave().
+ */
+function imple_school_reports_grade_support_entity_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  $entity_types_to_clear_gradable_course_lookup = [
+    'node' => 'course',
+    'ssr_grade_reg_course' => 'ssr_grade_reg_course',
+    'user' => 'user',
+  ];
+
+  $entity_type = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+
+  if (isset($entity_types_to_clear_gradable_course_lookup[$entity_type]) && $entity_types_to_clear_gradable_course_lookup[$entity_type] === $bundle) {
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
+    $service->clearLookup();
+  }
+}
+
+/**
  * Prepares variables for grade templates.
  *
  * Default template: ssr-grade.html.twig.

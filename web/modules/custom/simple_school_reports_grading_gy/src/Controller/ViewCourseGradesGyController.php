@@ -24,6 +24,13 @@ class ViewCourseGradesGyController extends ViewCourseGradesControllerBase {
   /**
    * {@inheritdoc}
    */
+  public function getSchoolTypeVersions(): array {
+    return SchoolTypeHelper::getSchoolTypeVersions('GY');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function access(?AccountInterface $account = NULL, NodeInterface $node = NULL): AccessResultInterface {
     $course = $node;
     if (!$course || $course->bundle() !== 'course') {

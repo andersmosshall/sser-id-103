@@ -8,12 +8,15 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
 function simple_school_reports_grading_gy_node_access(NodeInterface $entity, $operation, AccountInterface $account) {
-  if (($operation === 'register_course_grades' || $operation === 'view_course_grades') && $entity->bundle() === 'course') {
+  $operations_to_handle = ['register_course_grades_gy', 'unlock_register_course_grades_gy', 'view_course_grades_gy'];
+
+  if (in_array($operation, $operations_to_handle) && $entity->bundle() === 'course') {
     /** @var \Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface $gradable_course_service */
     $gradable_course_service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
     $school_types = SchoolTypeHelper::getSchoolTypeVersions('GY');
@@ -22,10 +25,23 @@ function simple_school_reports_grading_gy_node_access(NodeInterface $entity, $op
       return AccessResult::neutral()->addCacheableDependency($entity);
     }
 
-    return AccessResult::allowedIf($operation === 'register_course_grades'
-      ? $gradable_course_service->allowGradeRegistration($entity, $account)
-      : $gradable_course_service->allowViewGrades($entity, $account)
-    )->addCacheableDependency($entity)->addCacheContexts(['user']);
+    $allowed = FALSE;
+
+    switch ($operation) {
+      case 'register_course_grades_gy':
+        $allowed = $gradable_course_service->allowGradeRegistration($entity, $account);
+        break;
+      case 'unlock_register_course_grades_gy':
+        $allowed = $gradable_course_service->allowUnlockGradeRegistration($entity, $account);
+        break;
+      case 'view_course_grades_gy':
+        $allowed = $gradable_course_service->allowViewGrades($entity, $account);
+    }
+
+    return AccessResult::allowedIf($allowed)
+      ->addCacheableDependency($entity)
+      ->addCacheContexts(['user'])
+      ->addCacheTags(['user_' . $account->id(), 'ssr_grade_reg_course_list']);
   }
 
   return AccessResult::neutral();
@@ -59,6 +75,51 @@ function simple_school_reports_grading_gy_entity_operation_alter(array &$operati
           'title' => t('View grades'),
           'url' => Url::fromRoute('simple_school_reports_grading_gy.view_course_grades', ['node' => $course->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
           'weight' => -99,
+        ];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_grading_gy_ssr_local_actions_alter(array &$local_actions, CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'simple_school_reports_grading_gy.view_course_grades') {
+    /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
+    $route_match = $context['route_match'];
+    $node = $route_match->getParameter('node');
+    if ($node instanceof NodeInterface && $node->bundle() === 'course') {
+      $cache->addCacheTags(['node:' . $node->id(), 'user:' . \Drupal::currentUser()->id(), 'ssr_grade_reg_course_list']);
+      $cache->addCacheContexts(['user', 'route']);
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+
+      $access_reg_course_grades = $node->access('register_course_grades_gy', NULL, TRUE);
+      $cache->addCacheableDependency($access_reg_course_grades);
+      if ($access_reg_course_grades->isAllowed()) {
+        $local_actions['register_grades'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Register grades'),
+            'url' => Url::fromRoute('simple_school_reports_grading_gy.register_course_grades', ['node' => $node->id()], ['query' => ['destination' => $destination]]),
+          ],
+          '#weight' => 10,
+        ];
+      }
+
+      $access_unlock_course_grades = $node->access('register_course_grades_gy', NULL, TRUE);
+      $cache->addCacheableDependency($access_reg_course_grades);
+      if ($access_unlock_course_grades->isAllowed()) {
+        $local_actions['unlock_register_grades'] = [
+          '#theme' => 'menu_local_action',
+          '#link' => [
+            'title' => t('Unlock grade registration'),
+            'url' => Url::fromRoute('simple_school_reports_grading_gy.unlock_register_course_grades', ['node' => $node->id()], ['query' => ['destination' => $destination]]),
+          ],
+          '#weight' => 10,
         ];
       }
     }

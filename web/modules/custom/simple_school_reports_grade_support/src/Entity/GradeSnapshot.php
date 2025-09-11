@@ -77,6 +77,8 @@ final class GradeSnapshot extends ContentEntityBase implements GradeSnapshotInte
     if (!$this->get('grade_snapshot_period')->isEmpty()) {
       throw new \RuntimeException('Grade snapshot period must be set.');
     }
+
+    $this->set('identifier', $this->get('grade_snapshot_period')->target_id . ':' . $this->get('student')->target_id);
   }
 
   /**

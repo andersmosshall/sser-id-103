@@ -115,6 +115,51 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
   /**
    * {@inheritdoc}
    */
+  public function sanitizeFields(): self {
+    if ($this->get('identifier')->isEmpty()) {
+      $this->setIdentifier();
+    }
+    if ($this->get('label')->isEmpty()) {
+      $this->set('label', $this->get('identifier')->value);
+    }
+    if ($this->get('registered')->isEmpty()) {
+      $this->set('registered', \Drupal::time()->getRequestTime());
+    }
+
+    if (!$this->get('exclude_reason')->isEmpty()) {
+      $fields_to_clear = [
+        'main_grader',
+        'joint_grading_by',
+        'grade',
+        'trial',
+      ];
+      foreach ($fields_to_clear as $field_to_clear) {
+        $this->set($field_to_clear, NULL);
+      }
+    }
+
+    if ($this->get('term_index')->isEmpty()) {
+      /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
+      $term_service = \Drupal::service('simple_school_reports_core.term_service');
+      $this->set('term_index', $term_service->getDefaultTermIndex());
+    }
+
+    // Remove user from joint_grading_by if it is the same as main_grader.
+    $joint_grading_by_uids = array_column($this->get('joint_grading_by')->getValue() ?? [], 'target_id');
+    $main_grader_uid = $this->get('main_grader')->target_id;
+    if (in_array($main_grader_uid, $joint_grading_by_uids)) {
+      $new_joint_grading_by = array_filter($joint_grading_by_uids, function ($uid) use ($main_grader_uid) {
+        return $uid != $main_grader_uid;
+      });
+      $this->set('joint_grading_by', $new_joint_grading_by);
+    }
+
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasChanges(?GradeInterface $original = NULL): bool {
     if ($this->isNew()) {
       return TRUE;
@@ -187,26 +232,12 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
-
-    // Remove user from joint_grading_by if it is the same as main_grader.
-    $joint_grading_by_uids = array_column($this->get('joint_grading_by')->getValue() ?? [], 'target_id');
-    $main_grader_uid = $this->get('main_grader')->target_id;
-    if (in_array($main_grader_uid, $joint_grading_by_uids)) {
-      $new_joint_grading_by = array_filter($joint_grading_by_uids, function ($uid) use ($main_grader_uid) {
-        return $uid != $main_grader_uid;
-      });
-      $this->set('joint_grading_by', $new_joint_grading_by);
-    }
+    $this->sanitizeFields();
 
     if ($this->isSyncing()) {
       return;
     }
 
-    if (!$this->get('grade')->isEmpty() && $this->get('term_index')->isEmpty()) {
-      /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
-      $term_service = \Drupal::service('simple_school_reports_core.term_service');
-      $this->set('term_index', $term_service->getDefaultTermIndex());
-    }
 
     $this->assertNoForbiddenChanges();
 
@@ -220,6 +251,40 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
       $this->set('revision_uid', \Drupal::currentUser()->id());
     }
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradeSnapshotServiceInterface $grade_snapshot_service */
+    $grade_snapshot_service = \Drupal::service('simple_school_reports_grade_support.grade_snapshot_service');
+
+    if (!$update || $this->get('correction_type')->value === self::CORRECTION_TYPE_CHANGED) {
+      $grade_snapshot_service->makeSnapshot($this->get('student')->target_id);
+      return;
+    }
+
+    $new_revision_id = $this->getRevisionId();
+    $old_revision_id = $this->original->getRevisionId();
+
+    if (!$new_revision_id || !$old_revision_id) {
+      throw new \RuntimeException('New revision ID or old revision ID is not set.');
+    }
+    $grade_snapshot_service->updateSnapshotsForGrade($old_revision_id, $new_revision_id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    $tags = parent::getCacheTagsToInvalidate();
+    $tags[] = 'ssr_grade_list:student:' . $this->get('student')->target_id;;
+    $tags[] = 'ssr_grade_list:syllabus:' . $this->get('syllabus')->target_id;;
+    return $tags;
+  }
+
 
   /**
    * {@inheritdoc}

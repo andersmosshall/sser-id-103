@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\simple_school_reports_grade_support\GradeRegistrationCourseInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -148,6 +149,39 @@ class GradableCourseService implements GradableCourseServiceInterface {
     $query->innerJoin('ssr_grade_reg_round__field_grade_reg_course', 'r', 'r.field_grade_reg_course_target_id = rc.id');
     $query->innerJoin('ssr_grade_reg_round_field_data', 'rd', 'r.entity_id = rd.id');
     $query->condition('rc.course', $course->id());
+    $query->condition('rc.registration_status', GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE, '<>');
+    $query->condition('rd.open', TRUE);
+    $query->fields('rd', ['id']);
+    $count = $query->countQuery()->execute()->fetchField();
+
+    $access = $count > 0;
+    $this->lookup[$cid] = $access;
+    return $access;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function allowUnlockGradeRegistration(NodeInterface $course, ?AccountInterface $account = NULL): bool {
+    if (!$account) {
+      $account = $this->currentUser;
+    }
+
+    $cid = 'agu:' . $course->id() . ':' . $account->id();
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
+    if ($this->allowGradeRegistration($course, $account)) {
+      $this->lookup[$cid] = FALSE;
+      return FALSE;
+    }
+
+    $query = $this->connection->select('ssr_grade_reg_course', 'rc');
+    $query->innerJoin('ssr_grade_reg_round__field_grade_reg_course', 'r', 'r.field_grade_reg_course_target_id = rc.id');
+    $query->innerJoin('ssr_grade_reg_round_field_data', 'rd', 'r.entity_id = rd.id');
+    $query->condition('rc.course', $course->id());
+    $query->condition('rc.registration_status', GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE);
     $query->condition('rd.open', TRUE);
     $query->fields('rd', ['id']);
     $count = $query->countQuery()->execute()->fetchField();
@@ -183,6 +217,13 @@ class GradableCourseService implements GradableCourseServiceInterface {
     $allowed = in_array($account->id(), $grading_teacher_uids);
     $this->lookup[$cid] = $allowed;
     return $allowed;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function clearLookup(): void {
+    $this->lookup = [];
   }
 
 }

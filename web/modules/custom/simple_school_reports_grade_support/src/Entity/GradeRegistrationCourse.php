@@ -103,7 +103,7 @@ final class GradeRegistrationCourse extends ContentEntityBase implements GradeRe
       if ($this->original->get('course')->target_id !== $this->get('course')->target_id) {
         // Course changed, reset registration status.
         $this->set('registration_status', self::REGISTRATION_STATUS_NOT_STARTED);
-        $this->set('postpone', NULL);
+        $this->set('form_data_stash', NULL);
       }
     }
 
@@ -112,7 +112,7 @@ final class GradeRegistrationCourse extends ContentEntityBase implements GradeRe
     }
 
     if ($this->get('registration_status')->value === self::REGISTRATION_STATUS_DONE) {
-      $this->set('postpone', NULL);
+      $this->set('form_data_stash', NULL);
     }
 
     $this->set('label', self::makeLabelFromCourse($this->get('course')->entity));

@@ -32,4 +32,9 @@ interface GradeInterface extends ContentEntityInterface, EntityOwnerInterface, E
    */
   public function setIdentifier(): self;
 
+  /**
+   * @return self
+   */
+  public function sanitizeFields(): self;
+
 }
