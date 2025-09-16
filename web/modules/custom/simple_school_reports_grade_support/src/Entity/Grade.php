@@ -272,7 +272,8 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
     if (!$new_revision_id || !$old_revision_id) {
       throw new \RuntimeException('New revision ID or old revision ID is not set.');
     }
-    $grade_snapshot_service->updateSnapshotsForGrade($old_revision_id, $new_revision_id);
+    $student_id = $this->get('student')->target_id;
+    $grade_snapshot_service->updateSnapshotsForGrade($old_revision_id, $new_revision_id, $student_id ?? '*');
   }
 
   /**
@@ -284,7 +285,6 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
     $tags[] = 'ssr_grade_list:syllabus:' . $this->get('syllabus')->target_id;;
     return $tags;
   }
-
 
   /**
    * {@inheritdoc}

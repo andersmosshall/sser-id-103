@@ -25,6 +25,13 @@ interface SyllabusServiceInterface {
   public function getSyllabusLevelIds(int $syllabus_id): array;
 
   /**
+   * @param int $syllabus_id
+   *
+   * @return int[]
+   */
+  public function getSyllabusPreviousLevelIds(int $syllabus_id): array;
+
+  /**
    * @param array|null $syllabus_ids
    *
    * @return string[]
@@ -38,6 +45,24 @@ interface SyllabusServiceInterface {
    * @return string[]
    *   Keyed by syllabus id.
    */
+  public function getSyllabusCourseCodesInOrder(?array $syllabus_ids = NULL): array;
+
+  /**
+   * @param array|null $syllabus_ids
+   *
+   * @return string[]
+   *   Keyed by syllabus id.
+   */
   public function getSyllabusWeight(?array $syllabus_ids = NULL): array;
+
+  /**
+   * @param int $syllabus_id
+   *
+   * @return array
+   *  Keyed by level id, each entry is an array with the following keys:
+   *  - points
+   *  - aggregated_points
+   */
+  public function getSyllabusPreviousPoints(int $syllabus_id): array;
 
 }

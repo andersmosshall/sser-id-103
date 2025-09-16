@@ -98,10 +98,8 @@ abstract class ViewCourseGradesControllerBase extends SsrCachedPageControllerBas
         if (!empty($grades[$student->id()][$syllabus->id()])) {
           /** @var \Drupal\simple_school_reports_grade_support\Utilities\GradeInfo $grade_info */
           $grade_info = $grades[$student->id()][$syllabus->id()];
-          if (!$grade_info->removed) {
-            $date = $grade_info->date?->format('Y-m-d');
-            $grade = $this->gradeService->getGradeLabel($grade_info->gradeTid) ?? $this->t('Unknown');
-          }
+          $date = $grade_info->date?->format('Y-m-d');
+          $grade = $this->gradeService->getGradeLabel($grade_info) ?? $this->t('Unknown');
         }
 
         $build['table']['#rows'][] = [

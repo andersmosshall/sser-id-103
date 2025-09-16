@@ -39,3 +39,15 @@ simple_school_reports_grade_support.grade_registration_types:
     _permission: 'administer simple school reports settings'
   options:
     _admin_route: TRUE
+
+simple_school_reports_grade_support.student_grade_statistics:
+  path: '/user/{user}/grade-statistics'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::build'
+    _title_callback: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::access'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

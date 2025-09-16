@@ -15,6 +15,8 @@ class GradeInfo {
     public ?bool $trial,
     public ?string $excludeReason,
     public ?string $remark,
+    public ?int $points,
+    public ?int $aggregatedPoints,
     public bool $replaced,
   ) {}
 }

@@ -73,8 +73,8 @@ function simple_school_reports_grading_gy_entity_operation_alter(array &$operati
       if ($course->access('view_course_grades')) {
         $operations['view_grades'] = [
           'title' => t('View grades'),
-          'url' => Url::fromRoute('simple_school_reports_grading_gy.view_course_grades', ['node' => $course->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
-          'weight' => -99,
+          'url' => Url::fromRoute('simple_school_reports_grading_gy.view_course_grades', ['node' => $course->id()]),
+          'weight' => -98,
         ];
       }
     }

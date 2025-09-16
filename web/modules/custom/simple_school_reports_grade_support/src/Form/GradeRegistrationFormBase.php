@@ -155,7 +155,25 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
     if ($form_state->get('grade_references') === NULL) {
       $grade_references = $this->gradeService->getGradeReferences($filtered_student_ids, $filtered_syllabus_ids);
       $form_state->set('grade_references', $grade_references);
-      $form_state->set('grades_info', $this->gradeService->parseGradesFromReferences($grade_references));
+      $grades_info = $this->gradeService->parseGradesFromReferences($grade_references);
+      $form_state->set('grades_info', $grades_info);
+
+      // Warm up grade storage cache.
+      $grade_ids = [];
+      foreach ($filtered_syllabus_ids as $syllabus_id) {
+        foreach ($filtered_student_ids as $student_id) {
+          $grade_info = !empty($grades_info[$student_id][$syllabus_id])
+            ? $grades_info[$student_id][$syllabus_id]
+            : NULL;
+          if (!$grade_info || !$grade_info->id) {
+            continue;
+          }
+          $grade_ids[] = $grade_info->id;
+        }
+      }
+      if (!empty($grade_ids)) {
+        $this->entityTypeManager->getStorage('ssr_grade')->loadMultiple($grade_ids);
+      }
     }
 
     $registration_init_state = hash('sha256', Json::encode($form_state->get('grade_references')));
@@ -272,6 +290,8 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       : [];
 
     $stashed_exclude_reasons = [];
+
+    $grade_storage = $this->entityTypeManager->getStorage('ssr_grade');
 
 
     /** @var \Drupal\simple_school_reports_grade_support\GradeRegistrationCourseInterface $grade_registration_course */
@@ -395,16 +415,45 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
       // Make exclude reason options.
       $exclude_reason_options = [];
-      if ($grade_info?->gradeTid && $this->gradeService->getGradeLabel($grade_info?->gradeTid)) {
-        $exclude_reason_options['keep'] = $this->t('No changes. Keep grade @grade by @main_grader (@registered)', [
-          '@grade' => $this->gradeService->getGradeLabel($grade_info?->gradeTid),
+      if ($grade_info?->gradeTid && $this->gradeService->getGradeLabel($grade_info)) {
+        $exclude_reason_options['keep'] = $this->t('No changes. Keep grade @grade by @main_grader - @registered', [
+          '@grade' => $this->gradeService->getGradeLabel($grade_info),
           '@main_grader' => $grading_teacher_options[$main_grader],
           '@registered' => $grade_info?->date?->format('Y-m-d') ?? '',
         ]);
       }
-      $exclude_reason_options['n_a'] = $has_grade
-        ? $this->t('Student does not study the course (DELETE)')
-        : $this->t('Student does not study the course');
+
+      if (!$grade_info?->id) {
+        $exclude_reason_options['n_a'] = !empty($grade_registration_courses)
+          ? $this->t('Student does not study the course')
+          : $this->t('Skip grade registration for now');
+      }
+      else {
+        /** @var \Drupal\simple_school_reports_grade_support\GradeInterface|null $grade */
+        $grade = $grade_storage->load($grade_info?->id ?? 0);
+        $allow_delete = !$grade;
+        if ($this->currentUser()->hasPermission('administer simple_school_reports_grade_support')) {
+          $allow_delete = TRUE;
+        }
+        if ((int) $this->currentUser()->id() === $main_grader) {
+          $allow_delete = TRUE;
+        }
+        if ($allow_delete) {
+          if ($grade_info->gradeTid) {
+            $exclude_reason_options['n_a'] = $this->t('Delete grade @grade by @main_grader - @registered. (This action cannot be undone.)', [
+              '@grade' => $this->gradeService->getGradeLabel($grade_info) ?? $this->t('Unknown grade'),
+              '@main_grader' => $grading_teacher_options[$main_grader] ?? '?',
+              '@registered' => $grade_info?->date?->format('Y-m-d') ?? '',
+            ]);
+          } else {
+            $exclude_reason_options['n_a'] = $this->t('Delete grade @grade - @registered. (This action cannot be undone.)', [
+              '@grade' => $this->gradeService->getGradeLabel($grade_info) ?? $this->t('Unknown grade'),
+              '@registered' => $grade_info?->date?->format('Y-m-d') ?? '',
+            ]);
+          }
+        }
+      }
+
       $exclude_reason_options['adapted_studies'] = $this->t('Adapted studies');
       if (!empty($grade_registration_courses)) {
         $exclude_reason_options['pending'] = $this->t('Grade will be set later');
@@ -532,7 +581,13 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         ],
       ];
 
-      if ($has_grade) {
+      if ($grade_info) {
+        $exclude_reason_key_lookup = $exclude_reason_key;
+        if ($grade_info?->excludeReason === 'adapted_studies') {
+          $exclude_reason_key_lookup = 'no_adapted_studies_change';
+        }
+
+
         $form['grade_registration'][$student_id]['student']['grade_registration']['update_reason_wrapper'] = [
           '#type' => 'container',
           '#attributes' => [
@@ -540,8 +595,10 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
           ],
           '#states' => [
             'visible' => [
-              ':input[name="' . $exclude_key . '"]' => ['checked' => TRUE,],
-              ':radio[name="' . $exclude_reason_key . '"]' => ['value' => 'adapted_studies'],
+              ':radio[name="' . $exclude_reason_key_lookup . '"]' => ['value' => 'adapted_studies'],
+            ],
+            'invisible' => [
+              ':input[name="' . $exclude_key . '"]' => ['checked' => TRUE],
             ],
           ],
         ];
@@ -564,10 +621,6 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
-
-    $t_values = $form_state->getValues();
-
-
     $student_ids = $form_state->getValue('student_ids', []);
     $syllabus_ids = $form_state->getValue('syllabus_ids', []);
     $grade_references = $this->gradeService->getGradeReferences($student_ids, $syllabus_ids);
@@ -631,23 +684,6 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       $course = $course_id
         ? $this->entityTypeManager->getStorage('node')->load($course_id)
         : NULL;
-
-      // Warmup grades cache.
-      $grade_ids = [];
-      foreach ($syllabus_ids as $syllabus_id) {
-        foreach ($student_ids as $student_id) {
-          $grade_info = !empty($grades_info[$student_id][$syllabus_id])
-            ? $grades_info[$student_id][$syllabus_id]
-            : NULL;
-          if (!$grade_info || !$grade_info->id) {
-            continue;
-          }
-          $grade_ids[] = $grade_info->id;
-        }
-      }
-      if (!empty($grade_ids)) {
-        $grade_storage->loadMultiple($grade_ids);
-      }
 
       $form_data_stash = [];
       foreach ($syllabus_ids as $syllabus_id) {
@@ -756,8 +792,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
             throw new \Exception($log_message);
           }
 
-          // TEMP!!!!!!!!
-//          $grade->save();
+          $grade->save();
         }
       }
 

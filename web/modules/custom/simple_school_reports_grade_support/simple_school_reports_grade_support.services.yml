@@ -9,4 +9,4 @@ services:
 
   simple_school_reports_grade_support.grade_snapshot_service:
     class: Drupal\simple_school_reports_grade_support\Service\GradeSnapshotService
-    arguments: [ '@database','@entity_type.manager','@simple_school_reports_core.term_service', 'simple_school_reports_grade_support.grade_service' ]
+    arguments: [ '@database','@entity_type.manager','@simple_school_reports_core.term_service', '@simple_school_reports_grade_support.grade_service' ]

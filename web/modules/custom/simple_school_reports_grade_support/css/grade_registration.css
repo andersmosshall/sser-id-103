@@ -11,13 +11,6 @@
   margin-right: 20px;
 }
 
-.student-row--update-reason-wrapper .form-radios {
-  display: flex;
-  justify-content: flex-start;
-  align-content: center;
-  align-items: center;
-}
-
 .grade-registration-form select {
   width: 100%;
 }
@@ -40,10 +33,6 @@
 
 .grade-registration-form .form-item--state {
   margin-top: 60px !important;
-}
-
-.grade-registration-form .student-row--update-reason-wrapper .form-radios .form-type--radio {
-  margin-right: 16px;
 }
 
 @media screen and (min-width: 37.5rem) {

@@ -144,3 +144,9 @@ entity.ssr_grade_reg_round_type.collection:
   route_name: entity.ssr_grade_reg_round_type.collection
   base_route: entity.ssr_grade_reg_round_type.collection
 
+simple_school_reports_grade_support.student_grade_statistics:
+  base_route: entity.user.canonical
+  weight: 70
+  route_name: simple_school_reports_grade_support.student_grade_statistics
+  title: 'Grade statistics'
+

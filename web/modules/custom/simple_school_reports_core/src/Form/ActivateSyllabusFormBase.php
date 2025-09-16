@@ -224,6 +224,19 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
     return mb_strtoupper($identifier);
   }
 
+  public static function parseSyllabusIdentifier(string $identifier, bool $plain_course_code = TRUE): array {
+    $parts = explode(':', trim($identifier));
+
+    $course_code = $parts[0] ?? '';
+    $language_code = $parts[1] ?? NULL;
+
+    if ($plain_course_code && $language_code === NULL) {
+      $course_code = str_replace('_' . $language_code, '', $course_code);
+    }
+
+    return ['course_code' => $course_code, 'language_code' => $language_code];
+  }
+
   public static function activateCourse(string $course_code, array $data): bool {
     $syllabus_storage = \Drupal::entityTypeManager()->getStorage('ssr_syllabus');
 

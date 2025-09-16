@@ -5,6 +5,7 @@ namespace Drupal\simple_school_reports_grade_support\Service;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface;
 use Drupal\simple_school_reports_grade_support\GradeInterface;
@@ -15,6 +16,8 @@ use Drupal\simple_school_reports_grade_support\Utilities\GradeReference;
  * Provides a service for managing grades.
  */
 class GradeService implements GradeServiceInterface {
+
+  use StringTranslationTrait;
 
   protected array $lookup = [];
 
@@ -83,9 +86,11 @@ class GradeService implements GradeServiceInterface {
     $query->condition('gr.revision_id', $revision_ids, 'IN');
     $query->fields('g', ['student', 'syllabus']);
     $query->fields('gr', ['id', 'revision_id', 'grade', 'main_grader', 'registered', 'exclude_reason', 'trial', 'remark']);
+    $query->orderBy('gr.revision_id', 'ASC');
 
     $results = $query->execute();
 
+    $has_previous_levels = FALSE;
     $grades = [];
 
     $syllabus_ids = [];
@@ -99,7 +104,13 @@ class GradeService implements GradeServiceInterface {
         $date->setTimestamp($result->registered);
       }
 
-      $grades[$result->student][$result->syllabus][$result->revision_id] = new GradeInfo(
+      if (!$has_previous_levels && !empty($this->syllabusService->getSyllabusPreviousLevelIds($result->syllabus))) {
+        $has_previous_levels = TRUE;
+      }
+
+      $points_data = $this->syllabusService->getSyllabusPreviousPoints($result->syllabus);
+
+      $grades[$result->student][$result->syllabus] = new GradeInfo(
         $result->id,
         $result->revision_id,
         $result->student,
@@ -111,6 +122,8 @@ class GradeService implements GradeServiceInterface {
         !empty($result->trial),
         $result->exclude_reason ?? NULL,
         $result->remark ?? NULL,
+        $points_data['points'],
+        $points_data['aggregated_points'],
         false,
       );
     }
@@ -119,15 +132,62 @@ class GradeService implements GradeServiceInterface {
 
     // Sort by user weight.
     uasort($grades, function ($a, $b) use ($student_weight) {
-      return $student_weight[$a[0]] - $student_weight[$b[0]];
+      $a_key1 = array_key_first($a);
+      $b_key1 = array_key_first($b);
+
+      if (!$a_key1 || !$b_key1) {
+        return 0;
+      }
+
+      $student_id_a = $a[$a_key1]?->student ?? NULL;
+      $student_id_b = $b[$b_key1]?->student ?? NULL;
+
+      if (!$student_id_a || !$student_id_b) {
+        return 0;
+      }
+
+      if (!isset($student_weight[$student_id_a]) || !isset($student_weight[$student_id_b])) {
+        return 0;
+      }
+
+
+      return $student_weight[$student_id_a] <=> $student_weight[$student_id_b];
     });
 
     // Sort by syllabus weight.
-    foreach ($grades as $student_id => $student_grades) {
+    foreach ($grades as $student_id => &$student_grades) {
       uasort($student_grades, function ($a, $b) use ($syllabus_weight) {
-        return $syllabus_weight[$a[1]] - $syllabus_weight[$b[1]];
+        $syllabus_id_a = $a->syllabusId ?? NULL;
+        $syllabus_id_b = $b->syllabusId ?? NULL;
+
+        if (!$syllabus_id_a || !$syllabus_id_b) {
+          return 0;
+        }
+
+        if (!isset($syllabus_weight[$syllabus_id_a]) || !isset($syllabus_weight[$syllabus_id_b])) {
+          return 0;
+        }
+
+        return $syllabus_weight[$syllabus_id_a] <=> $syllabus_weight[$syllabus_id_b];
       });
     };
+
+    if ($has_previous_levels) {
+      // Handle replaced grades.
+      foreach ($grades as $student_id => $grades_data) {
+        foreach ($grades_data as $syllabus_id => $grade_info) {
+          $previous_level_ids = $this->syllabusService->getSyllabusPreviousLevelIds($syllabus_id);
+          foreach ($previous_level_ids as $previous_level_id) {
+            if (isset($grades[$student_id][$previous_level_id])) {
+              $grades[$student_id][$previous_level_id]->replaced = TRUE;
+            }
+          }
+
+        }
+      }
+    }
+
+
 
     return $grades;
   }
@@ -143,7 +203,31 @@ class GradeService implements GradeServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGradeLabel(int $tid): ?string {
+  public function getGradeLabel(GradeInfo $grade_info, ?array $exclude_label_map = []): ?string {
+    if ($grade_info->gradeTid) {
+      return $this->getGradeLabelFromTermId($grade_info->gradeTid);
+    }
+
+    if (!$grade_info->excludeReason) {
+      return NULL;
+    }
+
+    // Set default exlude label map.
+    $map = $exclude_label_map + [
+      GradeInterface::EXCLUDE_REASON_ADAPTED_STUDIES => $this->t('No grade - adapted studies'),
+    ];
+
+    if (isset($map[$grade_info->excludeReason])) {
+      return $map[$grade_info->excludeReason];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGradeLabelFromTermId(string|int $tid): ?string {
     $cid = 'grade_terms_map';
     if (!isset($this->lookup[$cid])) {
       $map = [];
@@ -158,6 +242,32 @@ class GradeService implements GradeServiceInterface {
     $map = $this->lookup[$cid];
 
     return $map[$tid]?->label() ?? NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCourseCode(GradeInfo $grade_info): string {
+    $syllabus_id = $grade_info->syllabusId;
+    if (empty($syllabus_id)) {
+      return '';
+    }
+
+    $map = $this->syllabusService->getSyllabusCourseCodesInOrder([$syllabus_id]);
+    return $map[$syllabus_id] ?? '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSyllabusLabel(GradeInfo $grade_info): string {
+    $syllabus_id = $grade_info->syllabusId;
+    if (empty($syllabus_id)) {
+      return '';
+    }
+
+    $map = $this->syllabusService->getSyllabusLabelsInOrder([$syllabus_id]);
+    return $map[$syllabus_id] ?? '';
 
   }
 }

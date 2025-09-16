@@ -74,11 +74,27 @@ final class GradeSnapshot extends ContentEntityBase implements GradeSnapshotInte
       $this->setOwnerId(0);
     }
 
-    if (!$this->get('grade_snapshot_period')->isEmpty()) {
+    if ($this->get('grade_snapshot_period')->isEmpty()) {
       throw new \RuntimeException('Grade snapshot period must be set.');
     }
 
-    $this->set('identifier', $this->get('grade_snapshot_period')->target_id . ':' . $this->get('student')->target_id);
+    if ($this->get('student')->isEmpty()) {
+      throw new \RuntimeException('Student must be set.');
+    }
+
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradeSnapshotServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_grade_support.grade_snapshot_service');
+    $identifier = $service->makeSnapshotIdentifier($this->get('grade_snapshot_period')->target_id, $this->get('student')->target_id);
+    $this->set('identifier', $identifier);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    $tags = parent::getCacheTagsToInvalidate();
+    $tags[] = 'ssr_grade_snapshot_list:student:' . $this->get('student')->target_id;;
+    return $tags;
   }
 
   /**

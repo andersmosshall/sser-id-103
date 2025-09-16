@@ -63,12 +63,9 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
   }
 
   /**
-   * @param int|string $snapshot_period_id
-   * @param int|string $student_id
-   *
-   * @return string
+   * {@inheritdoc}
    */
-  protected function makeSnapshotIdentifier(int|string $snapshot_period_id, int|string $student_id): string {
+  public function makeSnapshotIdentifier(int|string $snapshot_period_id, int|string $student_id): string {
     return 's.' . $student_id . '.p.' . $snapshot_period_id;
   }
 
@@ -94,7 +91,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
       ]);
     }
 
-    $current_revision_ids = array_column($snapshot->get('field_grades')->getValue(), 'revision_id');
+    $current_revision_ids = array_column($snapshot->get('grades')->getValue(), 'revision_id');
     $current_revision_ids = array_unique($current_revision_ids);
     sort($current_revision_ids);
 
@@ -106,7 +103,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     foreach ($grade_references as $grade_reference) {
       $new_revision_ids[] = $grade_reference->revisionId;
       $new_snapshot_grades[] = [
-        'revision_id' => $grade_reference->revisionId,
+        'target_revision_id' => $grade_reference->revisionId,
         'target_id' => $grade_reference->id,
       ];
     }
@@ -130,7 +127,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     $snapshot->set('grades', $new_snapshot_grades);
 
     $violations = $snapshot->validate();
-    if (!empty($violations)) {
+    if (count($violations) > 0) {
       throw new \RuntimeException('Failed to create grade snapshot for student ' . $student_id . ': ' . Json::encode($violations));
     }
 
@@ -140,15 +137,15 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function updateSnapshotsForGrade(int|string $old_grade_revision_id, int|string $new_grade_revision_id): void {
+  public function updateSnapshotsForGrade(int|string $old_grade_revision_id, int|string $new_grade_revision_id, string $student_id): void {
     if ((string) $old_grade_revision_id === (string) $new_grade_revision_id) {
       return;
     }
     $this->connection->update('ssr_grade_snapshot__grades')
-      ->fields(['revision_id' => $new_grade_revision_id])
-      ->condition('revision_id', $old_grade_revision_id)
+      ->fields(['grades_target_revision_id' => $new_grade_revision_id])
+      ->condition('grades_target_revision_id', $old_grade_revision_id)
       ->execute();
-    Cache::invalidateTags(['ssr_grade_snapshot_list']);;
+    Cache::invalidateTags(['ssr_grade_snapshot_list:student:' . $student_id]);
   }
 
 }
