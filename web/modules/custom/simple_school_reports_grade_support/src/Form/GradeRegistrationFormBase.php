@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface;
 use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Drupal\simple_school_reports_grade_support\GradeInterface;
 use Drupal\simple_school_reports_grade_support\GradeRegistrationCourseInterface;
@@ -36,6 +37,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
     protected GradeService $gradeService,
     protected ModuleHandlerInterface $moduleHandler,
     protected Connection $database,
+    protected SyllabusServiceInterface $syllabusService,
   ) {}
 
   /**
@@ -48,6 +50,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       $container->get('simple_school_reports_grade_support.grade_service'),
       $container->get('module_handler'),
       $container->get('database'),
+      $container->get('simple_school_reports_entities.syllabus_service'),
     );
   }
 
@@ -222,21 +225,51 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
     }
 
     $cid = 'grade_options:' . $grade_vid;
+    $cid2 = 'grade_options_category:' . $grade_vid;
     if (array_key_exists($cid, $this->lookup)) {
-      return $this->lookup[$cid];
+      $grade_options = $this->lookup[$cid];
+      $grade_options_category = $this->lookup[$cid2];
+    }
+    else {
+      /** @var \Drupal\taxonomy\TermStorageInterface $term_storage */
+      $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+
+      $grade_options = [];
+      $grade_items = $term_storage->loadTree($grade_vid, 0, NULL, TRUE);
+
+      $grade_options_category = [];
+
+      /** @var \Drupal\taxonomy\TermInterface $grade_item */
+      foreach ($grade_items as $grade_item) {
+        $merit = $grade_item->get('field_merit')->value ?? 0;
+        $category = 'not_approved';
+        if ($merit === 10) {
+          $category = 'approved';
+        }
+        if ($merit > 10) {
+          $category = 'extended_approved';
+        }
+        $grade_options_category[$grade_item->id()] = $category;
+        $grade_options[$grade_item->id()] = $grade_item->label();
+      }
+
+      $this->lookup[$cid] = $grade_options;
+      $this->lookup[$cid2] = $grade_options_category;
     }
 
-    /** @var \Drupal\taxonomy\TermStorageInterface $term_storage */
-    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-
-    $grade_options = [];
-    $grade_items = $term_storage->loadTree($grade_vid, 0, NULL, TRUE);
-    /** @var \Drupal\taxonomy\TermInterface $grade_item */
-    foreach ($grade_items as $grade_item) {
-      $grade_options[$grade_item->id()] = $grade_item->label();
+    // Diploma project has only approved on non approved grades.
+    if ($this->syllabusService->useDiplomaProject($syllabus->id())) {
+      $new_grade_options = [];
+      foreach ($grade_options as $grade_option_id => $grade_option_label) {
+        $category = $grade_options_category[$grade_option_id] ?? '?';
+        if ($category === 'not_approved' || $category === 'approved') {
+          $new_grade_options[$grade_option_id] = $grade_option_label;
+        }
+      }
+      return $new_grade_options;
     }
 
-    $this->lookup[$cid] = $grade_options;
+
     return $grade_options;
   }
 
@@ -426,7 +459,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
       if (!$grade_info?->id) {
         $exclude_reason_options['n_a'] = !empty($grade_registration_courses)
           ? $this->t('Student does not study the course')
-          : $this->t('Skip grade registration for now');
+          : $this->t('Skip grade registration now / Not applicable');
       }
       else {
         /** @var \Drupal\simple_school_reports_grade_support\GradeInterface|null $grade */
@@ -567,19 +600,46 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
 
 
       // TODO: Handle diploma project label/description.
-      $form['grade_registration'][$student_id]['student']['grade_registration']['diploma_project_wrapper'] = [
-        '#type' => 'container',
-        '#attributes' => [
-          'class' => ['student-row--report-wrapper--diploma-project'],
-        ],
-        '#states' => [
-          'invisible' => [
-            ':input[name="' . $exclude_key . '"]' => [
-              'checked' => TRUE,
+      if ($this->syllabusService->useDiplomaProject($syllabus_id)) {
+        $form['grade_registration'][$student_id]['student']['grade_registration']['diploma_project_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['student-row--report-wrapper--diploma-project'],
+          ],
+          '#states' => [
+            'invisible' => [
+              ':input[name="' . $exclude_key . '"]' => [
+                'checked' => TRUE,
+              ],
             ],
           ],
-        ],
-      ];
+        ];
+
+        /** @var \Drupal\simple_school_reports_grade_support\GradeInterface|null $grade */
+        $grade = $grade_info?->id
+          ? $grade_storage->load($grade_info->id)
+          : NULL;
+
+        $default_diploma_project_label = $grade?->get('diploma_project_label')->value ?? NULL;
+        $default_diploma_project_description = $grade?->get('diploma_project_description')->value ?? NULL;
+
+        $form['grade_registration'][$student_id]['student']['grade_registration']['diploma_project_wrapper'][$this->getFieldKey($syllabus_id, $student_id, 'diploma_project_label')] = [
+          '#type' => 'textfield',
+          '#title' => t('Diploma project label'),
+          '#default_value' => $default_diploma_project_label,
+          '#maxlength' => 250,
+        ];
+
+        $form['grade_registration'][$student_id]['student']['grade_registration']['diploma_project_wrapper'][$this->getFieldKey($syllabus_id, $student_id, 'diploma_project_description')] = [
+          '#type' => 'textarea',
+          '#title' => t('Diploma project description'),
+          '#default_value' => $default_diploma_project_description,
+          '#maxlength' => 250,
+        ];
+      }
+
+
+
 
       if ($grade_info) {
         $exclude_reason_key_lookup = $exclude_reason_key;
@@ -621,6 +681,11 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    $step = $form_state->get('step') ?? NULL;
+    if ($step === 1) {
+      return;
+    }
+
     $student_ids = $form_state->getValue('student_ids', []);
     $syllabus_ids = $form_state->getValue('syllabus_ids', []);
     $grade_references = $this->gradeService->getGradeReferences($student_ids, $syllabus_ids);

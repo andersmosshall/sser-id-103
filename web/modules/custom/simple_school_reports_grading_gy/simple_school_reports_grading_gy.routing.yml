@@ -33,3 +33,11 @@ simple_school_reports_grading_gy.unlock_register_course_grades:
     parameters:
       node:
         type: 'entity:node'
+
+simple_school_reports_grading_gy.register_grades_detached:
+  path: '/grade-registration/gy/register-detached'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\DetachedGradeRegistrationFormGy'
+    _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\DetachedGradeRegistrationFormGy::access'

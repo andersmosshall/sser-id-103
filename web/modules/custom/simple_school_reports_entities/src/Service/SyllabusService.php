@@ -103,6 +103,11 @@ class SyllabusService implements SyllabusServiceInterface {
 
       $group_for_ids = $group_for_map[$result->id] ?? [];
 
+      $use_diploma_project = FALSE;
+      if (str_starts_with($result->course_code ?? '', 'GYAR')) {
+        $use_diploma_project = TRUE;
+      }
+
       $map_by_syllabus_id[$result->id] = [
         'id' => $result->id,
         'identifier' => $syllabus_identifier ?? '',
@@ -116,6 +121,7 @@ class SyllabusService implements SyllabusServiceInterface {
         'aggregated_points' => NULL,
         'language_code' => $result->language_code,
         'associated_syllabuses' => array_unique(array_merge([$result->id], $level_syllabus_ids, $group_for_ids)),
+        'use_diploma_project' => $use_diploma_project,
       ];
     }
 
@@ -302,5 +308,12 @@ class SyllabusService implements SyllabusServiceInterface {
       'points' => $points,
       'aggregated_points' => $aggregated_points,
     ];
+  }
+
+  public function useDiplomaProject(int $syllabus_id): bool {
+    $this->warmUpMap();
+    $map = $this->lookup['syllabus_id_map'] ?? [];
+
+    return !empty($map[$syllabus_id]['use_diploma_project']);
   }
 }

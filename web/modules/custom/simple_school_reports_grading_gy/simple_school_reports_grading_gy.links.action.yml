@@ -5,3 +5,9 @@ simple_school_reports_grading_gy.grade_round_create:
     ssr_grade_reg_round_type: 'gy'
   appears_on:
     - view.ssr_grade_reg_rounds.gy
+
+simple_school_reports_grading_gy.register_grades_detached:
+  route_name: simple_school_reports_grading_gy.register_grades_detached
+  title: 'Register detached grades'
+  appears_on:
+    - view.ssr_grade_reg_rounds.gy

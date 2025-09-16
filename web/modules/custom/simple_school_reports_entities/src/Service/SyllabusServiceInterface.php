@@ -65,4 +65,11 @@ interface SyllabusServiceInterface {
    */
   public function getSyllabusPreviousPoints(int $syllabus_id): array;
 
+  /**
+   * @param int $syllabus_id
+   *
+   * @return bool
+   */
+  public function useDiplomaProject(int $syllabus_id): bool;
+
 }
