@@ -1,0 +1,29 @@
+uuid: 76b4d3b9-10eb-4c9a-b124-b8ade49b4cd7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_grade_reg_round.field_grade_reg_course
+    - simple_school_reports_grade_support.ssr_grade_reg_course_type.gy
+    - simple_school_reports_grade_support.ssr_grade_reg_round_type.gy
+id: ssr_grade_reg_round.gy.field_grade_reg_course
+field_name: field_grade_reg_course
+entity_type: ssr_grade_reg_round
+bundle: gy
+label: 'Courses to grade'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:ssr_grade_reg_course'
+  handler_settings:
+    target_bundles:
+      gy: gy
+    sort:
+      field: label
+      direction: ASC
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

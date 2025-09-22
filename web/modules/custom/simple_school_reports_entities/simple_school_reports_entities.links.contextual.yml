@@ -107,3 +107,14 @@ entity.ssr_syllabus.delete_form:
   group: ssr_syllabus
   title: 'Delete'
   weight: 10
+
+entity.ssr_programme.edit_form:
+  route_name: entity.ssr_programme.edit_form
+  group: ssr_programme
+  title: 'Edit'
+
+entity.ssr_programme.delete_form:
+  route_name: entity.ssr_programme.delete_form
+  group: ssr_programme
+  title: 'Delete'
+  weight: 10

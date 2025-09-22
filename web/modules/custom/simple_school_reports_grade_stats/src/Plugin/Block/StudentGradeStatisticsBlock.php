@@ -18,6 +18,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_grade_stats\Service\GradeStatisticsServiceInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -390,12 +391,25 @@ class StudentGradeStatisticsBlock extends BlockBase implements ContainerFactoryP
     return $build;
   }
 
+
+  protected function expectingGrades(UserInterface $user): bool {
+    $school_grades = SchoolGradeHelper::getSchoolGradeValues(['GR']);
+    $student_school_grade = $user->get('field_grade')->value;
+    return in_array($student_school_grade, $school_grades);
+  }
+
   protected function returnEmpty(CacheableMetadata $cache) {
-    $build['message'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'em',
-      '#value' => $this->t('There is no grade statistics to be shown yet.'),
-    ];
+    $build = [];
+
+    $student = $this->currentRouteMatch->getParameter('user') ?? $this->fallbackStudent;
+    if ($student && $this->expectingGrades($student)) {
+      $build['message'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'em',
+        '#value' => $this->t('There is no grade statistics to be shown yet.'),
+      ];
+    }
+
     $cache->applyTo($build);
     return $build;
   }
@@ -403,9 +417,35 @@ class StudentGradeStatisticsBlock extends BlockBase implements ContainerFactoryP
   /**
    * {@inheritdoc}
    */
-  public function blockAccess(AccountInterface $account) {
-    /** @var \Drupal\user\UserInterface $user */
-    $user = $this->currentRouteMatch->getParameter('user');
+  public function getCacheContexts() {
+    $contexts = parent::getCacheContexts();
+    $contexts[] = 'route';
+    $contexts[] = 'user.permissions';
+    return $contexts;
+  }
+
+  public function getCacheTags() {
+    $tags = parent::getCacheTags();
+    $tags[] = 'node_list:grade_student_group';
+    $tags[] = 'node_list:grade_round';
+
+    /** @var \Drupal\user\UserInterface $student */
+    $student = $this->currentRouteMatch->getParameter('user') ?? $this->fallbackStudent;
+
+    if ($student instanceof UserInterface) {
+      $tags[] = 'user:' . $student->id();
+    }
+
+    return $tags;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockAccess(AccountInterface $account, ?UserInterface $user = NULL) {
+    if (!$user) {
+      return AccessResult::forbidden();
+    }
     return AccessResult::allowedIf($user && $user->hasRole('student') && $user->access('update', $account))->cachePerUser()->addCacheContexts(['route']);
   }
 

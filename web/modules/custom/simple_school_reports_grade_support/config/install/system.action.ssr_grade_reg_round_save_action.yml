@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_reg_round_save_action
+label: 'Save grade registration rounds'
+type: ssr_grade_reg_round
+plugin: entity:save_action:ssr_grade_reg_round
+configuration: {  }

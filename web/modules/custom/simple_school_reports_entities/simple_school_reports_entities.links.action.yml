@@ -69,3 +69,9 @@ ssr_syllabus.add_form:
   route_name: entity.ssr_syllabus.add_form
   appears_on:
     - entity.ssr_syllabus.collection
+
+ssr_programme.add_form:
+  title: 'Add programme'
+  route_name: entity.ssr_programme.add_form
+  appears_on:
+    - entity.ssr_programme.collection

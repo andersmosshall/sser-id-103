@@ -95,6 +95,12 @@ simple_school_reports_core.config_syllabuses:
   description: 'Select school type to list and handle Subject/Course syllabuses.'
   route_name: simple_school_reports_core.config_syllabuses
 
+simple_school_reports_core.config_programmes:
+  title: 'Programmes'
+  parent: simple_school_reports_core.config
+  description: 'Select school type to list and handle programmes.'
+  route_name: simple_school_reports_core.config_programmes
+
 simple_school_reports_core.config_message_templates:
   title: 'Message templates config'
   parent: simple_school_reports_core.config

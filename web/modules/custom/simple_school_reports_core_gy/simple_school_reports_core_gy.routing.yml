@@ -1,0 +1,39 @@
+simple_school_reports_core_gy.activate_syllabus_gy11:
+  path: '/admin/syllabuses/gy-11/activate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gy\Form\ActivateSyllabusFormGy11'
+    _title: 'Activate syllabus'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core_gy.add_custom_syllabus_gy11:
+  path: '/admin/syllabuses/gy-11/add-custom'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gy\Form\AddCustomSyllabusFormGy11'
+    _title: 'Add custom syllabus'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core_gy.activate_syllabus_gy25:
+  path: '/admin/syllabuses/gy-25/activate'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gy\Form\ActivateSyllabusFormGy25'
+    _title: 'Activate syllabus'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_core_gy.add_custom_syllabus_gy25:
+  path: '/admin/syllabuses/gy-25/add-custom'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_gy\Form\AddCustomSyllabusFormGy25'
+    _title: 'Add custom syllabus'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE

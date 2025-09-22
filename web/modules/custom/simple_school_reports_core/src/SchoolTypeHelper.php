@@ -70,8 +70,8 @@ class SchoolTypeHelper {
   public static function getSchoolTypesVersioned(): array {
     return [
       'GR:22' => 'GR',
-      'GY:11' => 'Gy 11',
-      'GY:25' => 'Gy 25',
+      'GY:2011' => 'Gy 11',
+      'GY:2025' => 'Gy 25',
     ];
   }
 
@@ -87,5 +87,10 @@ class SchoolTypeHelper {
       }
     }
     return $versions;
+  }
+
+  public static function getSchoolTypeFromSchoolTypeVersioned($school_type_versioned): ?string {
+    $school_type = explode(':', $school_type_versioned)[0];
+    return $school_type ?? NULL;
   }
 }

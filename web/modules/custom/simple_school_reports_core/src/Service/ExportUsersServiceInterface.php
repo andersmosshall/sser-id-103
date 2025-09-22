@@ -15,6 +15,8 @@ interface ExportUsersServiceInterface {
 
   public function getServiceId(): string;
 
+  public function getFileSuffix(): ?string;
+
   public function getFileExtension(): string;
 
   public static function getPriority(): int;

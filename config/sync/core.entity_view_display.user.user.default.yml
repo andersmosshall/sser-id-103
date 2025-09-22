@@ -26,6 +26,7 @@ dependencies:
     - field.field.user.user.field_notes
     - field.field.user.user.field_password_expiration
     - field.field.user.user.field_pending_expire_sent
+    - field.field.user.user.field_programme
     - field.field.user.user.field_protected_personal_data
     - field.field.user.user.field_special_diet
     - field.field.user.user.field_ssn
@@ -191,6 +192,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 21
+    region: content
+  field_programme:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 25
     region: content
   field_protected_personal_data:
     type: list_default

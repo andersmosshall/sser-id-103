@@ -1,0 +1,13 @@
+uuid: dc054504-5ad7-4919-9c3c-4c578b68d9dc
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: F3RMobBKkxJ1lD8c7LFJStN6ekOjOC_Ae-S1jWS-E3I
+id: ssr_grade_snapshot_period_save_action
+label: 'Save grade snapshot periods'
+type: ssr_grade_snapshot_period
+plugin: 'entity:save_action:ssr_grade_snapshot_period'
+configuration: {  }

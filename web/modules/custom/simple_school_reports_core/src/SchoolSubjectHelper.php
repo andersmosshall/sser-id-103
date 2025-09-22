@@ -66,7 +66,7 @@ class SchoolSubjectHelper {
     return $return;
   }
 
-  public static function getSupportedLanguageCodes(bool $prefix_with_code = TRUE): array {
+  public static function getSupportedLanguageCodes(bool $prefix_with_code = TRUE, bool $trim_names = FALSE): array {
     $language_codes = [
       'ACE' => 'Acehnesiska, (Indonesia, Sumatra)',
       'ACH' => 'Acoli, (Uganda)',
@@ -225,6 +225,17 @@ class SchoolSubjectHelper {
     if ($prefix_with_code) {
       foreach ($language_codes as $code => $name) {
         $language_codes[$code] = '(' . $code . ') ' . $name;
+      }
+    }
+
+    if ($trim_names) {
+      foreach ($language_codes as $code => $name) {
+        if (strlen($name) < 35) {
+          continue;
+        }
+        $name = substr($name, 0, 32) . '...';
+        $language_codes[$code] = $name;
+
       }
     }
 

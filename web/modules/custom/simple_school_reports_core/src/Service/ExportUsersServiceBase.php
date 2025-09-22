@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\simple_school_reports_core\Events\ExportUsersMethodsEvent;
 use Drupal\simple_school_reports_core\Events\SsrCoreEvents;
 use Drupal\simple_school_reports_core\Pnum;
@@ -33,6 +32,7 @@ abstract class ExportUsersServiceBase implements ExportUsersServiceInterface, Ev
     protected TermServiceInterface $termService,
     protected UserMetaDataService $userMetaDataService,
     protected CourseServiceInterface $courseService,
+    protected FileTemplateServiceInterface $fileTemplateService,
   ) {}
 
   /**
@@ -41,6 +41,13 @@ abstract class ExportUsersServiceBase implements ExportUsersServiceInterface, Ev
   public static function getSubscribedEvents() {
     $events[SsrCoreEvents::EXPORT_USERS_METHODS][] = 'onExportUsersMethods';
     return $events;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFileSuffix(): ?string {
+    return NULL;
   }
 
   /**
@@ -138,6 +145,35 @@ abstract class ExportUsersServiceBase implements ExportUsersServiceInterface, Ev
       'postal_code' => $postal_code,
       'city' => $city,
     ];
+  }
+
+  protected function getUserPhoneNumber(UserInterface $user, ?string $type = NULL, ?int $trim = NULL): string {
+    $phone_number = $user->get('field_telephone_number')->value ?? '';
+    // Replace leading "+" with "00".
+    if (strpos($phone_number, '+') === 0) {
+      $phone_number = '00' . substr($phone_number, 1);
+    }
+    // Remove all non-digit characters.
+    $phone_number = preg_replace('/\D/', '', $phone_number);
+    if ($trim) {
+      $phone_number = substr($phone_number, 0, $trim);
+    }
+
+    if (!$type) {
+      return $phone_number;
+    }
+
+    $pattern1 = '/^07\d{8}$/'; // e.g., 07XXXXXXXX
+    $pattern2 = '/^\+467\d{8}$/'; // e.g., +467XXXXXXXX
+    $pattern3 = '/^\00467\d{8}$/'; // e.g., 00467XXXXXXXX
+
+    $is_mobile = preg_match($pattern1, $phone_number) || preg_match($pattern2, $phone_number) || preg_match($pattern3, $phone_number);
+
+    if ($type === 'mobile') {
+      return $is_mobile ? $phone_number : '';
+    }
+
+    return !$is_mobile ? $phone_number : '';
   }
 
   public function getUserRow(UserInterface $user, array $options): ?array {

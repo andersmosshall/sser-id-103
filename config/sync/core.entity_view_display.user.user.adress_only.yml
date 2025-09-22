@@ -27,6 +27,7 @@ dependencies:
     - field.field.user.user.field_notes
     - field.field.user.user.field_password_expiration
     - field.field.user.user.field_pending_expire_sent
+    - field.field.user.user.field_programme
     - field.field.user.user.field_protected_personal_data
     - field.field.user.user.field_special_diet
     - field.field.user.user.field_ssn
@@ -78,6 +79,7 @@ hidden:
   field_notes: true
   field_password_expiration: true
   field_pending_expire_sent: true
+  field_programme: true
   field_protected_personal_data: true
   field_special_diet: true
   field_ssn: true

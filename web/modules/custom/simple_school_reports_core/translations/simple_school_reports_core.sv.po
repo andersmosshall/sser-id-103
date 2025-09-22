@@ -606,6 +606,9 @@ msgstr "Status"
 msgid "Grade"
 msgstr "Betyg"
 
+msgid "Grades"
+msgstr "Betyg"
+
 msgid "Short comment"
 msgstr "Kort kommentar"
 
@@ -1123,7 +1126,7 @@ msgid "The current term has ended. Administer terms @link."
 msgstr "Nuvarande termin har avslutats. Administrera terminer @link"
 
 msgid "Published"
-msgstr "Publiserad"
+msgstr "Publicerad"
 
 msgid "Sorry to hear that you found an issue. Please describe the issue below and we will try to make Simple School Reports better together."
 msgstr "Tråkigt att höra att du hittat ett problem. Var vänlig och beskriv problemet nedan så försöker vi tillsammans göra Simple School Reports bättre."
@@ -1219,6 +1222,12 @@ msgstr "Mentor sparad"
 
 msgid "Bulk update grade"
 msgstr "Massuppdatera årskurs"
+
+msgid "Bulk update class"
+msgstr "Massuppdatera klass"
+
+msgid "Bulk update programme"
+msgstr "Massuppdatera program"
 
 msgid "Bulk update mentor"
 msgstr "Massuppdatera mentor"
@@ -1985,6 +1994,9 @@ msgstr "Beteende om vårdnadshavare saknar personnummer"
 
 msgid "This export will generate file with the selected users to be compatible with PMO systems. Use this if you want to import users to a PMO system."
 msgstr "Denna export kommer att generera en fil med de valda användarna för att vara kompatibel med PMO-system. Använd detta om du vill importera användare till ett PMO-system."
+
+msgid "This export will generate file with the selected users to be compatible with Prorenata systems. Use this if you want to import users to a Prorenata system."
+msgstr "Denna export kommer att generera en fil med de valda användarna för att vara kompatibel med Prorenata-system. Använd detta om du vill importera användare till ett Prorenata-system."
 
 msgid "Caregiver for"
 msgstr "Vårdnadshavare för"
@@ -2772,9 +2784,6 @@ msgstr "Alla ämnen"
 msgid "Edit result"
 msgstr "Hantera resultat"
 
-msgid "Published"
-msgstr "Publicerad"
-
 msgid "Not in assessment group"
 msgstr "Ej i bedömningsgrupp"
 
@@ -3508,38 +3517,97 @@ msgstr "Ämnes-/kursplaner"
 msgid "The course code %code already exists."
 msgstr "Kurskoden %code finns redan."
 
-msgid ""
-msgstr ""
+msgid "Handle syllabus status"
+msgstr "Hantera status för kursplan"
 
-msgid ""
-msgstr ""
+msgid "Hantera programme status"
+msgstr "Hantera programstatus"
 
-msgid ""
-msgstr ""
+msgid "List and handle course syllabuses in Gymnasieskolan 2025."
+msgstr "Lista och hantera kursplaner i gymnasieskolan 2025."
 
-msgid ""
-msgstr ""
+msgid "List and handle programmes in Gymnasieskolan 2025."
+msgstr "Lista och hantera program i gymnasieskolan 2025."
 
-msgid ""
-msgstr ""
+msgid "Programmes in gymnasieskolan 2025"
+msgstr "Program i gymnasieskolan 2025"
 
-msgid ""
-msgstr ""
+msgid "List and handle programmes Gymnasieskolan 2011."
+msgstr "Lista och hantera program i gymnasieskolan 2011."
 
-msgid ""
-msgstr ""
+msgid "Programmes in gymnasieskolan 2011"
+msgstr "Program i gymnasieskolan 2011"
 
-msgid ""
-msgstr ""
+msgid "Course syllabuses in gymnasieskolan 2025"
+msgstr "Kursplaner i gymnasieskolan 2025"
 
-msgid ""
-msgstr ""
+msgid "List and handle course syllabuses Gymnasieskolan 2011."
+msgstr "Lista och hantera kursplaner i gymnasieskolan 2011."
 
-msgid ""
-msgstr ""
+msgid "Course syllabuses in gymnasieskolan 2011"
+msgstr "Kursplaner i gymnasieskolan 2011"
 
-msgid ""
-msgstr ""
+msgid "Assign to programme"
+msgstr "Tilldela till program"
+
+msgid "Programme assigned"
+msgstr "Program tilldelat"
+
+msgid "Bulk update programme"
+msgstr "Massuppdatera program"
+
+msgid "You must select a programme to assign the students to."
+msgstr "Du måste välja ett program att tilldela eleverna till."
+
+msgid "Select the programme to assign the students to."
+msgstr "Välj det program som eleverna ska tilldelas."
+
+msgid "Programme"
+msgstr "Program"
+
+msgid "If checked, the programme will be removed from the students."
+msgstr "Om markerad tas programmet bort från eleverna."
+
+msgid "Remove programme"
+msgstr "Ta bort program"
+
+msgid "Programme updated."
+msgstr "Program uppdaterat."
+
+msgid "Are you sure you want to deactivate programme?"
+msgstr "Är du säker på att du vill inaktivera programmet?"
+
+msgid "Are you sure you want to activate programme?"
+msgstr "Är du säker på att du vill aktivera programmet?"
+
+msgid "Programmes"
+msgstr "Program"
+
+msgid "Select school type to list and handle programmes."
+msgstr "Välj skoltyp för att lista och hantera program."
+
+msgid "Are you sure you want to activate syllabus?"
+msgstr "Är du säker på att du vill aktivera kursplanen?"
+
+msgid "Are you sure you want to deactivate syllabus?"
+msgstr "Är du säker på att du vill inaktivera kursplanen?"
+
+msgctxt "gender"
+msgid "Male"
+msgstr "Man"
+
+msgctxt "gender"
+msgid "Female"
+msgstr "Kvinna"
+
+msgid "The email %name is not valid."
+msgstr "E-postadressen %name är inte giltig."
+
+msgid "Include protected data"
+msgstr "Inkludera skyddade uppgifter"
+
+msgid "If checked, protected data will be included even if the user has secrecy marking."
+msgstr "Om markerad kommer skyddade uppgifter inkluderas även om användaren har sekretessmarkering."
 
 msgid ""
 msgstr ""

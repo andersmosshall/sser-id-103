@@ -193,3 +193,8 @@
 
   console.log(`✅ Success! CSV file with ${csvData.length - 1} courses has been downloaded.`);
 })();
+
+
+(function() {
+  ... CODE HERE!
+})();

@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\simple_school_reports_core\Service\FileTemplateService;
 
 /**
  * Course data service for Grundskolan.
@@ -49,6 +50,7 @@ class CourseDataServiceGr implements CourseDataServiceGrInterface {
 
     $handle = fopen($path, 'r');
     while (($row = fgetcsv($handle)) !== FALSE) {
+      $row = FileTemplateService::trimCsvRow($row);
       // Validate the first row.
       if ($first_row) {
         $first_row = FALSE;

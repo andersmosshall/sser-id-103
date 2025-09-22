@@ -1,0 +1,53 @@
+entity.ssr_grade.settings:
+  path: 'admin/structure/ssr-grade'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\GradeSettingsForm'
+    _title: 'Grade'
+  requirements:
+    _permission: 'administer ssr_grade'
+
+entity.ssr_grade_snapshot.settings:
+  path: 'admin/structure/ssr-grade-snapshot'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\GradeSnapshotSettingsForm'
+    _title: 'Grade snapshot'
+  requirements:
+    _permission: 'administer ssr_grade_snapshot'
+
+entity.ssr_grade_signing.settings:
+  path: 'admin/structure/ssr-grade-signing'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\GradeSigningSettingsForm'
+    _title: 'Grade signing'
+  requirements:
+    _permission: 'administer ssr_grade_signing'
+
+entity.ssr_grade_snapshot_period.settings:
+  path: 'admin/structure/ssr-grade-snapshot-period'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\GradeSnapshotPeriodSettingsForm'
+    _title: 'Grade snapshot period'
+  requirements:
+    _permission: 'administer ssr_grade_snapshot_period'
+
+simple_school_reports_grade_support.grade_registration_types:
+  path: '/grade-registration'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Grade registration'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    _admin_route: TRUE
+
+simple_school_reports_grade_support.student_grade_statistics:
+  path: '/user/{user}/grade-statistics'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::build'
+    _title_callback: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grade_support\Controller\StudentGradeStatisticsController::access'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

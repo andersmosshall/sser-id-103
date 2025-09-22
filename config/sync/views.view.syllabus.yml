@@ -335,7 +335,7 @@ display:
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
-          hide_empty: true
+          hide_empty: false
           empty_zero: false
           hide_alter_empty: true
         operations:
@@ -585,7 +585,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
-      title: 'Kursplanner - Gymnasieskolan 2011'
+      title: 'Kursplaner - Gymnasieskolan 2011'
       filters:
         school_type_versioned:
           id: school_type_versioned
@@ -598,7 +598,7 @@ display:
           entity_field: school_type_versioned
           plugin_id: string
           operator: '='
-          value: 'GY:11'
+          value: 'GY:2011'
           group: 1
           exposed: false
           expose:
@@ -667,7 +667,7 @@ display:
           entity_field: school_type_versioned
           plugin_id: string
           operator: '='
-          value: 'GR:25'
+          value: 'GY:2025'
           group: 1
           exposed: false
           expose:

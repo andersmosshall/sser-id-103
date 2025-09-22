@@ -1,5 +1,5 @@
-simple_school_reports_grade_registration.grade_round_list:
-  title: 'Grade registration'
-  description: 'Register grades or create new grade registration rounds'
-  parent: simple_school_reports_core.actions
+simple_school_reports_grade_registration.grade_round_list_gr:
+  title: 'Grade registration - Grundskolan'
+  description: 'Handle grades and grade rounds for Grundskolan'
+  parent: simple_school_reports_grade_support.grade_registration_types
   route_name: view.grade_registration_rounds.active

@@ -1,0 +1,12 @@
+services:
+  simple_school_reports_grade_support.gradable_course:
+    class: Drupal\simple_school_reports_grade_support\Service\GradableCourseService
+    arguments: ['@database','@entity_type.manager','@current_user']
+
+  simple_school_reports_grade_support.grade_service:
+    class: Drupal\simple_school_reports_grade_support\Service\GradeService
+    arguments: [ '@database','@entity_type.manager','@current_user', '@simple_school_reports_entities.syllabus_service', '@simple_school_reports_core.user_meta_data' ]
+
+  simple_school_reports_grade_support.grade_snapshot_service:
+    class: Drupal\simple_school_reports_grade_support\Service\GradeSnapshotService
+    arguments: [ '@database','@entity_type.manager','@simple_school_reports_core.term_service', '@simple_school_reports_grade_support.grade_service' ]

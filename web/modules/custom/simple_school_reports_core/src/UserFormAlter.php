@@ -48,7 +48,15 @@ class UserFormAlter {
 
     if (!empty($form['#form_mode'])) {
       if ($form['#form_mode'] === 'register' || $form['#form_mode'] === 'default') {
-        $student_fields = ['field_grade', 'field_caregivers', 'field_mentor', 'field_adapted_studies', 'field_class', 'field_adult_student_settings'];
+        $student_fields = [
+          'field_grade',
+          'field_caregivers',
+          'field_mentor',
+          'field_adapted_studies',
+          'field_class',
+          'field_programme',
+          'field_adult_student_settings',
+        ];
 
         foreach ($student_fields as $student_field) {
           if (!isset($form[$student_field])) {
@@ -87,6 +95,23 @@ class UserFormAlter {
       }
     }
 
+    // Handle field_programme states.
+    if (isset($form['field_grade']) && isset($form['field_programme'])) {
+      // Grades that supports programme.
+      $programme_grades = SchoolGradeHelper::getSchoolGradeValues(['GY']);
+      if (empty($programme_grades)) {
+        $form['field_programme']['#access'] = FALSE;
+      }
+      else {
+        foreach ($programme_grades as $programme_grade) {
+          $form['field_programme']['#states']['visible'][] = [
+            'select[name="field_grade"]' => [
+              'value' => $programme_grade
+            ],
+          ];
+        }
+      }
+    }
 
     if (!empty($form['field_protected_personal_data'])) {
       $form['protected_personal_data_info'] = [

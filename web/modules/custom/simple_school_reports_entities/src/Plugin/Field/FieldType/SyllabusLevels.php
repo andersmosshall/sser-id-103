@@ -2,13 +2,15 @@
 
 namespace Drupal\simple_school_reports_entities\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\EntityReferenceFieldItemList;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
+use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
 
 /**
  * Computed field for the syllabus levels.
  */
-class SyllabusLevels extends EntityReferenceFieldItemList {
+class SyllabusLevels extends FieldItemList {
   use ComputedItemListTrait;
 
   /**
@@ -21,11 +23,32 @@ class SyllabusLevels extends EntityReferenceFieldItemList {
       return;
     }
 
-    $syllabus_ids = [];
+    /** @var \Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface $syllabus_service */
+    $syllabus_service = \Drupal::service('simple_school_reports_entities.syllabus_service');
 
-    foreach ($syllabus_ids as $delta => $syllabus_id) {
+    $level_syllabus_ids = $syllabus_service->getSyllabusLevelIds($syllabus->id());;
+    if (empty($level_syllabus_ids)) {
+      return;
+    }
+
+    $syllabuses = \Drupal::entityTypeManager()
+      ->getStorage('ssr_syllabus')
+      ->loadMultiple($level_syllabus_ids);
+
+    if (empty($syllabuses) || count($syllabuses) === 1) {
+      return;
+    }
+
+    $syllabuses = array_values($syllabuses);
+
+    // Sort syllabuses by label.
+    usort($syllabuses, function ($a, $b) {
+      return strnatcmp($a->label(), $b->label());
+    });
+
+    foreach ($syllabuses as $delta => $syllabus) {
       $this->list[$delta] = $this->createItem(0, [
-        'target_id' => $syllabus_id,
+        'value' => $syllabus->label(),
       ]);
     }
   }
