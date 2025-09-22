@@ -41,3 +41,11 @@ simple_school_reports_grading_gy.register_grades_detached:
     _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\DetachedGradeRegistrationFormGy::access'
+
+simple_school_reports_grading_gy.grades_export_gy:
+  path: '/grade-registration/gy/export'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\ExportsGradesFormGy'
+    _title: 'Export documents'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\ExportsGradesFormGy::access'

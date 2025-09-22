@@ -32,6 +32,37 @@ class GradeService implements GradeServiceInterface {
   /**
    * {@inheritdoc}
    */
+  public function getStudentIdsWithGrades(?array $syllabus_ids, $only_active = TRUE): array {
+    if (!empty($syllabus_ids)) {
+      $syllabus_ids = $this->syllabusService->getSyllabusAssociations($syllabus_ids);
+    }
+
+    $query = $this->connection->select('ssr_grade', 'g');
+    $query->innerJoin('users_field_data', 'u', 'u.uid = g.student');
+    $query->innerJoin('user__field_first_name', 'fn', 'fn.entity_id = u.uid');
+    $query->innerJoin('user__field_last_name', 'ln', 'ln.entity_id = u.uid');
+    $query->leftJoin('user__field_grade', 'g', 'g.entity_id = u.uid');
+
+    if (!empty($syllabus_ids)) {
+      $query->condition('g.syllabus', $syllabus_ids, 'IN');
+    }
+
+    $results = $query
+      ->fields('u', ['uid'])
+      ->orderBy('g.field_grade_value')
+      ->orderBy('fn.field_first_name_value')
+      ->orderBy('ln.field_last_name_value')
+      ->execute();
+    $student_ids = [];
+    foreach ($results as $result) {
+      $student_ids[] = $result->uid;
+    }
+    return $student_ids;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getGradeReferences(array $student_ids, ?array $syllabus_ids = NULL): array {
     if (empty($student_ids)) {
       return [];
@@ -85,7 +116,16 @@ class GradeService implements GradeServiceInterface {
     $query->innerJoin('ssr_grade', 'g', 'g.id = gr.id');
     $query->condition('gr.revision_id', $revision_ids, 'IN');
     $query->fields('g', ['student', 'syllabus']);
-    $query->fields('gr', ['id', 'revision_id', 'grade', 'main_grader', 'registered', 'exclude_reason', 'trial', 'remark']);
+    $query->fields('gr', [
+      'id',
+      'revision_id',
+      'grade',
+      'main_grader',
+      'registered',
+      'exclude_reason',
+      'trial',
+      'remark',
+    ]);
     $query->orderBy('gr.revision_id', 'ASC');
 
     $results = $query->execute();
@@ -124,14 +164,14 @@ class GradeService implements GradeServiceInterface {
         $result->remark ?? NULL,
         $points_data['points'],
         $points_data['aggregated_points'],
-        false,
+        FALSE,
       );
     }
 
     $syllabus_weight = $this->syllabusService->getSyllabusWeight(array_values($syllabus_ids));;
 
     // Sort by user weight.
-    uasort($grades, function ($a, $b) use ($student_weight) {
+    uasort($grades, function($a, $b) use ($student_weight) {
       $a_key1 = array_key_first($a);
       $b_key1 = array_key_first($b);
 
@@ -150,13 +190,12 @@ class GradeService implements GradeServiceInterface {
         return 0;
       }
 
-
       return $student_weight[$student_id_a] <=> $student_weight[$student_id_b];
     });
 
     // Sort by syllabus weight.
     foreach ($grades as $student_id => &$student_grades) {
-      uasort($student_grades, function ($a, $b) use ($syllabus_weight) {
+      uasort($student_grades, function($a, $b) use ($syllabus_weight) {
         $syllabus_id_a = $a->syllabusId ?? NULL;
         $syllabus_id_b = $b->syllabusId ?? NULL;
 
@@ -182,12 +221,9 @@ class GradeService implements GradeServiceInterface {
               $grades[$student_id][$previous_level_id]->replaced = TRUE;
             }
           }
-
         }
       }
     }
-
-
 
     return $grades;
   }
@@ -214,8 +250,8 @@ class GradeService implements GradeServiceInterface {
 
     // Set default exlude label map.
     $map = $exclude_label_map + [
-      GradeInterface::EXCLUDE_REASON_ADAPTED_STUDIES => $this->t('No grade - adapted studies'),
-    ];
+        GradeInterface::EXCLUDE_REASON_ADAPTED_STUDIES => $this->t('No grade - adapted studies'),
+      ];
 
     if (isset($map[$grade_info->excludeReason])) {
       return $map[$grade_info->excludeReason];
@@ -232,7 +268,8 @@ class GradeService implements GradeServiceInterface {
     if (!isset($this->lookup[$cid])) {
       $map = [];
       $vids = array_keys(simple_school_reports_entities_grade_vid_options());
-      $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['vid' => $vids]);
+      $terms = $this->entityTypeManager->getStorage('taxonomy_term')
+        ->loadByProperties(['vid' => $vids]);
       foreach ($terms as $term) {
         $map[$term->id()] = $term;
       }
@@ -268,6 +305,6 @@ class GradeService implements GradeServiceInterface {
 
     $map = $this->syllabusService->getSyllabusLabelsInOrder([$syllabus_id]);
     return $map[$syllabus_id] ?? '';
-
   }
+
 }

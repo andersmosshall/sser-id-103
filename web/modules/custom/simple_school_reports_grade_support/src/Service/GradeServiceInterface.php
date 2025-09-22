@@ -11,6 +11,14 @@ use Drupal\simple_school_reports_grade_support\Utilities\GradeInfo;
 interface GradeServiceInterface {
 
   /**
+   * @param array|null $syllabus_ids
+   * @param $only_active
+   *
+   * @return array
+   */
+  public function getStudentIdsWithGrades(?array $syllabus_ids, $only_active = TRUE): array;
+
+  /**
    * @param array $student_ids
    * @param array|null $syllabus_ids
    *

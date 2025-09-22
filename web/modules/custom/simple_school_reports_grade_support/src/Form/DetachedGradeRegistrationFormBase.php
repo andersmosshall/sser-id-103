@@ -79,6 +79,9 @@ abstract class DetachedGradeRegistrationFormBase extends GradeRegistrationFormBa
       ->condition('status', 1)
       ->condition('roles', 'student')
       ->condition('field_grade', $school_grades, 'IN')
+      ->sort('field_grade')
+      ->sort('field_first_name')
+      ->sort('field_last_name')
       ->execute();
     $student_options = [];
     if (!empty($student_ids)) {
@@ -117,6 +120,8 @@ abstract class DetachedGradeRegistrationFormBase extends GradeRegistrationFormBa
       ->accessCheck(FALSE)
       ->condition('status', 1)
       ->condition('roles', ['teacher', 'principle'], 'IN')
+      ->sort('field_first_name')
+      ->sort('field_last_name')
       ->execute();
     $grading_teacher_options = [];
     if (!empty($grading_teacher_ids)) {

@@ -1,0 +1,19 @@
+simple_school_reports_grading_gy.grade_rounds_list_gy:
+  title: 'Registration'
+  route_name: view.ssr_grade_reg_rounds.gy
+  base_route: view.ssr_grade_reg_rounds.gy
+
+#simple_school_reports_grading_gy.grades_preparation_gy:
+#  title: 'Preparation'
+#  route_name: simple_school_reports_grading_gy.grade_preparation_gy
+#  base_route: view.ssr_grade_reg_rounds.gy
+
+simple_school_reports_grading_gy.grades_export_gy:
+  title: 'Export'
+  route_name: simple_school_reports_grading_gy.grades_export_gy
+  base_route: view.ssr_grade_reg_rounds.gy
+
+#simple_school_reports_grading_gy.grade_signings_gy:
+#  title: 'Signings'
+#  route_name: simple_school_reports_grading_gy.grade_signings_gy
+#  base_route: view.ssr_grade_reg_rounds.gy
