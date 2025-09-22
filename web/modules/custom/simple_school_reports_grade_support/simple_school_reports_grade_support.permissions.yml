@@ -1,0 +1,79 @@
+administer ssr_grade:
+  title: 'Administer grades'
+  restrict access: true
+view ssr_grade:
+  title: 'View grade'
+edit ssr_grade:
+  title: 'Edit grade'
+delete ssr_grade:
+  title: 'Delete grade'
+create ssr_grade:
+  title: 'Create grade'
+view ssr_grade revision:
+  title: 'View grade revision'
+revert ssr_grade revision:
+  title: 'Revert grade revision'
+delete ssr_grade revision:
+  title: 'Delete grade revision'
+
+administer ssr_grade_snapshot:
+  title: 'Administer grade snapshots'
+  restrict access: true
+view ssr_grade_snapshot:
+  title: 'View grade snapshot'
+edit ssr_grade_snapshot:
+  title: 'Edit grade snapshot'
+delete ssr_grade_snapshot:
+  title: 'Delete grade snapshot'
+create ssr_grade_snapshot:
+  title: 'Create grade snapshot'
+
+administer ssr_grade_reg_course types:
+  title: 'Administer course to grade types'
+  description: 'Maintain the types of ssr grade registration course entity.'
+  restrict access: true
+view ssr_grade_reg_course:
+  title: 'View course to grade'
+edit ssr_grade_reg_course:
+  title: 'Edit course to grade'
+delete ssr_grade_reg_course:
+  title: 'Delete course to grade'
+create ssr_grade_reg_course:
+  title: 'Create course to grade'
+
+administer ssr_grade_signing:
+  title: 'Administer grade signings'
+  restrict access: true
+view ssr_grade_signing:
+  title: 'View gradesigning'
+edit ssr_grade_signing:
+  title: 'Edit gradesigning'
+delete ssr_grade_signing:
+  title: 'Delete gradesigning'
+create ssr_grade_signing:
+  title: 'Create gradesigning'
+
+administer ssr_grade_snapshot_period:
+  title: 'Administer grade snapshot periods'
+  restrict access: true
+view ssr_grade_snapshot_period:
+  title: 'View grade snapshot period'
+edit ssr_grade_snapshot_period:
+  title: 'Edit grade snapshot period'
+delete ssr_grade_snapshot_period:
+  title: 'Delete grade snapshot period'
+create ssr_grade_snapshot_period:
+  title: 'Create grade snapshot period'
+
+administer ssr_grade_reg_round types:
+  title: 'Administer graderegistrationround types'
+  description: 'Maintain the types of ssr grade registration round entity.'
+  restrict access: true
+view ssr_grade_reg_round:
+  title: 'View graderegistrationround'
+edit ssr_grade_reg_round:
+  title: 'Edit graderegistrationround'
+delete ssr_grade_reg_round:
+  title: 'Delete graderegistrationround'
+create ssr_grade_reg_round:
+  title: 'Create graderegistrationround'

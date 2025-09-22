@@ -84,6 +84,12 @@ msgstr "Betygsregistrering - omdömen"
 msgid "Grade registration"
 msgstr "Betygsregistrering"
 
+msgid "Grade registration - Grundskolan"
+msgstr "Betygsregistrering - Grundskolan"
+
+msgid "Grade registration - Gymnasiet"
+msgstr "Betygsregistrering - Gymnasiet"
+
 msgid "Grade statistics"
 msgstr "Betygsstatistik"
 
@@ -138,8 +144,8 @@ msgstr "Extensexport (MGBETYG)"
 msgid "SSR schema"
 msgstr "SSR-schema"
 
-msgid ""
-msgstr ""
+msgid "Student/User export - @name"
+msgstr "Elev-/Användarexport - @name"
 
 msgid ""
 msgstr ""

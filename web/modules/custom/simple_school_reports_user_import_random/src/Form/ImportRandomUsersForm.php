@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_user_import_random\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_user_import_support\Form\ImportUsersFormBase;
 
 class ImportRandomUsersForm extends ImportUsersFormBase {
@@ -105,9 +106,16 @@ class ImportRandomUsersForm extends ImportUsersFormBase {
       }
 
       $grade_mentor = $this->addRandomUser(mt_rand(30, 64),'teacher');
+      $actual_grade_value = SchoolGradeHelper::parseGradeValueToActualGrade($grade);
 
       $is_authm = (new \DateTime())->format('n') > 7;
-      $grade_age = $is_authm ? 6 + $grade : 7 + $grade;
+      $grade_age_base = $is_authm ? 6 : 7;
+
+      $school_type = SchoolGradeHelper::getSchoolTypeByGrade($grade);
+      if ($school_type === 'GY') {
+        $grade_age_base = $is_authm ? 15 : 16;
+      }
+      $grade_age = $grade_age_base + $actual_grade_value;
 
       for ($i = 0; $i < $number_of_students; $i++) {
         $caregiver_1 = $this->addRandomUser(mt_rand(30, 64), 'caregiver', 'male');

@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the grading gy module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_grading_gy_install() {
+  module_set_weight('simple_school_reports_grading_gy', 10);
+}
+

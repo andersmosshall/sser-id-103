@@ -1,0 +1,267 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\Core\Render\Element;
+use Drupal\user\UserInterface;
+use Drupal\simple_school_reports_grade_support\GradeInterface;
+use Drupal\simple_school_reports_grade_support\GradeRegistrationCourseInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+function simple_school_reports_grade_support_correction_types(): array {
+  return [
+    GradeInterface::CORRECTION_TYPE_CORRECTED => t('Corrected'),
+    GradeInterface::CORRECTION_TYPE_CHANGED => t('Changed'),
+  ];
+}
+
+function simple_school_reports_grade_support_semester_options(): array {
+  return [
+    GradeInterface::SEMESTER_HT => t('Autumn semester'),
+    GradeInterface::SEMESTER_VT => t('Spring semester'),
+  ];
+}
+
+function simple_school_reports_grade_support_exclude_reason_options(): array {
+  return [
+    GradeInterface::EXCLUDE_REASON_ADAPTED_STUDIES => t('Adapted studies'),
+  ];
+}
+
+function simple_school_reports_grade_support_registration_status_options(): array {
+  return [
+    GradeRegistrationCourseInterface::REGISTRATION_STATUS_NOT_STARTED => t('Not started'),
+    GradeRegistrationCourseInterface::REGISTRATION_STATUS_STARTED => t('Started'),
+    GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE => t('Done'),
+  ];
+}
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_grade_support_theme(): array {
+  return [
+    'ssr_grade' => ['render element' => 'elements'],
+    'ssr_grade_reg_course' => ['render element' => 'elements'],
+    'ssr_grade_reg_round' => ['render element' => 'elements'],
+    'ssr_grade_signing' => ['render element' => 'elements'],
+    'ssr_grade_snapshot' => ['render element' => 'elements'],
+    'ssr_grade_snapshot_period' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function imple_school_reports_grade_support_entity_presave(\Drupal\Core\Entity\EntityInterface $entity) {
+  $entity_types_to_clear_gradable_course_lookup = [
+    'node' => 'course',
+    'ssr_grade_reg_course' => 'ssr_grade_reg_course',
+    'user' => 'user',
+  ];
+
+  $entity_type = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+
+  if (isset($entity_types_to_clear_gradable_course_lookup[$entity_type]) && $entity_types_to_clear_gradable_course_lookup[$entity_type] === $bundle) {
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
+    $service->clearLookup();
+  }
+}
+
+/**
+ * Prepares variables for grade templates.
+ *
+ * Default template: ssr-grade.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the grade information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for grade snapshot templates.
+ *
+ * Default template: ssr-grade-snapshot.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the grade snapshot information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade_snapshot(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for grade registration round templates.
+ *
+ * Default template: ssr-grade-registration-round.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the grade registration round information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade_reg_round(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for course to grade templates.
+ *
+ * Default template: ssr-grade-registration-course.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the course to grade information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade_reg_course(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for gradesigning templates.
+ *
+ * Default template: ssr-grade-signing.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the gradesigning information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade_signing(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for grade snapshot period templates.
+ *
+ * Default template: ssr-grade-snapshot-period.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the grade snapshot period information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_grade_snapshot_period(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_grade_support_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  foreach ($query->where as &$condition_group) {
+    foreach ($condition_group['conditions'] as &$condition) {
+      if ($condition['value'] === 'my_uid') {
+        $condition['value'] = \Drupal::currentUser()->id();
+      }
+    }
+  }
+
+  if ($view->id() === 'course_reference') {
+    $syllabus_school_types = [];
+    if ($view->current_display === 'gradable_all' || $view->current_display === 'gradable_all_published') {
+      $syllabus_school_types = array_keys(SchoolTypeHelper::getSchoolTypesVersioned());
+    }
+    if ($view->current_display === 'gradable_gr' || $view->current_display === 'gradable_gr_published') {
+      $syllabus_school_types = SchoolTypeHelper::getSchoolTypeVersions('GR');
+    }
+    if ($view->current_display === 'gradable_gy' || $view->current_display === 'gradable_gy_published') {
+      $syllabus_school_types = SchoolTypeHelper::getSchoolTypeVersions('GY');
+    }
+
+    /** @var \Drupal\simple_school_reports_grade_support\Service\GradableCourseServiceInterface $gradable_course_service */
+    $gradable_course_service = \Drupal::service('simple_school_reports_grade_support.gradable_course');
+    $syllabus_ids = $gradable_course_service->getGradableSyllabusIds($syllabus_school_types);
+
+    if (!empty($syllabus_ids)) {
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as &$condition) {
+          // Alter syllabus ids.
+          if (!empty($condition['field']) && $condition['field'] === 'ssr_syllabus_field_data_node__field_syllabus.id') {
+            $condition['value'] = $syllabus_ids;
+            $condition['operator'] = 'IN';
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_grade_support_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
+  if (($entity_form['#entity_type'] ?? NULL) === 'ssr_grade_reg_course') {
+    $bundle = $entity_form['#bundle'] ?? NULL;
+    if (!$bundle) {
+      $bundle = 'all';
+    }
+    if (!empty($entity_form['course']['widget'][0]['target_id']['#selection_settings']['view']['display_name'])) {
+      $entity_form['course']['widget'][0]['target_id']['#selection_settings']['view']['display_name'] = 'gradable_' . $bundle . '_published';
+    }
+  }
+}
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_grade_support_entity_operation_alter(array &$operations, EntityInterface $entity) {
+
+  if ($entity->getEntityTypeId() === 'ssr_grade_reg_round') {
+    $operations['courses_to_grade'] = [
+      'title' => t('Courses'),
+      'url' => Url::fromRoute('view.courses_to_grade.list', ['ssr_grade_reg_round' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+      'weight' => -99,
+    ];
+  }
+
+  if ($entity->getEntityTypeId() === 'ssr_grade_reg_course') {
+    $operations = [];
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_grade_support_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'courses_to_grade') {
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+}

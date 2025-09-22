@@ -1,0 +1,13 @@
+uuid: 2251fb12-958c-4c25-903c-d7f4e0d36340
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: L_Bt7GGayYk4v7Nu0kYjIKNQKTGmTAjH6C8gDMMjzFc
+id: ssr_grade_snapshot_delete_action
+label: 'Delete grade snapshots'
+type: ssr_grade_snapshot
+plugin: 'entity:delete_action:ssr_grade_snapshot'
+configuration: {  }

@@ -1,0 +1,51 @@
+simple_school_reports_grading_gy.view_course_grades:
+  path: '/node/{node}/grades/gy'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::build'
+    _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+
+simple_school_reports_grading_gy.register_course_grades:
+  path: '/node/{node}/grades/gy/register'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\CourseGradeRegistrationFormGy'
+    _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\CourseGradeRegistrationFormGy::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+
+simple_school_reports_grading_gy.unlock_register_course_grades:
+  path: '/node/{node}/grades/gy/unlock'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\UnlockCourseGradeRegistrationFormGy'
+    _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\UnlockCourseGradeRegistrationFormGy::access'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+
+simple_school_reports_grading_gy.register_grades_detached:
+  path: '/grade-registration/gy/register-detached'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\DetachedGradeRegistrationFormGy'
+    _title_callback: '\Drupal\simple_school_reports_grading_gy\Controller\ViewCourseGradesGyController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\DetachedGradeRegistrationFormGy::access'
+
+simple_school_reports_grading_gy.grades_export_gy:
+  path: '/grade-registration/gy/export'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\ExportsGradesFormGy'
+    _title: 'Export documents'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\ExportsGradesFormGy::access'

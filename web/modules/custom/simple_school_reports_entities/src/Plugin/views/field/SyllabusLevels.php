@@ -10,6 +10,7 @@ namespace Drupal\simple_school_reports_entities\Plugin\views\field;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_entities\SyllabusInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,53 +24,41 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SyllabusLevels extends FieldPluginBase {
 
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    return $instance;
-  }
-
   /**
-   * @{inheritdoc}
-   */
-  public function query() {
-    // Leave empty to avoid a query on this field.
-  }
-
-  /**
-   * @{inheritdoc}
+   * {@inheritdoc}
    */
   public function render(ResultRow $values) {
-    $syllabus = $values->_entity;
     $cache = new CacheableMetadata();
-
+    $cache->addCacheTags(['ssr_syllabus_list']);
     $build = [];
+    $syllabus = $values->_entity;
+    if (!$syllabus || !$syllabus instanceof SyllabusInterface) {
+      $cache->applyTo($build);
+      return $build;
+    }
+    $cache->addCacheableDependency($syllabus);
 
-    if (!empty($syllabus)) {
-      $cache->addCacheableDependency($syllabus);
-      $level_ids = array_column($syllabus->get('levels')->getValue(), 'target_id');
+    $level_names = array_column($syllabus->get('levels_display')->getValue(), 'value');
 
-      $names = [];
-      foreach ($level_ids as $level_id) {
-        $level = $this->entityTypeManager->getStorage('ssr_syllabus')->load($level_id);
-        if ($level) {
-          $names[] = $level->label();
-          $cache->addCacheableDependency($level);
-        }
-      }
-
-      if (!empty($names)) {
-        $build = [
-          '#theme' => 'item_list',
-          '#items' => $names,
-        ];
-      }
+    if (empty($level_names)) {
+      $cache->applyTo($build);
+      return $build;
     }
 
+    $build['levels'] = [
+      '#theme' => 'item_list',
+      '#items' => $level_names,
+    ];
     $cache->applyTo($build);
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function query() {
+    // This function exists to override parent query function.
+    // Do nothing.
   }
 
 }

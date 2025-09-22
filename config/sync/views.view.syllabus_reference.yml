@@ -187,20 +187,67 @@ display:
         type: tag
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        label:
+          id: label
+          table: ssr_syllabus_field_data
+          field: label
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: ssr_syllabus
+          entity_field: label
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
-        -
-          id: '0'
+        status:
+          id: status
           table: ssr_syllabus_field_data
-          field: ''
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: ssr_syllabus
-          entity_field: ''
+          entity_field: status
           plugin_id: boolean
+          operator: '='
           value: '1'
           group: 1
+          exposed: false
           expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups: {  }
       style:
         type: default
         options:
@@ -249,6 +296,7 @@ display:
         options:
           search_fields:
             label: label
+            school_type_versioned: '0'
       row:
         type: entity_reference
         options:

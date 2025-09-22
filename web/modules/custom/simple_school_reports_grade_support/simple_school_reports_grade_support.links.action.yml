@@ -1,0 +1,48 @@
+ssr_grade.add_form:
+  title: 'Add grade'
+  route_name: entity.ssr_grade.add_form
+  appears_on:
+    - entity.ssr_grade.collection
+
+ssr_grade_snapshot.add_form:
+  title: 'Add grade snapshot'
+  route_name: entity.ssr_grade_snapshot.add_form
+  appears_on:
+    - entity.ssr_grade_snapshot.collection
+
+ssr_grade_reg_course.type_add:
+  title: 'Add course to grade type'
+  route_name: entity.ssr_grade_reg_course_type.add_form
+  appears_on:
+    - entity.ssr_grade_reg_course_type.collection
+
+ssr_grade_reg_course.add_page:
+  title: 'Add course to grade'
+  route_name: entity.ssr_grade_reg_course.add_page
+  appears_on:
+    - entity.ssr_grade_reg_course.collection
+
+ssr_grade_signing.add_form:
+  title: 'Add gradesigning'
+  route_name: entity.ssr_grade_signing.add_form
+  appears_on:
+    - entity.ssr_grade_signing.collection
+
+ssr_grade_snapshot_period.add_form:
+  title: 'Add grade snapshot period'
+  route_name: entity.ssr_grade_snapshot_period.add_form
+  appears_on:
+    - entity.ssr_grade_snapshot_period.collection
+
+ssr_grade_reg_round.type_add:
+  title: 'Add graderegistrationround type'
+  route_name: entity.ssr_grade_reg_round_type.add_form
+  appears_on:
+    - entity.ssr_grade_reg_round_type.collection
+
+ssr_grade_reg_round.add_page:
+  title: 'Add graderegistrationround'
+  route_name: entity.ssr_grade_reg_round.add_page
+  appears_on:
+    - entity.ssr_grade_reg_round.collection
+

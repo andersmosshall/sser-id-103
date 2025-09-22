@@ -58,12 +58,13 @@ function simple_school_reports_core_gr_deploy_10001() {
     }
   }
 
+  $school_type = 'GR:22';
   $vid = 'school_subject';
   $query = $connection->select('taxonomy_term_field_data', 't');
   $query->leftJoin('taxonomy_term__field_subject_code_new', 'sc', 'sc.entity_id = t.tid');
   $query->innerJoin('taxonomy_term__field_school_type_versioned', 'st', 'st.entity_id = t.tid');
   $query->condition('t.vid', $vid);
-  $query->condition('st.field_school_type_versioned_value', ['GR:22'], 'IN');
+  $query->condition('st.field_school_type_versioned_value', [$school_type], 'IN');
   $query->fields('t', ['tid']);
   $query->fields('sc', ['field_subject_code_new_value']);
   $results = $query->execute();
@@ -108,10 +109,6 @@ function simple_school_reports_core_gr_deploy_10001() {
 
   $term_map = [];
 
-  /**
-   * Create links in personalisation group to medlemsform.
-   * $type is not a fully loaded term, BTW.
-   */
   foreach ($to_import as $code => $label) {
     if (empty($subject_code_exist[$code])) {
       $variants = $variants[$code] ?? [''];
@@ -133,6 +130,7 @@ function simple_school_reports_core_gr_deploy_10001() {
           'vid' => $vid,
           'langcode' => 'sv',
           'field_subject_code_new' => $code,
+          'field_school_type_versioned' => $school_type,
           'status' => $status,
         ]);
 
@@ -248,7 +246,7 @@ function simple_school_reports_core_gr_deploy_10002() {
     ->exists('field_subject_code_new')
     ->execute();
 
-  $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE);
+  $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE, TRUE);
 
   $course_codes_to_skip[] = 'GRSL';
   $course_codes_to_skip[] = 'GRGRSLJ01';

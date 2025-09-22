@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: ssr_programme_save_action
+label: 'Save programmes'
+type: ssr_programme
+plugin: entity:save_action:ssr_programme
+configuration: {  }

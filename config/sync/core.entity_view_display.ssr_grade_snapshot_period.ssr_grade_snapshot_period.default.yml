@@ -1,0 +1,27 @@
+uuid: 0ce63e49-937f-46ad-b32f-d547592562e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_snapshot_period.ssr_grade_snapshot_period.default
+targetEntityType: ssr_grade_snapshot_period
+bundle: ssr_grade_snapshot_period
+mode: default
+content:
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: yes-no
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  label: true
+  langcode: true
+  period_index: true
+  uid: true

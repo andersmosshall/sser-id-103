@@ -78,6 +78,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'written_reviews' => NULL,
       'iup' => NULL,
       'dnp_empty' => NULL,
+      'prorenta_export_empty' => NULL,
       'doc_logo_left' => NULL,
       'doc_logo_center' => NULL,
       'doc_logo_right' => NULL,
@@ -129,6 +130,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'written_reviews' => $template_file_path_base . 'SO.docx',
       'iup' => $template_file_path_base . 'IUP.docx',
       'dnp_empty' => $template_file_path_base . 'dnp-empty-1.5.2.xlsx',
+      'prorenta_export_empty' => $template_file_path_base . 'prorenata-import-empty-1.0.0.xlsx',
     ];
 
     if (isset($local_templates[$key]) && file_exists($local_templates[$key])) {
@@ -331,6 +333,41 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
     if ($filename !== $event->getFilename()) {
       $event->setFilename($filename)->setSecurityRename();
     }
+  }
+
+  public static function trimCsvRow(array $row): array {
+    foreach ($row as $key => $value) {
+      // Trim each cell in the row.
+      $row[$key] = self::trimCsvCell($value);
+    }
+    return $row;
+  }
+
+  public static function trimCsvCell(string $cell): string {
+    // 1. First, perform a standard trim to remove leading and trailing
+    // whitespace.
+    $cell = trim($cell);
+
+
+    // 2. Define a precise pattern for invisible/control characters to be removed.
+    $pattern = '/(
+        \p{Cc}    # C0 and C1 control characters (e.g., \x00, \x08)
+      | \p{Cf}    # Format control characters (e.g., ZWJ, ZWNJ, soft-hyphen)
+      | \p{Zl}    # Line separator
+      | \p{Zp}    # Paragraph separator
+      | \x{1680}  # Ogham space mark
+      | \x{200B}  # Zero-width space
+      | \x{202F}  # Narrow no-break space (often invisible)
+      | \x{2060}  # Word joiner (the modern ZWNBSP)
+      | \x{FEFF}  # Byte Order Mark (the legacy ZWNBSP)
+    )/ux';
+    // The 'x' modifier allows for comments in the regex for clarity.
+
+    // 2. Remove a comprehensive set of invisible characters and format controls.
+    $cleaned_cell = preg_replace($pattern, '', $cell);
+
+    // preg_replace returns null on error.
+    return $cleaned_cell ?? '';
   }
 
 }

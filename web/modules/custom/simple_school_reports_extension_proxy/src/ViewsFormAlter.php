@@ -42,6 +42,9 @@ class ViewsFormAlter {
       'ssr_assign_to_class' => [
         'simple_school_reports_class',
       ],
+      'ssr_assign_to_programme' => [
+        'simple_school_reports_core_gy',
+      ],
       'ssr_export_users' => [
         'simple_school_reports_pmo_export',
         'simple_school_reports_skolon_export',

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_reg_course_save_action
+label: 'Save course to grades'
+type: ssr_grade_reg_course
+plugin: entity:save_action:ssr_grade_reg_course
+configuration: {  }

@@ -1,0 +1,26 @@
+uuid: f3a38d72-366b-4593-9541-52d3247b8083
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_programme
+  module:
+    - user
+id: user.user.field_programme
+field_name: field_programme
+entity_type: user
+bundle: user
+label: Programme
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: programme_reference
+      display_name: all
+      arguments: {  }
+field_type: entity_reference

@@ -61,13 +61,13 @@ services:
 
   simple_school_reports_core:export_users_ssr:
     class: Drupal\simple_school_reports_core\Service\SSRExportUsersService
-    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_core.course_service' ]
+    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_core.course_service', '@simple_school_reports_core.file_template_service' ]
     tags:
       - { name: event_subscriber }
 
   simple_school_reports_core:export_users_csv:
     class: Drupal\simple_school_reports_core\Service\CsvExportUsersService
-    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_core.course_service' ]
+    arguments: [ '@database', '@entity_type.manager', '@current_user', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@messenger', '@simple_school_reports_core.term_service', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_core.course_service', '@simple_school_reports_core.file_template_service' ]
     tags:
       - { name: event_subscriber }
 

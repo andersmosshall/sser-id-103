@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_grade_stats\Plugin\Block\GradeStatisticsBlock;
 use Drupal\simple_school_reports_list_templates\Plugin\Block\ListBlock;
 use Drupal\Core\Access\AccessResult;
@@ -24,6 +25,24 @@ function simple_school_reports_extension_proxy_form_alter(&$form, FormStateInter
 
   if (str_starts_with($form_id, 'views_form_')) {
     ViewsFormAlter::userFormAlter($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function simple_school_reports_extension_proxy_user_presave(\Drupal\user\UserInterface $user) {
+  if (!$user->hasRole('student')) {
+    $user->set('field_programme', NULL);
+    $user->set('field_class', NULL);
+    $user->set('field_grade', NULL);
+  }
+  elseif (!$user->get('field_programme')->isEmpty()) {
+    $grade = $user->get('field_grade')->value;
+    $programme_grades = SchoolGradeHelper::getSchoolGradeValues(['GY']);
+    if (!in_array($grade, $programme_grades)) {
+      $user->set('field_programme', NULL);
+    }
   }
 }
 
@@ -144,6 +163,17 @@ function simple_school_reports_extension_proxy_views_data_alter(array &$data) {
     $data['school_week_deviation']['school_week_deviation_comment']['help'] =  t('School week deviation comment');
     $data['school_week_deviation']['school_week_deviation_comment']['field'] = [
       'id' => 'school_week_deviation_comment',
+    ];
+  }
+
+  if (!empty($data['ssr_programme_field_data']['id'])) {
+    // Copy id data to ssr_programme_number_of_students.
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students'] = $data['ssr_programme_field_data']['id'];
+    // Override title and override views field.
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['title'] = t('Programme number of students');
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['help'] =  t('Programme number of students');
+    $data['ssr_programme_field_data']['ssr_programme_number_of_students']['field'] = [
+      'id' => 'ssr_programme_number_of_students',
     ];
   }
 }
@@ -373,7 +403,7 @@ function _simple_school_reports_extension_proxy_supported_grade_systems() {
   return $options;
 }
 
-function clean_up_public_dir() {
+function do_clean_up_dir(string $root) {
   /** @var \Drupal\Core\File\FileSystemInterface $file_system */
   $file_system = \Drupal::service('file_system');
 
@@ -391,7 +421,7 @@ function clean_up_public_dir() {
 
   try {
     $folder = 'ssr_generated';
-    $files = $file_system->scanDirectory('public://' . $folder, '/.*/');
+    $files = $file_system->scanDirectory($root . '://' . $folder, '/.*/');
   }
   catch (\Exception $e) {
     $files = [];
@@ -407,14 +437,14 @@ function clean_up_public_dir() {
     $item = $file_system->realpath($item);
     $file_system->delete($item);
   }
-  $source_dir = $file_system->realpath('public://' . $folder . DIRECTORY_SEPARATOR);
+  $source_dir = $file_system->realpath($root . '://' . $folder . DIRECTORY_SEPARATOR);
   if (is_dir($source_dir)) {
     _clean_up_empty_dir($source_dir);
   }
 
   try {
     $folder = 'ssr_tmp';
-    $files = $file_system->scanDirectory('public://' . $folder, '/.*/');
+    $files = $file_system->scanDirectory($root . '://' . $folder, '/.*/');
   }
   catch (\Exception $e) {
     $files = [];
@@ -432,11 +462,16 @@ function clean_up_public_dir() {
     }
   }
   if (!$has_new) {
-    $tmp_dir = $file_system->realpath('public://ssr_tmp' . DIRECTORY_SEPARATOR);
+    $tmp_dir = $file_system->realpath($root . '://ssr_tmp' . DIRECTORY_SEPARATOR);
     if (is_dir($tmp_dir)) {
       $file_system->deleteRecursive($tmp_dir);
     }
   }
+
+}
+
+function clean_up_public_dir() {
+  do_clean_up_dir('public');
 }
 
 function _clean_up_empty_dir($path) {

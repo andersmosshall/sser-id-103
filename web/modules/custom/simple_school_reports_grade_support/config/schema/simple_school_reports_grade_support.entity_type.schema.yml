@@ -1,0 +1,25 @@
+simple_school_reports_grade_support.ssr_grade_reg_round_type.*:
+  type: config_entity
+  label: 'Grade registration round type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+
+simple_school_reports_grade_support.ssr_grade_reg_course_type.*:
+  type: config_entity
+  label: 'Course to grade type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string

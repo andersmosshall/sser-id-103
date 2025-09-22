@@ -1,0 +1,13 @@
+uuid: e5f5a0a9-94d4-428d-a1bd-90e40f41fd48
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+_core:
+  default_config_hash: 53Umy4hV7KXVp9j6aVlwcpIaTGFtJbtELsOJBza-RZs
+id: ssr_grade_reg_round_delete_action
+label: 'Delete grade registration rounds'
+type: ssr_grade_reg_round
+plugin: 'entity:delete_action:ssr_grade_reg_round'
+configuration: {  }

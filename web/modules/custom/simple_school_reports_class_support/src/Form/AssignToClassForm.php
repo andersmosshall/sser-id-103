@@ -143,8 +143,8 @@ class AssignToClassForm extends ConfirmFormBase {
     if (!empty($form_state->getValue('accounts'))) {
       // Initialize batch (to set title).
       $batch = [
-        'title' => $this->t('Bulk update grade'),
-        'init_message' => $this->t('Bulk update grade'),
+        'title' => $this->t('Bulk update class'),
+        'init_message' => $this->t('Bulk update class'),
         'progress_message' => $this->t('Processed @current out of @total.'),
         'operations' => [],
         'finished' => [self::class, 'finished'],

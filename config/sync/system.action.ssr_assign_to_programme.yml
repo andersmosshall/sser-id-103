@@ -1,0 +1,11 @@
+uuid: 31aff13a-68b1-4d2d-aed8-dfeafa1fce9c
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_assign_to_programme
+label: 'Assign to programme'
+type: user
+plugin: ssr_assign_to_programme
+configuration: {  }

@@ -2,3 +2,11 @@ services:
   simple_school_reports_entities.school_week_service:
     class: Drupal\simple_school_reports_entities\Service\SchoolWeekService
     arguments: [ '@database', '@entity_type.manager', '@cache.default', '@state', '@?simple_school_reports_core.user_meta_data', '@module_handler']
+
+  simple_school_reports_entities.programme_service:
+    class: Drupal\simple_school_reports_entities\Service\ProgrammeService
+    arguments: [ '@entity_type.manager', '@database', '@state', '@queue', '@current_user', '@messenger', '@module_handler' ]
+
+  simple_school_reports_entities.syllabus_service:
+    class: Drupal\simple_school_reports_entities\Service\SyllabusService
+    arguments: [ '@entity_type.manager', '@database' ]

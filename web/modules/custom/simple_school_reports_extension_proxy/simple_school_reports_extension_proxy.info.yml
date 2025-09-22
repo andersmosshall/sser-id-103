@@ -3,6 +3,6 @@ type: module
 description: Simple School Reports Extension Proxy
 core_version_requirement: ^10 || ^11
 package: 'Simple School Reports'
-version: 11.0.0
+version: 11.1.0
 dependencies:
   - simple_school_reports_core:simple_school_reports_core
