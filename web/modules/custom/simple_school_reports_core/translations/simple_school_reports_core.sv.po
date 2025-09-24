@@ -3612,8 +3612,8 @@ msgstr "Om markerad kommer skyddade uppgifter inkluderas även om användaren ha
 msgid "Skip users with protected data"
 msgstr "Hoppa över användare med skyddade uppgifter"
 
-msgid "If checked, users with protected data will excluded from the export."
-msgstr "Om markerad kommer användare med skyddade uppgifter exkluderas från export."
+msgid "If checked, users with secrecy marking will be excluded from the export."
+msgstr "Om markerad kommer användare med sekretessmarkering exkluderas från export."
 
 msgid "Skipping @name due to protected data"
 msgstr "Hoppar över @name på grund av skyddade uppgifter"
