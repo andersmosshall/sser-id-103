@@ -77,7 +77,7 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
     $form['include_protected_data'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include protected data'),
-      '#description' => $this->t('If checked, protected data will be included even if the user has secrecy marking.'),
+      '#description' => $this->t('If checked, users with protected data will excluded from the export.'),
       '#default_value' => TRUE,
       '#states' => [
         'visible' => [
@@ -227,6 +227,7 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
     $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
 
     if ($has_protected_data && $options['skip_user_with_protected_data']) {
+      $this->messenger->addWarning($this->t('Skipping @name due to protected data', ['@name' => $user->getDisplayName()]));
       return null;
     }
 
@@ -303,6 +304,7 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
     $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
 
     if ($has_protected_data && $options['skip_user_with_protected_data']) {
+      $this->messenger->addWarning($this->t('Skipping @name due to protected data', ['@name' => $user->getDisplayName()]));
       return null;
     }
 
