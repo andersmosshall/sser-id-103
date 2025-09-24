@@ -67,11 +67,23 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
       ],
     ];
 
+    $form['skip_user_with_protected_data'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Skip users with protected data'),
+      '#description' => $this->t('If checked, users with protected data will be skipped.'),
+      '#default_value' => FALSE,
+    ];
+
     $form['include_protected_data'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include protected data'),
       '#description' => $this->t('If checked, protected data will be included even if the user has secrecy marking.'),
       '#default_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="export_method[simple_school_reports_prorenata_export:export_users_prorenata][options][skip_user_with_protected_data]"]' => ['checked' => FALSE],
+        ]
+      ]
     ];
 
     return $form;
@@ -85,6 +97,7 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
       'include_caregivers' => TRUE,
       'ssn_caregivers_behavior' => 'include_with_warning',
       'include_protected_data' => TRUE,
+      'skip_user_with_protected_data' => FALSE,
     ];
 
     return $options;
@@ -209,6 +222,18 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
       return NULL;
     }
 
+    $include_protected_data = TRUE;
+    $protected_data_value = $user->get('field_protected_personal_data')->value ?? NULL;
+    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
+
+    if ($has_protected_data && $options['skip_user_with_protected_data']) {
+      return null;
+    }
+
+    if ($has_protected_data && !$options['include_protected_data']) {
+      $include_protected_data = FALSE;
+    }
+
     $first_name = $user->get('field_first_name')->value ?? '';
     $last_name = $user->get('field_last_name')->value ?? '';
 
@@ -243,13 +268,6 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
     $phone_number_mobile = $this->getUserPhoneNumber($user, 'mobile');
     $email = $this->emailService->getUserEmail($user) ?? '';
 
-    $include_protected_data = TRUE;
-    $protected_data_value = $user->get('field_protected_personal_data')->value ?? NULL;
-    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
-    if ($has_protected_data && !$options['include_protected_data']) {
-      $include_protected_data = FALSE;
-    }
-
     return [
       'first_name' => $first_name,
       'last_name' => $last_name,
@@ -280,6 +298,18 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
       throw new \RuntimeException('Missing ssr id');
     }
 
+    $include_protected_data = TRUE;
+    $protected_data_value = $user->get('field_protected_personal_data')->value ?? NULL;
+    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
+
+    if ($has_protected_data && $options['skip_user_with_protected_data']) {
+      return null;
+    }
+
+    if ($has_protected_data && !$options['include_protected_data']) {
+      $include_protected_data = FALSE;
+    }
+
     $external_id = sha1('SSR.' . $ssr_id);
     $user_uuid = $user->uuid();
 
@@ -298,7 +328,7 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
     if ($grade_value !== NULL) {
       $grade = SchoolGradeHelper::parseGradeValueToActualGrade($grade_value);
       if ($grade === 0) {
-        $grade = 'F';
+        $grade = '0';
       }
       $default_class = SchoolGradeHelper::getSchoolGradesLongName()[$grade_value];
     }
@@ -338,13 +368,6 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
           $caregivers[$key] = $caregiver_data;
         }
       }
-    }
-
-    $include_protected_data = TRUE;
-    $protected_data_value = $user->get('field_protected_personal_data')->value ?? NULL;
-    $has_protected_data = $protected_data_value !== NULL && $protected_data_value !== 'none';
-    if ($has_protected_data && !$options['include_protected_data']) {
-      $include_protected_data = FALSE;
     }
 
 
