@@ -75,14 +75,6 @@ function template_preprocess_dnp_prov_test_settings(array &$variables): void {
   }
 }
 
-function format_with_leading_zeros(int $number, $total_digits) {
-  $number_str = (string) $number;
-  if (strlen($number_str) < $total_digits) {
-    return str_pad($number_str, $total_digits, '0', STR_PAD_LEFT);
-  }
-  return $number_str;
-}
-
 function calculate_dnp_username(UserInterface $user): string {
   if (!$user->id()) {
     throw new \InvalidArgumentException('User must have an ID.');

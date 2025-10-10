@@ -83,6 +83,10 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'doc_logo_center' => NULL,
       'doc_logo_right' => NULL,
       'logo_header' => NULL,
+      // New grade documents.
+      'grade_document' => NULL,
+      'sign_document' => NULL,
+      'grade_catalog' => NULL,
     ];
 
     $file_storage = $this->entityTypeManager->getStorage('file');
@@ -131,6 +135,9 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'iup' => $template_file_path_base . 'IUP.docx',
       'dnp_empty' => $template_file_path_base . 'dnp-empty-1.5.2.xlsx',
       'prorenta_export_empty' => $template_file_path_base . 'prorenata-import-empty-1.0.0.xlsx',
+      'grade_document' => $template_file_path_base . 'grade-document-empty-1.0.0.xlsx',
+      'sign_document' => $template_file_path_base . 'sign-document-empty-1.0.0.xlsx',
+      'grade_catalog' => $template_file_path_base . 'grade-catalog-empty-1.0.0.xlsx',
     ];
 
     if (isset($local_templates[$key]) && file_exists($local_templates[$key])) {
@@ -220,10 +227,15 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
   }
 
   public function doZip(string $source_dir, string $destination_dir, string $file_name): bool {
-    $destination = 'public://'  . $destination_dir;
-    $this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY);
-    $destination = $this->fileSystem->realpath($destination) . DIRECTORY_SEPARATOR;
-    $final_destination = $destination . DIRECTORY_SEPARATOR . $file_name;
+    if (str_contains($destination_dir, '://')) {
+      $destination = 'public://'  . $destination_dir;
+      $this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY);
+      $destination = $this->fileSystem->realpath($destination) . DIRECTORY_SEPARATOR;
+      $final_destination = $destination . DIRECTORY_SEPARATOR . $file_name;
+    }
+    else {
+      $final_destination = $destination_dir . DIRECTORY_SEPARATOR . $file_name;
+    }
 
     $zip = new \ZipArchive;
     $zip->open($final_destination, \ZipArchive::CREATE);
@@ -368,6 +380,34 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
 
     // preg_replace returns null on error.
     return $cleaned_cell ?? '';
+  }
+
+  public function sanitizeFileName(string $file_name, bool $prepare_directory = TRUE, bool $lower_case = TRUE): string {
+    if ($lower_case) {
+      $file_name = mb_strtolower($file_name);
+    }
+
+    $file_name = simple_school_reports_core_character_normalise_word($file_name, [
+      ' - ' => '-',
+      ' ' => '_',
+    ], FALSE);
+    $file_name = str_replace(' ', '_', $file_name);
+
+    $file_name_last = basename($file_name);
+    $base_path = str_replace($file_name_last, '', $file_name);
+
+    if ($prepare_directory) {
+      $base_path_copy = $base_path;
+      $this->fileSystem->prepareDirectory($base_path_copy, FileSystemInterface::CREATE_DIRECTORY);
+    }
+
+
+
+    $event = new FileUploadSanitizeNameEvent($file_name_last, '');
+    $dispatcher = \Drupal::service('event_dispatcher');
+    $dispatcher->dispatch($event);
+    $file_name_last = $event->getFilename();
+    return $base_path . $file_name_last;
   }
 
 }

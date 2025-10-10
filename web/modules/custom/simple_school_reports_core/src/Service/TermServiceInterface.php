@@ -57,6 +57,7 @@ interface TermServiceInterface {
    *   Array with keys:
    *    - term_start (programmatically calculated)
    *    - term_end (programmatically calculated)
+   *    - arbitrary_term_data (programmatically calculated)
    *    - school_year
    *    - semester: HT or VT.
    *    - semester_name: ex. HT2021

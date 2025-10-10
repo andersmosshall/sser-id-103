@@ -41,7 +41,7 @@ class SyllabusService implements SyllabusServiceInterface {
     }
 
     $results = $this->database->select('ssr_syllabus_field_data', 's')
-      ->fields('s', ['id', 'identifier', 'label', 'language_code', 'levels__value', 'course_code', 'points'])
+      ->fields('s', ['id', 'identifier', 'label', 'language_code', 'levels__value', 'course_code', 'subject_code', 'subject_name', 'points', 'school_type_versioned'])
       ->orderBy('s.label', 'ASC')
       ->execute();
 
@@ -108,20 +108,33 @@ class SyllabusService implements SyllabusServiceInterface {
         $use_diploma_project = TRUE;
       }
 
+      $level_numerical = NULL;
+      // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
+      if (preg_match('/\d+[a-c]?$/i', $result->label ?? '')) {
+        // Set level numerical to [number] or [number]a, [number]b, [number]c.
+        $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $result->label ?? '');
+        $level_numerical = str_replace($without_level_numerical, '', $result->label ?? '');
+      }
+
       $map_by_syllabus_id[$result->id] = [
         'id' => $result->id,
         'identifier' => $syllabus_identifier ?? '',
         'label' => $result->label ?? '',
+        'subject_label' => $result->subject_name ?? '',
         'course_code' => $result->course_code ?? '',
+        'subject_code' => $result->subject_code ?? '',
         'group_for' => $group_for_ids,
         'levels' => $level_syllabus_ids,
+        'level_numerical' => $level_numerical,
         'previous_levels' => $previous_level_syllabus_ids,
         'previous_levels_identifiers' => $previous_level_identifiers,
+        'previous_levels_numerical' => [],
         'points' => is_numeric($result->points) ? (int) $result->points : NULL,
-        'aggregated_points' => NULL,
+        'aggregated_points' => is_numeric($result->points) ? (int) $result->points : NULL,
         'language_code' => $result->language_code,
         'associated_syllabuses' => array_unique(array_merge([$result->id], $level_syllabus_ids, $group_for_ids)),
         'use_diploma_project' => $use_diploma_project,
+        'school_type_short' => $result->school_type_versioned ?? '',
       ];
     }
 
@@ -134,12 +147,17 @@ class SyllabusService implements SyllabusServiceInterface {
         continue;
       }
       $aggregated_points = $syllabus['points'];
+      $previous_levels_numerical = [];
       foreach ($syllabus['previous_levels_identifiers'] as $previous_level_identifier) {
         $previous_level_points = NULL;
         if (isset($syllabus_identifier_map[$previous_level_identifier])) {
           $previous_level_id = $syllabus_identifier_map[$previous_level_identifier];
-          if (isset($map_by_syllabus_id[$previous_level_identifier])) {
-            $previous_level_points = $map_by_syllabus_id[$previous_level_identifier]['points'] ?? 0;
+          if (isset($map_by_syllabus_id[$previous_level_id])) {
+            $previous_level_points = $map_by_syllabus_id[$previous_level_id]['points'] ?? 0;
+
+            if (!empty($map_by_syllabus_id[$previous_level_id]['level_numerical'])) {
+              $previous_levels_numerical[] = $map_by_syllabus_id[$previous_level_id]['level_numerical'];
+            }
           }
         }
 
@@ -164,6 +182,17 @@ class SyllabusService implements SyllabusServiceInterface {
               continue;
             }
             $previous_level_points = $course_data['points'] ?? 0;
+
+
+            // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
+            if (preg_match('/\d+[a-c]?$/i', $course_data['label'] ?? '')) {
+              // Set level numerical to [number] or [number]a, [number]b, [number]c.
+              $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $course_data['label'] ?? '');
+              $level_numerical = str_replace($without_level_numerical, '', $course_data['label'] ?? '');
+
+              $previous_levels_numerical[] = $level_numerical;
+            }
+
             break;
           }
         }
@@ -173,6 +202,7 @@ class SyllabusService implements SyllabusServiceInterface {
         }
       }
       $map_by_syllabus_id[$syllabus_id]['aggregated_points'] = $aggregated_points;
+      $map_by_syllabus_id[$syllabus_id]['previous_levels_numerical'] = $previous_levels_numerical;
     }
 
     $this->lookup[$cid_by_syllabus_id] = $map_by_syllabus_id;
@@ -197,6 +227,12 @@ class SyllabusService implements SyllabusServiceInterface {
       }
     }
     return array_unique(array_values($final_list));
+  }
+
+  public function getSyllabusInfo(int $syllabus_id): array {
+    $this->warmUpMap();
+    $map = $this->lookup['syllabus_id_map'] ?? [];
+    return $map[$syllabus_id] ?? [];
   }
 
   /**
@@ -226,7 +262,7 @@ class SyllabusService implements SyllabusServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSyllabusLabelsInOrder(?array $syllabus_ids = NULL): array {
+  public function getSyllabusLabelsInOrder(?array $syllabus_ids = NULL, bool $use_school_type_suffix = false): array {
     $this->warmUpMap();
     $map = $this->lookup['syllabus_id_map'] ?? [];
 
@@ -236,6 +272,9 @@ class SyllabusService implements SyllabusServiceInterface {
       $syllabus_id = $syllabus_ids[0];
       if (isset($map[$syllabus_id])) {
         $names[$syllabus_id] = $map[$syllabus_id]['label'];
+        if ($use_school_type_suffix) {
+          $names[$syllabus_id] .= ' | ' . $map[$syllabus_id]['school_type_short'];
+        }
       }
       return $names;
     }
@@ -249,6 +288,12 @@ class SyllabusService implements SyllabusServiceInterface {
         continue;
       }
       $names[$syllabus_id] = $data['label'];
+    }
+
+    if ($use_school_type_suffix) {
+      foreach ($names as $syllabus_id => $name) {
+        $names[$syllabus_id] .= ' | ' . $map[$syllabus_id]['school_type_short'];
+      }
     }
 
     return $names;

@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\simple_school_reports_grade_support\GradeSigningInterface;
 use Drupal\user\EntityOwnerTrait;
 
@@ -75,8 +76,28 @@ final class GradeSigning extends ContentEntityBase implements GradeSigningInterf
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function isSigned(): bool {
     return !!$this->get('signing')->target_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDocumentId(): string {
+    $id = $this->id();
+    if (!$id) {
+      throw new \RuntimeException('Cannot get document id for an unsaved grade signing.');
+    }
+
+    $ssr_id = Settings::get('ssr_id', '');
+    if ($ssr_id === '') {
+      throw new \RuntimeException('Failed to calculate document id, missing ssr id.');
+    }
+
+    return 'BS-' . $ssr_id . '-' . format_with_leading_zeros($id, 6);
   }
 
   /**
@@ -120,6 +141,13 @@ final class GradeSigning extends ContentEntityBase implements GradeSigningInterf
     $fields['signing'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Signing'))
       ->setSetting('target_type', 'ssr_signing')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['signees'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('To sign'))
+      ->setSetting('target_type', 'user')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

@@ -94,4 +94,6 @@ interface FileTemplateServiceInterface {
    * @return string
    */
   public function handleFormattedWordText(string $text, string $format = 'wordsupported_format'): string;
+
+  public function sanitizeFileName(string $file_name, bool $prepare_directory = TRUE, bool $lower_case = TRUE): string;
 }
