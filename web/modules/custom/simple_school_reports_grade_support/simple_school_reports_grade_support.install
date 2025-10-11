@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Grade Support module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+
+/**
+ * Install ssr grade signing signees field.
+ */
+function simple_school_reports_grade_support_update_10001() {
+  $fields = [];
+
+  $fields['signees'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('To sign'))
+    ->setSetting('target_type', 'user')
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_grade_signing', 'simple_school_reports_grade_support', $storage_definition);
+  }
+}
+
+
+/**
+ * Install ssr grade signing fields for easier attest and download.
+ */
+function simple_school_reports_grade_support_update_10002() {
+  $fields = [];
+
+  $fields['signing_complete'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Signing complete'))
+    ->setDefaultValue(FALSE)
+    ->setSetting('on_label', t('Yes'))
+    ->setSetting('on_label', t('No'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['syllabus'] = BaseFieldDefinition::create('entity_reference')
+    ->setRevisionable(FALSE)
+    ->setRequired(TRUE)
+    ->setLabel(t('Syllabus'))
+    ->setSetting('target_type', 'ssr_syllabus')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['export_document_key'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Export document key'))
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_grade_signing', 'simple_school_reports_grade_support', $storage_definition);
+  }
+}

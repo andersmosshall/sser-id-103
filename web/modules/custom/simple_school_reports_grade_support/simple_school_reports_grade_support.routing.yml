@@ -37,8 +37,6 @@ simple_school_reports_grade_support.grade_registration_types:
     _title: 'Grade registration'
   requirements:
     _permission: 'administer simple school reports settings'
-  options:
-    _admin_route: TRUE
 
 simple_school_reports_grade_support.student_grade_statistics:
   path: '/user/{user}/grade-statistics'
@@ -51,3 +49,23 @@ simple_school_reports_grade_support.student_grade_statistics:
     parameters:
       user:
         type: 'entity:user'
+
+simple_school_reports_grade_support.ssr_attest_grade_signing_multiple:
+  path: '/grade-registration/attest-grade-signing/multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\AttestGradeSigningMultipleForm'
+    _title: 'Attest grade signing'
+  requirements:
+    _permission: 'administer simple school reports settings'
+
+simple_school_reports_grade_support.ssr_attest_grade_signing:
+  path: '/grade-registration/attest-grade-signing/{ssr_grade_signing}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\AttestGradeSigningForm'
+    _title: 'Attest grade signing'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    parameters:
+      ssr_grade_signing:
+        type: 'entity:ssr_grade_signing'

@@ -348,7 +348,7 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
     $fields['syllabus'] = BaseFieldDefinition::create('entity_reference')
       ->setRevisionable(FALSE)
       ->setRequired(TRUE)
-      ->setLabel(t('Student'))
+      ->setLabel(t('Syllabus'))
       ->setSetting('target_type', 'ssr_syllabus')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);

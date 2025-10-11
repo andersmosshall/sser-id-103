@@ -285,6 +285,7 @@ class TermService implements TermServiceInterface {
       return [
         'term_start' => $default_school_year['start'],
         'term_end' => $term_end,
+        'arbitrary_term_data' => $date,
         'school_year' => $default_school_year['start']->format('Y'),
         'semester' => self::SEMESTER_HT,
         'semester_name' => 'HT' . $default_school_year['start']->format('Y'),
@@ -295,6 +296,7 @@ class TermService implements TermServiceInterface {
     return [
       'term_start' => $default_school_year['term_switch'],
       'term_end' => $default_school_year['end'],
+      'arbitrary_term_data' => $date,
       'school_year' => $default_school_year['end']->format('Y'),
       'semester' => self::SEMESTER_VT,
       'semester_name' => 'VT' . $default_school_year['end']->format('Y'),

@@ -1,0 +1,11 @@
+uuid: 84dd12f9-185c-4ce0-adeb-983377e720aa
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: ssr_attest_grade_signing
+label: 'Attest signing documents'
+type: ssr_grade_signing
+plugin: ssr_attest_grade_signing
+configuration: {  }

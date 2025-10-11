@@ -24,6 +24,7 @@ dependencies:
     - simple_school_reports_dnp_support
     - simple_school_reports_entities
     - simple_school_reports_examinations_support
+    - simple_school_reports_grade_support
     - simple_school_reports_module_info
     - simple_school_reports_schema_support
     - taxonomy
@@ -47,6 +48,8 @@ permissions:
   - 'create school week'
   - 'create school_week_deviation'
   - 'create ssr_assessment_group'
+  - 'create ssr_grade_reg_course'
+  - 'create ssr_grade_reg_round'
   - 'create ssr_schema_entry'
   - 'create ssr_school_class'
   - 'create terms in extra_adaptations'
@@ -64,6 +67,9 @@ permissions:
   - 'delete school week'
   - 'delete school_week_deviation'
   - 'delete ssr_assessment_group'
+  - 'delete ssr_grade_reg_course'
+  - 'delete ssr_grade_reg_round'
+  - 'delete ssr_grade_signing'
   - 'delete ssr_schema_entry'
   - 'delete ssr_school_class'
   - 'delete term revisions in extra_adaptations'
@@ -75,6 +81,8 @@ permissions:
   - 'edit dnp_prov_test_settings'
   - 'edit school week'
   - 'edit school_week_deviation'
+  - 'edit ssr_grade_reg_course'
+  - 'edit ssr_grade_reg_round'
   - 'edit ssr_schema_entry'
   - 'edit ssr_school_class'
   - 'edit terms in extra_adaptations'
@@ -92,6 +100,7 @@ permissions:
   - 'view protected personal data'
   - 'view school week'
   - 'view ssr_assessment_group'
+  - 'view ssr_grade_reg_round'
   - 'view ssr_module_info price'
   - 'view ssr_schema_entry'
   - 'view ssr_student_leave_application'
