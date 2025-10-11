@@ -1942,9 +1942,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $cols_to_add = 0;
     }
 
-    // TEMP!!!!
-    $cols_to_add = 5;
-
     if ($cols_to_add > 0) {
       $excel_sheet->insertNewColumnBeforeByIndex($subject_col_to_copy, $cols_to_add);
     }
@@ -2176,7 +2173,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         $file_name .= ' mfl';
       }
       $file_name .= ' ' . $grade_signing->getDocumentId();
-      $context['ssr_document_context']['file_name'] = 'betygskatalog' . DIRECTORY_SEPARATOR . $file_name . '.xlsx';
+      $context['ssr_document_context']['file_name'] = 'betygskatalog' . DIRECTORY_SEPARATOR . 'signering_' . $file_name . '.xlsx';
       $this->saveSpreadsheet($spreadsheet, $grader, 'signering', $context);
     }
     catch (\Exception $e) {
@@ -2284,7 +2281,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     $name_suffixes[] = $group_internal_id;
     $file_name .= ' ' . implode(' - ', array_values($name_suffixes));
 
-    $context['ssr_document_context']['file_name'] = 'betygskatalog' . DIRECTORY_SEPARATOR . $file_name . '.xlsx';
+    $context['ssr_document_context']['file_name'] = 'betygskatalog' . DIRECTORY_SEPARATOR . 'betygskatalog_' . $file_name . '.xlsx';
 
     /** @var \Drupal\user\UserInterface $current_user */
     $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser()->id());
