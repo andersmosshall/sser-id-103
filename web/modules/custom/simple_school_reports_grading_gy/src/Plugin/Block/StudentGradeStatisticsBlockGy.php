@@ -91,13 +91,17 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
       return [];
     }
 
+    $school_type_versions = SchoolTypeHelper::getSchoolTypeVersions('GY');
+
     $query = $this->connection->select('ssr_grade_snapshot__grades', 'gsg');
     $query->innerJoin('ssr_grade_revision', 'gr', 'gsg.grades_target_revision_id = gr.revision_id');
     $query->innerJoin('ssr_grade', 'g', 'gr.revision_id = g.revision_id');
     $query->innerJoin('ssr_grade_snapshot', 'gs', 'gsg.entity_id = gs.id');
     $query->innerJoin('ssr_grade_snapshot_period_field_data', 'p', 'gs.grade_snapshot_period = p.id');
+    $query->innerJoin('ssr_grade_snapshot_period__school_type_versioned', 'stv', 'p.id = stv.entity_id');
     $query->condition('g.syllabus', $syllabus_ids, 'IN');
     $query->condition('p.status', 1);
+    $query->condition('stv.school_type_versioned_value', $school_type_versions, 'IN');
     $query->condition('gs.student', $user->id());
     $query->orderBy('p.period_index', 'DESC');
     $query->fields('gs', ['id']);

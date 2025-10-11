@@ -72,6 +72,10 @@ class GradeService implements GradeServiceInterface {
       $syllabus_ids = $this->syllabusService->getSyllabusAssociations($syllabus_ids);
     }
 
+    if (is_array($syllabus_ids) && count($syllabus_ids) === 0) {
+      return [];
+    }
+
     $query = $this->connection->select('ssr_grade', 'g')
       ->condition('g.student', $student_ids, 'IN')
       ->fields('g', ['id', 'revision_id'])

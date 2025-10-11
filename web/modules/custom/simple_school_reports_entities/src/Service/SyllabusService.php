@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 /**
  * Support methods for syllabus stuff.
@@ -360,5 +361,28 @@ class SyllabusService implements SyllabusServiceInterface {
     $map = $this->lookup['syllabus_id_map'] ?? [];
 
     return !empty($map[$syllabus_id]['use_diploma_project']);
+  }
+
+  public function getSyllabusIdsFromSchoolTypes(array $school_type_versions): array {
+    $this->warmUpMap();
+    $map = $this->lookup['syllabus_id_map'] ?? [];
+    $keyed_school_type_versions = [];
+    $school_types = SchoolTypeHelper::getSchoolTypes();
+    foreach ($school_type_versions as $school_type_version) {
+      $keyed_school_type_versions[$school_type_version] = $school_type_version;
+      if (in_array($school_type_version, $school_types)) {
+        $extracted_school_type_versions = SchoolTypeHelper::getSchoolTypeVersions($school_type_version);
+        foreach ($extracted_school_type_versions as $extracted_school_type_version) {
+          $keyed_school_type_versions[$extracted_school_type_version] = $extracted_school_type_version;
+        }
+      }
+    }
+    $syllabus_ids = [];
+    foreach ($map as $syllabus_id => $data) {
+      if (in_array($data['school_type_short'], $keyed_school_type_versions)) {
+        $syllabus_ids[] = $syllabus_id;
+      }
+    }
+    return $syllabus_ids;
   }
 }

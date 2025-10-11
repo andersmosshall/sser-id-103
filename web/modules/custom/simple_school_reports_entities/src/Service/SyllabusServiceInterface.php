@@ -74,4 +74,12 @@ interface SyllabusServiceInterface {
    */
   public function useDiplomaProject(int $syllabus_id): bool;
 
+  /**
+   * @param array $school_type_versions
+   *   May be school types or school type versions.
+   *
+   * @return array
+   */
+  public function getSyllabusIdsFromSchoolTypes(array $school_type_versions): array;
+
 }

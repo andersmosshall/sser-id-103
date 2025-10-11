@@ -7,6 +7,7 @@
 
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 
 /**
  * Install ssr grade signing signees field.
@@ -59,5 +60,39 @@ function simple_school_reports_grade_support_update_10002() {
   foreach ($fields as $field_name => $storage_definition) {
     \Drupal::entityDefinitionUpdateManager()
       ->installFieldStorageDefinition($field_name, 'ssr_grade_signing', 'simple_school_reports_grade_support', $storage_definition);
+  }
+}
+
+/**
+ * Install ssr grade period fields for publishing per school type.
+ */
+function simple_school_reports_grade_support_update_10003() {
+  $fields = [];
+
+  $fields['school_type_versioned'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('School type'))
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_grade_snapshot_period', 'simple_school_reports_grade_support', $storage_definition);
+  }
+
+  // At this point in time only gy snapshot period exists. Update all of those.
+  $storage = \Drupal::entityTypeManager()->getStorage('ssr_grade_snapshot_period');
+  $grade_snapshot_period_ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('id', 0, '>')
+    ->execute();
+  if (empty($grade_snapshot_period_ids)) {
+    return;
+  }
+  $grade_snapshot_periods = $storage->loadMultiple($grade_snapshot_period_ids);
+  foreach ($grade_snapshot_periods as $grade_snapshot_period) {
+    $grade_snapshot_period->set('school_type_versioned', SchoolTypeHelper::getSchoolTypeVersions('GY'));
+    $grade_snapshot_period->save();
   }
 }

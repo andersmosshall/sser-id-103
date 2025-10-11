@@ -162,6 +162,7 @@ permissions:
   - 'edit school_week_deviation'
   - 'edit ssr_grade_reg_course'
   - 'edit ssr_grade_reg_round'
+  - 'edit ssr_grade_snapshot_period'
   - 'edit ssr_schema_entry'
   - 'edit ssr_school_class'
   - 'edit terms in extra_adaptations'
