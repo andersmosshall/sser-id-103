@@ -45,6 +45,7 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
     protected GradeSnapshotServiceInterface $gradeSnapshotService,
     protected Connection $connection,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected ?AccountInterface $currentUser = NULL,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -64,6 +65,7 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
       $container->get('simple_school_reports_grade_support.grade_snapshot_service'),
       $container->get('database'),
       $container->get('entity_type.manager'),
+      $container->get('current_user'),
     );
   }
 
@@ -73,6 +75,18 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
   protected function getSyllabusIds(): array {
     $school_types = SchoolTypeHelper::getSchoolTypeVersions('GY');
     return $this->gradableCourseService->getGradableSyllabusIds($school_types);
+  }
+
+  protected function getTableHeader(): array {
+    return [
+      'subject' => $this->t('Subject'),
+      'course_code' => $this->t('Course code'),
+      'points' => $this->t('Points'),
+      'levels' => $this->t('Levels'),
+      'date' => $this->t('Date'),
+      'grade' => $this->t('Grade'),
+      'handle' => '',
+    ];
   }
 
   protected function getSnapshotLimit(): int {
@@ -125,13 +139,20 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
     return $this->entityTypeManager->getStorage('ssr_grade_snapshot')->loadMultiple($snapshot_ids);
   }
 
-  protected function buildTable(GradeSnapshotInterface $snapshot): array {
-    $student = $this->routeMatch->getParameter('user');
+  protected function buildTable(GradeSnapshotInterface $snapshot, bool $link_to_edit = FALSE): array {
+    $student_id = $snapshot->get('student')->target_id;
+    if ($link_to_edit && !$this->currentUser->hasPermission('administer simple school reports settings')) {
+      $link_to_edit = FALSE;
+    }
+
+    $cache = new CacheableMetadata();
+    $cache->addCacheContexts(['user:permissions']);
 
     $build = [];
+    $cache->applyTo($build);
 
     /** @var \Drupal\simple_school_reports_grade_support\GradeSnapshotPeriodInterface|null $snapshot_period */
-    $snapshot_period = $snapshot?->get('grade_snapshot_period')->entity;
+    $snapshot_period = $snapshot->get('grade_snapshot_period')->entity;
 
     $build['label'] = [
       '#type' => 'html_tag',
@@ -139,15 +160,11 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
       '#value' => $snapshot_period?->label() ?? $this->t('Unknown term'),
     ];
 
+    $table_header = $this->getTableHeader();
+
     $build['table'] = [
       '#type' => 'table',
-      '#header' => [
-        'subject' => $this->t('Subject'),
-        'course_code' => $this->t('Course code'),
-        'points' => $this->t('Points'),
-        'date' => $this->t('Date'),
-        'grade' => $this->t('Grade'),
-      ],
+      '#header' => $table_header,
       '#rows' => [],
       '#empty' => $this->t('There are no grades to be shown yet.'),
       '#attributes' => [
@@ -168,7 +185,7 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
       );
     }
 
-    $data = $this->gradeService->parseGradesFromReferences($grade_references)[$student->id()] ?? [];
+    $data = $this->gradeService->parseGradesFromReferences($grade_references)[$student_id] ?? [];
 
     $has_points = FALSE;
 
@@ -191,14 +208,37 @@ class StudentGradeStatisticsBlockGy extends BlockBase implements ContainerFactor
         $has_points = TRUE;
       }
 
+      $levels = '';
+
+      $row_data = [];
+      foreach ($table_header as $key => $header) {
+        switch ($key) {
+          case 'subject':
+            $row_data[$key] = $syllabus_label;
+            break;
+          case 'course_code':
+            $row_data[$key] = $course_code;
+            break;
+          case 'points':
+            $row_data[$key] = $points;
+            break;
+          case 'levels':
+            $row_data[$key] = $levels;
+            break;
+          case 'date':
+            $row_data[$key] = $date;
+            break;
+          case 'grade':
+            $row_data[$key] = $grade;
+            break;
+          case 'handle':
+            $row_data[$key] = '';
+            break;
+        }
+      }
+
       $row = [];
-      $row['data'] = [
-        $syllabus_label,
-        $course_code,
-        $points,
-        $date,
-        $grade,
-      ];
+      $row['data'] = $row_data;
       $row['class'] = [
         'student-grade-statistics-table--row',
       ];
