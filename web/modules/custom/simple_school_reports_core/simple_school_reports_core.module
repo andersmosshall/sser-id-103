@@ -166,6 +166,17 @@ function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_
       ];
       $form['#validate'][] = 'simple_school_reports_core_form_ssr_calendar_event_bulk_form_modifier';
     }
+
+    if (isset($view->field['ssr_grade_signing_bulk_form'])) {
+      $form['#attached']['library'][] = 'simple_school_reports_core/bulk_form';
+      $form['override_id_list'] = [
+        '#type' => 'hidden',
+        '#attributes' => [
+          'data-override-id-list' => TRUE,
+        ],
+      ];
+      $form['#validate'][] = 'simple_school_reports_core_form_ssr_grade_signing_bulk_form_modifier';
+    }
   }
 
   if ($form_id === 'node_course_edit_form') {
@@ -642,7 +653,7 @@ function simple_school_reports_core_views_post_execute(ViewExecutable $view) {
     $view->element['#total_uid_list'] = $uids;
   }
 
-  if (isset($view->field['ssr_calendar_event_bulk_form'])) {
+  if (isset($view->field['ssr_calendar_event_bulk_form']) || isset($view->field['ssr_grade_signing_bulk_form'])) {
     /** @var \Drupal\mysql\Driver\Database\mysql\Select $count_query */
     $count_query = clone $view->build_info['count_query'];
     $results = $count_query->execute();
@@ -743,6 +754,39 @@ function simple_school_reports_core_form_ssr_calendar_event_bulk_form_modifier($
         }
 
         $user_input['ssr_calendar_event_bulk_form'] = $bulk_form;
+        $form_state->setUserInput($user_input);
+      }
+    }
+  }
+}
+
+function simple_school_reports_core_form_ssr_grade_signing_bulk_form_modifier($form, FormStateInterface $form_state) {
+  if (empty($form_state->getErrors()) && $form_state->get('step') == 'views_form_views_form') {
+    $user_input = $form_state->getUserInput();
+    if (!empty($user_input['override_id_list'])) {
+      $ids = json_decode($user_input['override_id_list']);
+      if (is_array($ids) && !empty($ids)) {
+        $bulk_form = [];
+
+        $query = \Drupal::database()->select('ssr_grade_signing', 'gs');
+        $query->condition('gs.id', $ids, 'IN')
+          ->fields('gs', ['id'])
+          ->orderBy('gs.created', 'DESC')
+          ->execute();
+
+        $results = $query->execute();
+        foreach ($results as $result) {
+          if (isset($result->id)) {
+            $key_parts = [
+              'und',
+              $result->id,
+            ];
+            $key = json_encode($key_parts);
+            $bulk_form[] = base64_encode($key);
+          }
+        }
+
+        $user_input['ssr_grade_signing_bulk_form'] = $bulk_form;
         $form_state->setUserInput($user_input);
       }
     }
@@ -1851,7 +1895,7 @@ function ssr_tmp_ssn_check() {
 
 }
 
-function simple_school_reports_core_character_normalise_word(string $word): string {
+function simple_school_reports_core_character_normalise_word(string $word, array $extended = [], bool $strip_non_characters = TRUE): string {
   $charMap = [
     'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'AE',
     'Ç' => 'C',
@@ -1870,8 +1914,13 @@ function simple_school_reports_core_character_normalise_word(string $word): stri
     'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u',
     'ý' => 'y', 'ÿ' => 'y'
   ];
+
+  $charMap += $extended;
+
   $normalized_word = strtr($word, $charMap);
-  $normalized_word = preg_replace('/[^A-Za-z]/', '', $normalized_word);
+  if ($strip_non_characters) {
+    $normalized_word = preg_replace('/[^A-Za-z]/', '', $normalized_word);
+  }
   return $normalized_word;
 }
 
@@ -2002,4 +2051,12 @@ function simple_school_reports_core_deploy() {
   $dispatcher = \Drupal::service('event_dispatcher');
   $event = new \Drupal\simple_school_reports_core\Events\SsrPostDeployEvent();
   $dispatcher->dispatch($event, \Drupal\simple_school_reports_core\Events\SsrCoreEvents::SSR_POST_DEPLOY);
+}
+
+function format_with_leading_zeros(int|string $number, $total_digits) {
+  $number_str = (string) $number;
+  if (strlen($number_str) < $total_digits) {
+    return str_pad($number_str, $total_digits, '0', STR_PAD_LEFT);
+  }
+  return $number_str;
 }

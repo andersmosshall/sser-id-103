@@ -2,13 +2,13 @@
 
 namespace Drupal\simple_school_reports_core\Form;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_entities\SsrSigningInterface;
@@ -28,6 +28,7 @@ abstract class ConfirmWithSigningFormBase extends ConfirmFormBase {
     protected UuidInterface $uuidService,
     protected AccountInterface $currentUser,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected PrivateTempStoreFactory $tempStoreFactory,
   ) {}
 
 
@@ -41,6 +42,7 @@ abstract class ConfirmWithSigningFormBase extends ConfirmFormBase {
       $container->get('uuid'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
+      $container->get('tempstore.private'),
     );
   }
 

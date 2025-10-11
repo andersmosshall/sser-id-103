@@ -87,10 +87,10 @@ class ProgrammeService implements ProgrammeServiceInterface {
 
     if (!empty($uids)) {
       $query = $this->database->select('user__field_programme', 'up');
-      $query->innerJoin('ssr_school_programme_field_data', 'c', 'up.field_programme_target_id = c.id');
+      $query->innerJoin('ssr_school_programme_field_data', 'p', 'up.field_programme_target_id = p.id');
       $query->condition('up.entity_id', array_values($uids), 'IN');
-      $query->condition('c.status', 1);
-      $query->fields('c', ['id']);
+      $query->condition('p.status', 1);
+      $query->fields('p', ['id']);
       $results = $query->execute();
 
       foreach ($results as $result) {
@@ -106,6 +106,10 @@ class ProgrammeService implements ProgrammeServiceInterface {
    * {@inheritdoc}
    */
   public function getStudentProgrammeId(string $student_id): ?string {
+    return $this->getProgrammeIdsInUse([$student_id])[$student_id] ?? NULL;
+  }
+
+  public function getProgrammeIdsInUse(): array {
     $cid = 'programmes_map';
     if (is_array($this->lookup[$cid] ?? NULL)) {
       $map = $this->lookup[$cid];
@@ -114,12 +118,14 @@ class ProgrammeService implements ProgrammeServiceInterface {
       $map = [];
       if (!$this->moduleEnabled()) {
         $this->lookup[$cid] = [];
-        return NULL;
+        return [];
       }
 
-      $results = $this->database->select('user__field_programme', 'up')
-        ->fields('up', ['entity_id', 'field_programme_target_id'])
-        ->execute();
+      $query = $this->database->select('user__field_programme', 'up');
+      $query->innerJoin('ssr_programme_field_data', 'p', 'up.field_programme_target_id = p.id');
+      $query->fields('up', ['entity_id', 'field_programme_target_id']);
+      $query->orderBy('p.label', 'ASC');
+      $results = $query->execute();
 
       foreach ($results as $result) {
         $map[$result->entity_id] = $result->field_programme_target_id;
@@ -128,7 +134,18 @@ class ProgrammeService implements ProgrammeServiceInterface {
       $this->lookup[$cid] = $map;
     }
 
-    return $map[$student_id] ?? NULL;
+    return $map;
+  }
+
+  public function getProgrammeIdsInUseBy(array $student_ids): array {
+    $map = $this->getProgrammeIdsInUse();
+    $final_map = [];
+    foreach ($student_ids as $student_id) {
+      if (isset($map[$student_id])) {
+        $final_map[$student_id] = $map[$student_id];
+      }
+    }
+    return $final_map;
   }
 
   /**

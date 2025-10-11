@@ -598,8 +598,6 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         '#type' => 'container',
       ];
 
-
-      // TODO: Handle diploma project label/description.
       if ($this->syllabusService->useDiplomaProject($syllabus_id)) {
         $form['grade_registration'][$student_id]['student']['grade_registration']['diploma_project_wrapper'] = [
           '#type' => 'container',

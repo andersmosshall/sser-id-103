@@ -22,6 +22,7 @@ dependencies:
     - simple_school_reports_core
     - simple_school_reports_entities
     - simple_school_reports_examinations_support
+    - simple_school_reports_grade_support
     - simple_school_reports_schema_support
     - taxonomy
     - views_custom_permissions
@@ -63,6 +64,7 @@ permissions:
   - 'use text format wordsupported_format'
   - 'view school week'
   - 'view ssr_assessment_group'
+  - 'view ssr_grade_reg_round'
   - 'view ssr_schema_entry'
   - 'view ssr_student_leave_application'
   - 'view user email addresses'

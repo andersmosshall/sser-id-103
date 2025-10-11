@@ -13,6 +13,24 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 
+/**
+ * Implements hook_form_alter().
+ */
+function simple_school_reports_grade_support_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    /** @var \Drupal\views\Entity\View $view */
+    if ($view = $form_state->get('view')) {
+      if ($view->id() === 'ssr_grade_sign_attest') {
+        $options = [
+          TRUE => t('Yes'),
+          FALSE => t('No'),
+        ];
+        $form['signing_complete']['#options'] = $options;
+      }
+    }
+  }
+}
+
 function simple_school_reports_grade_support_correction_types(): array {
   return [
     GradeInterface::CORRECTION_TYPE_CORRECTED => t('Corrected'),
@@ -255,6 +273,18 @@ function simple_school_reports_grade_support_entity_operation_alter(array &$oper
   if ($entity->getEntityTypeId() === 'ssr_grade_reg_course') {
     $operations = [];
   }
+
+  if ($entity->getEntityTypeId() === 'ssr_grade_signing') {
+    if (!$entity->get('signing_complete')->value) {
+      $operations['attest'] = [
+        'title' => t('Attest'),
+        'url' => Url::fromRoute('simple_school_reports_grade_support.ssr_attest_grade_signing', ['ssr_grade_signing' => $entity->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
+        'weight' => -99,
+      ];
+    }
+
+
+  }
 }
 
 /**
@@ -263,5 +293,43 @@ function simple_school_reports_grade_support_entity_operation_alter(array &$oper
 function simple_school_reports_grade_support_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
   if ($view->id() === 'courses_to_grade') {
     $view->element['#cache']['contexts'][] = 'user';
+  }
+  if ($view->id() === 'ssr_grade_sign_attest') {
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_grade_support_views_data_alter(array &$data) {
+  if (isset($data['ssr_grade_signing'])) {
+    $data['ssr_grade_signing']['ssr_grade_signing_bulk_form'] = [
+      'title' => t('Grade signing operations bulk form'),
+      'help' => t('Add a form element that lets you run operations on multiple grade signings.'),
+      'field' => [
+        'id' => 'ssr_grade_signing_bulk_form',
+      ],
+    ];
+  }
+
+  if (isset($data['ssr_grade_signing'])) {
+    $data['ssr_grade_signing']['ssr_grade_signing_document_id'] = [
+      'title' => t('Document id'),
+      'help' => t('Document id'),
+      'field' => [
+        'id' => 'ssr_grade_signing_document_id',
+      ],
+    ];
+  }
+
+  if (isset($data['ssr_grade_reg_round_field_data'])) {
+    $data['ssr_grade_reg_round_field_data']['ssr_grade_reg_round_status_per_user'] = [
+      'title' => t('Grade registration round status per user'),
+      'help' => t('Grade registration round status per user'),
+      'field' => [
+        'id' => 'ssr_grade_reg_round_status_per_user',
+      ],
+    ];
   }
 }

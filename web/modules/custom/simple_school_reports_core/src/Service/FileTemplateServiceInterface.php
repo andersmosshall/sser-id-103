@@ -85,7 +85,7 @@ interface FileTemplateServiceInterface {
    *
    * @return bool
    */
-  public function doZip(string $source_dir, string $destination_dir, string $file_name): bool;
+  public function doZip(string $source_dir, string $destination_dir, string $file_name, bool $destination_prepared = FALSE): bool;
 
   /**
    * @param string $text
@@ -94,4 +94,6 @@ interface FileTemplateServiceInterface {
    * @return string
    */
   public function handleFormattedWordText(string $text, string $format = 'wordsupported_format'): string;
+
+  public function sanitizeFileName(string $file_name, bool $prepare_directory = TRUE, bool $lower_case = TRUE): string;
 }

@@ -13,4 +13,23 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface GradeSigningInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  /**
+   * @return bool
+   */
+  public function isSigned(): bool;
+
+  /**
+   * @return string
+   *
+   * @throws \RuntimeException
+   */
+  public function getDocumentId(): string;
+
+  /**
+   * @return string
+   *
+   * @throws \RuntimeException
+   */
+  public function getShortSummary(): string;
+
 }

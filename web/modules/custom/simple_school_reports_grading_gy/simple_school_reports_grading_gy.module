@@ -62,7 +62,7 @@ function simple_school_reports_grading_gy_entity_operation_alter(array &$operati
         return;
       }
 
-      if ($course->access('register_course_grades')) {
+      if ($course->access('register_course_grades_gy')) {
         $operations['register_grades'] = [
           'title' => t('Register grades'),
           'url' => Url::fromRoute('simple_school_reports_grading_gy.register_course_grades', ['node' => $course->id()], ['query' => ['destination' => \Drupal::service('path.current')->getPath()]]),
@@ -70,7 +70,7 @@ function simple_school_reports_grading_gy_entity_operation_alter(array &$operati
         ];
       }
 
-      if ($course->access('view_course_grades')) {
+      if ($course->access('view_course_grades_gy')) {
         $operations['view_grades'] = [
           'title' => t('View grades'),
           'url' => Url::fromRoute('simple_school_reports_grading_gy.view_course_grades', ['node' => $course->id()]),
@@ -110,7 +110,7 @@ function simple_school_reports_grading_gy_ssr_local_actions_alter(array &$local_
         ];
       }
 
-      $access_unlock_course_grades = $node->access('register_course_grades_gy', NULL, TRUE);
+      $access_unlock_course_grades = $node->access('unlock_register_course_grades_gy', NULL, TRUE);
       $cache->addCacheableDependency($access_reg_course_grades);
       if ($access_unlock_course_grades->isAllowed()) {
         $local_actions['unlock_register_grades'] = [

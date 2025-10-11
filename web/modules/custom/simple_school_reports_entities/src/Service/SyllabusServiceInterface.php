@@ -17,6 +17,8 @@ interface SyllabusServiceInterface {
    */
   public function getSyllabusAssociations(array $syllabus_ids): array;
 
+  public function getSyllabusInfo(int $syllabus_id): array;
+
   /**
    * @param int $syllabus_id
    *

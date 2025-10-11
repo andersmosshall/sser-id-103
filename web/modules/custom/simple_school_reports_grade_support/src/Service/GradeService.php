@@ -32,7 +32,7 @@ class GradeService implements GradeServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getStudentIdsWithGrades(?array $syllabus_ids, $only_active = TRUE): array {
+  public function getStudentIdsWithGrades(?array $syllabus_ids, bool $only_active = TRUE): array {
     if (!empty($syllabus_ids)) {
       $syllabus_ids = $this->syllabusService->getSyllabusAssociations($syllabus_ids);
     }
@@ -41,7 +41,7 @@ class GradeService implements GradeServiceInterface {
     $query->innerJoin('users_field_data', 'u', 'u.uid = g.student');
     $query->innerJoin('user__field_first_name', 'fn', 'fn.entity_id = u.uid');
     $query->innerJoin('user__field_last_name', 'ln', 'ln.entity_id = u.uid');
-    $query->leftJoin('user__field_grade', 'g', 'g.entity_id = u.uid');
+    $query->leftJoin('user__field_grade', 'ug', 'ug.entity_id = u.uid');
 
     if (!empty($syllabus_ids)) {
       $query->condition('g.syllabus', $syllabus_ids, 'IN');
@@ -49,7 +49,7 @@ class GradeService implements GradeServiceInterface {
 
     $results = $query
       ->fields('u', ['uid'])
-      ->orderBy('g.field_grade_value')
+      ->orderBy('ug.field_grade_value')
       ->orderBy('fn.field_first_name_value')
       ->orderBy('ln.field_last_name_value')
       ->execute();
@@ -76,6 +76,36 @@ class GradeService implements GradeServiceInterface {
       ->condition('g.student', $student_ids, 'IN')
       ->fields('g', ['id', 'revision_id'])
       ->orderBy('g.revision_id', 'ASC');
+
+    if (!empty($syllabus_ids)) {
+      $query->condition('g.syllabus', $syllabus_ids, 'IN');
+    }
+
+    $results = $query->execute();
+    $grade_references = [];
+    foreach ($results as $result) {
+      $grade_references[$result->revision_id] = new GradeReference($result->id, $result->revision_id);
+    }
+    return $grade_references;
+  }
+
+  public function getGradeReferencesByRegistrationDate(\DateTime $from, \DateTime $to, array $student_ids, ?array $syllabus_ids = NULL) {
+    if (empty($student_ids)) {
+      return [];
+    }
+
+    if (!empty($syllabus_ids)) {
+      $syllabus_ids = $this->syllabusService->getSyllabusAssociations($syllabus_ids);
+    }
+
+    // TODO correct fetch from correct table.
+    $query = $this->connection->select('ssr_grade_revision', 'gr');
+    $query->innerJoin('ssr_grade', 'g', 'g.id = gr.id');
+    $query->condition('g.student', $student_ids, 'IN')
+      ->condition('gr.registered', $from->getTimestamp(), '>=')
+      ->condition('gr.registered', $to->getTimestamp(), '<=')
+      ->fields('gr', ['id', 'revision_id'])
+      ->orderBy('gr.revision_id', 'ASC');
 
     if (!empty($syllabus_ids)) {
       $query->condition('g.syllabus', $syllabus_ids, 'IN');
@@ -125,6 +155,7 @@ class GradeService implements GradeServiceInterface {
       'exclude_reason',
       'trial',
       'remark',
+      'course',
     ]);
     $query->orderBy('gr.revision_id', 'ASC');
 
@@ -155,6 +186,7 @@ class GradeService implements GradeServiceInterface {
         $result->revision_id,
         $result->student,
         $result->syllabus,
+        $result->course ?? NULL,
         $result->grade ?? NULL,
         $result->main_grader ?? NULL,
         $joint_graders_map[$result->revision_id] ?? [],
@@ -216,9 +248,32 @@ class GradeService implements GradeServiceInterface {
       foreach ($grades as $student_id => $grades_data) {
         foreach ($grades_data as $syllabus_id => $grade_info) {
           $previous_level_ids = $this->syllabusService->getSyllabusPreviousLevelIds($syllabus_id);
-          foreach ($previous_level_ids as $previous_level_id) {
-            if (isset($grades[$student_id][$previous_level_id])) {
-              $grades[$student_id][$previous_level_id]->replaced = TRUE;
+          if (empty($previous_level_ids)) {
+            continue;
+          }
+
+          // If passed, replace previous levels.
+          if ($this->isPassed($grade_info)) {
+            foreach ($previous_level_ids as $previous_level_id) {
+              if (isset($grades[$student_id][$previous_level_id])) {
+                $grades[$student_id][$previous_level_id]->replaced = TRUE;
+              }
+            }
+          }
+          // If not passed, replace current level if any previous is passed.
+          else {
+            $previous_level_passed = FALSE;
+            foreach ($previous_level_ids as $previous_level_id) {
+              if (isset($grades[$student_id][$previous_level_id])) {
+                $previous_grade_info = $grades[$student_id][$previous_level_id];
+                if ($this->isPassed($previous_grade_info)) {
+                  $previous_level_passed = TRUE;
+                  break;
+                }
+              }
+            }
+            if ($previous_level_passed) {
+              $grades[$student_id][$syllabus_id]->replaced = TRUE;
             }
           }
         }
@@ -281,6 +336,24 @@ class GradeService implements GradeServiceInterface {
     return $map[$tid]?->label() ?? NULL;
   }
 
+  protected function getPassedTermIds(): array {
+    $cid = 'grade_passed_term_ids';
+    if (!isset($this->lookup[$cid])) {
+      $passed_tids = [];
+      $vids = array_keys(simple_school_reports_entities_grade_vid_options());
+      $terms = $this->entityTypeManager->getStorage('taxonomy_term')
+        ->loadByProperties(['vid' => $vids]);
+      foreach ($terms as $term) {
+        $merit = $term->get('field_merit')->value;
+        if ($merit >= 10) {
+          $passed_tids[] = $term->id();
+        }
+      }
+      $this->lookup[$cid] = $passed_tids;
+    }
+    return $this->lookup[$cid];
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -294,6 +367,15 @@ class GradeService implements GradeServiceInterface {
     return $map[$syllabus_id] ?? '';
   }
 
+  public function isPassed(GradeInfo $grade_info): bool {
+    $term_id = $grade_info->gradeTid ?? '*';
+    return in_array($term_id, $this->getPassedTermIds());
+  }
+
+  public function hasGrade(GradeInfo $grade_info): bool {
+    return !empty($this->getGradeLabelFromTermId($grade_info->gradeTid ?? '*'));
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -305,6 +387,14 @@ class GradeService implements GradeServiceInterface {
 
     $map = $this->syllabusService->getSyllabusLabelsInOrder([$syllabus_id]);
     return $map[$syllabus_id] ?? '';
+  }
+
+  public function getCodes(GradeInfo $grade_info): array {
+    // For now only P (trial) can be resolved.
+    if ($grade_info->trial) {
+      return ['P'];
+    }
+    return [];
   }
 
 }
