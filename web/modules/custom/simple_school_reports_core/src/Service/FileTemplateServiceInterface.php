@@ -85,7 +85,7 @@ interface FileTemplateServiceInterface {
    *
    * @return bool
    */
-  public function doZip(string $source_dir, string $destination_dir, string $file_name): bool;
+  public function doZip(string $source_dir, string $destination_dir, string $file_name, bool $destination_prepared = FALSE): bool;
 
   /**
    * @param string $text

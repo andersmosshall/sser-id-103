@@ -396,8 +396,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         ],
       ];
 
-      $url = Url::fromRoute('<front>');
-      $link = Link::createFromRoute($this->t('here'), '<front>', [])->toString();
+      $school_type = $this->getSchoolType();
+
+      $link = Link::createFromRoute($this->t('here'), 'view.ssr_grade_sign_attest.' . mb_strtolower($school_type), [])->toString();
       $form['signature_documents_settings']['info'] = [
         '#type' => 'html_tag',
         '#tag' => 'p',
@@ -931,7 +932,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
       $template_path = $context['results'][$template_name . '_path'];
       $context['results'][$template_name . '_path'] = $template_path . DIRECTORY_SEPARATOR . $template_name . '.xlsx';
-      $this->fileTemplateService->doZip($working_path, $template_path, $template_name . '.xlsx');
+      $this->fileTemplateService->doZip($working_path, $template_path, $template_name . '.xlsx', TRUE);
       $this->fileSystem->deleteRecursive($working_path);
     }
   }
@@ -1054,8 +1055,12 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
       $student_id = $grade_info->student;
       $main_grader = $grade_info->mainGrader;
-      $users_pre_load[] = $student_id;
-      $users_pre_load[] = $main_grader;
+      if ($student_id) {
+        $users_pre_load[$student_id] = $student_id;
+      }
+      if ($main_grader) {
+        $users_pre_load[$main_grader] = $main_grader;
+      }
 
       if (in_array($student_id, $final_grade_student_ids) && !$grade_info->replaced) {
         /** @var \Drupal\simple_school_reports_grade_support\GradeInterface|null $grade_entity */
@@ -1083,7 +1088,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     }
 
     if (!empty($users_pre_load)) {
-      $this->entityTypeManager->getStorage('user')->loadMultiple($users_pre_load);
+      $this->entityTypeManager->getStorage('user')->loadMultiple(array_values($users_pre_load));
     }
   }
 
@@ -2087,12 +2092,12 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         ];
 
         $signees[$grade_info->mainGrader] = [
-          ['target_id' => $grade_info->mainGrader],
+          'target_id' => $grade_info->mainGrader
         ];
 
         foreach ($grade_info->jointGraders ?? [] as $uid) {
           $signees[$uid] = [
-            ['target_id' => $uid],
+            'target_id' => $uid,
           ];
         }
       }
@@ -2107,6 +2112,8 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         'label' => substr($file_name, 0, 255),
         'status' => 1,
         'signees' => array_values($signees),
+        'export_document_key' => $signing_group_key,
+        'syllabus' => ['target_id' => $syllabus_id ?? 0],
         'langcode' => 'sv',
       ]);
       $grade_signing->set('grades', $grades_to_sign_targets);
@@ -2338,7 +2345,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
       $file_name = 'betyg-export-' . $export_date_suffix . '.zip';
 
-      $result =  $this->fileTemplateService->doZip($source_dir, $destination, $file_name);
+      $result =  $this->fileTemplateService->doZip($source_dir, $destination, $file_name, TRUE);
       if (!$result) {
         $this->messenger()->addError(t('Something went wrong'));
         return;

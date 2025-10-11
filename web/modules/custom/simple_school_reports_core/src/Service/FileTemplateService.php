@@ -226,8 +226,8 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
     return $result;
   }
 
-  public function doZip(string $source_dir, string $destination_dir, string $file_name): bool {
-    if (str_contains($destination_dir, '://')) {
+  public function doZip(string $source_dir, string $destination_dir, string $file_name, bool $destination_prepared = FALSE): bool {
+    if (!$destination_prepared) {
       $destination = 'public://'  . $destination_dir;
       $this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY);
       $destination = $this->fileSystem->realpath($destination) . DIRECTORY_SEPARATOR;

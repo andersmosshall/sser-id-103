@@ -25,4 +25,11 @@ interface GradeSigningInterface extends ContentEntityInterface, EntityOwnerInter
    */
   public function getDocumentId(): string;
 
+  /**
+   * @return string
+   *
+   * @throws \RuntimeException
+   */
+  public function getShortSummary(): string;
+
 }
