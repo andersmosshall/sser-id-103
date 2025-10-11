@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_grade_support\Service;
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Provides an interface defining GradableCourseService.
@@ -64,5 +65,12 @@ interface GradableCourseServiceInterface {
    * @return void
    */
   public function clearLookup(): void;
+
+  /**
+   * @param $grade_round_id
+   *
+   * @return float
+   */
+  public function getGradeRoundStatus(int|string $grade_round_id, ?AccountInterface $user = NULL): float;
 
 }

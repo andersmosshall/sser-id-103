@@ -219,6 +219,78 @@ class GradableCourseService implements GradableCourseServiceInterface {
     return $allowed;
   }
 
+  public function getGradeRoundStatus(int|string $grade_round_id, ?AccountInterface $user = NULL): float {
+    if (empty($grade_round_id)) {
+      return 0;
+    }
+
+    $cid = 'grade_round_statuses';
+    if ($user) {
+      $cid .= ':' . $user->id();
+    }
+
+    if (is_array($this->lookup[$cid] ?? NULL)) {
+      return $this->lookup[$cid][$grade_round_id] ?? 0;
+    }
+
+    $course_ids = [];
+    if ($user->hasPermission('administer simple school reports settings')) {
+      $course_ids = 'all';
+    }
+    else {
+      $course_ids = $this->entityTypeManager->getStorage('node')->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', 'course')
+        ->condition('field_grading_teacher', $user->id())
+        ->execute();
+      $course_ids = array_values($course_ids);
+    }
+
+    if (is_array($course_ids) && empty($course_ids)) {
+      $this->lookup[$cid] = [];
+      return 0;
+    }
+
+    $statuses = [];
+
+    $query = $this->connection->select('ssr_grade_reg_course', 'rc');
+    $query->innerJoin('ssr_grade_reg_round__field_grade_reg_course', 'r', 'r.field_grade_reg_course_target_id = rc.id');
+    $query->innerJoin('ssr_grade_reg_round_field_data', 'rd', 'r.entity_id = rd.id');
+    if (is_array($course_ids)) {
+      $query->condition('rc.course', $course_ids, ['IN']);
+    }
+    $query->fields('rc', ['registration_status']);
+    $query->fields('rd', ['id']);
+
+    $results = $query->execute();
+
+
+    $data = [];
+    foreach ($results as $result) {
+      $round = $result->id;
+      if (!isset($data[$round])) {
+        $data[$round] = [
+          'done' => 0,
+          'total' => 0,
+        ];
+      }
+      $done = $result->registration_status === GradeRegistrationCourseInterface::REGISTRATION_STATUS_DONE;
+      $data[$round]['done'] += $done ? 1 : 0;
+      $data[$round]['total'] += 1;
+    }
+
+    foreach ($data as $round => $status) {
+      if ($status['total'] === 0) {
+        $statuses[$round] = 0;
+        continue;
+      }
+      $statuses[$round] = ($status['done'] / $status['total']) * 100;
+    }
+
+    $this->lookup[$cid] = $statuses;
+    return $this->lookup[$cid][$grade_round_id] ?? 0;
+  }
+
   /**
    * {@inheritdoc}
    */

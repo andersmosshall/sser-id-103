@@ -29,9 +29,23 @@ interface ProgrammeServiceInterface {
   public function getStudentProgrammeId(string $student_id): ?string;
 
   /**
-   * @param bool $include_inactive
+   * @return string[]
+   *   Keyed by student id.
+   */
+  public function getProgrammeIdsInUse(): array;
+
+  /**
+   * @param array $student_ids
    *
    * @return array
+   *   Keyed by student id.
+   */
+  public function getProgrammeIdsInUseBy(array $student_ids): array;
+
+  /**
+   * @param bool $include_inactive
+   *
+   * @return string[]
    */
   public function getProgrammeIds(bool $include_inactive = FALSE): array;
 

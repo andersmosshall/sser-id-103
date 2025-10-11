@@ -22,13 +22,8 @@ final class GradeSigningAccessControlHandler extends EntityAccessControlHandler 
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
-    if ($account->hasPermission($this->entityType->getAdminPermission())) {
-      return AccessResult::allowed()->cachePerPermissions();
-    }
-
     return match($operation) {
       'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_grade_signing'),
-      'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_grade_signing'),
       'delete' => AccessResult::allowedIfHasPermission($account, 'delete ssr_grade_signing'),
       default => AccessResult::neutral(),
     };

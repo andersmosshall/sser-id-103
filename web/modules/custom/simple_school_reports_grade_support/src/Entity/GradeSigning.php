@@ -10,15 +10,18 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_grade_support\GradeSigningInterface;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\user\UserInterface;
 
 /**
- * Defines the gradesigning entity class.
+ * Defines the grade signing entity class.
  *
  * @ContentEntityType(
  *   id = "ssr_grade_signing",
- *   label = @Translation("GradeSigning"),
+ *   label = @Translation("Grade signing"),
  *   label_collection = @Translation("Grade signings"),
  *   label_singular = @Translation("gradesigning"),
  *   label_plural = @Translation("grade signings"),
@@ -63,6 +66,7 @@ final class GradeSigning extends ContentEntityBase implements GradeSigningInterf
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -73,10 +77,42 @@ final class GradeSigning extends ContentEntityBase implements GradeSigningInterf
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    $signing_complete = !empty($this->get('signing')->target_id);
+    $this->set('signing_complete', $signing_complete);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function isSigned(): bool {
     return !!$this->get('signing')->target_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDocumentId(): string {
+    $id = $this->id();
+    if (!$id) {
+      throw new \RuntimeException('Cannot get document id for an unsaved grade signing.');
+    }
+
+    $ssr_id = Settings::get('ssr_id', '');
+    if ($ssr_id === '') {
+      throw new \RuntimeException('Failed to calculate document id, missing ssr id.');
+    }
+
+    return 'BS-' . $ssr_id . '-' . format_with_leading_zeros($id, 6);
+  }
+
+  public function getShortSummary(): string {
+    $signees = $this->get('signees')->referencedEntities();
+    $summary_suffix = '';
+    if (!empty($signees)) {
+      $summary_suffix = ' ' . $this->t('Signed by @signees', ['@signees' => implode(', ', array_map(fn(UserInterface $user) => $user->getDisplayName(), $signees))]);
+    }
+    return $this->getDocumentId() . $summary_suffix;
   }
 
   /**
@@ -123,10 +159,39 @@ final class GradeSigning extends ContentEntityBase implements GradeSigningInterf
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['signees'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('To sign'))
+      ->setSetting('target_type', 'user')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['signing_complete'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Signing complete'))
+      ->setDefaultValue(FALSE)
+      ->setSetting('on_label', t('Yes'))
+      ->setSetting('on_label', t('No'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['grades'] = BaseFieldDefinition::create('entity_reference_revisions')
       ->setLabel(t('Grades'))
       ->setSetting('target_type', 'ssr_grade')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['syllabus'] = BaseFieldDefinition::create('entity_reference')
+      ->setRevisionable(FALSE)
+      ->setRequired(TRUE)
+      ->setLabel(t('Syllabus'))
+      ->setSetting('target_type', 'ssr_syllabus')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['export_document_key'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Export document key'))
+      ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

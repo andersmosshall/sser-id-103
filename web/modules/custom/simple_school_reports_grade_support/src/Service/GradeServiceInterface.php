@@ -16,7 +16,7 @@ interface GradeServiceInterface {
    *
    * @return array
    */
-  public function getStudentIdsWithGrades(?array $syllabus_ids, $only_active = TRUE): array;
+  public function getStudentIdsWithGrades(?array $syllabus_ids, bool $only_active = TRUE): array;
 
   /**
    * @param array $student_ids
@@ -26,6 +26,8 @@ interface GradeServiceInterface {
    *   Keyed by revision id.
    */
   public function getGradeReferences(array $student_ids, ?array $syllabus_ids = NULL): array;
+
+  public function getGradeReferencesByRegistrationDate(\DateTime $from, \DateTime $to, array $student_ids, ?array $syllabus_ids = NULL);
 
   /**
    * Parsed grades.
@@ -76,6 +78,12 @@ interface GradeServiceInterface {
    * @return string
    */
   public function getSyllabusLabel(GradeInfo $grade_info): string;
+
+  public function isPassed(GradeInfo $grade_info): bool;
+
+  public function hasGrade(GradeInfo $grade_info): bool;
+
+  public function getCodes(GradeInfo $grade_info): array;
 
 
 

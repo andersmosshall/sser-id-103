@@ -19,7 +19,7 @@ class UnlockCourseGradeRegistrationFormGy extends UnlockCourseGradeRegistrationF
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'register_course_grades_gy';
+    return 'unlock_register_course_grades_gy';
   }
 
   /**

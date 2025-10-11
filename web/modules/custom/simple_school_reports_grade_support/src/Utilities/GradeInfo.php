@@ -8,6 +8,7 @@ class GradeInfo {
     public int $revisionId,
     public int $student,
     public int $syllabusId,
+    public ?int $courseId,
     public ?int $gradeTid,
     public ?int $mainGrader,
     public array $jointGraders,
