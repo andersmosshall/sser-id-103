@@ -455,15 +455,19 @@ abstract class ImportUsersFormBase extends FormBase {
       ],
     ];
 
+    $school_grades = SchoolGradeHelper::getSchoolGradesMap();
+
     foreach ($users_to_display as $uuid => $values) {
       if (!in_array('student', $values['roles'])) {
         continue;
       }
       unset($users_to_display[$uuid]);
       $display_name = $this->userDisplayName($uuid, $form_state);
+
+
       $form['students_table']['#rows'][$uuid] = [
         'user' => $display_name,
-        'grade' => $values['field_grade'] ?? '-',
+        'grade' => $school_grades[$values['field_grade'] ?? ''] ?? '-',
       ];
 
       if (!empty($values['field_caregivers'])) {

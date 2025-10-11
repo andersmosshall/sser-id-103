@@ -1510,6 +1510,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
           }
         }
       }
+
+      // Auto adjust row height.
+      $excel_sheet->getRowDimension($item_row)->setRowHeight(-1);
       $item_row++;
     }
 
@@ -1933,8 +1936,17 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $excel_sheet->setCellValue($value_cell_id, $info_item['value'] ?? '');
     }
 
+    $needed_cols = 0;
+    foreach ($syllabus_ids as $syllabus_id) {
+      $needed_cols++;
+      $syllabus_info = $this->syllabusService->getSyllabusInfo($syllabus_id);
+      if (!empty($syllabus_info['language_code'])) {
+        $needed_cols++;
+      }
+    }
+
     // Add columns.
-    $cols_to_add = count($syllabus_ids) - 16;
+    $cols_to_add = $needed_cols - 16;
     if (!empty($invalid_absence_key)) {
       $cols_to_add++;
     }
@@ -1988,9 +2000,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $context['ssr_document_context']['cols'][$syllabus_id] = $col;
 
       if (!empty($syllabus_info['language_code'])) {
-        $label = $syllabus_info['subject_label'] ?? $syllabus_info['label'] ?? '-';
-        $excel_sheet->setCellValue($label_cell_id, $label);
-
         $col_index++;
         $col = Coordinate::stringFromColumnIndex($col_index);
         $language_code_cell_id = $col . $label_row;
@@ -2005,8 +2014,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     // Populate invalid absence labels.
     if (!empty($invalid_absence_key)) {
       $col = Coordinate::stringFromColumnIndex($col_index);
-      $label_cell_id = $col . $label_row;
-
       $context['ssr_document_context']['cols']['invalid_absence'] = $col;
       $context['ssr_document_context']['labels']['invalid_absence'] = 'Ogiltig frånvaro';
     }
@@ -2017,7 +2024,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     $context['ssr_document_context']['notes_row'] = $notes_row;
 
     // Setup signer.
-    $excel_sheet->setCellValue($label_cell_id, $info_item['label'] ?? '');
     $excel_sheet->setCellValue('F3', $sign_label);
     $excel_sheet->setCellValue('F4', $sign_name);
 
@@ -2190,6 +2196,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     }
     $catalog_group_key = array_key_first($context['results']['grade_catalog_groups'][$catalog_sub_index]);
     $group_data = $context['results']['grade_catalog_groups'][$catalog_sub_index][$catalog_group_key];
+    $group_internal_id = count($context['results']['grade_catalog_groups'][$catalog_sub_index]);
     unset($context['results']['grade_catalog_groups'][$catalog_sub_index][$catalog_group_key]);
 
     if (empty($group_data['student_ids'])) {
@@ -2197,8 +2204,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     }
 
     $group_name = $group_data['name'] ?? 'Okänd grupp';
-    $group_internal_id = count($context['results']['grade_catalog_groups']) + 1;
-
 
     $form_values = $context['results']['form_values'] ?? [];
 
