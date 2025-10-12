@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
 use Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface;
+use Drupal\simple_school_reports_grade_support\GradeSnapshotInterface;
 
 /**
  * Provides a service for managing grade snapshots.
@@ -91,14 +92,14 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function makeSnapshot(int|string $student_id, array $school_type_versions): void {
+  public function makeSnapshot(int|string $student_id, array $school_type_versions, bool $dry_run = FALSE): ?GradeSnapshotInterface {
     $school_type_versions = $this->normalizeSchoolTypeVersions($school_type_versions);
 
     $snapshot_period_id = $this->getSnapshotPeriodId($school_type_versions);
 
     $student = $this->entityTypeManager->getStorage('user')->load($student_id);
     if (!$student) {
-      return;
+      return NULL;
     }
 
     $identifier = $this->makeSnapshotIdentifier($snapshot_period_id, $student_id);
@@ -134,7 +135,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     sort($new_revision_ids);
 
     if ($new_revision_ids == $current_revision_ids) {
-      return;
+      return $snapshot;
     }
 
     $snapshot->set('identifier', $identifier);
@@ -154,7 +155,12 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
       throw new \RuntimeException('Failed to create grade snapshot for student ' . $student_id . ': ' . Json::encode($violations));
     }
 
+    if ($dry_run) {
+      return $snapshot;
+    }
+
     $snapshot->save();
+    return $snapshot;
   }
 
   /**

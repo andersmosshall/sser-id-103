@@ -228,8 +228,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $student_options = [];
     $users = $this->entityTypeManager->getStorage('user')->loadMultiple($student_ids);
+    /** @var \Drupal\user\UserInterface $user */
     foreach ($users as $user) {
-      $student_options[$user->id()] = $user->label();
+      $student_options[$user->id()] = $user->getDisplayName();
     }
     if (empty($student_options)) {
       throw new AccessDeniedHttpException();
@@ -2095,7 +2096,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         ];
 
         $signees[$grade_info->mainGrader] = [
-          'target_id' => $grade_info->mainGrader
+          'target_id' => $grade_info->mainGrader,
         ];
 
         foreach ($grade_info->jointGraders ?? [] as $uid) {
@@ -2242,7 +2243,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     if ($municipality) {
       $info_items[] = [
         'label' => 'Kommun',
-        'value' => $municipality
+        'value' => $municipality,
       ];
     }
 

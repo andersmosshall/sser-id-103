@@ -27,11 +27,11 @@ use Drupal\simple_school_reports_grade_support\Utilities\GradeReference;
  * Provides a 'StudentGradeStatisticsBlockGy' block.
  *
  * @Block(
- *  id = "student_grade_statistics_block_gy",
- *  admin_label = @Translation("Student grade statistics GY"),
+ *  id = "student_grade_preview_block_gy",
+ *  admin_label = @Translation("Student grade preview GY"),
  * )
  */
-class StudentGradeStatisticsBlockGy extends StudentGradeStatisticsBlockBase implements ContainerFactoryPluginInterface {
+class StudentGradePreviewBlockGy extends StudentGradeStatisticsBlockBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 
@@ -47,9 +47,11 @@ class StudentGradeStatisticsBlockGy extends StudentGradeStatisticsBlockBase impl
     return [
       'subject' => $this->t('Subject'),
       'course_code' => $this->t('Course code'),
+      'levels' => $this->t('Levels'),
       'points' => $this->t('Points'),
       'date' => $this->t('Date'),
       'grade' => $this->t('Grade'),
+      'handle' => ''
     ];
   }
 
@@ -59,6 +61,43 @@ class StudentGradeStatisticsBlockGy extends StudentGradeStatisticsBlockBase impl
 
   protected function getSchoolTypeVersions(): array {
     return SchoolTypeHelper::getSchoolTypeVersions('GY');
+  }
+
+  protected function getSnapshots(UserInterface $user, bool $only_published = TRUE): array {
+    $latest_snapshot = $this->gradeSnapshotService->makeSnapshot($user->id(), $this->getSchoolTypeVersions(), TRUE);
+    if ($latest_snapshot) {
+      return [$latest_snapshot];
+    }
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build(UserInterface $user = NULL) {
+    $build = [];
+
+    if (!$user) {
+      return $build;
+    }
+
+    $snapshots = $this->getSnapshots($user);
+    if (empty($snapshots)) {
+      return $build;
+    }
+
+    foreach (array_values($snapshots) as $key => $snapshot) {
+      $build[$key . '_table'] = $this->buildTable($snapshot, TRUE);
+      unset($build[$key . '_table']['label']);
+
+      if ($key < count($snapshots) - 1) {
+        $build[$key . '_divider'] = [
+          '#markup' => '<hr>',
+        ];
+      }
+    }
+
+    return $build;
   }
 
 }

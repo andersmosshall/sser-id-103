@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_grade_support\Service;
 
 use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_grade_support\Entity\GradeSnapshotPeriod;
+use Drupal\simple_school_reports_grade_support\GradeSnapshotInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -15,7 +16,7 @@ interface GradeSnapshotServiceInterface {
 
   public function getSnapshotPeriodId(array $school_type_versions, ?\DateTime $date = NULL): int|string;
 
-  public function makeSnapshot(int|string $student_id, array $school_type_versions): void;
+  public function makeSnapshot(int|string $student_id, array $school_type_versions, bool $dry_run = FALSE): ?GradeSnapshotInterface;
 
   public function updateSnapshotsForGrade(int|string $old_grade_revision_id, int|string $new_grade_revision_id, string $student_id): void;
 
