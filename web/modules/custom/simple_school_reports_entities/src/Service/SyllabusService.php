@@ -111,9 +111,9 @@ class SyllabusService implements SyllabusServiceInterface {
 
       $level_numerical = NULL;
       // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
-      if (preg_match('/\d+[a-c]?$/i', $result->label ?? '')) {
+      if (preg_match('/\d+[a-c]?\d?$/i', $result->label ?? '')) {
         // Set level numerical to [number] or [number]a, [number]b, [number]c.
-        $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $result->label ?? '');
+        $without_level_numerical = preg_replace('/\d+[a-c]?\d?$/i', '', $result->label ?? '');
         $level_numerical = str_replace($without_level_numerical, '', $result->label ?? '');
       }
 
@@ -131,7 +131,6 @@ class SyllabusService implements SyllabusServiceInterface {
         'previous_levels_identifiers' => $previous_level_identifiers,
         'previous_levels_numerical' => [],
         'points' => is_numeric($result->points) ? (int) $result->points : NULL,
-        'aggregated_points' => is_numeric($result->points) ? (int) $result->points : NULL,
         'language_code' => $result->language_code,
         'associated_syllabuses' => array_unique(array_merge([$result->id], $level_syllabus_ids, $group_for_ids)),
         'use_diploma_project' => $use_diploma_project,
@@ -147,7 +146,6 @@ class SyllabusService implements SyllabusServiceInterface {
       if ($syllabus['points'] === NULL) {
         continue;
       }
-      $aggregated_points = $syllabus['points'];
       $previous_levels_numerical = [];
       foreach ($syllabus['previous_levels_identifiers'] as $previous_level_identifier) {
         $previous_level_points = NULL;
@@ -182,13 +180,12 @@ class SyllabusService implements SyllabusServiceInterface {
             if (!$course_data) {
               continue;
             }
-            $previous_level_points = $course_data['points'] ?? 0;
 
 
             // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
-            if (preg_match('/\d+[a-c]?$/i', $course_data['label'] ?? '')) {
+            if (preg_match('/\d+[a-c]?\d?$/i', $course_data['label'] ?? '')) {
               // Set level numerical to [number] or [number]a, [number]b, [number]c.
-              $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $course_data['label'] ?? '');
+              $without_level_numerical = preg_replace('/\d+[a-c]?\d?$/i', '', $course_data['label'] ?? '');
               $level_numerical = str_replace($without_level_numerical, '', $course_data['label'] ?? '');
 
               $previous_levels_numerical[] = $level_numerical;
@@ -197,12 +194,7 @@ class SyllabusService implements SyllabusServiceInterface {
             break;
           }
         }
-
-        if (is_numeric($previous_level_points)) {
-          $aggregated_points += $previous_level_points;
-        }
       }
-      $map_by_syllabus_id[$syllabus_id]['aggregated_points'] = $aggregated_points;
       $map_by_syllabus_id[$syllabus_id]['previous_levels_numerical'] = $previous_levels_numerical;
     }
 
@@ -339,21 +331,11 @@ class SyllabusService implements SyllabusServiceInterface {
     return $weight_list;
   }
 
-  public function getSyllabusPreviousPoints(int $syllabus_id): array {
+  public function getSyllabusPoints(int $syllabus_id): ?int {
     $this->warmUpMap();
-    $map = $this->lookup['syllabus_id_map'] ?? [];
+    $map = $this->lookup['syllabus_id_map'][$syllabus_id] ?? [];
 
-    $points = NULL;
-    $aggregated_points = NULL;
-
-    if (!empty($map[$syllabus_id])) {
-      $points = $map[$syllabus_id]['points'];
-      $aggregated_points = $map[$syllabus_id]['aggregated_points'];
-    }
-    return [
-      'points' => $points,
-      'aggregated_points' => $aggregated_points,
-    ];
+    return $map['points'] ?? NULL;
   }
 
   public function useDiplomaProject(int $syllabus_id): bool {

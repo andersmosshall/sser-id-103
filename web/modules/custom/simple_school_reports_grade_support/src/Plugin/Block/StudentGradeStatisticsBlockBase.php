@@ -11,6 +11,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
@@ -22,6 +23,7 @@ use Drupal\simple_school_reports_grade_support\Service\GradeSnapshotServiceInter
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\simple_school_reports_grade_support\Utilities\GradeReference;
+use Drupal\Core\Routing\RedirectDestinationTrait;
 
 /**
  * Provides a 'StudentGradeStatisticsBlockBase' block.
@@ -29,6 +31,7 @@ use Drupal\simple_school_reports_grade_support\Utilities\GradeReference;
 abstract class StudentGradeStatisticsBlockBase extends BlockBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
+  use RedirectDestinationTrait;
 
   public function __construct(
     array $configuration,
@@ -204,12 +207,12 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       $syllabus_label = $this->gradeService->getSyllabusLabel($grade_info) ?? $this->t('Unknown course');
       $course_code = $this->gradeService->getCourseCode($grade_info) ?? '';
 
-      $points = $grade_info->aggregatedPoints ?? $grade_info->points ?? '';
+      $points = $this->gradeService->getAggregatedPoints($grade_info) ?? '';
       if (!empty($points)) {
         $has_points = TRUE;
       }
 
-      $levels = '';
+      $levels = implode(', ', $this->gradeService->getLevelsNumericalNames($grade_info));
 
       $row_data = [];
       foreach ($table_header as $key => $header) {
@@ -233,7 +236,26 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
             $row_data[$key] = $grade;
             break;
           case 'handle':
-            $row_data[$key] = '';
+            if (!$link_to_edit) {
+              $row_data[$key] = '';
+              break;
+            }
+            $operations = [];
+            $query = $this->getDestinationArray();
+
+            $operations[] = [
+              'title' => $this->t('Handle grade'),
+              'weight' => 0,
+              'url' => Url::fromRoute('simple_school_reports_grade_support.handle_single_grade', ['ssr_grade_revision_id' => $grade_info->revisionId]),
+              'query' => $query,
+            ];
+
+            $row_data[$key]['data'] = [
+              '#type' => 'operations',
+              '#links' => $operations,
+            ];
+
+
             break;
         }
       }

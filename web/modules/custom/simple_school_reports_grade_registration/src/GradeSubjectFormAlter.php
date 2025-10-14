@@ -394,12 +394,12 @@ class GradeSubjectFormAlter {
     if (!$disabled && count($students) > 1 && $grade_system === 'geg_grade_system') {
       $form['select_copy'] = [
         '#type' => 'msr_input_copy',
-        '#target_selectors' => ['.grade-value-select select'],
+        '#target_selectors' => ['.grade-value-select'],
       ];
 
       $form['comment_copy'] = [
         '#type' => 'msr_input_copy',
-        '#target_selectors' => ['.grading-teacher-select select'],
+        '#target_selectors' => ['.grading-teacher-select'],
       ];
     }
 

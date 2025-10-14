@@ -10,6 +10,7 @@ use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
 use Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface;
 use Drupal\simple_school_reports_grade_support\GradeInterface;
 use Drupal\simple_school_reports_grade_support\Utilities\GradeInfo;
+use Drupal\simple_school_reports_grade_support\Utilities\GradeInfoMinimal;
 use Drupal\simple_school_reports_grade_support\Utilities\GradeReference;
 
 /**
@@ -183,8 +184,6 @@ class GradeService implements GradeServiceInterface {
         $has_previous_levels = TRUE;
       }
 
-      $points_data = $this->syllabusService->getSyllabusPreviousPoints($result->syllabus);
-
       $grades[$result->student][$result->syllabus] = new GradeInfo(
         $result->id,
         $result->revision_id,
@@ -198,8 +197,7 @@ class GradeService implements GradeServiceInterface {
         !empty($result->trial),
         $result->exclude_reason ?? NULL,
         $result->remark ?? NULL,
-        $points_data['points'],
-        $points_data['aggregated_points'],
+        $this->syllabusService->getSyllabusPoints($result->syllabus),
         FALSE,
       );
     }
@@ -256,7 +254,7 @@ class GradeService implements GradeServiceInterface {
             continue;
           }
 
-          // If passed, replace previous levels.
+          // If passed, replace previous levels and set latest as previous level.
           if ($this->isPassed($grade_info)) {
             foreach ($previous_level_ids as $previous_level_id) {
               if (isset($grades[$student_id][$previous_level_id])) {
@@ -280,6 +278,26 @@ class GradeService implements GradeServiceInterface {
               $grades[$student_id][$syllabus_id]->replaced = TRUE;
             }
           }
+
+          // Calculate gradeinfo minimal for last previous level.
+          foreach (array_reverse($previous_level_ids) as $previous_level_id) {
+            if (isset($grades[$student_id][$previous_level_id])) {
+              /** @var \Drupal\simple_school_reports_grade_support\Utilities\GradeInfo $previous_grade_info */
+              $previous_grade_info = $grades[$student_id][$previous_level_id];
+
+              $grades[$student_id][$syllabus_id]->previousLevel = new GradeInfoMinimal(
+                $previous_grade_info->id,
+                $previous_grade_info->revisionId,
+                $previous_grade_info->student,
+                $previous_grade_info->syllabusId,
+                $previous_grade_info->gradeTid,
+                $previous_grade_info->points,
+                $previous_grade_info->previousLevel,
+              );
+              break;
+            }
+          }
+
         }
       }
     }
@@ -298,7 +316,7 @@ class GradeService implements GradeServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGradeLabel(GradeInfo $grade_info, ?array $exclude_label_map = []): ?string {
+  public function getGradeLabel(GradeInfo|GradeInfoMinimal $grade_info, ?array $exclude_label_map = []): ?string {
     if ($grade_info->gradeTid) {
       return $this->getGradeLabelFromTermId($grade_info->gradeTid);
     }
@@ -371,19 +389,19 @@ class GradeService implements GradeServiceInterface {
     return $map[$syllabus_id] ?? '';
   }
 
-  public function isPassed(GradeInfo $grade_info): bool {
+  public function isPassed(GradeInfo|GradeInfoMinimal $grade_info): bool {
     $term_id = $grade_info->gradeTid ?? '*';
     return in_array($term_id, $this->getPassedTermIds());
   }
 
-  public function hasGrade(GradeInfo $grade_info): bool {
+  public function hasGrade(GradeInfo|GradeInfoMinimal $grade_info): bool {
     return !empty($this->getGradeLabelFromTermId($grade_info->gradeTid ?? '*'));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSyllabusLabel(GradeInfo $grade_info): string {
+  public function getSyllabusLabel(GradeInfo|GradeInfoMinimal $grade_info): string {
     $syllabus_id = $grade_info->syllabusId;
     if (empty($syllabus_id)) {
       return '';
@@ -399,6 +417,62 @@ class GradeService implements GradeServiceInterface {
       return ['P'];
     }
     return [];
+  }
+
+  /**
+   * @param \Drupal\simple_school_reports_grade_support\Utilities\GradeInfo $grade_info
+   *
+   * @return \Drupal\simple_school_reports_grade_support\Utilities\GradeInfoMinimal[]
+   */
+  protected function getPreviousLevelsInfo(GradeInfo $grade_info, bool $skip_if_replaced = TRUE, bool $skip_if_no_grade = TRUE): array {
+    if ($skip_if_replaced && $grade_info->replaced) {
+      return [];
+    }
+
+    if ($skip_if_no_grade && !$this->hasGrade($grade_info)) {
+      return [];
+    }
+
+    $levels = [];
+    $current_level = $grade_info->previousLevel ?? NULL;
+    while ($current_level) {
+      $levels[] = $current_level;
+      $current_level = $current_level->previousLevel ?? NULL;
+    }
+    return array_reverse($levels);
+  }
+
+  public function getLevelsNumericalNames(GradeInfo $grade_info): array {
+    $previous_levels = $this->getPreviousLevelsInfo($grade_info);
+    $names = [];
+
+    foreach ($previous_levels as $previous_level) {
+      $syllabus_info = $this->syllabusService->getSyllabusInfo($previous_level->syllabusId);
+      $names[] = $syllabus_info['level_numerical'] ?? '-';
+    }
+
+    return $names;
+  }
+
+  public function getLevelsGradeReferences(GradeInfo $grade_info): array {
+    $previous_levels = $this->getPreviousLevelsInfo($grade_info);
+    $grade_references = [];
+    foreach ($previous_levels as $previous_level) {
+      $grade_references[] = new GradeReference($previous_level->id, $previous_level->revisionId);
+    }
+    return $grade_references;
+  }
+
+  public function getAggregatedPoints(GradeInfo $grade_info): ?int {
+    $previous_levels = $this->getPreviousLevelsInfo($grade_info);
+    if (empty($previous_levels)) {
+      return $grade_info->points;
+    }
+    $aggregated_points = $grade_info->points ?? 0;
+    foreach ($previous_levels as $previous_level) {
+      $aggregated_points += $previous_level->points ?? 0;
+    }
+    return $aggregated_points;
   }
 
 }

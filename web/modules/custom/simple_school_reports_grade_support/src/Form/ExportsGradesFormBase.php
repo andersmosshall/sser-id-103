@@ -1435,18 +1435,13 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         }
         if ($key === 'levels') {
           $cols_in_use[$col] = $col;
-          $levels_numerical = $syllabus_info['previous_levels_numerical'] ?? [];
-          if (!empty($previous_levels_numerical)) {
-            if (!empty($syllabus_info['level_numerical'])) {
-              $levels_numerical[] = $syllabus_info['level_numerical'];
-            }
-          }
+          $levels_numerical = $this->gradeService->getLevelsNumericalNames($grade_info);
           $excel_sheet->setCellValue($cell_id, implode(',', $levels_numerical));
         }
         if ($key === 'points') {
-          $points = $syllabus_info['points'] ?? '';
+          $points = $grade_info->points ?? '';
           if ($skip_replaced) {
-            $points = $syllabus_info['aggregated_points'] ?? '';
+            $points = $this->gradeService->getAggregatedPoints($grade_info);
           }
 
           if (!empty($points)) {

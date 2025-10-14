@@ -69,3 +69,12 @@ simple_school_reports_grade_support.ssr_attest_grade_signing:
     parameters:
       ssr_grade_signing:
         type: 'entity:ssr_grade_signing'
+
+simple_school_reports_grade_support.handle_single_grade:
+  path: '/grade-registration/handle/{ssr_grade_revision_id}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grade_support\Form\HandleSingleGradeForm'
+    _title: 'Handle grade'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grade_support\Form\HandleSingleGradeForm::access'
+    ssr_grade_revision_id: \d+

@@ -65,7 +65,7 @@ interface SyllabusServiceInterface {
    *  - points
    *  - aggregated_points
    */
-  public function getSyllabusPreviousPoints(int $syllabus_id): array;
+  public function getSyllabusPoints(int $syllabus_id): ?int;
 
   /**
    * @param int $syllabus_id

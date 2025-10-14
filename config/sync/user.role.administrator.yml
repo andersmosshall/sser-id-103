@@ -122,6 +122,7 @@ permissions:
   - 'delete school week'
   - 'delete school_week_deviation'
   - 'delete ssr_assessment_group'
+  - 'delete ssr_grade'
   - 'delete ssr_grade_reg_course'
   - 'delete ssr_grade_reg_round'
   - 'delete ssr_grade_signing'
