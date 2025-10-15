@@ -2,6 +2,8 @@
 
 namespace Drupal\simple_school_reports_entities\Service;
 
+use Drupal\simple_school_reports_entities\SyllabusInterface;
+
 /**
  * Provides an interface defining SyllabusService.
  */
@@ -81,5 +83,9 @@ interface SyllabusServiceInterface {
    * @return array
    */
   public function getSyllabusIdsFromSchoolTypes(array $school_type_versions): array;
+
+  public function syncSyllabus(SyllabusInterface  $syllabus): void;
+
+  public function clearLookup(): void;
 
 }

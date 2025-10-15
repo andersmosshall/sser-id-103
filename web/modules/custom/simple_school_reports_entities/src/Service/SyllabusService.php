@@ -7,7 +7,9 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
 use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\simple_school_reports_entities\SyllabusInterface;
 
 /**
  * Support methods for syllabus stuff.
@@ -21,6 +23,36 @@ class SyllabusService implements SyllabusServiceInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
   ) {}
+
+  protected function getCourseData(string $syllabus_identifier): ?array {
+
+    // Look for course data from various services.
+    $services = [
+      'simple_school_reports_core_gr.course_data',
+      'simple_school_reports_core_gy11.course_data',
+      'simple_school_reports_core_gy25.course_data',
+    ];
+
+    $course_code = ActivateSyllabusFormBase::parseSyllabusIdentifier($syllabus_identifier)['course_code'] ?? NULL;
+
+    if (!$course_code) {
+      return NULL;
+    }
+
+
+    foreach ($services as $service_name) {
+      if (!\Drupal::hasService($service_name)) {
+        continue;
+      }
+      $service = \Drupal::service($service_name);
+      $course_data = $service->getCourseData()[$course_code] ?? NULL;
+      if ($course_data) {
+        return $course_data;
+      }
+    }
+
+    return NULL;
+  }
 
   protected function warmUpMap(): void {
     $cid_by_syllabus_id = 'syllabus_id_map';
@@ -161,27 +193,8 @@ class SyllabusService implements SyllabusServiceInterface {
         }
 
         if ($previous_level_points === NULL) {
-          // Look for previous level points in syllabus import services that
-          // may have level support.
-          $services = [
-            'simple_school_reports_core_gr.course_data',
-            'simple_school_reports_core_gy11.course_data',
-            'simple_school_reports_core_gy25.course_data',
-          ];
-
-          $course_code = ActivateSyllabusFormBase::parseSyllabusIdentifier($previous_level_identifier)['course_code'] ?? NULL;
-
-          foreach ($services as $service_name) {
-            if (!$course_code || !\Drupal::hasService($service_name)) {
-              continue;
-            }
-            $service = \Drupal::service($service_name);
-            $course_data = $service->getCourseData()[$course_code] ?? NULL;
-            if (!$course_data) {
-              continue;
-            }
-
-
+          $course_data = $this->getCourseData($previous_level_identifier);
+          if ($course_data) {
             // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
             if (preg_match('/\d+[a-c]?\d?$/i', $course_data['label'] ?? '')) {
               // Set level numerical to [number] or [number]a, [number]b, [number]c.
@@ -190,8 +203,6 @@ class SyllabusService implements SyllabusServiceInterface {
 
               $previous_levels_numerical[] = $level_numerical;
             }
-
-            break;
           }
         }
       }
@@ -366,5 +377,40 @@ class SyllabusService implements SyllabusServiceInterface {
       }
     }
     return $syllabus_ids;
+  }
+
+  public function syncSyllabus(SyllabusInterface $syllabus): void {
+    $syllabus_identifier = $syllabus->get('identifier')->value ?? '';
+    $course_data = $this->getCourseData($syllabus_identifier);
+    if (empty($course_data)) {
+      return;
+    }
+
+    $parsed_identifier = ActivateSyllabusFormBase::parseSyllabusIdentifier($syllabus_identifier);
+    $course_code = $parsed_identifier['course_code'] ?? NULL;
+    $langcode = $parsed_identifier['language_code'] ?? NULL;
+
+    if ($langcode && $course_data['use_langcode']) {
+      $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE, TRUE);
+
+      $language_label = mb_strtolower($language_label_map[$langcode] ?? $langcode);
+      $course_data['label'] = $course_data['label'] . ', ' . $language_label;
+      $course_data['course_code'] = $course_code . '_' . $langcode;
+      $course_data['language_code'] = $langcode;
+      $course_data['subject_name'] = $course_data['subject_name'] . ', ' . $language_label;
+      $levels = $course_data['levels'] ?? [];
+      foreach ($levels as $key => $level) {
+        $levels[$key] = $level . '_' . $langcode;
+      }
+      $course_data['levels'] = $levels;
+    }
+
+    $course_data['short_label'] = $syllabus->get('short_label')->value ?? '';
+
+    ActivateSyllabusFormBase::activateCourse($course_code, $course_data);
+  }
+
+  public function clearLookup(): void {
+    $this->lookup = [];
   }
 }
