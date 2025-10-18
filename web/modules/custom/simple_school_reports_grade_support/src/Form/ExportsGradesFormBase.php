@@ -1223,7 +1223,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('G7', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
     $student_last_name = $student->get('field_last_name')->value ?? '-';
@@ -1780,7 +1780,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('F7', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
     $grader_last_name = $grader->get('field_last_name')->value ?? '-';
@@ -1895,7 +1895,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('F2', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
 
@@ -2234,7 +2234,8 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $info_items = [];
 
-    $municipality = Settings::get('ssr_school_municipality', NULL);
+    $school = $this->organizationsService->getOrganization('school', $this->getSchoolType());
+    $municipality = $school->get('municipality')->value ?? NULL;
     if ($municipality) {
       $info_items[] = [
         'label' => 'Kommun',

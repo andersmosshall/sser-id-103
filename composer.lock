@@ -1543,17 +1543,17 @@
         },
         {
             "name": "drupal/autologout_alterable",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/autologout_alterable.git",
-                "reference": "1.1.1"
+                "reference": "1.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/autologout_alterable-1.1.1.zip",
-                "reference": "1.1.1",
-                "shasum": "65a6549a7fa027704c64d7652fd1a9c0fc39d0de"
+                "url": "https://ftp.drupal.org/files/projects/autologout_alterable-1.1.2.zip",
+                "reference": "1.1.2",
+                "shasum": "ae74e38c5668d3e933be0bc811a08f00c11fd074"
             },
             "require": {
                 "drupal/core": "^10 || ^11"
@@ -1561,8 +1561,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.1.1",
-                    "datestamp": "1742454413",
+                    "version": "1.1.2",
+                    "datestamp": "1760726367",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

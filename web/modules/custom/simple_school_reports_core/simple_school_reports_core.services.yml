@@ -12,6 +12,11 @@ services:
     class: Drupal\simple_school_reports_core\Service\SchoolSubjectService
     arguments: [ '@entity_type.manager', '@database', '@cache.default' ]
 
+  simple_school_reports_core.school_grade:
+    class: Drupal\simple_school_reports_core\Service\SchoolGradeService
+    arguments: [ '@entity_type.manager', '@database', '@cache.default', '@module_handler' ]
+
+
   simple_school_reports_core.absence_statistics:
     class: Drupal\simple_school_reports_core\Service\AbsenceStatisticsService
     arguments: [ '@database', '@entity_type.manager', '@cache.default' ]

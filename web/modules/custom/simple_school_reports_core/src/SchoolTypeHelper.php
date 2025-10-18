@@ -7,7 +7,7 @@ use Drupal\node\NodeInterface;
 
 class SchoolTypeHelper {
 
-  public static function getSupportedSchoolTypes(): array {
+  public static function getSupportedSchoolTypes(bool $filter_by_modules = TRUE): array {
     $school_types = [
 //      'FS' => 'Förskola',
       'FKLASS' => 'Förskoleklass',
@@ -41,6 +41,18 @@ class SchoolTypeHelper {
 //      'ABU' => 'Arbetsmarknadsutbildning',
 //      'AU' => 'Annan undervisning',
     ];
+
+    if ($filter_by_modules) {
+      /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+      $module_handler = \Drupal::service('module_handler');
+
+      foreach ($school_types as $key => $value) {
+        $module_name = 'simple_school_reports_core_' . strtolower($key);
+        if (!$module_handler->moduleExists($module_name)) {
+          unset($school_types[$key]);
+        }
+      }
+    }
 
     return $school_types;
   }

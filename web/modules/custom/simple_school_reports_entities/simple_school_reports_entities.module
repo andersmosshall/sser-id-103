@@ -144,6 +144,10 @@ function simple_school_reports_entities_school_types() {
   return \Drupal\simple_school_reports_core\SchoolTypeHelper::getSupportedSchoolTypes();
 }
 
+function simple_school_reports_entities_school_grades() {
+  return \Drupal\simple_school_reports_core\SchoolGradeHelper::getSupportedSchoolGrades();
+}
+
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */

@@ -56,11 +56,6 @@ if ( (!array_key_exists('HTTPS', $_SERVER)) && (PHP_SAPI !== 'cli') ) {
 $config['config_split.config_split.local']['status'] = TRUE;
 
 $settings['ssr_school_name'] = '[SCHOOL_NAME]';
-$settings['ssr_school_name_short'] = '[SCHOOL_NAME_SHORT]';
-$settings['ssr_school_organiser'] = '[SCHOOL_ORGANISER]';
-$settings['ssr_school_unit_code'] = '[SCHOOL_UNIT_CODE]';
-$settings['ssr_school_municipality'] = '[SCHOOL_MUNICIPALITY]';
-$settings['ssr_school_municipality_code'] = '[SCHOOL_MUNICIPALITY_CODE]';
 $settings['ssr_id'] = [SSR_ID];
 
 $settings['ssr_grade_from'] = [SSR_GRADE_FROM];

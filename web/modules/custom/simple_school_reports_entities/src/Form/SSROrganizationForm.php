@@ -19,12 +19,7 @@ final class SSROrganizationForm extends ContentEntityForm {
     if (!$organization->isNew()) {
       // Disable a set of fields if they are set.
       $fields_to_disable = [
-        'label',
-        'municipality_code',
-        'school_types',
-        'school_unit_code',
         'organization_type',
-        'parent',
       ];
 
       foreach ($fields_to_disable as $field_name) {
@@ -33,6 +28,70 @@ final class SSROrganizationForm extends ContentEntityForm {
         }
       }
     }
+
+    if (isset($form['short_name'])) {
+      $form['short_name']['#states'] = [
+        'visible' => [
+          [
+            ':input[name="organization_type"]' => ['value' => 'school'],
+          ],
+          [
+            ':input[name="organization_type"]' => ['value' => 'school_unit'],
+          ],
+        ],
+      ];
+    }
+
+
+    $school_organiser_only_fields = [
+      'organization_number',
+    ];
+
+    $school_only_fields = [
+      'municipality',
+      'municipality_code',
+    ];
+
+    $school_unit_only_fields = [
+      'school_unit_code',
+      'school_types',
+      'school_grades',
+    ];
+
+    // Hide fields with states that are not relevant for the selected.
+    foreach ($school_organiser_only_fields as $field_name) {
+      if (!isset($form[$field_name])) {
+        continue;
+      }
+      $form[$field_name]['#states'] = [
+        'visible' => [
+          ':input[name="organization_type"]' => ['value' => 'school_organiser'],
+        ],
+      ];
+    }
+
+    foreach ($school_only_fields as $field_name) {
+      if (!isset($form[$field_name])) {
+        continue;
+      }
+      $form[$field_name]['#states'] = [
+        'visible' => [
+          ':input[name="organization_type"]' => ['value' => 'school'],
+        ],
+      ];
+    }
+
+    foreach ($school_unit_only_fields as $field_name) {
+      if (!isset($form[$field_name])) {
+        continue;
+      }
+      $form[$field_name]['#states'] = [
+        'visible' => [
+          ':input[name="organization_type"]' => ['value' => 'school_unit'],
+        ],
+      ];
+    }
+
 
     return $form;
   }

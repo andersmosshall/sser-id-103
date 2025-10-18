@@ -605,6 +605,7 @@ function simple_school_reports_core_views_query_alter(ViewExecutable $view, \Dru
  */
 function simple_school_reports_core_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
   $view->element['#cache']['contexts'][] = 'route';
+  $view->element['#cache']['tags'][] = 'ssr_organization_list';
 
   // Add cache user permissions on views that is rendering nodes.
   if ($view->getBaseEntityType() && $view->getBaseEntityType()->id() === 'node') {

@@ -9,6 +9,8 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\simple_school_reports_core\Pnum;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
+use Drupal\simple_school_reports_core\Service\OrganizationsService;
+use Drupal\simple_school_reports_core\Service\OrganizationsServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
 
 /**
@@ -22,6 +24,7 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
     protected Pnum $pnumService,
     protected EmailServiceInterface $emailService,
     protected FileSystemInterface $fileSystem,
+    protected OrganizationsServiceInterface $organizationsService,
   ) {}
 
   /**
@@ -30,10 +33,9 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
   public function handleExport(string $student_group_nid, array $references, array &$context) {
     if (
       empty($context['results']['catalog'][$student_group_nid]) ||
-      empty(Settings::get('ssr_school_municipality_code')) ||
-      empty(Settings::get('ssr_school_unit_code')) ||
+      empty($this->organizationsService->getOrganization('school', 'GR')) ||
+      empty(OrganizationsService::getStaticSchoolUnitCode('GR')) ||
       empty(Settings::get('ssr_school_name')) ||
-      empty(Settings::get('ssr_school_name_short')) ||
       empty(Settings::get('ssr_catalog_id'))
     ) {
       return;
@@ -211,8 +213,10 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
       // Add home municipality code (not applicable).
       $student_row .= $this->makeRowPart('', 4);
 
+      $school = $this->organizationsService->getOrganization('school', 'GR');
+
       // Add school municipality code.
-      $student_row .= $this->makeRowPart(Settings::get('ssr_school_municipality_code'), 4);
+      $student_row .= $this->makeRowPart($school->get('municipality_code')->value, 4);
 
       // Add email.
       $email = $use_contact_details ? $this->emailService->getUserEmail($student) : '';
@@ -254,9 +258,10 @@ class ExtensGradeExportService implements GroupGradeExportInterface {
 
     $file_content = 'MGBETYG';
     $student_row_prefix = $this->makeRowPart('B957T', 5);
-    $student_row_prefix .= $this->makeRowPart(Settings::get('ssr_school_unit_code'), 8);
+    $student_row_prefix .= $this->makeRowPart(OrganizationsService::getStaticSchoolUnitCode('GR'), 8);
     $student_row_prefix .= $this->makeRowPart('', 2);
-    $student_row_prefix .= $this->makeRowPart(Settings::get('ssr_school_name_short'), 3);
+    $school = $this->organizationsService->getOrganization('school', 'GR');
+    $student_row_prefix .= $this->makeRowPart($school?->get('short_name')->value, 3);
 
     foreach (array_values($context['results']['extent_student_rows']) as $delta => $student_row) {
       $row_id = mb_str_pad((string) ($delta + 1), 4, '0', STR_PAD_LEFT);
