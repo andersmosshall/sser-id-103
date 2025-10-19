@@ -143,7 +143,7 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
+      ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
       ->setDisplayConfigurable('form', TRUE)
@@ -176,14 +176,13 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
 
     $fields['school_types'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('School types'))
-      ->setDescription(t('The school type.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_types')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['school_grades'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('School grades'))
+      ->setLabel(t('School types'))
       ->setDescription(t('Active school grades.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_grades')

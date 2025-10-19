@@ -3618,26 +3618,44 @@ msgstr "Om markerad kommer användare med sekretessmarkering exkluderas från ex
 msgid "Skipping @name due to protected data"
 msgstr "Hoppar över @name på grund av skyddade uppgifter"
 
-msgid ""
-msgstr ""
+msgid "List and hangle organizations."
+msgstr "Lista och hantera organisationer."
 
-msgid ""
-msgstr ""
+msgid "Organizations"
+msgstr "Organisationer"
 
-msgid ""
-msgstr ""
+msgid "Add school/organization"
+msgstr "Lägg till skola/organisation"
 
-msgid ""
-msgstr ""
+msgid "Municipality code"
+msgstr "Kommunkod"
 
-msgid ""
-msgstr ""
+msgid "Municipality"
+msgstr "Kommun"
 
-msgid ""
-msgstr ""
+msgid "Active school grades."
+msgstr "Aktiva årskurser."
 
-msgid ""
-msgstr ""
+msgid "School types"
+msgstr "Skolformer"
+
+msgid "School unit code"
+msgstr "Skolenhetskod"
+
+msgid "Organization number"
+msgstr "Organisationsnummer"
+
+msgid "Organization type"
+msgstr "Organisationstyp"
+
+msgid "Parent organization"
+msgstr "Överordnad organisation"
+
+msgid "Short label"
+msgstr "Kort namn"
+
+msgid "Short label, recomended 3 characters."
+msgstr "Kort namn, rekommenderas 3 tecken."
 
 msgid ""
 msgstr ""
