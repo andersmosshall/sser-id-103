@@ -58,9 +58,6 @@ $config['config_split.config_split.local']['status'] = TRUE;
 $settings['ssr_school_name'] = '[SCHOOL_NAME]';
 $settings['ssr_id'] = [SSR_ID];
 
-$settings['ssr_grade_from'] = [SSR_GRADE_FROM];
-$settings['ssr_grade_to'] = [SSR_GRADE_TO];
-
 $settings['ssr_bug_report_email'] = '[SSR_BUG_REPORT_EMAIL]';
 $settings['ssr_no_reply_email'] = '[SSR_NO_REPLY_EMAIL]';
 
