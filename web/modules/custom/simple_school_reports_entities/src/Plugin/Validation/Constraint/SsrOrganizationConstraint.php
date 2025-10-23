@@ -18,26 +18,26 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 )]
 class SsrOrganizationConstraint extends SymfonyConstraint {
 
-  public $missingType = 'Organization type must be set.';
+  public $missingType = 'Organization type must be set';
 
   /**
    * @var string
    */
-  public $missingSchool = 'Parent organization of type school must be set.';
+  public $missingSchool = 'Parent organization of type school must be set';
 
   /**
    * @var string
    */
-  public $missingOrganizer = 'Parent organization of type organizer must be set.';
+  public $missingOrganizer = 'Parent organization of type organizer must be set';
 
   /**
    * @var string
    */
-  public $schoolTypeOccupied = 'There is already a school unit set for the school type %type.';
+  public $schoolTypeOccupied = 'There is already a school unit set for the school type %type';
 
   /**
    * @var string
    */
-  public $missingShortname = 'A short name must be set.';
+  public $missingShortname = 'A short name must be set';
 
 }

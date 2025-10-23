@@ -164,37 +164,6 @@ abstract class PreviewGradeExportFormBase extends ConfirmFormBase {
 
     $build['stats'] = $block->build($student);
     return $build;
-
-
-    $total_points = 0;
-
-    // TODO MOVE TO STATS BLOCK.
-    $build['total_points'] = [
-      '#theme' => 'field',
-      '#title' => t('Written reviews'),
-      '#label_display' => 'above',
-      '#view_mode' => 'default',
-      '#field_name' => 'total_points',
-      '#field_type' => 'text',
-      '#field_translatable' => FALSE,
-      '#entity_type' => $student->getEntityTypeId(),
-      '#bundle' => $student->bundle(),
-      '#object' => $student,
-      '#is_multiple' => FALSE,
-      '#items' => [],
-      0 => [
-        '#plain_text' => $total_points,
-      ],
-    ];
-
-
-
-
-    if (empty($total_points)) {
-      unset($build['total_points']);
-    }
-
-    return $build;
   }
 
   /**

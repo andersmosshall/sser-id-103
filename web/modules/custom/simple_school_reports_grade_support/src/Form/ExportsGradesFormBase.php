@@ -1154,7 +1154,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     if (!$has_valid_ssn && $has_grades) {
       $name = '';
       _simple_school_reports_core_resolve_name($name, $student, TRUE);
-      $this->messenger()->addWarning(t('@name misses a valid personal number, document is generated anyway with value @value', ['@name' => $name, '@value' => $ssn]));
+      $this->messenger()->addWarning($this->t('@name misses a valid personal number, document is generated anyway with value @value', ['@name' => $name, '@value' => $ssn]));
     }
 
     $group = NULL;

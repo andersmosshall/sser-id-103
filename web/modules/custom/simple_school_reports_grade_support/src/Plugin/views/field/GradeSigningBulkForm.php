@@ -6,10 +6,10 @@ use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\BulkForm;
 
 /**
- * Defines a grade singing event operations bulk form element.
+ * Defines a grade signing event operations bulk form element.
  */
 #[ViewsField("ssr_grade_signing_bulk_form")]
-class CalendarEventBulkForm extends BulkForm {
+class GradeSigningBulkForm extends BulkForm {
 
   /**
    * {@inheritdoc}

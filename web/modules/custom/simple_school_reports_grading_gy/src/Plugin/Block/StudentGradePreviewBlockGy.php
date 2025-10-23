@@ -87,7 +87,7 @@ class StudentGradePreviewBlockGy extends StudentGradeStatisticsBlockBase impleme
     }
 
     foreach (array_values($snapshots) as $key => $snapshot) {
-      $build[$key . '_table'] = $this->buildTable($snapshot, TRUE);
+      $build[$key . '_table'] = $this->buildTable($snapshot, TRUE, TRUE);
       unset($build[$key . '_table']['label']);
 
       if ($key < count($snapshots) - 1) {

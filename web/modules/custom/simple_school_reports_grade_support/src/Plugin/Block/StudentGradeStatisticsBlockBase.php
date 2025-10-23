@@ -143,7 +143,7 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
     return $this->entityTypeManager->getStorage('ssr_grade_snapshot')->loadMultiple($snapshot_ids);
   }
 
-  protected function buildTable(GradeSnapshotInterface $snapshot, bool $link_to_edit = FALSE): array {
+  protected function buildTable(GradeSnapshotInterface $snapshot, bool $link_to_edit = FALSE, bool $calculate_total_points = FALSE): array {
     $student_id = $snapshot->get('student')->target_id;
     if ($link_to_edit && !$this->currentUser->hasPermission('administer simple school reports settings')) {
       $link_to_edit = FALSE;
@@ -162,6 +162,26 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       '#type' => 'html_tag',
       '#tag' => 'h3',
       '#value' => $snapshot_period?->label() ?? $this->t('Unknown term'),
+    ];
+
+    $total_points = 0;
+
+    $build['total_points'] = [
+      '#theme' => 'field',
+      '#title' => t('Written reviews'),
+      '#label_display' => 'above',
+      '#view_mode' => 'default',
+      '#field_name' => 'total_points',
+      '#field_type' => 'text',
+      '#field_translatable' => FALSE,
+      '#entity_type' => 'user',
+      '#bundle' => 'user',
+      '#object' => $snapshot,
+      '#is_multiple' => FALSE,
+      '#items' => [],
+      0 => [
+        '#plain_text' => $total_points,
+      ],
     ];
 
     $table_header = $this->getTableHeader();
@@ -210,6 +230,9 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       $points = $this->gradeService->getAggregatedPoints($grade_info) ?? '';
       if (!empty($points)) {
         $has_points = TRUE;
+        if ($calculate_total_points && !$grade_info->replaced) {
+          $total_points += $points;
+        }
       }
 
       $levels = implode(', ', $this->gradeService->getLevelsNumericalNames($grade_info));
@@ -277,6 +300,12 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       $build['table']['#rows']['points'] = '';
     }
 
+    if (!$calculate_total_points || empty($total_points)) {
+      unset($build['total_points']);
+    }
+    else {
+      $build['total_points']['#items'][0]['#plain_text'] = number_format($total_points, 0, ',', ' ') . 'p';
+    }
 
     return $build;
   }

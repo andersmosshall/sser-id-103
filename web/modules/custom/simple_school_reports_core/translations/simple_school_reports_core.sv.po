@@ -3657,6 +3657,357 @@ msgstr "Kort namn"
 msgid "Short label, recomended 3 characters."
 msgstr "Kort namn, rekommenderas 3 tecken."
 
+msgid "Export documents"
+msgstr "Exportera dokument"
+
+msgid "Preview grades"
+msgstr "Förhandsgranska betyg"
+
+msgid "Unlock grade registration"
+msgstr "Lås upp betygsregistrering"
+
+msgid "View grades"
+msgstr "Visa betyg"
+
+msgid "Register grades"
+msgstr "Registrera betyg"
+
+msgid "Handle grades and grade rounds for Gymnasiet"
+msgstr "Hantera betyg och betygsomgångar för gymnasiet"
+
+msgid "Grade registration - Gymnasiet"
+msgstr "Betygsregistrering – Gymnasiet"
+
+msgid "Register detached grades"
+msgstr "Registrera fristående betyg"
+
+msgid "Type to search for programmes"
+msgstr "Skriv för att söka efter program"
+
+msgid "Select the list of programmes that will result in the higher graded examina certificate."
+msgstr "Välj den lista av program som ger ett högre betygat examensbevis."
+
+msgid "Higher grade examina certificate"
+msgstr "Examensbevis med högre betyg"
+
+msgid "Type to search for course syllabuses"
+msgstr "Skriv för att söka efter kursplaner"
+
+msgid "Select the list of syllabuses that are required to have at least approved grade for the examina certificate otherwise study certificate is used."
+msgstr "Välj de kursplaner som kräver minst godkänt betyg för examensbevis, annars används studieintyg."
+
+msgid "Required syllabuses"
+msgstr "Obligatoriska kursplaner"
+
+msgid "The minimum points needed to get an extended examina certificate (U) otherwise study certificate is used."
+msgstr "Minsta poäng som krävs för utökat examensbevis (U), annars används studieintyg."
+
+msgid "Threshold for extended examina certificate (U)"
+msgstr "Gränsvärde för utökat examensbevis (U)"
+
+msgid "The minimum points needed to get an examina certificate (F) otherwise study certificate is used."
+msgstr "Minsta poäng som krävs för examensbevis (F), annars används studieintyg."
+
+msgid "Threshold for examina certificate (F)"
+msgstr "Gränsvärde för examensbevis (F)"
+
+msgid "Calculations settings"
+msgstr "Beräkningsinställningar"
+
+msgid "Check this if you want to calculate the document label and other data that the system does not have all the information for. It is still important that any generated documents are checked for accuracy."
+msgstr "Markera detta om du vill beräkna dokumentetikett och annan data som systemet saknar fullständig information för. Det är fortfarande viktigt att alla genererade dokument kontrolleras för korrekthet."
+
+msgid "Calculate document label etc."
+msgstr "Beräkna dokumentetikett m.m."
+
+msgid "Handle grade"
+msgstr "Hantera betyg"
+
+msgid "Attest grade signing"
+msgstr "Attestera betygssignering"
+
+msgid "Attest"
+msgstr "Attestera"
+
+msgid "Spring semester"
+msgstr "Vårtermin"
+
+msgid "Autumn semester"
+msgstr "Hösttermin"
+
+msgid "Changed"
+msgstr "Ändrad"
+
+msgid "Corrected"
+msgstr "Rättad"
+
+msgid "Select school type to handle grade registration."
+msgstr "Välj skolform för att hantera betygsregistrering."
+
+msgid "No grade - adapted studies"
+msgstr "Inget betyg – anpassade studier"
+
+msgid "No signing document selected."
+msgstr "Inget signeringsdokument valt."
+
+msgid "GradeSigningBulkForm"
+msgstr "GradeSigningBulkForm"
+
+msgid "Unknown course"
+msgstr "Okänd kurs"
+
+msgid "Unknown term"
+msgstr "Okänd termin"
+
+msgid "There are no grades to be shown yet."
+msgstr "Det finns inga betyg att visa ännu."
+
+msgid "The grade registration is unlocked."
+msgstr "Betygsregistreringen är upplåst."
+
+msgid "Are you sure you want to unlock course @name for grade registration?"
+msgstr "Är du säker på att du vill låsa upp kursen @name för betygsregistrering?"
+
+msgid "No grades to show"
+msgstr "Inga betyg att visa"
+
+msgid "The suggested courses is courses that has ended or are about to be ended as is not already added in a grade round. In addition to these you can add any course in the section below."
+msgstr "Föreslagna kurser är kurser som har avslutats eller snart avslutas och som inte redan finns i en betygsomgång. Utöver dessa kan du lägga till valfri kurs i avsnittet nedan."
+
+msgid "Suggested courses to grade"
+msgstr "Föreslagna kurser att betygsätta"
+
+msgid "Grades has been registered."
+msgstr "Betyg har registrerats."
+
+msgid "You must select a reason for excluding the grade registration for this student."
+msgstr "Du måste välja en orsak till att undanta betygsregistreringen för denna elev."
+
+msgid "You can not mark registration as done if there are pending grades to set."
+msgstr "Du kan inte markera registreringen som klar om det finns betyg kvar att sätta."
+
+msgid "Someone has made changes to one or more grades. Please refresh the page and try again."
+msgstr "Någon har gjort ändringar i ett eller flera betyg. Uppdatera sidan och försök igen."
+
+msgid "Change, (e.g. the grade has changed for example due to a new examination)"
+msgstr "Ändring (t.ex. betyget har ändrats på grund av en ny prövning)"
+
+msgid "Correction, (e.g. wrong registration, updated with correct value.)"
+msgstr "Rättning (t.ex. felregistrering, uppdaterad med korrekt värde)"
+
+msgid "Delete grade @grade - @registered. (This action cannot be undone.)"
+msgstr "Ta bort betyg @grade - @registered. (Denna åtgärd kan inte ångras.)"
+
+msgid "Delete grade @grade by @main_grader - @registered. (This action cannot be undone.)"
+msgstr "Ta bort betyg @grade av @main_grader - @registered. (Denna åtgärd kan inte ångras.)"
+
+msgid "Skip grade registration now / Not applicable"
+msgstr "Hoppa över betygsregistrering nu / Ej tillämpligt"
+
+msgid "Student does not study the course"
+msgstr "Eleven läser inte kursen"
+
+msgid "No changes. Keep grade @grade by @main_grader - @registered"
+msgstr "Inga ändringar. Behåll betyg @grade av @main_grader - @registered"
+
+msgid "Syllabus @name does not support grading."
+msgstr "Kursplanen @name stödjer inte betygsättning."
+
+msgid "Grades in @name"
+msgstr "Betyg i @name"
+
+msgid "Mark all grades in course @label as done."
+msgstr "Markera alla betyg i kursen @label som klara."
+
+msgid "Mark as done"
+msgstr "Markera som klar"
+
+msgid "Too many syllabuses, students or grading teachers selected. Please select fewer."
+msgstr "För många kursplaner, elever eller betygsättande lärare valda. Välj färre."
+
+msgid "No valid syllabuses, students or grading teachers found."
+msgstr "Inga giltiga kursplaner, elever eller betygsättande lärare hittades."
+
+msgid "Select grading teachers to choose from in the next step."
+msgstr "Välj betygsättande lärare att välja bland i nästa steg."
+
+msgid "Select courses to register grades for."
+msgstr "Välj kurser att registrera betyg för."
+
+msgid "Enter name or grade/class to filter"
+msgstr "Ange namn eller årskurs/klass för att filtrera"
+
+msgid "Select students to register grades for."
+msgstr "Välj elever att registrera betyg för."
+
+msgid "A short name must be set"
+msgstr "Ett kortnamn måste anges"
+
+msgid "There is already a school unit set for the school type %type"
+msgstr "Det finns redan en skolenhet angiven för skolformen %type"
+
+msgid "Parent organization of type organizer must be set"
+msgstr "Överordnad organisation av typen huvudman måste anges"
+
+msgid "Parent organization of type school must be set"
+msgstr "Överordnad organisation av typen skola måste anges"
+
+msgid "Organization type must be set"
+msgstr "Organisationstyp måste anges"
+
+msgid "Signed by @signees"
+msgstr "Undertecknat av @signees"
+
+msgid "Signing documents attested"
+msgstr "Signeringsdokument attesterade"
+
+msgid "I confirm that the following documents have been signed and, if applicable, archived according to the school policy:"
+msgstr "Jag bekräftar att följande dokument har signerats och vid behov arkiverats enligt skolans policy:"
+
+msgid "Attest the following signing documents"
+msgstr "Attestera följande signeringsdokument"
+
+msgid "Attest signing documents"
+msgstr "Attestera signeringsdokument"
+
+msgid "Signing complete"
+msgstr "Signering slutförd"
+
+msgid "To sign"
+msgstr "Att signera"
+
+msgid "Signing"
+msgstr "Signerar"
+
+msgid "Open for grade registrations"
+msgstr "Öppen för betygsregistreringar"
+
+msgid "Registration status"
+msgstr "Registreringsstatus"
+
+msgid "Diploma project description"
+msgstr "Beskrivning av gymnasiearbete"
+
+msgid "Diploma project label"
+msgstr "Benämning för gymnasiearbete"
+
+msgid "Grade set from a trial"
+msgstr "Betyg satt från prövning"
+
+msgid "Final grade"
+msgstr "Slutbetyg"
+
+msgid "Reason for exclusion"
+msgstr "Orsak till undantag"
+
+msgid "Registered date"
+msgstr "Registreringsdatum"
+
+msgid "Joint grading by"
+msgstr "Gemensam betygssättning av"
+
+msgid "Grading teacher"
+msgstr "Betygsättande lärare"
+
+msgid "Registered by"
+msgstr "Registrerad av"
+
+msgid "Failed to create signing document for @name"
+msgstr "Misslyckades med att skapa signeringsdokument för @name"
+
+msgid "Collecting data and building documents"
+msgstr "Samlar in data och bygger dokument"
+
+msgid "When combining terms, the selected terms cannot have gaps between first and last selected term."
+msgstr "Vid sammanslagning av terminer får det inte finnas luckor mellan första och sista valda terminen."
+
+msgid "Select a combine terms setting."
+msgstr "Välj inställning för sammanslagning av terminer."
+
+msgid "At least one term must be selected."
+msgstr "Minst en termin måste väljas."
+
+msgid "You must confirm the information about @name."
+msgstr "Du måste bekräfta informationen om @name."
+
+msgid "Invalid absence period must be valid."
+msgstr "Perioden för ogiltig frånvaro måste vara giltig."
+
+msgid "At least one export type must be selected."
+msgstr "Minst en exporttyp måste väljas."
+
+msgid "Template file for @template_to_use is not found."
+msgstr "Mallfil för @template_to_use hittades inte."
+
+msgid "I confirm that I have read and understood the above information."
+msgstr "Jag bekräftar att jag har läst och förstått informationen ovan."
+
+msgid "Include invalid absence"
+msgstr "Inkludera ogiltig frånvaro"
+
+msgid "Combine terms setting"
+msgstr "Inställning för sammanslagning av terminer"
+
+msgid "One catalog for each selected terms"
+msgstr "En katalog för varje vald termin"
+
+msgid "Combine to one catalog"
+msgstr "Slå ihop till en katalog"
+
+msgid "Terms to include in catalog"
+msgstr "Terminer som ska ingå i katalogen"
+
+msgid "Export grade catalog settings"
+msgstr "Inställningar för export av betygskatalog"
+
+msgid "Export grade catalog"
+msgstr "Exportera betygskatalog"
+
+msgid "Signature documents will ge generated for grades that has not yet been signed. Grades that are pending to be attested in the next tab will be excluded as well. To start over with the unsigned grades completely, clear any pending attestations @link."
+msgstr "Signeringsdokument kommer att genereras för betyg som ännu inte har signerats. Betyg som väntar på att attesteras i nästa flik utesluts också. För att börja om helt med osignerade betyg, rensa eventuella väntande attesteringar @link."
+
+msgid "Export signature documents settings"
+msgstr "Inställningar för export av signeringsdokument"
+
+msgid "Export signature documents"
+msgstr "Exportera signeringsdokument"
+
+msgid "Only students set in this list will be included in the final grade export or leave empty to include all selected students above."
+msgstr "Endast elever som anges i denna lista kommer att inkluderas i slutbetygsexporten, eller lämna tomt för att inkludera alla valda elever ovan."
+
+msgid "Students with final grades"
+msgstr "Elever med slutbetyg"
+
+msgid "Export grade documents settings"
+msgstr "Inställningar för export av betygsdokument"
+
+msgid "Export @name"
+msgstr "Exportera @name"
+
+msgid "Invalid absence to"
+msgstr "Ogiltig frånvaro till"
+
+msgid "Invalid absence from"
+msgstr "Ogiltig frånvaro från"
+
+msgid "Export grade documents"
+msgstr "Exportera betygsdokument"
+
+msgid "There are @count open grade rounds."
+msgstr "Det finns @count öppna betygsomgångar."
+
+msgid "Close all open grade rounds"
+msgstr "Stäng alla öppna betygsomgångar"
+
+msgid "Select the list of students to constrain any export to."
+msgstr "Välj den lista med elever som ska begränsa eventuell export."
+
+msgid "Principal"
+msgstr "Rektor"
+
+msgid "Document date"
+msgstr "Dokumentdatum"
+
 msgid ""
 msgstr ""
 
