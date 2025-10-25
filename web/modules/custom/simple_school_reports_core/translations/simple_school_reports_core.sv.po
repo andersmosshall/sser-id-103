@@ -4044,8 +4044,8 @@ msgstr "Kurs"
 msgid "course"
 msgstr "kurs"
 
-msgid ""
-msgstr ""
+msgid "Select the list of students to preview grades for."
+msgstr "Välj lista med elever att förhandsgranska betyg för."
 
 msgid ""
 msgstr ""
