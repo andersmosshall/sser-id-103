@@ -1406,6 +1406,9 @@ msgstr "Mitt svar"
 msgid "Other answers"
 msgstr "Övriga svar"
 
+msgid "Other"
+msgstr "Övrigt"
+
 msgid "No answer has been given, check this box if you want to give answer."
 msgstr "Inget svar har givits, markera boxen om du vill ge ett svar."
 
@@ -4008,32 +4011,38 @@ msgstr "Rektor"
 msgid "Document date"
 msgstr "Dokumentdatum"
 
-msgid ""
-msgstr ""
+msgid "School unit"
+msgstr "Skolenhet"
 
-msgid ""
-msgstr ""
+msgid "School"
+msgstr "Skola"
 
-msgid ""
-msgstr ""
+msgid "School organizer"
+msgstr "Huvudman"
 
-msgid ""
-msgstr ""
+msgid "Phone number"
+msgstr "Telefonnummer"
 
-msgid ""
-msgstr ""
+msgid "Course to grade"
+msgstr "Kurs att betygsätta"
 
-msgid ""
-msgstr ""
+msgid "Courses to grade"
+msgstr "Kurser att betygsätta"
 
-msgid ""
-msgstr ""
+msgid "course to grade"
+msgstr "kurs att betygsätta"
 
-msgid ""
-msgstr ""
+msgid "course to grade"
+msgstr "kurser att betygsätta"
 
-msgid ""
-msgstr ""
+msgid "Search for course by name or course code."
+msgstr "Sök efter kurs med namn eller kurskod."
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "course"
+msgstr "kurs"
 
 msgid ""
 msgstr ""
