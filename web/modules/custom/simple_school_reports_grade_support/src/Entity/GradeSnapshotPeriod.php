@@ -97,7 +97,7 @@ final class GradeSnapshotPeriod extends ContentEntityBase implements GradeSnapsh
 
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setTranslatable(TRUE)
-      ->setLabel(t('Label'))
+      ->setLabel(t('Name'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
