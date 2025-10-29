@@ -117,6 +117,10 @@ final class Syllabus extends ContentEntityBase implements SyllabusInterface {
       throw new \LogicException('Identifier cannot be empty.');
     }
     parent::postSave($storage, $update);
+
+    /** @var \Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface $syllabus_service */
+    $syllabus_service = \Drupal::service('simple_school_reports_entities.syllabus_service');
+    $syllabus_service->clearLookup();
   }
 
   /**

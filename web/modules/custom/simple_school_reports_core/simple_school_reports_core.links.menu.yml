@@ -77,17 +77,17 @@ simple_school_reports_core.panic_confirm:
   parent: simple_school_reports_core.config
   route_name: simple_school_reports_core.panic_confirm
 
+simple_school_reports_core.ssr_organizations:
+  title: 'Organizations'
+  description: 'List and hangle organizations.'
+  parent: simple_school_reports_core.config
+  route_name: view.ssr_organizations.list
+
 simple_school_reports_core.config_terms:
   title: 'Terms'
   parent: simple_school_reports_core.config
   description: 'Add new term or change existing terms.'
   route_name: view.terms.terms
-
-#simple_school_reports_core.config_school_subject:
-#  title: 'School subjects'
-#  parent: simple_school_reports_core.config
-#  description: 'List school subjects and add new language subjects.'
-#  route_name: view.syllabus.gr
 
 simple_school_reports_core.config_syllabuses:
   title: 'Subject/Course syllabuses'

@@ -12,6 +12,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
 use Drupal\Core\Site\Settings;
+use Drupal\simple_school_reports_core\Service\OrganizationsService;
 use Drupal\simple_school_reports_dnp_support\DnpProvisioningInterface;
 use Drupal\simple_school_reports_dnp_support\DnpProvisioningRowIdTrait;
 use Drupal\simple_school_reports_dnp_support\DnpSourceDataInterface;
@@ -192,7 +193,7 @@ final class DnpProvisioning extends ContentEntityBase implements DnpProvisioning
     /** @var \Drupal\simple_school_reports_core\Service\TermServiceInterface $term_service */
     $term_service = \Drupal::service('simple_school_reports_core.term_service');
     $default_school_year = $term_service->getDefaultSchoolYearStart()->format('y') . $term_service->getDefaultSchoolYearEnd()->format('y');
-    $school_unit_code = Settings::get('ssr_school_unit_code');
+    $school_unit_code = OrganizationsService::getStaticSchoolUnitCode('GR');
 
     if (!$school_unit_code) {
       throw new \RuntimeException('School unit code is not set.');

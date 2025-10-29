@@ -230,7 +230,7 @@ abstract class ActivateSyllabusFormBase extends ConfirmFormBase {
     $course_code = $parts[0] ?? '';
     $language_code = $parts[1] ?? NULL;
 
-    if ($plain_course_code && $language_code === NULL) {
+    if ($plain_course_code && $language_code !== NULL) {
       $course_code = str_replace('_' . $language_code, '', $course_code);
     }
 

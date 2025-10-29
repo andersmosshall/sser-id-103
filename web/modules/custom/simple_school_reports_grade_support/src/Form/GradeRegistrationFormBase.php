@@ -710,7 +710,7 @@ abstract class GradeRegistrationFormBase extends ConfirmFormBase {
         }
 
         if ($excluded && empty($exclude_reason)) {
-          $form_state->setErrorByName($this->getFieldKey($syllabus_id, $student_id, 'exclude_reason'), $this->t('You must select a reason for excluding the grade registraion for this student.'));
+          $form_state->setErrorByName($this->getFieldKey($syllabus_id, $student_id, 'exclude_reason'), $this->t('You must select a reason for excluding the grade registration for this student.'));
         }
 
         if ($excluded) {

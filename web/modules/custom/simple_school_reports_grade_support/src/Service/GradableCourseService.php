@@ -257,7 +257,7 @@ class GradableCourseService implements GradableCourseServiceInterface {
     $query->innerJoin('ssr_grade_reg_round__field_grade_reg_course', 'r', 'r.field_grade_reg_course_target_id = rc.id');
     $query->innerJoin('ssr_grade_reg_round_field_data', 'rd', 'r.entity_id = rd.id');
     if (is_array($course_ids)) {
-      $query->condition('rc.course', $course_ids, ['IN']);
+      $query->condition('rc.course', $course_ids, 'IN');
     }
     $query->fields('rc', ['registration_status']);
     $query->fields('rd', ['id']);

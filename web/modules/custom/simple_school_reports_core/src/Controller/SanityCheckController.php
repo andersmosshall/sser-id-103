@@ -61,11 +61,6 @@ class SanityCheckController extends ControllerBase {
     $value_safe_settings = [
       'ssr_bug_report_email',
       'ssr_school_name',
-      'ssr_school_name_short',
-      'ssr_school_organiser',
-      'ssr_school_unit_code',
-      'ssr_school_municipality',
-      'ssr_school_municipality_code',
       'ssr_id',
     ];
     foreach ($value_safe_settings as $setting) {
@@ -230,6 +225,36 @@ class SanityCheckController extends ControllerBase {
         'style' => 'height: 90px; width: auto;',
       ],
     ];
+
+    $build['organization_list_label'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h2',
+      '#value' => $this->t('Organization/School'),
+    ];
+
+    $organization_storage = $this->entityTypeManager()->getStorage('ssr_organization');
+    $organization_ids = $organization_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->sort('sort_index', 'ASC')
+      ->sort('label', 'ASC')
+      ->execute();
+
+    if (!empty($organization_ids)) {
+      $organizations = $organization_storage->loadMultiple($organization_ids);
+      foreach ($organizations as $organization) {
+        $view_builder = $this->entityTypeManager->getViewBuilder('ssr_organization');
+        $build['organization_label_' . $organization->id()] = [
+          '#type' => 'html_tag',
+          '#tag' => 'h3',
+          '#value' => $organization->label(),
+        ];
+        $build['organization_' . $organization->id()] = $view_builder->view($organization);
+        $build['organization_devider_' . $organization->id()] = [
+          '#type' => 'html_tag',
+          '#tag' => 'hr',
+        ];
+      }
+    }
 
 
     $build['modules_list_label'] = [

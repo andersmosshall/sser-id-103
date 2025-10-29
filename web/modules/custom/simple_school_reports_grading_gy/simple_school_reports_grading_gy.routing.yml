@@ -49,3 +49,11 @@ simple_school_reports_grading_gy.grades_export_gy:
     _title: 'Export documents'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\ExportsGradesFormGy::access'
+
+simple_school_reports_grading_gy.preview_grades_export_gy:
+  path: '/grade-registration/gy/preview'
+  defaults:
+    _form: '\Drupal\simple_school_reports_grading_gy\Form\PreviewGradeExportFormGy'
+    _title: 'Preview grades'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_grading_gy\Form\PreviewGradeExportFormGy::access'

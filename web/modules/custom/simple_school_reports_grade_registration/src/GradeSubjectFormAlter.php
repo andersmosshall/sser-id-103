@@ -286,6 +286,10 @@ class GradeSubjectFormAlter {
         '#default_value' => $default_grade,
         '#disabled' => $disabled,
         '#states' => $states,
+        '#attributes' => [
+          'data-copy-to-all-label' => t('Copy @label from @source', ['@label' => t('Grade'), '@source' =>  $student->getDisplayName()]),
+          'class' => ['grade-value-select'],
+        ],
       ];
       $form['grade_registration'][$student_uid]['student']['grade_registration']['grade_wrapper']['grade_select_wrapper']['trial_' . $student_uid] = [
         '#title' => t('Grade from trial'),
@@ -317,6 +321,10 @@ class GradeSubjectFormAlter {
         '#default_value' => $default_grading_teacher,
         '#disabled' => $disabled,
         '#states' => $states,
+        '#attributes' => [
+          'data-copy-to-all-label' => t('Copy @label from @source', ['@label' => t('Grading teacher'), '@source' =>  $student->getDisplayName()]),
+          'class' => ['grading-teacher-select'],
+        ],
       ];
 
       if (count($grading_teacher_options_local) > 1) {
@@ -380,6 +388,19 @@ class GradeSubjectFormAlter {
           '#states' => $states,
         ];
       }
+    }
+
+    $grade_system = $grade_student_group->get('field_grade_system')->value;
+    if (!$disabled && count($students) > 1 && $grade_system === 'geg_grade_system') {
+      $form['select_copy'] = [
+        '#type' => 'msr_input_copy',
+        '#target_selectors' => ['.grade-value-select'],
+      ];
+
+      $form['comment_copy'] = [
+        '#type' => 'msr_input_copy',
+        '#target_selectors' => ['.grading-teacher-select'],
+      ];
     }
 
     if (\Drupal::currentUser()->hasPermission('administer simple school reports settings')) {

@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for gy 25 core module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\link\LinkItemInterface;
+use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+
+/**
+ * Resync gy 25 syllabuses.
+ */
+function simple_school_reports_core_gy_update_10001() {
+  $syllabus_storage = \Drupal::entityTypeManager()->getStorage('ssr_syllabus');
+  $syllabuses = $syllabus_storage->loadByProperties(['school_type_versioned' => 'GY:2025']);
+  /** @var \Drupal\simple_school_reports_entities\SyllabusInterface $syllabus */
+  foreach ($syllabuses as $syllabus) {
+    /** @var \Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface $syllabus_service */
+    $syllabus_service = \Drupal::service('simple_school_reports_entities.syllabus_service');
+    $syllabus_service->syncSyllabus($syllabus);
+  }
+}

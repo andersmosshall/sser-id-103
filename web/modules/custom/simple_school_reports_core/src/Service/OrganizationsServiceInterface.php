@@ -9,7 +9,7 @@ use Drupal\simple_school_reports_entities\SSROrganizationInterface;
  */
 interface OrganizationsServiceInterface {
 
-  public function getOrganization(string $organization_type): ?SSROrganizationInterface;
+  public function getOrganization(string $organization_type, string $school_type): ?SSROrganizationInterface;
 
-  public function assertOrganizations(): bool;
+  public function getSchoolUnitCode(string $school_type): ?string;
 }

@@ -81,13 +81,6 @@ abstract class UnlockCourseGradeRegistrationFormBase extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
-    return 'unlock_course_grade_registration_form';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildForm(
     array $form,
     FormStateInterface $form_state,

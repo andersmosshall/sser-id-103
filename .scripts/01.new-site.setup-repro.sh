@@ -40,6 +40,9 @@ declare -A MODULE_WEIGHT_OVERRIDES=(
     ["simple_school_reports_geg_grade_registration"]=20
     ["simple_school_reports_grade_stats"]=30
     ["simple_school_reports_maillog"]=6
+    ["simple_school_reports_core_fklass"]=5
+    ["simple_school_reports_core_gr"]=5
+    ["simple_school_reports_core_gy"]=5
     # Add more overrides here later if needed
 )
 
@@ -144,69 +147,70 @@ while true; do
     fi
 done
 
-DEFAULT_SCHOOL_NAME_SHORT=$(echo "$SCHOOL_NAME" | cut -c1-3)
-read -p "Enter School Short Name (max 3-4 chars) [${DEFAULT_SCHOOL_NAME_SHORT}]: " SCHOOL_NAME_SHORT
-SCHOOL_NAME_SHORT=${SCHOOL_NAME_SHORT:-$DEFAULT_SCHOOL_NAME_SHORT}
-if [[ ${#SCHOOL_NAME_SHORT} -gt 4 ]]; then
-    echo "Warning: School Short Name '${SCHOOL_NAME_SHORT}' is longer than 4 characters. Using first 4: '${SCHOOL_NAME_SHORT:0:4}'" >&2
-    SCHOOL_NAME_SHORT=${SCHOOL_NAME_SHORT:0:4}
-fi
-
-while true; do
-    read -p "Enter School Organiser (Huvudman) (required): " SCHOOL_ORGANISER
-    if [[ -n "$SCHOOL_ORGANISER" ]]; then
-        break
-    else
-        echo "School Organiser cannot be empty." >&2
-    fi
-done
-
-while true; do
-    read -p "Enter School Unit Code (Skolenhetskod) (required): " SCHOOL_UNIT_CODE
-    if [[ -n "$SCHOOL_UNIT_CODE" ]]; then
-        break
-    else
-        echo "School Unit Code cannot be empty." >&2
-    fi
-done
-
-while true; do
-    read -p "Enter School Municipality (Kommun) (required): " SCHOOL_MUNICIPALITY
-    if [[ -n "$SCHOOL_MUNICIPALITY" ]]; then
-        break
-    else
-        echo "School Municipality cannot be empty." >&2
-    fi
-done
-
-while true; do
-    read -p "Enter School Municipality Code (Kommunkod) (required): " SCHOOL_MUNICIPALITY_CODE
-    if [[ -n "$SCHOOL_MUNICIPALITY_CODE" ]]; then
-        break
-    else
-        echo "School Municipality Code cannot be empty." >&2
-    fi
-done
 echo # Add a newline
 
-# 6. Get SSR Grade Range
-while true; do
-  read -p "Enter starting grade (0-9): " SSR_GRADE_FROM
-  if [[ "$SSR_GRADE_FROM" =~ ^[0-9]$ ]]; then # Check for single digit 0-9
-     break
-  else
-     echo "Invalid input. Please enter a single digit between 0 and 9." >&2
-  fi
-done
+# 6. Get school types
+# Allow choosing one or more school types to use. Maintain options in the list below.
+declare -a SCHOOL_TYPE_OPTIONS=(
+  "FKLASS"
+  "GR"
+  "GY"
+)
 
-while true; do
-  read -p "Enter ending grade (0-9, must be >= ${SSR_GRADE_FROM}): " SSR_GRADE_TO
-  if [[ "$SSR_GRADE_TO" =~ ^[0-9]$ && "$SSR_GRADE_TO" -ge "$SSR_GRADE_FROM" ]]; then
-     break
-  else
-     echo "Invalid input. Please enter a single digit between 0 and 9, not less than the starting grade (${SSR_GRADE_FROM})." >&2
-  fi
-done
+# Arrays to hold the selected school types (codes) and their lowercase equivalents
+SSR_SCHOOL_TYPES=()
+SSR_SCHOOL_TYPES_LOWER=()
+
+if [[ ${#SCHOOL_TYPE_OPTIONS[@]} -gt 0 ]]; then
+  echo "--- School Types ---"
+  echo "Available school types:"
+  st_index=0
+  for st in "${SCHOOL_TYPE_OPTIONS[@]}"; do
+    printf "  %d) %s\n" $((st_index + 1)) "$st"
+    st_index=$((st_index + 1))
+  done
+
+  # Selection prompt loop (consistent with other multi-select prompts)
+  while true; do
+    read -p "Enter number(s) for corresponding school types to include (space-separated, or 'none'): " st_selection_input
+    if [[ "$st_selection_input" == "none" || -z "$st_selection_input" ]]; then
+      echo "No school types selected."
+      break
+    fi
+
+    valid_st_selection=true
+    read -ra st_selected_indices <<< "$st_selection_input"
+    tmp_selected_types=()
+    for index_str in "${st_selected_indices[@]}"; do
+      if ! [[ "$index_str" =~ ^[1-9][0-9]*$ ]]; then
+        echo "Invalid input: '$index_str' is not a positive number." >&2
+        valid_st_selection=false
+        break
+      fi
+      local_index=$((index_str - 1))
+      if ! [[ "$local_index" -ge 0 && "$local_index" -lt ${#SCHOOL_TYPE_OPTIONS[@]} ]]; then
+        echo "Invalid input: Number '$index_str' is out of range (1-${#SCHOOL_TYPE_OPTIONS[@]})." >&2
+        valid_st_selection=false
+        break
+      fi
+      tmp_selected_types+=("${SCHOOL_TYPE_OPTIONS[$local_index]}")
+    done
+
+    if $valid_st_selection; then
+      # De-duplicate and assign
+      SSR_SCHOOL_TYPES=($(printf "%s\n" "${tmp_selected_types[@]}" | sort -u))
+      # Build lowercase list
+      SSR_SCHOOL_TYPES_LOWER=()
+      for t in "${SSR_SCHOOL_TYPES[@]}"; do
+        SSR_SCHOOL_TYPES_LOWER+=("$(echo "$t" | tr '[:upper:]' '[:lower:]')")
+      done
+      echo "Selected school types: ${SSR_SCHOOL_TYPES[*]}"
+      break
+    fi
+  done
+else
+  echo "No school type options are defined."
+fi
 echo # Add a newline
 
 # 7. Email and Customization Settings
@@ -276,6 +280,17 @@ declare -a available_modules=()
 declare -a selected_module_indices=()
 declare -a base_modules=()
 SELECTED_MODULES=() # Final list of selected module names
+AUTO_SELECTED_MODULES=() # Modules auto-picked from selected school types
+
+# Build auto-selected modules list from selected school types
+if [[ ${#SSR_SCHOOL_TYPES_LOWER[@]} -gt 0 ]]; then
+    for st in "${SSR_SCHOOL_TYPES_LOWER[@]}"; do
+        AUTO_SELECTED_MODULES+=("simple_school_reports_core_${st}")
+    done
+    # Initialize SELECTED_MODULES with auto-selected (unique)
+    SELECTED_MODULES=($(printf "%s\n" "${AUTO_SELECTED_MODULES[@]}" | sort -u))
+    echo "Auto-selected modules based on school types: ${SELECTED_MODULES[*]}"
+fi
 
 # Read base modules from core.extension.yml if it exists
 if [[ -f "$BASE_CORE_EXTENSION_FILE" ]]; then
@@ -339,8 +354,21 @@ else
                 continue
             fi
 
+            # Exclude auto-selected modules derived from school types
+            is_auto_module=false
+            for auto_mod in "${AUTO_SELECTED_MODULES[@]}"; do
+                if [[ "$module_name" == "$auto_mod" ]]; then
+                    is_auto_module=true
+                    break
+                fi
+            done
+            if $is_auto_module; then
+                echo "  - Excluding '$module_name' (auto-selected by school types)"
+                continue
+            fi
+
             # If not excluded, add to candidates
-             candidate_modules+=("$module_name")
+            candidate_modules+=("$module_name")
         done
 
         # Now list the actual available modules for selection
@@ -384,8 +412,9 @@ else
 
                 if $valid_selection; then
                     echo "Selected module numbers: ${selected_indices[*]}"
-                    # Assign validated selections and remove duplicates
-                    SELECTED_MODULES=($(printf "%s\n" "${temp_selected_modules[@]}" | sort -u))
+                    # Merge validated selections with any preselected (auto) modules and de-duplicate
+                    combined_modules=("${SELECTED_MODULES[@]}" "${temp_selected_modules[@]}")
+                    SELECTED_MODULES=($(printf "%s\n" "${combined_modules[@]}" | sort -u))
                     echo "Selected modules: ${SELECTED_MODULES[*]}"
                     break # Exit selection loop
                 fi
@@ -401,8 +430,6 @@ echo # Newline after module selection
 # Escape variables that might contain problematic characters BEFORE file operations
 echo "Preparing replacement values..."
 ESCAPED_SCHOOL_NAME=$(escape_sed_replacement "$SCHOOL_NAME")
-ESCAPED_SCHOOL_ORGANISER=$(escape_sed_replacement "$SCHOOL_ORGANISER")
-ESCAPED_SCHOOL_MUNICIPALITY=$(escape_sed_replacement "$SCHOOL_MUNICIPALITY")
 ESCAPED_SSR_NO_REPLY_EMAIL=$(escape_sed_replacement "$SSR_NO_REPLY_EMAIL")
 ESCAPED_GIT_CLONE_URL=$(escape_sed_replacement "$GIT_CLONE_URL")
 ESCAPED_SSR_BASE_GIT_URL=$(escape_sed_replacement "$SSR_BASE_GIT_URL") # Escape Base Git URL
@@ -424,20 +451,6 @@ apply_all_replacements() {
     || error_exit "Failed replacing [SSR_BASE_GIT_URL] in ${filename}"
   sed -i "s/\\[SCHOOL_NAME\\]/${ESCAPED_SCHOOL_NAME}/g" "$target_file" \
     || error_exit "Failed replacing [SCHOOL_NAME] in ${filename}"
-  sed -i "s/\\[SCHOOL_NAME_SHORT\\]/${SCHOOL_NAME_SHORT}/g" "$target_file" \
-    || error_exit "Failed replacing [SCHOOL_NAME_SHORT] in ${filename}"
-  sed -i "s/\\[SCHOOL_ORGANISER\\]/${ESCAPED_SCHOOL_ORGANISER}/g" "$target_file" \
-    || error_exit "Failed replacing [SCHOOL_ORGANISER] in ${filename}"
-  sed -i "s/\\[SCHOOL_UNIT_CODE\\]/${SCHOOL_UNIT_CODE}/g" "$target_file" \
-    || error_exit "Failed replacing [SCHOOL_UNIT_CODE] in ${filename}"
-  sed -i "s/\\[SCHOOL_MUNICIPALITY\\]/${ESCAPED_SCHOOL_MUNICIPALITY}/g" "$target_file" \
-    || error_exit "Failed replacing [SCHOOL_MUNICIPALITY] in ${filename}"
-  sed -i "s/\\[SCHOOL_MUNICIPALITY_CODE\\]/${SCHOOL_MUNICIPALITY_CODE}/g" "$target_file" \
-    || error_exit "Failed replacing [SCHOOL_MUNICIPALITY_CODE] in ${filename}"
-  sed -i "s/\\[SSR_GRADE_FROM\\]/${SSR_GRADE_FROM}/g" "$target_file" \
-    || error_exit "Failed replacing [SSR_GRADE_FROM] in ${filename}"
-  sed -i "s/\\[SSR_GRADE_TO\\]/${SSR_GRADE_TO}/g" "$target_file" \
-    || error_exit "Failed replacing [SSR_GRADE_TO] in ${filename}"
   sed -i "s/\\[SSR_BUG_REPORT_EMAIL\\]/${SSR_BUG_REPORT_EMAIL}/g" "$target_file" \
     || error_exit "Failed replacing [SSR_BUG_REPORT_EMAIL] in ${filename}"
   sed -i "s/\\[SSR_NO_REPLY_EMAIL\\]/${ESCAPED_SSR_NO_REPLY_EMAIL}/g" "$target_file" \
@@ -747,12 +760,6 @@ echo "New Site Git URL:       ${GIT_CLONE_URL}"
 echo "URL Name:               ${URL_NAME}"
 echo "Full URL:               ${FULL_URL}"
 echo "School Name:            ${SCHOOL_NAME}"
-echo "School Short Name:      ${SCHOOL_NAME_SHORT}"
-echo "School Organiser:       ${SCHOOL_ORGANISER}"
-echo "School Unit Code:       ${SCHOOL_UNIT_CODE}"
-echo "School Municipality:    ${SCHOOL_MUNICIPALITY}"
-echo "Municipality Code:      ${SCHOOL_MUNICIPALITY_CODE}"
-echo "Grade Range:            ${SSR_GRADE_FROM}-${SSR_GRADE_TO}"
 echo "Bug Report Email:       ${SSR_BUG_REPORT_EMAIL}"
 echo "No-Reply Email:         ${SSR_NO_REPLY_EMAIL}"
 echo "Extra Super Admins:     ${SSR_EXTRA_SUPER_ADMINS}"

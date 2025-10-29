@@ -27,3 +27,9 @@ simple_school_reports_core.language_school_subject_add:
   title: 'Add language school subject'
   appears_on:
     - view.school_subjects.school_subjects
+
+simple_school_reports_core.organization_add:
+  route_name: entity.ssr_organization.add_form
+  title: 'Add school/organization'
+  appears_on:
+    - view.ssr_organizations.list

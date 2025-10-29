@@ -404,3 +404,51 @@ function simple_school_reports_entities_update_10018() {
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_programme'));
   }
 }
+
+/**
+ * Install new fields on ssr organization
+ */
+function simple_school_reports_entities_update_10019() {
+  $fields = [];
+
+  $fields['short_name'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Short label'))
+    ->setSetting('max_length', 5)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['school_grades'] = BaseFieldDefinition::create('list_string')
+    ->setLabel(t('School grades'))
+    ->setDescription(t('Active school grades.'))
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_grades')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['municipality'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Municipality'))
+    ->setSetting('max_length', 255)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_organization', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+
+/**
+ * Install sort index field on ssr organization
+ */
+function simple_school_reports_entities_update_10020() {
+  $fields = [];
+
+  $fields['sort_index'] = BaseFieldDefinition::create('integer')
+    ->setLabel(t('Sort index'))
+    ->setRequired(TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_organization', 'simple_school_reports_entities', $storage_definition);
+  }
+}

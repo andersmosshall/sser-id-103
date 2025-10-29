@@ -22,14 +22,10 @@ final class GradeSnapshotPeriodAccessControlHandler extends EntityAccessControlH
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
-    if ($account->hasPermission($this->entityType->getAdminPermission())) {
-      return AccessResult::allowed()->cachePerPermissions();
-    }
-
     return match($operation) {
       'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_grade_snapshot_period'),
       'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_grade_snapshot_period'),
-      'delete' => AccessResult::allowedIfHasPermission($account, 'delete ssr_grade_snapshot_period'),
+//      'delete' => AccessResult::allowedIfHasPermission($account, 'delete ssr_grade_snapshot_period'),
       default => AccessResult::neutral(),
     };
   }
