@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\simple_school_reports_grade_support\GradeSnapshotPeriodInterface;
 use Drupal\user\EntityOwnerTrait;
 
@@ -96,7 +97,7 @@ final class GradeSnapshotPeriod extends ContentEntityBase implements GradeSnapsh
 
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setTranslatable(TRUE)
-      ->setLabel(t('Label'))
+      ->setLabel(t('Name'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
@@ -104,7 +105,7 @@ final class GradeSnapshotPeriod extends ContentEntityBase implements GradeSnapsh
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published'))
-      ->setDefaultValue(FALSE)
+      ->setDefaultValue(TRUE)
       ->setSetting('on_label', t('Yes'))
       ->setSetting('on_label', t('No'))
       ->setDisplayConfigurable('form', TRUE)
@@ -129,6 +130,13 @@ final class GradeSnapshotPeriod extends ContentEntityBase implements GradeSnapsh
 
     $fields['period_index'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Period index'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['school_type_versioned'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('School type'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setSetting('allowed_values_function', 'simple_school_reports_core_school_type_versioned_options')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

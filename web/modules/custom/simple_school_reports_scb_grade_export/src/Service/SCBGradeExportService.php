@@ -8,6 +8,8 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\simple_school_reports_core\Pnum;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
+use Drupal\simple_school_reports_core\Service\OrganizationsService;
+use Drupal\simple_school_reports_core\Service\OrganizationsServiceInterface;
 use Drupal\simple_school_reports_core\Service\SSRVersionServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
 
@@ -40,7 +42,7 @@ class SCBGradeExportService implements GroupGradeExportInterface {
   public function handleExport(string $student_group_nid, array $references, array &$context) {
     if (
       empty($context['results']['catalog'][$student_group_nid]) ||
-      empty(Settings::get('ssr_school_unit_code')) ||
+      empty(OrganizationsService::getStaticSchoolUnitCode('GR')) ||
       empty(Settings::get('ssr_school_name')) ||
       empty(Settings::get('ssr_catalog_id'))
     ) {
@@ -237,7 +239,7 @@ class SCBGradeExportService implements GroupGradeExportInterface {
       $student_row_parts[] = $this->makeRowPart($ssn, 12);
 
       // Add school unit code.
-      $student_row_parts[] = $this->makeRowPart(Settings::get('ssr_school_unit_code'), 8);
+      $student_row_parts[] = $this->makeRowPart(OrganizationsService::getStaticSchoolUnitCode('GR'), 8);
 
       // Add class.
       $class = $context['results']['ssr_student_doc_class_value'][$student_uid] ?? $context['results']['ssr_student_doc_grade_value'][$student_uid] ?? '';

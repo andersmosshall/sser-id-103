@@ -2,6 +2,8 @@
 
 namespace Drupal\simple_school_reports_entities\Service;
 
+use Drupal\simple_school_reports_entities\SyllabusInterface;
+
 /**
  * Provides an interface defining SyllabusService.
  */
@@ -65,7 +67,7 @@ interface SyllabusServiceInterface {
    *  - points
    *  - aggregated_points
    */
-  public function getSyllabusPreviousPoints(int $syllabus_id): array;
+  public function getSyllabusPoints(int $syllabus_id): ?int;
 
   /**
    * @param int $syllabus_id
@@ -73,5 +75,17 @@ interface SyllabusServiceInterface {
    * @return bool
    */
   public function useDiplomaProject(int $syllabus_id): bool;
+
+  /**
+   * @param array $school_type_versions
+   *   May be school types or school type versions.
+   *
+   * @return array
+   */
+  public function getSyllabusIdsFromSchoolTypes(array $school_type_versions): array;
+
+  public function syncSyllabus(SyllabusInterface  $syllabus): void;
+
+  public function clearLookup(): void;
 
 }

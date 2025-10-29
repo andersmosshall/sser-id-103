@@ -262,7 +262,12 @@ final class Grade extends RevisionableContentEntityBase implements GradeInterfac
     $grade_snapshot_service = \Drupal::service('simple_school_reports_grade_support.grade_snapshot_service');
 
     if (!$update || $this->get('correction_type')->value === self::CORRECTION_TYPE_CHANGED) {
-      $grade_snapshot_service->makeSnapshot($this->get('student')->target_id);
+      $syllabus = $this->get('syllabus')->entity;
+      $school_type_versioned = $syllabus?->get('school_type_versioned')->value;
+      if (!$school_type_versioned) {
+        throw new \RuntimeException('Failed to resolve school type versions from syllabus: ' . $this->get('syllabus')->target_id);
+      }
+      $grade_snapshot_service->makeSnapshot($this->get('student')->target_id, [$school_type_versioned]);
       return;
     }
 

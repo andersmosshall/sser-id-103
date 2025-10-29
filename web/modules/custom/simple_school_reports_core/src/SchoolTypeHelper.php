@@ -7,40 +7,52 @@ use Drupal\node\NodeInterface;
 
 class SchoolTypeHelper {
 
-  public static function getSupportedSchoolTypes(): array {
+  public static function getSupportedSchoolTypes(bool $filter_by_modules = TRUE): array {
     $school_types = [
-      'FS' => 'Förskola',
+//      'FS' => 'Förskola',
       'FKLASS' => 'Förskoleklass',
-      'FTH' => 'Fritidshem',
-      'OPPFTH' => 'Öppen fritidsverksamhet',
+//      'FTH' => 'Fritidshem',
+//      'OPPFTH' => 'Öppen fritidsverksamhet',
       'GR' => 'Grundskola',
-      'GRS' => 'Grundsärskola',
-      'TR' => 'Träningsskolan',
-      'SP' => 'Specialskola',
-      'SAM' => 'Sameskola',
+//      'GRS' => 'Grundsärskola',
+//      'TR' => 'Träningsskolan',
+//      'SP' => 'Specialskola',
+//      'SAM' => 'Sameskola',
       'GY' => 'Gymnasieskola',
-      'GYS' => 'Gymnasiesärskola',
-      'VUX' => 'Kommunal vuxenutbildning',
-      'VUXSFI' => 'Kommunal vuxenutbildning i svenska för invandrare',
-      'VUXGR' => 'Kommunal vuxenutbildning på grundläggande nivå',
-      'VUXGY' => 'Kommunal vuxenutbildning på gymnasial nivå',
-      'VUXSARGR' => 'Kommunal vuxenutbildning som särskild utbildning på grundläggande nivå',
-      'VUXSARTR' => 'Kommunal vuxenutbildning som särskild utbildning som motsvarar träningsskolan',
-      'VUXSARGY' => 'Kommunal vuxenutbildning som särskild utbildning på gymnasial nivå',
-      'SFI' => 'Utbildning i svenska för invandrare',
-      'SARVUX' => 'Särskild utbildning för vuxna',
-      'SARVUXGR' => 'Särskild utbildning för vuxna på grundläggande nivå',
-      'SARVUXGY' => 'Särskild utbildning för vuxna på gymnasial nivå',
-      'SFI' => 'Kommunal vuxenutbildning i svenska för invandrare',
-      'KU' => 'Kulturskola',
-      'YH' => 'Yrkeshögskola',
-      'FHS' => 'Folkhögskola',
-      'STF' => 'Studieförbund',
-      'KKU' => 'Konst- och kulturutbildning',
-      'HS' => 'Högskola',
-      'ABU' => 'Arbetsmarknadsutbildning',
-      'AU' => 'Annan undervisning',
+//      'GYS' => 'Gymnasiesärskola',
+//      'VUX' => 'Kommunal vuxenutbildning',
+//      'VUXSFI' => 'Kommunal vuxenutbildning i svenska för invandrare',
+//      'VUXGR' => 'Kommunal vuxenutbildning på grundläggande nivå',
+//      'VUXGY' => 'Kommunal vuxenutbildning på gymnasial nivå',
+//      'VUXSARGR' => 'Kommunal vuxenutbildning som särskild utbildning på grundläggande nivå',
+//      'VUXSARTR' => 'Kommunal vuxenutbildning som särskild utbildning som motsvarar träningsskolan',
+//      'VUXSARGY' => 'Kommunal vuxenutbildning som särskild utbildning på gymnasial nivå',
+//      'SFI' => 'Utbildning i svenska för invandrare',
+//      'SARVUX' => 'Särskild utbildning för vuxna',
+//      'SARVUXGR' => 'Särskild utbildning för vuxna på grundläggande nivå',
+//      'SARVUXGY' => 'Särskild utbildning för vuxna på gymnasial nivå',
+//      'SFI' => 'Kommunal vuxenutbildning i svenska för invandrare',
+//      'KU' => 'Kulturskola',
+//      'YH' => 'Yrkeshögskola',
+//      'FHS' => 'Folkhögskola',
+//      'STF' => 'Studieförbund',
+//      'KKU' => 'Konst- och kulturutbildning',
+//      'HS' => 'Högskola',
+//      'ABU' => 'Arbetsmarknadsutbildning',
+//      'AU' => 'Annan undervisning',
     ];
+
+    if ($filter_by_modules) {
+      /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+      $module_handler = \Drupal::service('module_handler');
+
+      foreach ($school_types as $key => $value) {
+        $module_name = 'simple_school_reports_core_' . strtolower($key);
+        if (!$module_handler->moduleExists($module_name)) {
+          unset($school_types[$key]);
+        }
+      }
+    }
 
     return $school_types;
   }

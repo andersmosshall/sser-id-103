@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_grade_support\Service;
 
 use Drupal\simple_school_reports_grade_support\GradeInterface;
 use Drupal\simple_school_reports_grade_support\Utilities\GradeInfo;
+use Drupal\simple_school_reports_grade_support\Utilities\GradeInfoMinimal;
 
 /**
  * Provides an interface defining GradeService.
@@ -56,7 +57,7 @@ interface GradeServiceInterface {
    *
    * @return string|null
    */
-  public function getGradeLabel(GradeInfo $grade_info, ?array $exclude_label_map = []): ?string;
+  public function getGradeLabel(GradeInfo|GradeInfoMinimal $grade_info, ?array $exclude_label_map = []): ?string;
 
   /**
    * @param string|int $tid
@@ -77,14 +78,18 @@ interface GradeServiceInterface {
    *
    * @return string
    */
-  public function getSyllabusLabel(GradeInfo $grade_info): string;
+  public function getSyllabusLabel(GradeInfo|GradeInfoMinimal $grade_info): string;
 
-  public function isPassed(GradeInfo $grade_info): bool;
+  public function isPassed(GradeInfo|GradeInfoMinimal $grade_info): bool;
 
-  public function hasGrade(GradeInfo $grade_info): bool;
+  public function hasGrade(GradeInfo|GradeInfoMinimal $grade_info): bool;
 
   public function getCodes(GradeInfo $grade_info): array;
 
+  public function getLevelsNumericalNames(GradeInfo $grade_info): array;
 
+  public function getLevelsGradeReferences(GradeInfo $grade_info): array;
+
+  public function getAggregatedPoints(GradeInfo $grade_info): ?int;
 
 }

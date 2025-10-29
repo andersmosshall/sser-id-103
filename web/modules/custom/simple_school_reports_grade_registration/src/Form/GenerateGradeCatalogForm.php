@@ -18,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Drupal\simple_school_reports_core\Pnum;
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\FileTemplateServiceInterface;
+use Drupal\simple_school_reports_core\Service\OrganizationsService;
 use Drupal\simple_school_reports_core\Service\SchoolSubjectServiceInterface;
 use Drupal\simple_school_reports_grade_registration\GradeRoundFormAlter;
 use Drupal\simple_school_reports_grade_registration\GroupGradeExportInterface;
@@ -823,6 +824,11 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
     $use_classes = \Drupal::moduleHandler()->moduleExists('simple_school_reports_class');
 
+    /** @var \Drupal\simple_school_reports_core\Service\OrganizationsServiceInterface $organization_service */
+    $organization_service = \Drupal::service('simple_school_reports_core.organizations_service');
+    $organizer = $organization_service->getOrganization('school_organiser', 'GR');
+    $school = $organization_service->getOrganization('school', 'GR');
+
     $search_replace_map['!fornamn!'] = $student->get('field_first_name')->value ?? '';
     $search_replace_map['!efternamn!'] = $student->get('field_last_name')->value ?? '';
     $search_replace_map['!sgl!'] = 'Årskurs';
@@ -831,10 +837,10 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     $search_replace_map['!bsl!'] = 'Antal timmar med ogiltig frånvaro';
     $search_replace_map['!bs!'] = !empty($context['results']['invalid_absence'][$student_uid]) ? $context['results']['invalid_absence'][$student_uid] . ' h' : '0 h';
 
-    $search_replace_map['!huvudman!'] = Settings::get('ssr_school_organiser', '');
-    $search_replace_map['!skola!'] = Settings::get('ssr_school_name', '') . ', ' . Settings::get('ssr_school_organiser', '');
-    $search_replace_map['!kommun!'] = Settings::get('ssr_school_municipality', '');
-    $search_replace_map['!sc!'] = Settings::get('ssr_school_unit_code', '');
+    $search_replace_map['!huvudman!'] = $organizer?->label() ?? '';
+    $search_replace_map['!skola!'] = ($school?->label() ?? '') . ', ' . ($organizer?->label() ?? '');
+    $search_replace_map['!kommun!'] = $school?->get('municipality')->value ?? '';
+    $search_replace_map['!sc!'] = OrganizationsService::getStaticSchoolUnitCode('GR');
 
     $search_replace_map['!gi!'] = '';
 
@@ -1024,6 +1030,11 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       return;
     }
 
+    /** @var \Drupal\simple_school_reports_core\Service\OrganizationsServiceInterface $organization_service */
+    $organization_service = \Drupal::service('simple_school_reports_core.organizations_service');
+    $organizer = $organization_service->getOrganization('school_organiser', 'GR');
+    $school = $organization_service->getOrganization('school', 'GR');
+
     $search_replace_map = [];
     $search_replace_map['!grupp!'] = $references['student_groups_data'][$student_group_nid]['name'];
     $search_replace_map['!datum!'] = $references['document_date'];
@@ -1032,10 +1043,10 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     $search_replace_map['!sts!'] = '';
     $search_replace_map['!gspec!'] = 'Lgr11. Betygsbeteckningarna som används är A, B, C, D, E eller F. (F, eleven har icke godkänt resultat för betyg), (-, Underlag för bedömning av elevens kunskaper saknas pga elevens frånvaro) Skollagen (2010:800) 10 kap 17-18 §. Siffran 2 anges i NO och SO för respektive ämne när eleven fått sammanfattande betyg för ämnesblocket eller i ämnesblocket när eleven fått betyg i de enskilda ämnena Skollagen (2010:800) 10 kap. 18 §, SkolFS (2011:123) 10 §. Siffran 2 anges även för svenska eller svenska som andraspråk samt i ämnena moderna språk (elevens val eller språkval), modersmål och teckenspråk när eleven inte läst dessa ämnen. SkolFS (2011:123) 10 §. Siffran 3 anges när ett ämne inte lästs på grund av anpassad studiegång enligt Skollagen (2010:800) 3 kap. 12 §. Anmärkningskolumnen används för rättelse av betyg (anges med siffran 4) och prövning (anges med siffran 5). Efter siffran används förkortning av ämnet.';
 
-    $search_replace_map['!huvudman!'] = Settings::get('ssr_school_organiser', '');
-    $search_replace_map['!skola!'] = Settings::get('ssr_school_name', '');
-    $search_replace_map['!kommun!'] = Settings::get('ssr_school_municipality', '');
-    $search_replace_map['!sc!'] = Settings::get('ssr_school_unit_code', '');
+    $search_replace_map['!huvudman!'] = $organizer?->label() ?? '';
+    $search_replace_map['!skola!'] = $school?->label() ?? '';;
+    $search_replace_map['!kommun!'] = $school?->get('municipality')->value ?? '';
+    $search_replace_map['!sc!'] = OrganizationsService::getStaticSchoolUnitCode('GR');
 
     $principle_name = '';
     if (!empty($references['student_groups_data'][$student_group_nid]['principle'])) {
@@ -1164,6 +1175,11 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
       return;
     }
 
+    /** @var \Drupal\simple_school_reports_core\Service\OrganizationsServiceInterface $organization_service */
+    $organization_service = \Drupal::service('simple_school_reports_core.organizations_service');
+    $organizer = $organization_service->getOrganization('school_organiser', 'GR');
+    $school = $organization_service->getOrganization('school', 'GR');
+
     $search_replace_map = [];
     $search_replace_map['!grupp!'] = $references['student_groups_data'][$student_group_nid]['name'];
     $search_replace_map['!datum!'] = $references['document_date'];
@@ -1172,10 +1188,10 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     $search_replace_map['!al!'] = 'Ämne';
     $search_replace_map['!grupplabel!'] = 'Klass/Gruppbeteckning';
 
-    $search_replace_map['!huvudman!'] = Settings::get('ssr_school_organiser', '');
-    $search_replace_map['!skola!'] = Settings::get('ssr_school_name', '');
-    $search_replace_map['!kommun!'] = Settings::get('ssr_school_municipality', '');
-    $search_replace_map['!sc!'] = Settings::get('ssr_school_unit_code', '');
+    $search_replace_map['!huvudman!'] = $organizer?->label() ?? '';
+    $search_replace_map['!skola!'] = $school?->label() ?? '';;
+    $search_replace_map['!kommun!'] = $school?->get('municipality')->value ?? '';
+    $search_replace_map['!sc!'] = OrganizationsService::getStaticSchoolUnitCode('GR');
 
 
 

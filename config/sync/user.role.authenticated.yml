@@ -10,6 +10,7 @@ dependencies:
     - filter
     - simple_school_reports_class_support
     - simple_school_reports_entities
+    - simple_school_reports_grade_support
     - simple_school_reports_module_info
     - system
     - toolbar
@@ -27,6 +28,7 @@ permissions:
   - 'use text format plain_text_ck'
   - 'view school week'
   - 'view school_week_deviation'
+  - 'view ssr_grade_snapshot_period'
   - 'view ssr_module_info'
   - 'view ssr_programme'
   - 'view ssr_school_class'

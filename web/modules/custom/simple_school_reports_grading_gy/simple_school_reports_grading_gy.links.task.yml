@@ -2,13 +2,28 @@ simple_school_reports_grading_gy.grade_rounds_list_gy:
   title: 'Register'
   route_name: view.ssr_grade_reg_rounds.gy
   base_route: view.ssr_grade_reg_rounds.gy
+  weight: 10
+
+simple_school_reports_grading_gy.preview_grades_export_gy:
+  title: 'Preview'
+  route_name: simple_school_reports_grading_gy.preview_grades_export_gy
+  base_route: view.ssr_grade_reg_rounds.gy
+  weight: 30
 
 simple_school_reports_grading_gy.grades_export_gy:
   title: 'Export'
   route_name: simple_school_reports_grading_gy.grades_export_gy
   base_route: view.ssr_grade_reg_rounds.gy
+  weight: 30
 
 simple_school_reports_grading_gy.ssr_grade_sign_attest_gy:
   title: 'Attest'
   route_name: view.ssr_grade_sign_attest.gy
   base_route: view.ssr_grade_reg_rounds.gy
+  weight: 40
+
+simple_school_reports_grading_gy.ssr_grade_snapshot_period_publish_gy:
+  title: 'Publish'
+  route_name: view.ssr_grade_snapshot_period_publish.gy
+  base_route: view.ssr_grade_reg_rounds.gy
+  weight: 50

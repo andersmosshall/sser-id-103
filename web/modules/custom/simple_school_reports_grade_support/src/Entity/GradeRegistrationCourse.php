@@ -21,9 +21,9 @@ use Drupal\user\EntityOwnerTrait;
  * @ContentEntityType(
  *   id = "ssr_grade_reg_course",
  *   label = @Translation("Course to grade"),
- *   label_collection = @Translation("Course to grades"),
+ *   label_collection = @Translation("Courses to grade"),
  *   label_singular = @Translation("course to grade"),
- *   label_plural = @Translation("course to grades"),
+ *   label_plural = @Translation("courses to grade"),
  *   label_count = @PluralTranslation(
  *     singular = "@count course to grades",
  *     plural = "@count course to grades",

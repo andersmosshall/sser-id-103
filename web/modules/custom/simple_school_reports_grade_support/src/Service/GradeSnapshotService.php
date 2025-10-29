@@ -7,7 +7,10 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
+use Drupal\simple_school_reports_entities\Service\SyllabusServiceInterface;
+use Drupal\simple_school_reports_grade_support\GradeSnapshotInterface;
 
 /**
  * Provides a service for managing grade snapshots.
@@ -21,12 +24,28 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected TermServiceInterface $termService,
     protected GradeServiceInterface $gradeService,
+    protected SyllabusServiceInterface $syllabusService,
   ) {}
+
+  protected function normalizeSchoolTypeVersions(array $school_type_versions): array {
+    if (empty($school_type_versions)) {
+      throw new \InvalidArgumentException('school_type_versions must not be empty');
+    }
+    // GY versions are always associated.
+    $gy_school_type_versions = SchoolTypeHelper::getSchoolTypeVersions('GY');
+    // Make sure all gy versions are included if any of them are included.
+    if (count(array_intersect($gy_school_type_versions, $school_type_versions)) > 0) {
+      $school_type_versions = array_merge($school_type_versions, $gy_school_type_versions);
+    }
+    return array_unique($school_type_versions);
+  }
 
   /**
    * {@inheritdoc}
    */
-  public function getSnapshotPeriodId(?\DateTime $date = NULL): int|string {
+  public function getSnapshotPeriodId(array $school_type_versions, ?\DateTime $date = NULL): int|string {
+    $school_type_versions = $this->normalizeSchoolTypeVersions($school_type_versions);
+
     if (!$date) {
       $date = new \DateTime('now');
     }
@@ -42,6 +61,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('period_index', $term_index)
+      ->condition('school_type_versioned', $school_type_versions, 'IN')
       ->execute());
 
     if (!$id) {
@@ -72,12 +92,14 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function makeSnapshot(int|string $student_id): void {
-    $snapshot_period_id = $this->getSnapshotPeriodId();
+  public function makeSnapshot(int|string $student_id, array $school_type_versions, bool $dry_run = FALSE): ?GradeSnapshotInterface {
+    $school_type_versions = $this->normalizeSchoolTypeVersions($school_type_versions);
+
+    $snapshot_period_id = $this->getSnapshotPeriodId($school_type_versions);
 
     $student = $this->entityTypeManager->getStorage('user')->load($student_id);
     if (!$student) {
-      return;
+      return NULL;
     }
 
     $identifier = $this->makeSnapshotIdentifier($snapshot_period_id, $student_id);
@@ -98,7 +120,9 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     $new_revision_ids = [];
     $new_snapshot_grades = [];
 
-    $grade_references = $this->gradeService->getGradeReferences([$student_id]);
+    $syllabus_ids = $this->syllabusService->getSyllabusIdsFromSchoolTypes($school_type_versions);
+
+    $grade_references = $this->gradeService->getGradeReferences([$student_id], $syllabus_ids);
 
     foreach ($grade_references as $grade_reference) {
       $new_revision_ids[] = $grade_reference->revisionId;
@@ -111,7 +135,7 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
     sort($new_revision_ids);
 
     if ($new_revision_ids == $current_revision_ids) {
-      return;
+      return $snapshot;
     }
 
     $snapshot->set('identifier', $identifier);
@@ -131,7 +155,12 @@ class GradeSnapshotService implements GradeSnapshotServiceInterface {
       throw new \RuntimeException('Failed to create grade snapshot for student ' . $student_id . ': ' . Json::encode($violations));
     }
 
+    if ($dry_run) {
+      return $snapshot;
+    }
+
     $snapshot->save();
+    return $snapshot;
   }
 
   /**

@@ -1,4 +1,4 @@
 services:
   simple_school_reports_extens_grade_export.export_service:
     class: Drupal\simple_school_reports_extens_grade_export\Service\ExtensGradeExportService
-    arguments: ['@entity_type.manager', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@file_system']
+    arguments: ['@entity_type.manager', '@simple_school_reports_core.pnum', '@simple_school_reports_core.email_service', '@file_system', '@simple_school_reports_core.organizations_service']

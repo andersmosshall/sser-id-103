@@ -91,7 +91,7 @@ final class GradeRegistrationRound extends ContentEntityBase implements GradeReg
 
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setTranslatable(TRUE)
-      ->setLabel(t('Label'))
+      ->setLabel(t('Name'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)

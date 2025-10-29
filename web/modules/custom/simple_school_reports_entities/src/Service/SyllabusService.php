@@ -7,6 +7,9 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_core\Form\ActivateSyllabusFormBase;
+use Drupal\simple_school_reports_core\SchoolSubjectHelper;
+use Drupal\simple_school_reports_core\SchoolTypeHelper;
+use Drupal\simple_school_reports_entities\SyllabusInterface;
 
 /**
  * Support methods for syllabus stuff.
@@ -20,6 +23,36 @@ class SyllabusService implements SyllabusServiceInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
   ) {}
+
+  protected function getCourseData(string $syllabus_identifier): ?array {
+
+    // Look for course data from various services.
+    $services = [
+      'simple_school_reports_core_gr.course_data',
+      'simple_school_reports_core_gy11.course_data',
+      'simple_school_reports_core_gy25.course_data',
+    ];
+
+    $course_code = ActivateSyllabusFormBase::parseSyllabusIdentifier($syllabus_identifier)['course_code'] ?? NULL;
+
+    if (!$course_code) {
+      return NULL;
+    }
+
+
+    foreach ($services as $service_name) {
+      if (!\Drupal::hasService($service_name)) {
+        continue;
+      }
+      $service = \Drupal::service($service_name);
+      $course_data = $service->getCourseData()[$course_code] ?? NULL;
+      if ($course_data) {
+        return $course_data;
+      }
+    }
+
+    return NULL;
+  }
 
   protected function warmUpMap(): void {
     $cid_by_syllabus_id = 'syllabus_id_map';
@@ -110,9 +143,9 @@ class SyllabusService implements SyllabusServiceInterface {
 
       $level_numerical = NULL;
       // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
-      if (preg_match('/\d+[a-c]?$/i', $result->label ?? '')) {
+      if (preg_match('/\d+[a-c]?\d?$/i', $result->label ?? '')) {
         // Set level numerical to [number] or [number]a, [number]b, [number]c.
-        $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $result->label ?? '');
+        $without_level_numerical = preg_replace('/\d+[a-c]?\d?$/i', '', $result->label ?? '');
         $level_numerical = str_replace($without_level_numerical, '', $result->label ?? '');
       }
 
@@ -130,7 +163,6 @@ class SyllabusService implements SyllabusServiceInterface {
         'previous_levels_identifiers' => $previous_level_identifiers,
         'previous_levels_numerical' => [],
         'points' => is_numeric($result->points) ? (int) $result->points : NULL,
-        'aggregated_points' => is_numeric($result->points) ? (int) $result->points : NULL,
         'language_code' => $result->language_code,
         'associated_syllabuses' => array_unique(array_merge([$result->id], $level_syllabus_ids, $group_for_ids)),
         'use_diploma_project' => $use_diploma_project,
@@ -146,7 +178,6 @@ class SyllabusService implements SyllabusServiceInterface {
       if ($syllabus['points'] === NULL) {
         continue;
       }
-      $aggregated_points = $syllabus['points'];
       $previous_levels_numerical = [];
       foreach ($syllabus['previous_levels_identifiers'] as $previous_level_identifier) {
         $previous_level_points = NULL;
@@ -162,46 +193,19 @@ class SyllabusService implements SyllabusServiceInterface {
         }
 
         if ($previous_level_points === NULL) {
-          // Look for previous level points in syllabus import services that
-          // may have level support.
-          $services = [
-            'simple_school_reports_core_gr.course_data',
-            'simple_school_reports_core_gy11.course_data',
-            'simple_school_reports_core_gy25.course_data',
-          ];
-
-          $course_code = ActivateSyllabusFormBase::parseSyllabusIdentifier($previous_level_identifier)['course_code'] ?? NULL;
-
-          foreach ($services as $service_name) {
-            if (!$course_code || !\Drupal::hasService($service_name)) {
-              continue;
-            }
-            $service = \Drupal::service($service_name);
-            $course_data = $service->getCourseData()[$course_code] ?? NULL;
-            if (!$course_data) {
-              continue;
-            }
-            $previous_level_points = $course_data['points'] ?? 0;
-
-
+          $course_data = $this->getCourseData($previous_level_identifier);
+          if ($course_data) {
             // Check if label ends with a number or [number]a, [number]b, [number]c. For example 1 or 1b.
-            if (preg_match('/\d+[a-c]?$/i', $course_data['label'] ?? '')) {
+            if (preg_match('/\d+[a-c]?\d?$/i', $course_data['label'] ?? '')) {
               // Set level numerical to [number] or [number]a, [number]b, [number]c.
-              $without_level_numerical = preg_replace('/\d+[a-c]?$/i', '', $course_data['label'] ?? '');
+              $without_level_numerical = preg_replace('/\d+[a-c]?\d?$/i', '', $course_data['label'] ?? '');
               $level_numerical = str_replace($without_level_numerical, '', $course_data['label'] ?? '');
 
               $previous_levels_numerical[] = $level_numerical;
             }
-
-            break;
           }
         }
-
-        if (is_numeric($previous_level_points)) {
-          $aggregated_points += $previous_level_points;
-        }
       }
-      $map_by_syllabus_id[$syllabus_id]['aggregated_points'] = $aggregated_points;
       $map_by_syllabus_id[$syllabus_id]['previous_levels_numerical'] = $previous_levels_numerical;
     }
 
@@ -338,21 +342,11 @@ class SyllabusService implements SyllabusServiceInterface {
     return $weight_list;
   }
 
-  public function getSyllabusPreviousPoints(int $syllabus_id): array {
+  public function getSyllabusPoints(int $syllabus_id): ?int {
     $this->warmUpMap();
-    $map = $this->lookup['syllabus_id_map'] ?? [];
+    $map = $this->lookup['syllabus_id_map'][$syllabus_id] ?? [];
 
-    $points = NULL;
-    $aggregated_points = NULL;
-
-    if (!empty($map[$syllabus_id])) {
-      $points = $map[$syllabus_id]['points'];
-      $aggregated_points = $map[$syllabus_id]['aggregated_points'];
-    }
-    return [
-      'points' => $points,
-      'aggregated_points' => $aggregated_points,
-    ];
+    return $map['points'] ?? NULL;
   }
 
   public function useDiplomaProject(int $syllabus_id): bool {
@@ -360,5 +354,63 @@ class SyllabusService implements SyllabusServiceInterface {
     $map = $this->lookup['syllabus_id_map'] ?? [];
 
     return !empty($map[$syllabus_id]['use_diploma_project']);
+  }
+
+  public function getSyllabusIdsFromSchoolTypes(array $school_type_versions): array {
+    $this->warmUpMap();
+    $map = $this->lookup['syllabus_id_map'] ?? [];
+    $keyed_school_type_versions = [];
+    $school_types = SchoolTypeHelper::getSchoolTypes();
+    foreach ($school_type_versions as $school_type_version) {
+      $keyed_school_type_versions[$school_type_version] = $school_type_version;
+      if (in_array($school_type_version, $school_types)) {
+        $extracted_school_type_versions = SchoolTypeHelper::getSchoolTypeVersions($school_type_version);
+        foreach ($extracted_school_type_versions as $extracted_school_type_version) {
+          $keyed_school_type_versions[$extracted_school_type_version] = $extracted_school_type_version;
+        }
+      }
+    }
+    $syllabus_ids = [];
+    foreach ($map as $syllabus_id => $data) {
+      if (in_array($data['school_type_short'], $keyed_school_type_versions)) {
+        $syllabus_ids[] = $syllabus_id;
+      }
+    }
+    return $syllabus_ids;
+  }
+
+  public function syncSyllabus(SyllabusInterface $syllabus): void {
+    $syllabus_identifier = $syllabus->get('identifier')->value ?? '';
+    $course_data = $this->getCourseData($syllabus_identifier);
+    if (empty($course_data)) {
+      return;
+    }
+
+    $parsed_identifier = ActivateSyllabusFormBase::parseSyllabusIdentifier($syllabus_identifier);
+    $course_code = $parsed_identifier['course_code'] ?? NULL;
+    $langcode = $parsed_identifier['language_code'] ?? NULL;
+
+    if ($langcode && $course_data['use_langcode']) {
+      $language_label_map = SchoolSubjectHelper::getSupportedLanguageCodes(FALSE, TRUE);
+
+      $language_label = mb_strtolower($language_label_map[$langcode] ?? $langcode);
+      $course_data['label'] = $course_data['label'] . ', ' . $language_label;
+      $course_data['course_code'] = $course_code . '_' . $langcode;
+      $course_data['language_code'] = $langcode;
+      $course_data['subject_name'] = $course_data['subject_name'] . ', ' . $language_label;
+      $levels = $course_data['levels'] ?? [];
+      foreach ($levels as $key => $level) {
+        $levels[$key] = $level . '_' . $langcode;
+      }
+      $course_data['levels'] = $levels;
+    }
+
+    $course_data['short_label'] = $syllabus->get('short_label')->value ?? '';
+
+    ActivateSyllabusFormBase::activateCourse($course_code, $course_data);
+  }
+
+  public function clearLookup(): void {
+    $this->lookup = [];
   }
 }

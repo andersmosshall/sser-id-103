@@ -228,8 +228,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $student_options = [];
     $users = $this->entityTypeManager->getStorage('user')->loadMultiple($student_ids);
+    /** @var \Drupal\user\UserInterface $user */
     foreach ($users as $user) {
-      $student_options[$user->id()] = $user->label();
+      $student_options[$user->id()] = $user->getDisplayName();
     }
     if (empty($student_options)) {
       throw new AccessDeniedHttpException();
@@ -1153,7 +1154,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     if (!$has_valid_ssn && $has_grades) {
       $name = '';
       _simple_school_reports_core_resolve_name($name, $student, TRUE);
-      $this->messenger()->addWarning(t('@name misses a valid personal number, document is generated anyway with value @value', ['@name' => $name, '@value' => $ssn]));
+      $this->messenger()->addWarning($this->t('@name misses a valid personal number, document is generated anyway with value @value', ['@name' => $name, '@value' => $ssn]));
     }
 
     $group = NULL;
@@ -1222,7 +1223,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('G7', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
     $student_last_name = $student->get('field_last_name')->value ?? '-';
@@ -1434,18 +1435,13 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         }
         if ($key === 'levels') {
           $cols_in_use[$col] = $col;
-          $levels_numerical = $syllabus_info['previous_levels_numerical'] ?? [];
-          if (!empty($previous_levels_numerical)) {
-            if (!empty($syllabus_info['level_numerical'])) {
-              $levels_numerical[] = $syllabus_info['level_numerical'];
-            }
-          }
+          $levels_numerical = $this->gradeService->getLevelsNumericalNames($grade_info);
           $excel_sheet->setCellValue($cell_id, implode(',', $levels_numerical));
         }
         if ($key === 'points') {
-          $points = $syllabus_info['points'] ?? '';
+          $points = $grade_info->points ?? '';
           if ($skip_replaced) {
-            $points = $syllabus_info['aggregated_points'] ?? '';
+            $points = $this->gradeService->getAggregatedPoints($grade_info);
           }
 
           if (!empty($points)) {
@@ -1510,6 +1506,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
           }
         }
       }
+
+      // Auto adjust row height.
+      $excel_sheet->getRowDimension($item_row)->setRowHeight(-1);
       $item_row++;
     }
 
@@ -1781,7 +1780,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('F7', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
     $grader_last_name = $grader->get('field_last_name')->value ?? '-';
@@ -1896,7 +1895,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $excel_sheet->setCellValue('F2', $school_unit_code);
 
-    $school_organization = $this->organizationsService->getOrganization('school_organization', $this->getSchoolType());
+    $school_organization = $this->organizationsService->getOrganization('school_organiser', $this->getSchoolType());
     $excel_sheet->setCellValue('A8', $school_organization?->label() ?? '-');
 
 
@@ -1933,8 +1932,17 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $excel_sheet->setCellValue($value_cell_id, $info_item['value'] ?? '');
     }
 
+    $needed_cols = 0;
+    foreach ($syllabus_ids as $syllabus_id) {
+      $needed_cols++;
+      $syllabus_info = $this->syllabusService->getSyllabusInfo($syllabus_id);
+      if (!empty($syllabus_info['language_code'])) {
+        $needed_cols++;
+      }
+    }
+
     // Add columns.
-    $cols_to_add = count($syllabus_ids) - 16;
+    $cols_to_add = $needed_cols - 16;
     if (!empty($invalid_absence_key)) {
       $cols_to_add++;
     }
@@ -1988,9 +1996,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $context['ssr_document_context']['cols'][$syllabus_id] = $col;
 
       if (!empty($syllabus_info['language_code'])) {
-        $label = $syllabus_info['subject_label'] ?? $syllabus_info['label'] ?? '-';
-        $excel_sheet->setCellValue($label_cell_id, $label);
-
         $col_index++;
         $col = Coordinate::stringFromColumnIndex($col_index);
         $language_code_cell_id = $col . $label_row;
@@ -2005,8 +2010,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     // Populate invalid absence labels.
     if (!empty($invalid_absence_key)) {
       $col = Coordinate::stringFromColumnIndex($col_index);
-      $label_cell_id = $col . $label_row;
-
       $context['ssr_document_context']['cols']['invalid_absence'] = $col;
       $context['ssr_document_context']['labels']['invalid_absence'] = 'Ogiltig frånvaro';
     }
@@ -2017,7 +2020,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     $context['ssr_document_context']['notes_row'] = $notes_row;
 
     // Setup signer.
-    $excel_sheet->setCellValue($label_cell_id, $info_item['label'] ?? '');
     $excel_sheet->setCellValue('F3', $sign_label);
     $excel_sheet->setCellValue('F4', $sign_name);
 
@@ -2089,7 +2091,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
         ];
 
         $signees[$grade_info->mainGrader] = [
-          'target_id' => $grade_info->mainGrader
+          'target_id' => $grade_info->mainGrader,
         ];
 
         foreach ($grade_info->jointGraders ?? [] as $uid) {
@@ -2190,6 +2192,7 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     }
     $catalog_group_key = array_key_first($context['results']['grade_catalog_groups'][$catalog_sub_index]);
     $group_data = $context['results']['grade_catalog_groups'][$catalog_sub_index][$catalog_group_key];
+    $group_internal_id = count($context['results']['grade_catalog_groups'][$catalog_sub_index]);
     unset($context['results']['grade_catalog_groups'][$catalog_sub_index][$catalog_group_key]);
 
     if (empty($group_data['student_ids'])) {
@@ -2197,8 +2200,6 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
     }
 
     $group_name = $group_data['name'] ?? 'Okänd grupp';
-    $group_internal_id = count($context['results']['grade_catalog_groups']) + 1;
-
 
     $form_values = $context['results']['form_values'] ?? [];
 
@@ -2233,11 +2234,12 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
 
     $info_items = [];
 
-    $municipality = Settings::get('ssr_school_municipality', NULL);
+    $school = $this->organizationsService->getOrganization('school', $this->getSchoolType());
+    $municipality = $school->get('municipality')->value ?? NULL;
     if ($municipality) {
       $info_items[] = [
         'label' => 'Kommun',
-        'value' => $municipality
+        'value' => $municipality,
       ];
     }
 

@@ -154,8 +154,24 @@
       const linkEl = row.querySelector('th a');
       const codeEl = row.querySelector('td');
       if (!linkEl || !codeEl) return null;
+
+      const levelName = linkEl.textContent.trim();
+
+      let levelTrack = '';
+
+      const lastTwo = levelName.slice(-2);
+      const lastThree = levelName.slice(-3);
+
+      if (lastTwo.match(/[1-9][a-zA-Z]/)) {
+        levelTrack = (lastTwo.slice(-1));
+      }
+      if (lastThree.match(/[1-9][a-zA-Z][1-4]/)) {
+        levelTrack = (lastThree.slice(1,2));
+      }
+
       return {
-        levelName: linkEl.textContent.trim(),
+        levelName,
+        levelTrack,
         courseCode: codeEl.textContent.trim(),
         link: window.location.origin + linkEl.getAttribute('href')
       };
@@ -163,8 +179,8 @@
 
     courseDetails.forEach(course => {
       const lastChar = course.levelName.slice(-1);
-      const relatedLevels = lastChar.match(/[a-zA-Z]/)
-        ? courseDetails.filter(item => item.levelName.slice(-1) === lastChar).map(item => item.courseCode)
+      const relatedLevels = course.levelTrack.length
+        ? courseDetails.filter(item => item.levelTrack === course.levelTrack || item.levelTrack === '').map(item => item.courseCode)
         : courseDetails.map(item => item.courseCode);
 
       if (!pointsMap[course.levelName]) {

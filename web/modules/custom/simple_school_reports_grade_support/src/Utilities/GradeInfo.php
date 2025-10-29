@@ -17,7 +17,7 @@ class GradeInfo {
     public ?string $excludeReason,
     public ?string $remark,
     public ?int $points,
-    public ?int $aggregatedPoints,
     public bool $replaced,
+    public ?GradeInfoMinimal $previousLevel = null,
   ) {}
 }

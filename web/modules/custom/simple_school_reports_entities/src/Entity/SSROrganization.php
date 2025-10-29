@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_entities\SSROrganizationInterface;
 use Drupal\user\EntityOwnerTrait;
 
@@ -57,6 +58,9 @@ use Drupal\user\EntityOwnerTrait;
  *     "delete-multiple-form" = "/admin/content/ssr-organization/delete-multiple",
  *   },
  *   field_ui_base_route = "entity.ssr_organization.settings",
+ *   constraints = {
+ *     "SsrOrganizationConstraint" = {}
+ *   }
  * )
  */
 final class SSROrganization extends ContentEntityBase implements SSROrganizationInterface {
@@ -74,10 +78,47 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
       $this->setOwnerId(0);
     }
 
-    // School types are only relevant for school unit organizations.
+    // School types/grades are only relevant for school unit organizations.
     if ($this->get('organization_type')->value !== 'school_unit') {
       $this->set('school_types', NULL);
     }
+
+    // School unit has to have a parent of type school.
+    if ($this->get('organization_type')->value === 'school_unit' && ($this->get('parent')->isEmpty() || $this->get('parent')->entity?->get('organization_type')->value !== 'school')) {
+      throw new \RuntimeException('A school unit has to have a parent organization of type school.');
+    }
+    // School has to have a parent of type school organiser.
+    if ($this->get('organization_type')->value === 'school' && ($this->get('parent')->isEmpty() || $this->get('parent')->entity?->get('organization_type')->value !== 'school_organiser')) {
+      throw new \RuntimeException('A school has to have a parent organization of type school organiser.');
+    }
+
+    $sort_index = 900;
+    if ($this->get('organization_type')->value === 'school_organiser') {
+      $sort_index = 100;
+    }
+    elseif ($this->get('organization_type')->value === 'school') {
+      $sort_index = 200;
+    }
+    elseif ($this->get('organization_type')->value === 'school_unit') {
+      $sort_index = 300;
+    }
+    $this->set('sort_index', $sort_index);
+
+    $filtered_school_grades = [];
+
+    if ($this->get('organization_type')->value === 'school_unit') {
+      $selected_school_grades = array_column($this->get('school_grades')->getValue(), 'value');
+      $selected_school_types = array_column($this->get('school_types')->getValue(), 'value');
+
+      $supported_grades = array_keys(SchoolGradeHelper::getSupportedSchoolGrades($selected_school_types));
+      foreach ($selected_school_grades as $school_grade) {
+        if (in_array($school_grade, $supported_grades)) {
+          $filtered_school_grades[] = $school_grade;
+        }
+      }
+    }
+
+    $this->set('school_grades', $filtered_school_grades);
   }
 
   /**
@@ -94,8 +135,15 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['short_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Short label'))
+      ->setDescription(t('Short label, recomended 3 characters.'))
+      ->setSetting('max_length', 5)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
+      ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
       ->setDisplayConfigurable('form', TRUE)
@@ -128,9 +176,22 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
 
     $fields['school_types'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('School types'))
-      ->setDescription(t('The school type. NOTE: Only relevant for school unit organizations.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_types')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['school_grades'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('School types'))
+      ->setDescription(t('Active school grades.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setSetting('allowed_values_function', 'simple_school_reports_entities_school_grades')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['municipality'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Municipality'))
+      ->setSetting('max_length', 255)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
@@ -168,6 +229,10 @@ final class SSROrganization extends ContentEntityBase implements SSROrganization
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the ssr organization was last edited.'));
+
+    $fields['sort_index'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Sort index'))
+      ->setRequired(TRUE);
 
     return $fields;
   }

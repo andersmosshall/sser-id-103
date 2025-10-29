@@ -181,7 +181,7 @@ class ExportsGradesFormGy extends ExportsGradesFormBase {
         }
 
         $subject_code = $syllabus_info['subject_code'] ?? NULL;
-        $course_points = (int) ($syllabus_info['aggregated_points'] ?? 0);
+        $course_points = $this->gradeService->getAggregatedPoints($grade_info) ?? 0;
 
         if ($this->gradeService->hasGrade($grade_info)) {
           $points += $course_points;
