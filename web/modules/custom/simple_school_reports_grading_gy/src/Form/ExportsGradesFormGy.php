@@ -290,7 +290,7 @@ class ExportsGradesFormGy extends ExportsGradesFormBase {
     if ($type === 'final_grade_document') {
       $info_items[] = [
         'label' => 'Omfattning',
-        'value' => $points . 'p',
+        'value' => number_format($points, 0, ',', ' ') . 'p',
       ];
     }
     $context['ssr_document_context']['skip_replaced'] = TRUE;
