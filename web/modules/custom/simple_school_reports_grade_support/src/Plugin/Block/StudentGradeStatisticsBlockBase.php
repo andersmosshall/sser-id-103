@@ -233,8 +233,6 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
         if ($calculate_total_points && !$grade_info->replaced) {
           $total_points += $points;
         }
-
-        $total_points += $points;
       }
 
       $levels = implode(', ', $this->gradeService->getLevelsNumericalNames($grade_info));
@@ -306,7 +304,7 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       unset($build['total_points']);
     }
     else {
-      $build['total_points']['#items'][0]['#plain_text'] = number_format($total_points, 0, ',', ' ') . 'p';
+      $build['total_points'][0]['#plain_text'] = number_format($total_points, 0, ',', ' ') . 'p';
     }
 
     return $build;
