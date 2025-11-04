@@ -328,7 +328,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
       'total' => 0,
     ];
 
-    $grade_map = SchoolGradeHelper::getSchoolGradeValues(NULL, TRUE, !$skip_ended);
+    $grade_map = SchoolGradeHelper::getSchoolGradesMap(NULL, TRUE, !$skip_ended);
 
     foreach ($uids as $uid) {
       if (isset($raw_grades[$uid]) && isset($grade_map[$raw_grades[$uid]])) {
