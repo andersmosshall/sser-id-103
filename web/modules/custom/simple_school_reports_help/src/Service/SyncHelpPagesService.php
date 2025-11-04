@@ -177,11 +177,11 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
       ],
       // Admin menu
       [
-        'title' => 'Administration av ämnen och språkämnen',
+        'title' => 'Administration av ämnes-/kursplaner och språkämnen',
         'roles' => ['administrator',],
-        'body' => 'Denna film går igenom administration av ämnen.',
-        'vimeo' => 'https://vimeo.com/688778643',
-        'context' => ['simple_school_reports_core.admin', 'view.school_subjects.school_subjects', ],
+        'body' => 'Denna film går igenom ämnes-/kursplaner och språkämnen.',
+        'vimeo' => 'https://vimeo.com/1133594895',
+        'context' => ['simple_school_reports_core.admin', 'view.syllabus.gr', 'view.syllabus.gy11', 'view.syllabus.gy25'],
         'module' => ['simple_school_reports_core_gr', 'simple_school_reports_core_gy'],
       ],
       [
