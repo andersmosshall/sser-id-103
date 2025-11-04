@@ -1,0 +1,22 @@
+uuid: 25676c93-7de6-4865-b95c-89b9ecbf72f1
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_grade_support
+id: ssr_grade_snapshot.ssr_grade_snapshot.default
+targetEntityType: ssr_grade_snapshot
+bundle: ssr_grade_snapshot
+mode: default
+content: {  }
+hidden:
+  created: true
+  gender: true
+  grade_snapshot_period: true
+  grades: true
+  identifier: true
+  label: true
+  school_grade: true
+  status: true
+  student: true
+  uid: true

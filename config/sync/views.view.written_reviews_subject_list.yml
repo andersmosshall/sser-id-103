@@ -105,7 +105,7 @@ display:
           label: ''
           exclude: true
           alter:
-            alter_text: true
+            alter_text: false
             text: 'Årskurs {{ field_grade }}'
             make_link: false
             path: ''
@@ -131,6 +131,7 @@ display:
             trim: false
             preserve_tags: ''
             html: false
+            destination: 0
           element_type: ''
           element_class: ''
           element_label_type: ''

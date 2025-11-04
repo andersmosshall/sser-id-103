@@ -24,4 +24,5 @@ hidden:
   label: true
   langcode: true
   period_index: true
+  school_type_versioned: true
   uid: true

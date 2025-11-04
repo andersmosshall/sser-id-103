@@ -229,7 +229,7 @@ class DIRoundFormAlter {
           continue;
         }
 
-        $grade_options = SchoolGradeHelper::getSchoolGradesMapAll();
+        $grade_options = SchoolGradeHelper::getSchoolGradesLongName();
         $grade_label = $grade_options[$grade] ?? $grade;
 
         $grade_class_names = $class_names;
@@ -240,8 +240,8 @@ class DIRoundFormAlter {
         foreach ($class_map[$grade] as $class_id) {
           $class_name = $grade_class_names[$class_id] ?? '';
           $title_prefix = $class_name
-            ? mb_strtolower($grade_label) . ' (' . $class_name . ')'
-            : mb_strtolower($grade_label);
+            ? $grade_label . ' (' . $class_name . ')'
+            : $grade_label;
           if (empty($student_map[$grade][$class_id])) {
             \Drupal::messenger()->addWarning(t('There is no students in grade @grade', ['@grade' => $title_prefix]));
             continue;
@@ -249,7 +249,7 @@ class DIRoundFormAlter {
 
           $grade_student_group = $node_storage->create([
             'type' => 'di_student_group',
-            'title' => 'Årskurs ' . $title_prefix,
+            'title' => $title_prefix,
             'langcode' => 'sv',
           ]);
 
