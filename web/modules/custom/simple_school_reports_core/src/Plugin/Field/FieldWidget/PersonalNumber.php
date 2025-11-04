@@ -50,7 +50,7 @@ class PersonalNumber extends StringTextfieldWidget {
     if (empty($form_state->getErrors())) {
       foreach ($values as &$value) {
         if (is_array($value) && !empty($value['value'])) {
-          $value['value'] = $this->pnum->normalizeIfValid($value['value']) ?? '';
+          $value['value'] = $this->pnum->normalizeIfValid($value['value'], TRUE) ?? '';
         }
       }
 
