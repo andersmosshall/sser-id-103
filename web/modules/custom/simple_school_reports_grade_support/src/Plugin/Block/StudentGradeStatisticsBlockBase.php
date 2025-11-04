@@ -168,7 +168,7 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
 
     $build['total_points'] = [
       '#theme' => 'field',
-      '#title' => t('Written reviews'),
+      '#title' => $this->t('Points'),
       '#label_display' => 'above',
       '#view_mode' => 'default',
       '#field_name' => 'total_points',
@@ -180,7 +180,7 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       '#is_multiple' => FALSE,
       '#items' => [],
       0 => [
-        '#plain_text' => $total_points,
+        '#plain_text' => number_format($total_points, 0, ',', ' ') . 'p',
       ],
     ];
 
@@ -227,12 +227,14 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
       $syllabus_label = $this->gradeService->getSyllabusLabel($grade_info) ?? $this->t('Unknown course');
       $course_code = $this->gradeService->getCourseCode($grade_info) ?? '';
 
-      $points = $this->gradeService->getAggregatedPoints($grade_info) ?? '';
+      $points = $this->gradeService->hasGrade($grade_info) ? $this->gradeService->getAggregatedPoints($grade_info) ?? '' : '';
       if (!empty($points)) {
         $has_points = TRUE;
         if ($calculate_total_points && !$grade_info->replaced) {
           $total_points += $points;
         }
+
+        $total_points += $points;
       }
 
       $levels = implode(', ', $this->gradeService->getLevelsNumericalNames($grade_info));
