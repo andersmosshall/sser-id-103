@@ -19,7 +19,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_address:
     type: entity_reference_revisions_entity_view
@@ -28,7 +28,15 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 7
+    weight: 8
+    region: content
+  municipality:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   municipality_code:
     type: string
@@ -36,7 +44,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   organization_number:
     type: string
@@ -67,7 +75,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
   school_grades:
     type: list_default
@@ -94,7 +102,6 @@ content:
 hidden:
   created: true
   label: true
-  municipality: true
   short_name: true
   status: true
   uid: true
