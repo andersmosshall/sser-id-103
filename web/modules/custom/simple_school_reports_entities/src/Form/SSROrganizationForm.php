@@ -125,6 +125,11 @@ final class SSROrganizationForm extends ContentEntityForm {
 
     $form_state->setRedirectUrl($this->entity->toUrl());
 
+    // Temporary clear all cache when we update an organization in gui.
+    // That is because views seems not to cache item lists even if the view
+    // has the ssr_organization_list cache tag.
+    drupal_flush_all_caches();
+
     return $result;
   }
 
