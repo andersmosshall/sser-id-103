@@ -9,7 +9,7 @@ custom_paths: ''
 include_home_segment: true
 alternative_title_field: field_breadcrumb_title
 home_segment_title: Hem
-home_segment_keep: false
+home_segment_keep: true
 include_title_segment: true
 title_from_page_when_available: true
 title_segment_as_link: false
