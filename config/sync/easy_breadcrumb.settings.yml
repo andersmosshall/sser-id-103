@@ -3,7 +3,7 @@ _core:
 langcode: sv
 applies_admin_routes: true
 include_invalid_paths: false
-excluded_paths: ''
+excluded_paths: /node/add
 replaced_titles: ''
 custom_paths: ''
 include_home_segment: true
