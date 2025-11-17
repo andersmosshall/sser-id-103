@@ -277,11 +277,14 @@ class IUPRouter extends ControllerBase {
               ->setFallbackStudent($student)
               ->setSkipAccessCheck(TRUE)->build();
             // Resolve merit value.
-            $first_round_key = !empty($block_build['table']['#ssr_sorted_row_keys'])
-              ? reset($block_build['table']['#ssr_sorted_row_keys'])
+            $rounds_count = !empty($block_build['table']['#ssr_sorted_row_keys'])
+              ? count($block_build['table']['#ssr_sorted_row_keys'])
+              : 0;
+            $latest_round_key = $rounds_count > 0
+              ? $block_build['table']['#ssr_sorted_row_keys'][$rounds_count - 1]
               : 'no_rounds';
-            $merit_value = !empty($block_build['table'][$first_round_key]['merit']['value']['#markup'])
-              ? $block_build['table'][$first_round_key]['merit']['value']['#markup']
+            $merit_value = !empty($block_build['table'][$latest_round_key]['merit']['value']['#markup'])
+              ? $block_build['table'][$latest_round_key]['merit']['value']['#markup']
               : NULL;
 
             if ($merit_value) {
