@@ -10,11 +10,10 @@ weight: 0
 module: autologout_alterable
 callback: 'autologout_alterable#cron'
 scheduler:
-  id: crontab
+  id: simple
   configuration:
     rules:
       - '0 1 * * *'
-    catch_up: 900
 launcher:
   id: serial
   configuration:
