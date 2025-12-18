@@ -1,0 +1,293 @@
+uuid: e4ff758a-29cc-471c-bd94-1af92ce99cf0
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user--user
+disabled: false
+path: user
+resourceType: user--user
+resourceFields:
+  uid:
+    disabled: false
+    fieldName: uid
+    publicName: uid
+    enhancer:
+      id: ''
+  uuid:
+    disabled: false
+    fieldName: uuid
+    publicName: uuid
+    enhancer:
+      id: ''
+  langcode:
+    disabled: true
+    fieldName: langcode
+    publicName: langcode
+    enhancer:
+      id: ''
+  preferred_langcode:
+    disabled: true
+    fieldName: preferred_langcode
+    publicName: preferred_langcode
+    enhancer:
+      id: ''
+  preferred_admin_langcode:
+    disabled: true
+    fieldName: preferred_admin_langcode
+    publicName: preferred_admin_langcode
+    enhancer:
+      id: ''
+  name:
+    disabled: false
+    fieldName: name
+    publicName: name
+    enhancer:
+      id: ''
+  pass:
+    disabled: true
+    fieldName: pass
+    publicName: pass
+    enhancer:
+      id: ''
+  mail:
+    disabled: false
+    fieldName: mail
+    publicName: mail
+    enhancer:
+      id: ''
+  timezone:
+    disabled: true
+    fieldName: timezone
+    publicName: timezone
+    enhancer:
+      id: ''
+  status:
+    disabled: false
+    fieldName: status
+    publicName: status
+    enhancer:
+      id: ''
+  created:
+    disabled: false
+    fieldName: created
+    publicName: created
+    enhancer:
+      id: ''
+  changed:
+    disabled: false
+    fieldName: changed
+    publicName: changed
+    enhancer:
+      id: ''
+  access:
+    disabled: true
+    fieldName: access
+    publicName: access
+    enhancer:
+      id: ''
+  login:
+    disabled: true
+    fieldName: login
+    publicName: login
+    enhancer:
+      id: ''
+  init:
+    disabled: true
+    fieldName: init
+    publicName: init
+    enhancer:
+      id: ''
+  roles:
+    disabled: false
+    fieldName: roles
+    publicName: roles
+    enhancer:
+      id: ''
+  default_langcode:
+    disabled: true
+    fieldName: default_langcode
+    publicName: default_langcode
+    enhancer:
+      id: ''
+  encrypted_field_storage:
+    disabled: true
+    fieldName: encrypted_field_storage
+    publicName: encrypted_field_storage
+    enhancer:
+      id: ''
+  path:
+    disabled: true
+    fieldName: path
+    publicName: path
+    enhancer:
+      id: ''
+  field_adapted_studies:
+    disabled: false
+    fieldName: field_adapted_studies
+    publicName: field_adapted_studies
+    enhancer:
+      id: ''
+  field_address:
+    disabled: false
+    fieldName: field_address
+    publicName: field_address
+    enhancer:
+      id: ''
+  field_adult_student_settings:
+    disabled: false
+    fieldName: field_adult_student_settings
+    publicName: field_adult_student_settings
+    enhancer:
+      id: ''
+  field_allow_login:
+    disabled: false
+    fieldName: field_allow_login
+    publicName: field_allow_login
+    enhancer:
+      id: ''
+  field_birth_date:
+    disabled: false
+    fieldName: field_birth_date
+    publicName: field_birth_date
+    enhancer:
+      id: ''
+  field_birth_date_source:
+    disabled: false
+    fieldName: field_birth_date_source
+    publicName: field_birth_date_source
+    enhancer:
+      id: ''
+  field_caregivers:
+    disabled: false
+    fieldName: field_caregivers
+    publicName: field_caregivers
+    enhancer:
+      id: ''
+  field_class:
+    disabled: false
+    fieldName: field_class
+    publicName: field_class
+    enhancer:
+      id: ''
+  field_dnp_username:
+    disabled: false
+    fieldName: field_dnp_username
+    publicName: field_dnp_username
+    enhancer:
+      id: ''
+  field_eduid_username:
+    disabled: false
+    fieldName: field_eduid_username
+    publicName: field_eduid_username
+    enhancer:
+      id: ''
+  field_extra_adaptations:
+    disabled: false
+    fieldName: field_extra_adaptations
+    publicName: field_extra_adaptations
+    enhancer:
+      id: ''
+  field_first_name:
+    disabled: false
+    fieldName: field_first_name
+    publicName: field_first_name
+    enhancer:
+      id: ''
+  field_gender:
+    disabled: false
+    fieldName: field_gender
+    publicName: field_gender
+    enhancer:
+      id: ''
+  field_grade:
+    disabled: false
+    fieldName: field_grade
+    publicName: field_grade
+    enhancer:
+      id: ''
+  field_invalid_absence:
+    disabled: false
+    fieldName: field_invalid_absence
+    publicName: field_invalid_absence
+    enhancer:
+      id: ''
+  field_last_name:
+    disabled: false
+    fieldName: field_last_name
+    publicName: field_last_name
+    enhancer:
+      id: ''
+  field_last_password_reset:
+    disabled: true
+    fieldName: field_last_password_reset
+    publicName: field_last_password_reset
+    enhancer:
+      id: ''
+  field_make_up_time_reminded:
+    disabled: true
+    fieldName: field_make_up_time_reminded
+    publicName: field_make_up_time_reminded
+    enhancer:
+      id: ''
+  field_mentor:
+    disabled: false
+    fieldName: field_mentor
+    publicName: field_mentor
+    enhancer:
+      id: ''
+  field_middle_name:
+    disabled: false
+    fieldName: field_middle_name
+    publicName: field_middle_name
+    enhancer:
+      id: ''
+  field_notes:
+    disabled: false
+    fieldName: field_notes
+    publicName: field_notes
+    enhancer:
+      id: ''
+  field_password_expiration:
+    disabled: true
+    fieldName: field_password_expiration
+    publicName: field_password_expiration
+    enhancer:
+      id: ''
+  field_pending_expire_sent:
+    disabled: true
+    fieldName: field_pending_expire_sent
+    publicName: field_pending_expire_sent
+    enhancer:
+      id: ''
+  field_programme:
+    disabled: false
+    fieldName: field_programme
+    publicName: field_programme
+    enhancer:
+      id: ''
+  field_protected_personal_data:
+    disabled: false
+    fieldName: field_protected_personal_data
+    publicName: field_protected_personal_data
+    enhancer:
+      id: ''
+  field_special_diet:
+    disabled: false
+    fieldName: field_special_diet
+    publicName: field_special_diet
+    enhancer:
+      id: ''
+  field_ssn:
+    disabled: false
+    fieldName: field_ssn
+    publicName: field_ssn
+    enhancer:
+      id: ''
+  field_telephone_number:
+    disabled: false
+    fieldName: field_telephone_number
+    publicName: field_telephone_number
+    enhancer:
+      id: ''
