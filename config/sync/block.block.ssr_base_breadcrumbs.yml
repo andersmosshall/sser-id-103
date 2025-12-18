@@ -1,6 +1,6 @@
 uuid: 8dfee822-5adc-480e-9dbd-a2254f761344
 langcode: sv
-status: false
+status: true
 dependencies:
   module:
     - system
@@ -11,7 +11,7 @@ _core:
 id: ssr_base_breadcrumbs
 theme: ssr_base
 region: breadcrumb
-weight: 0
+weight: -23
 provider: null
 plugin: system_breadcrumb_block
 settings:

@@ -9,7 +9,7 @@ _core:
 id: ssr_base_page_title
 theme: ssr_base
 region: header
-weight: -14
+weight: -23
 provider: null
 plugin: page_title_block
 settings:
