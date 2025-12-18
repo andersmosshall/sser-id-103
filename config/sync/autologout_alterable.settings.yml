@@ -33,6 +33,6 @@ inactivity_message: 'Du har loggats ut på grund av inaktivitet.'
 inactivity_message_type: warning
 induced_logout_message: 'Du har loggats ut.'
 induced_logout_message_type: status
+use_cron: true
 use_watchdog: true
 whitelisted_ip_addresses: ''
-use_cron: true
