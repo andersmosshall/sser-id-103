@@ -61,7 +61,8 @@ final class ApiUserAccessPolicy extends AccessPolicyBase {
    * {@inheritdoc}
    */
   public function getPersistentCacheContexts(): array {
-    return ['user.roles:api'];
+    return ['user.roles'];
+//    return ['user.roles:api'];
   }
 
 }
