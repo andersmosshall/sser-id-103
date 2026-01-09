@@ -59,7 +59,6 @@ ssr-sites
 .lando.local.yml
 .local.lando.yml
 .env.local
-.lando.yml
 
 console/
 

@@ -12,7 +12,7 @@ proxy:
 
 services:
   appserver:
-    composer_version: '2.5.1'
+    composer_version: '2.6.0'
     config:
       php: .lando/php.ini
     overrides:
@@ -24,7 +24,7 @@ services:
         XDEBUG_TRIGGER: 1
 
   database:
-    type: mysql
+    type: mariadb
     portforward: 32791
     creds:
       user: drupal9
