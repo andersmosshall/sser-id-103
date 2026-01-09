@@ -1,0 +1,17 @@
+uuid: 78aca468-d451-4ac8-9940-109b23f706d2
+langcode: sv
+status: true
+dependencies:
+  module:
+    - update
+title: 'Sök efter uppdateringar'
+id: update_cron
+weight: 0
+module: update
+callback: 'update#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
