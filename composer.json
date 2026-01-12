@@ -36,7 +36,7 @@
         "drupal/improved_multi_select": "^1.7",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/jsonapi_extras": "^3.27",
-        "drupal/mail_login": "^2.6",
+        "drupal/mail_login": "^4.2",
         "drupal/masquerade": "^2.0@beta",
         "drupal/node_access_grants": "^3.0",
         "drupal/paragraphs": "^1.12",
