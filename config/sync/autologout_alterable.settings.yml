@@ -35,4 +35,4 @@ induced_logout_message: 'Du har loggats ut.'
 induced_logout_message_type: status
 use_cron: true
 use_watchdog: true
-whitelisted_ip_addresses: ''
+allowlisted_ip_addresses: ''
