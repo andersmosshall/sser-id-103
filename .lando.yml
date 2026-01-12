@@ -24,7 +24,7 @@ services:
         XDEBUG_TRIGGER: 1
 
   database:
-    type: mariadb
+    type: mariadb:11.8
     portforward: 32791
     creds:
       user: drupal9
@@ -35,14 +35,6 @@ services:
     type: memcached
     mem: 512
 tooling:
-  npm:
-    service: node
-  node:
-    service: node
-  yarn:
-    service: node
-  gulp:
-    service: node
   debug-on:
     service: appserver
     description: Enable xdebug for apache.
