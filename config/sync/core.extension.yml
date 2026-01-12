@@ -80,7 +80,6 @@ module:
   views_custom_permissions: 0
   views_load_more: 0
   views_ui: 0
-  vimeo_embed_field: 0
   pathauto: 1
   simple_school_reports_extension_proxy: 5
   simple_school_reports_maillog: 6
