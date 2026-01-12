@@ -21,7 +21,7 @@
         "drupal/allowed_formats": "^3.0",
         "drupal/autologout_alterable": "^1.0@beta",
         "drupal/backup_migrate": "^5.0",
-        "drupal/better_exposed_filters": "^6.0",
+        "drupal/better_exposed_filters": "^7.1",
         "drupal/config_split": "^1.7",
         "drupal/core-composer-scaffold": "^10",
         "drupal/core-project-message": "^10",
