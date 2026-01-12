@@ -49,7 +49,7 @@
         "drupal/ultimate_cron": "^2.0@alpha",
         "drupal/upgrade_status": "^4.3",
         "drupal/views_load_more": "^2.0",
-        "drush/drush": "^12",
+        "drush/drush": "^13",
         "personnummer/personnummer": "^3.0",
         "phpoffice/phpspreadsheet": "^3.3"
     },
