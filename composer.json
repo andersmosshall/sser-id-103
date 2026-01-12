@@ -33,7 +33,6 @@
         "drupal/field_group": "^3.2",
         "drupal/field_permissions": "^1.1",
         "drupal/honeypot": "^2.0",
-        "drupal/improved_multi_select": "^1.7",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/jsonapi_extras": "^3.27",
         "drupal/mail_login": "^4.2",
