@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.paragraph.field_review_comment
+    - filter.format.wordsupported_format
     - paragraphs.paragraphs_type.written_review
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - wordsupported_format
 id: paragraph.written_review.field_review_comment
 field_name: field_review_comment
 entity_type: paragraph
@@ -23,5 +19,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - wordsupported_format
 field_type: text_long
