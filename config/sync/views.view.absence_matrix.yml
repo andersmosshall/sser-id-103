@@ -564,14 +564,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -611,14 +603,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -658,14 +642,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -709,14 +685,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
@@ -761,14 +729,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
@@ -814,14 +774,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''

@@ -6,6 +6,6 @@ dependencies:
     - user
 id: user.student
 label: Student
-description: ''
+description: null
 targetEntityType: user
 cache: true

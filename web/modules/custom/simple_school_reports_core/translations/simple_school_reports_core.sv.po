@@ -942,6 +942,10 @@ msgstr "Listmallar"
 msgid "Start"
 msgstr "Start"
 
+msgctxt "menu"
+msgid "Start"
+msgstr "Start"
+
 msgid "Start - school staff"
 msgstr "Start - skolpersonal"
 

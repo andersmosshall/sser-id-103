@@ -6,6 +6,6 @@ dependencies:
     - user
 id: user.caregiver_ief
 label: 'Caregiver ief'
-description: ''
+description: null
 targetEntityType: user
 cache: true

@@ -6,6 +6,6 @@ dependencies:
     - node
 id: node.iup_goal_ief
 label: 'IUP goal ief'
-description: ''
+description: null
 targetEntityType: node
 cache: true
