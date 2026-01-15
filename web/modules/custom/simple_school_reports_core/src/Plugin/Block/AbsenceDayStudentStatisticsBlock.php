@@ -34,8 +34,8 @@ class AbsenceDayStudentStatisticsBlock extends StatisticsBlockBase implements Co
         /** @var \Drupal\simple_school_reports_entities\SchoolWeekInterface|null $school_week */
         $school_week = NULL;
         $uid = $user->id();
-        $from = $this->currentRequest->get('from');
-        $to = $this->currentRequest->get('to');
+        $from = $this->currentRequest->query->get('from');
+        $to = $this->currentRequest->query->get('to');
         if ($uid && $from && $to) {
           $absence_nids = [];
           $attendance_statistics = [];

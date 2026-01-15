@@ -101,7 +101,7 @@ class HelpPageBlock extends BlockBase implements ContainerFactoryPluginInterface
     $cache->addCacheContexts(['url.query_args', 'user.permissions']);
     $build = [];
 
-    $contexts_json = urldecode($this->currentRequest->get('contexts', '[]'));
+    $contexts_json = urldecode($this->currentRequest->query->get('contexts', '[]'));
     $contexts = json_decode($contexts_json);
 
     // Prepare module info.
@@ -174,7 +174,7 @@ class HelpPageBlock extends BlockBase implements ContainerFactoryPluginInterface
       'view.students.students',
     ];
 
-    $contexts_json = urldecode($this->currentRequest->get('contexts', '[]'));
+    $contexts_json = urldecode($this->currentRequest->query->get('contexts', '[]'));
     $contexts = json_decode($contexts_json);
 
     if (empty($contexts)) {

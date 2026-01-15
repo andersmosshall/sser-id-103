@@ -56,8 +56,8 @@ class AttendanceReportStudent extends FieldPluginBase {
     // Leave empty to avoid a query on this field.
     $this->ensureMyTable();
 
-    $from = $this->currentRequest->get('from', 0);
-    $to = $this->currentRequest->get('to', 0);
+    $from = $this->currentRequest->query->get('from', 0);
+    $to = $this->currentRequest->query->get('to', 0);
 
     $order = !empty($this->view?->sort['attendance_report_student']) && !empty($this->view->sort['attendance_report_student']->options['order']) ? $this->view->sort['attendance_report_student']->options['order'] : 'asc';
     if ($order_field = $this->view->getRequest()->query?->get('order')) {
@@ -108,8 +108,8 @@ class AttendanceReportStudent extends FieldPluginBase {
       ];
     }
     else {
-      $from = (new \DateTime())->setTimestamp($this->currentRequest->get('from', 0));
-      $to = (new \DateTime())->setTimestamp($this->currentRequest->get('to', 0));
+      $from = (new \DateTime())->setTimestamp($this->currentRequest->query->get('from', 0));
+      $to = (new \DateTime())->setTimestamp($this->currentRequest->query->get('to', 0));
 
       $user_grade_from = $this->userMetaDataService->getUserGrade($uid, $from);
       $user_grade_now = $this->userMetaDataService->getUserGrade($uid);
