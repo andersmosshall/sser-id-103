@@ -71,14 +71,14 @@ class ProrenataExportUsersService extends ExportUsersServiceBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Skip users with protected data'),
       '#description' => $this->t('If checked, users with secrecy marking will be excluded from the export.'),
-      '#default_value' => FALSE,
+      '#default_value' => TRUE,
     ];
 
     $form['include_protected_data'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include protected data'),
       '#description' => $this->t('If checked, protected data will be included even if the user has secrecy marking.'),
-      '#default_value' => TRUE,
+      '#default_value' => FALSE,
       '#states' => [
         'visible' => [
           ':input[name="export_method[simple_school_reports_prorenata_export:export_users_prorenata][options][skip_user_with_protected_data]"]' => ['checked' => FALSE],
