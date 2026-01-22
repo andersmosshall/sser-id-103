@@ -7,6 +7,7 @@ dependencies:
     - field.field.ssr_student_leave_application.ssr_student_leave_application.field_handler_notes
     - field.field.ssr_student_leave_application.ssr_student_leave_application.field_reason
   module:
+    - options
     - simple_school_reports_entities
     - text
 id: ssr_student_leave_application.ssr_student_leave_application.default
@@ -26,7 +27,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 9
     region: content
   field_reason:
     type: text_default
@@ -55,13 +56,40 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  handled_at:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: 'Y-m-d H:i'
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
   handled_by:
     type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    weight: 6
+    weight: 7
+    region: content
+  state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
     region: content
   student:
     type: entity_reference_label

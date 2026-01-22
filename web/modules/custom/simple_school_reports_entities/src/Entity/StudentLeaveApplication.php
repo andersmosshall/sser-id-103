@@ -118,6 +118,10 @@ final class StudentLeaveApplication extends ContentEntityBase implements Student
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    if ($this->get('handled_by')->isEmpty()) {
+      $this->set('handled_at', NULL);
+    }
   }
 
   public function label() {
@@ -356,6 +360,11 @@ final class StudentLeaveApplication extends ContentEntityBase implements Student
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['handled_at'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Handled'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['from'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('From'))
       ->setRequired(TRUE)
@@ -375,11 +384,11 @@ final class StudentLeaveApplication extends ContentEntityBase implements Student
       ->setDisplayConfigurable('view', FALSE);
 
     $fields['state'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('State'))
+      ->setLabel(t('Decision'))
       ->setDefaultValue('pending')
       ->setSetting('allowed_values_function', 'simple_school_reports_student_leave_application_states')
       ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }
