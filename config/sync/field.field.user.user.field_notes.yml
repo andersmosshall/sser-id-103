@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.user.field_notes
+    - filter.format.full_html
   module:
-    - allowed_formats
     - text
     - user
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - full_html
 id: user.user.field_notes
 field_name: field_notes
 entity_type: user
@@ -23,5 +19,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - full_html
 field_type: text_long

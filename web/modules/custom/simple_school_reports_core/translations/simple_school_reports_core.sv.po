@@ -942,6 +942,10 @@ msgstr "Listmallar"
 msgid "Start"
 msgstr "Start"
 
+msgctxt "menu"
+msgid "Start"
+msgstr "Start"
+
 msgid "Start - school staff"
 msgstr "Start - skolpersonal"
 
@@ -2192,6 +2196,9 @@ msgstr "Mig (@name)"
 
 msgid "Handled by"
 msgstr "Hanterad av"
+
+msgid "Handled"
+msgstr "Hanterad"
 
 msgid "Leave days"
 msgstr "Lediga dager"
@@ -4047,8 +4054,8 @@ msgstr "kurs"
 msgid "Select the list of students to preview grades for."
 msgstr "Välj lista med elever att förhandsgranska betyg för."
 
-msgid ""
-msgstr ""
+msgid "Decision"
+msgstr "Beslut"
 
 msgid ""
 msgstr ""

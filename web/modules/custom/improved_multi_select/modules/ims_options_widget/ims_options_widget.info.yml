@@ -1,0 +1,8 @@
+package: Form Elements
+name: 'IMS Options Widget'
+type: module
+description: 'Provides a Select Lists widget which keeps previously selected values on top of the available options.'
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:options
+  - improved_multi_select:improved_multi_select

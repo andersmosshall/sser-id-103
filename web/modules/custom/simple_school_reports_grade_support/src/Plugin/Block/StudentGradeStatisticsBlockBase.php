@@ -119,7 +119,7 @@ abstract class StudentGradeStatisticsBlockBase extends BlockBase implements Cont
     $query->condition('stv.school_type_versioned_value', $school_type_versions, 'IN');
     $query->condition('gs.student', $user->id());
     $query->orderBy('p.period_index', 'DESC');
-    $query->fields('p', ['id']);
+    $query->fields('gs', ['id']);
     $results = $query->execute();
 
     $snapshot_ids = [];

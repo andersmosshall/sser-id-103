@@ -37,6 +37,7 @@ simple_school_reports_core.start_page_resolver:
   defaults:
     _controller: '\Drupal\simple_school_reports_core\Controller\StartPageController::startPageResolver'
     _title: 'Start'
+    _title_context: 'menu'
   requirements:
     _access: 'TRUE'
 
@@ -45,6 +46,7 @@ simple_school_reports_core.start_page_default:
   defaults:
     _controller: '\Drupal\simple_school_reports_core\Controller\StartPageController::defaultStartPage'
     _title: 'Start'
+    _title_context: 'menu'
   requirements:
     _permission: 'school staff permissions+budget review+administer budget'
 

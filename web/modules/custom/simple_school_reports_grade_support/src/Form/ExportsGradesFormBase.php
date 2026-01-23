@@ -1382,7 +1382,9 @@ abstract class ExportsGradesFormBase extends ConfirmFormBase implements TrustedC
       $diploma_project_label = NULL;
 
       if ($this->syllabusService->useDiplomaProject($syllabus_id)) {
-        $grade_entity = $this->entityTypeManager->getStorage('ssr_grade')->loadRevision($grade_info->revisionId);
+        /** @var \Drupal\Core\Entity\ContentEntityStorageInterface $grade_storage */
+        $grade_storage = $this->entityTypeManager->getStorage('ssr_grade');
+        $grade_entity = $grade_storage->loadRevision($grade_info->revisionId);
         $diploma_project_label = $grade_entity?->get('diploma_project_label')->value ?? NULL;
         $diploma_project_description = $grade_entity?->get('diploma_project_description')->value ?? NULL;
 

@@ -86,8 +86,8 @@ class AttendancePeriodReportStudent extends FieldPluginBase {
     // @todo Implement this when needed.
 
 //    $this->ensureMyTable();
-//    $from = $this->currentRequest->get('from', 0);
-//    $to = $this->currentRequest->get('to', 0);
+//    $from = $this->currentRequest->query->get('from', 0);
+//    $to = $this->currentRequest->query->get('to', 0);
 //
 //    $order = !empty($this->view?->sort['attendance_period_report_student']) && !empty($this->view->sort['attendance_period_report_student']->options['order']) ? $this->view->sort['attendance_period_report_student']->options['order'] : 'asc';
 //    if ($order_field = $this->view->getRequest()->query?->get('order')) {
@@ -142,8 +142,8 @@ class AttendancePeriodReportStudent extends FieldPluginBase {
 
 
       try {
-        $from = $this->currentRequest->get('from');
-        $to = $this->currentRequest->get('to');
+        $from = $this->currentRequest->query->get('from');
+        $to = $this->currentRequest->query->get('to');
 
         if (!$from || !$to) {
           throw new \RuntimeException('missing properties');

@@ -3,8 +3,8 @@ Datum	Datum för uttag av fil, åååå-mm-dd	S och bindestreck	10
 Version	Leverantörens systemversion, fritext	A	15
 PersonNr	Identitetsbegrepp för personer. Består av årtusende, år, månad, dag, löpnummer, checksiffra. 12 siffror, ååååmmddxxxx. Uppgiften omfattar elever med skyddade identiteter.  Uppgiften omfattar även elever med tillfälliga personnummer, ååååmmddTFxx.	BS	12
 Skolenhetskod	Kod för skola dvs en administrativ enhet där lärare och/eller elever finns. Skola speglar inte byggnad/fastighet utan avser en organisatorisk enhet på en adress. 8 siffror.	S	8
-Klass	Klassbeteckning	A	20
-	9999999999 = Uppgift saknas
+Klass	Klassbeteckning	A	25
+
 Fornamn	Förnamn	B	20
 Efternamn	Efternamn	B	20
 Bl	Betyg, Tillåtna värden i ämnet bild:	BS	1

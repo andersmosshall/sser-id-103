@@ -81,8 +81,8 @@ class SSRLocalActionsBlock extends LocalActionsBlock implements ContainerFactory
     }
 
     $black_list_routes = ['simple_school_reports_iup.generate_iup_single_doc', 'system.403', 'system.404'];
-    $destination = $this->currentRequest->get('back_destination');
-    $destination = $destination ?? $this->currentRequest->get('destination');
+    $destination = $this->currentRequest->query->get('back_destination');
+    $destination = $destination ?? $this->currentRequest->query->get('destination');
     if ($destination && !in_array($route_name, $black_list_routes)) {
 
       if (substr($destination, 0, 1) !== '/') {

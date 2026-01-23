@@ -120,8 +120,8 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
     $this_to->setTime(23, 59, 59);
 
     $uid = $user->id();
-    $from = $this->currentRequest->get('from');
-    $to = min($this->currentRequest->get('to'), $this_to->getTimestamp());
+    $from = $this->currentRequest->query->get('from');
+    $to = min($this->currentRequest->query->get('to'), $this_to->getTimestamp());
 
     if (!$uid || !$from || !$to || $from > $to) {
       $cache->applyTo($build);

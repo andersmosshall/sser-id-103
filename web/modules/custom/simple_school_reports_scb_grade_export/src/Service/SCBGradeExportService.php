@@ -244,7 +244,7 @@ class SCBGradeExportService implements GroupGradeExportInterface {
       // Add class.
       $class = $context['results']['ssr_student_doc_class_value'][$student_uid] ?? $context['results']['ssr_student_doc_grade_value'][$student_uid] ?? '';
 
-      $student_row_parts[] = $this->makeRowPart($class, 20);
+      $student_row_parts[] = $this->makeRowPart($class, 25);
 
       // Add first name.
       $first_name = $student->get('field_first_name')->value ?? '';

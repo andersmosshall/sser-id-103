@@ -131,7 +131,7 @@ class FileTemplatesConfigForm extends FormBase {
         '#upload_location' => 'public://file_templates',
         '#default_value' => $file ? [$file->id()] : NULL,
         '#upload_validators' => [
-          'file_validate_extensions' => [implode(' ', $file_types)],
+          'FileExtension' => ['extensions' => implode(' ', $file_types)],
         ],
         '#description' => str_contains($type, 'logo') ? '' : $this->t('Only upload files if it should overwrite the default template in code.'),
       ];

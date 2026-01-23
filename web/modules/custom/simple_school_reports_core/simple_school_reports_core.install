@@ -160,3 +160,14 @@ function simple_school_reports_core_update_10004() {
     }
   }
 }
+
+/**
+ * Clean up key value store.
+ */
+function simple_school_reports_core_update_11001() {
+  \Drupal::keyValue('system.schema')->delete('config_filter');
+  \Drupal::keyValue('system.schema')->delete('jquery_ui');
+  \Drupal::keyValue('system.schema')->delete('jquery_ui_datepicker');
+  \Drupal::keyValue('system.schema')->delete('jquery_ui_slider');
+  \Drupal::keyValue('system.schema')->delete('jquery_ui_touch_punch');
+}

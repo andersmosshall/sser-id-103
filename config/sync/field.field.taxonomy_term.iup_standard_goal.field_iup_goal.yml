@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.taxonomy_term.field_iup_goal
+    - filter.format.plain_text_ck
     - taxonomy.vocabulary.iup_standard_goal
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - plain_text_ck
 id: taxonomy_term.iup_standard_goal.field_iup_goal
 field_name: field_iup_goal
 entity_type: taxonomy_term
@@ -23,5 +19,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - plain_text_ck
 field_type: text_long

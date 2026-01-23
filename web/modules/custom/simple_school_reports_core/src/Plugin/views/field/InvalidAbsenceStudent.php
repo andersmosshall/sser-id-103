@@ -45,8 +45,8 @@ class InvalidAbsenceStudent extends FieldPluginBase {
   public function query() {
     $this->ensureMyTable();
 
-    $from = $this->currentRequest->get('from', 0);
-    $to = $this->currentRequest->get('to', 0);
+    $from = $this->currentRequest->query->get('from', 0);
+    $to = $this->currentRequest->query->get('to', 0);
     $calculated_value = $this->absenceStatisticsService->getAllInvalidAbsenceData($from, $to);
     $cases = 'CASE ';
     foreach ($calculated_value as $value => $uids) {

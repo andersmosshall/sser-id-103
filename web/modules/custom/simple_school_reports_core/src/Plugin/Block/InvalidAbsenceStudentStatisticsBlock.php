@@ -49,8 +49,8 @@ class InvalidAbsenceStudentStatisticsBlock extends StatisticsBlockBase implement
       $calculated_data['negative_absence_time'] = 0;
       if ($user = $this->currentRouteMatch->getParameter('user')) {
         $uid = $user->id();
-        $from = $this->currentRequest->get('from');
-        $to = $this->currentRequest->get('to');
+        $from = $this->currentRequest->query->get('from');
+        $to = $this->currentRequest->query->get('to');
         if ($uid && $from && $to) {
           $subject_map = $this->schoolSubjectService->getSchoolSubjectOptionList(NULL, TRUE);
           asort($subject_map);
@@ -194,8 +194,8 @@ class InvalidAbsenceStudentStatisticsBlock extends StatisticsBlockBase implement
       ];
 
       $context = [
-        'from' => $this->currentRequest->get('from', 0),
-        'to' => $this->currentRequest->get('from', 0),
+        'from' => $this->currentRequest->query->get('from', 0),
+        'to' => $this->currentRequest->query->get('from', 0),
         'uid' => $this->currentRouteMatch->getParameter('user')->id(),
         'sum' => $total,
         'negative_absence_time' => $calculated_data['negative_absence_time'],

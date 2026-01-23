@@ -56,6 +56,7 @@ class UserFormAlter {
           'field_class',
           'field_programme',
           'field_adult_student_settings',
+          'field_extra_adaptations',
         ];
 
         foreach ($student_fields as $student_field) {

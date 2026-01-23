@@ -207,8 +207,8 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
       '#default_value' => NULL,
       '#multiple' => TRUE,
       '#upload_validators' => [
-        'file_validate_extensions' => ['pdf doc docx jpg jpeg png txt zip'],
-        'file_validate_size' => [15 * 1024 * 1024],
+        'FileExtension' => ['extensions' => 'pdf doc docx jpg jpeg png txt zip'],
+        'FileSizeLimit' => ['fileLimit' => 15 * 1024 * 1024],
       ],
       '#access' => EmailService::supportEmailAttachments(),
     ];
