@@ -78,6 +78,7 @@ module:
   toolbar: 0
   ultimate_cron: 0
   user: 0
+  video_embed_field: 0
   views_custom_permissions: 0
   views_load_more: 0
   views_ui: 0
