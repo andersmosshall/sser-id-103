@@ -610,8 +610,7 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'title' => $help_page['title'],
         'field_system_id' => $system_id,
         'field_target_group' => $roles,
-        // TODO: Update once vimeo is updated after d11 upgrade.
-//        'field_vimeo' => ['value' => $help_page['vimeo']],
+        'field_vimeo' => ['value' => $help_page['vimeo']],
         'field_context' => $help_page['context'],
         'field_module' => $help_page['module'],
         'field_weight' => $weight,
