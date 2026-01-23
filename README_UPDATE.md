@@ -1,7 +1,11 @@
 ## How to update SSR
 
-1. Check if there is a d10 supported version of vimeo_embed_field and views_custom_permissions
-2. Run lando composer update --with-all-dependencies
+1. Check if there is a d11 (or d11.3) supported version:
+    vimeo_embed_field
+    views_custom_permissions
+    improved_multi_select
+    field_encrypt
+2. Run chmod 777 web/sites/default && chmod 666 web/sites/default/*settings.php && chmod 666 web/sites/default/*services.yml && lando composer update --with-all-dependencies
 3. Do git diff and check what has changed.
 4. Do git add . (no commit yet)
 5. Run lando drush updb -y

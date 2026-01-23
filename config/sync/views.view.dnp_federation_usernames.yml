@@ -391,8 +391,11 @@ display:
           bef:
             general:
               autosubmit: false
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: false
               autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
               autosubmit_hide: false
               input_required: false
               allow_secondary: false
@@ -403,34 +406,54 @@ display:
               field_first_name_value:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   placeholder_text: ''
                   collapsible: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
               field_last_name_value:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   placeholder_text: ''
                   collapsible: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
               field_grade_value:
                 plugin_id: default
                 advanced:
                   sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
                   collapsible: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
               uid_raw:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   placeholder_text: ''
                   collapsible: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
       access:
         type: perm
         options:
@@ -561,14 +584,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -608,14 +623,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -655,14 +662,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -707,14 +706,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
@@ -1109,14 +1100,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1156,14 +1139,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1207,14 +1182,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
@@ -1605,14 +1572,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1652,14 +1611,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1703,14 +1654,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              student: '0'
-              caregiver: '0'
-              teacher: '0'
-              administrator: '0'
-              principle: '0'
-              budget_reviewer: '0'
-              budget_administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''

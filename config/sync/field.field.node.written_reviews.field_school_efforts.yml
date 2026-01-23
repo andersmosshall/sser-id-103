@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_school_efforts
+    - filter.format.wordsupported_format
     - node.type.written_reviews
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - wordsupported_format
 id: node.written_reviews.field_school_efforts
 field_name: field_school_efforts
 entity_type: node
@@ -23,5 +19,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - wordsupported_format
 field_type: text_long

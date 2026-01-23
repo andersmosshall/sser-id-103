@@ -138,8 +138,8 @@ class RangeToUrlForm extends ConfirmFormBase {
     }
 
 
-    $from = $this->currentRequest->get('from');
-    $to = $this->currentRequest->get('to');
+    $from = $this->currentRequest->query->get('from');
+    $to = $this->currentRequest->query->get('to');
 
     if (!$from || !$to) {
       $from = $this->termService->getCurrentTermStart(FALSE);

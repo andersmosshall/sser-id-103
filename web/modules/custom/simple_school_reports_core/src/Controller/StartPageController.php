@@ -42,6 +42,10 @@ class StartPageController extends SystemController {
   public function startPageResolver() {
     $start_page_routes = [];
 
+    if ($this->currentUser->isAnonymous()) {
+      return $this->makeResponse(Url::fromRoute('user.login'));
+    }
+
     $results = $this->moduleHandler()->invokeAll('ssr_start_page_route', [$this->currentUser]);
     foreach ($results as $result) {
       if ($result) {

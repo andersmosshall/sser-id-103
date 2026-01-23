@@ -24,7 +24,7 @@ settings:
   context_mapping:
     parent_id: '@node.node_route_context:node'
   views_label: 'Attendance report'
-  items_per_page: none
+  items_per_page: null
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

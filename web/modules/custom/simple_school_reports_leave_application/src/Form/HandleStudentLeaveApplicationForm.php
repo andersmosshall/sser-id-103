@@ -344,6 +344,8 @@ class HandleStudentLeaveApplicationForm extends ConfirmFormBase {
     }
     $application->set('state', $state);
     $application->set('handled_by', ['target_id' => $handler]);
+    $now = \Drupal::time()->getRequestTime();
+    $application->set('handled_at', $now);
     $application->set('field_handler_notes', $handler_notes);
     $application->save();
   }

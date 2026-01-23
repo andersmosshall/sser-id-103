@@ -115,8 +115,8 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
     $cache->addCacheableDependency($user);
 
     $uid = $user->id();
-    $from = $this->currentRequest->get('from');
-    $to = $this->currentRequest->get('to');
+    $from = $this->currentRequest->query->get('from');
+    $to = $this->currentRequest->query->get('to');
     if (!$uid || !$from || !$to) {
       $cache->applyTo($build);
       return $build;

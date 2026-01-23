@@ -54,8 +54,10 @@ class HandleSingleGradeForm extends GradeRegistrationFormBase {
       throw new NotFoundHttpException();
     }
 
+    /** @var \Drupal\Core\Entity\ContentEntityStorageInterface $grade_storage */
+    $grade_storage = $this->entityTypeManager->getStorage('ssr_grade');
     /** @var \Drupal\simple_school_reports_grade_support\GradeInterface|null $ssr_grade */
-    $ssr_grade = $this->entityTypeManager->getStorage('ssr_grade')->loadRevision($ssr_grade_revision_id);
+    $ssr_grade = $grade_storage->loadRevision($ssr_grade_revision_id);
     if (!$ssr_grade) {
       throw new NotFoundHttpException();
     }

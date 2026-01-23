@@ -6,6 +6,6 @@ dependencies:
     - simple_school_reports_entities
 id: school_week_deviation.school_week_specific
 label: 'School week specific'
-description: ''
+description: null
 targetEntityType: school_week_deviation
 cache: true

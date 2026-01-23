@@ -355,6 +355,10 @@ class GradeService implements GradeServiceInterface {
     /** @var \Drupal\taxonomy\TermInterface[] $map */
     $map = $this->lookup[$cid];
 
+    if (!isset($map[$tid])) {
+      return NULL;
+    }
+
     return $map[$tid]?->label() ?? NULL;
   }
 
@@ -395,7 +399,10 @@ class GradeService implements GradeServiceInterface {
   }
 
   public function hasGrade(GradeInfo|GradeInfoMinimal $grade_info): bool {
-    return !empty($this->getGradeLabelFromTermId($grade_info->gradeTid ?? '*'));
+    if (!$grade_info->gradeTid) {
+      return FALSE;
+    }
+    return !empty($this->getGradeLabelFromTermId($grade_info->gradeTid));
   }
 
   /**

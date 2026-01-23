@@ -1,0 +1,15 @@
+isall: false
+url: ''
+selectors: ''
+placeholder_text: ''
+filtertype: 'partial'
+orderable: false
+groupresetfilter: false
+js_regex: false
+buttontext_add: '>'
+buttontext_addall: '»'
+buttontext_del: '<'
+buttontext_delall: '«'
+buttontext_moveup: 'Move up'
+buttontext_movedown: 'Move down'
+remove_required_attr: false

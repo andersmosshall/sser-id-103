@@ -452,3 +452,20 @@ function simple_school_reports_entities_update_10020() {
       ->installFieldStorageDefinition($field_name, 'ssr_organization', 'simple_school_reports_entities', $storage_definition);
   }
 }
+
+/**
+ * Install handled at field on leave application.
+ */
+function simple_school_reports_entities_update_11001() {
+  $fields = [];
+
+  $fields['handled_at'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Handled'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'ssr_student_leave_application', 'simple_school_reports_entities', $storage_definition);
+  }
+}

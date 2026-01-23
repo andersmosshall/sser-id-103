@@ -179,8 +179,8 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $from = $this->currentRequest->get('from');
-    $to = $this->currentRequest->get('to');
+    $from = $this->currentRequest->query->get('from');
+    $to = $this->currentRequest->query->get('to');
 
     $default_date = new DrupalDateTime();
     if ($from) {
@@ -206,7 +206,7 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       $options = $this->getWeekOptions(NULL, $max_from, $this->termService->getDefaultSchoolYearEnd());
     }
     else {
-      $this->getWeekOptions();
+      $options = $this->getWeekOptions();
     }
 
     $form['from_date'] = [

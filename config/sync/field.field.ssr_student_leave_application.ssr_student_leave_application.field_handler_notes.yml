@@ -6,13 +6,8 @@ dependencies:
     - field.storage.ssr_student_leave_application.field_handler_notes
     - filter.format.plain_text_ck
   module:
-    - allowed_formats
     - simple_school_reports_entities
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - plain_text_ck
 id: ssr_student_leave_application.ssr_student_leave_application.field_handler_notes
 field_name: field_handler_notes
 entity_type: ssr_student_leave_application

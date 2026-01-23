@@ -12,7 +12,7 @@ proxy:
 
 services:
   appserver:
-    composer_version: '2.5.1'
+    composer_version: '2.6.0'
     config:
       php: .lando/php.ini
     overrides:
@@ -24,7 +24,7 @@ services:
         XDEBUG_TRIGGER: 1
 
   database:
-    type: mysql
+    type: mariadb:11.8
     portforward: 32793
     creds:
       user: drupal9
@@ -35,14 +35,6 @@ services:
     type: memcached
     mem: 512
 tooling:
-  npm:
-    service: node
-  node:
-    service: node
-  yarn:
-    service: node
-  gulp:
-    service: node
   debug-on:
     service: appserver
     description: Enable xdebug for apache.

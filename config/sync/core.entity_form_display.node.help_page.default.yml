@@ -9,12 +9,10 @@ dependencies:
     - field.field.node.help_page.field_module_enabled
     - field.field.node.help_page.field_system_id
     - field.field.node.help_page.field_target_group
-    - field.field.node.help_page.field_vimeo
     - field.field.node.help_page.field_weight
     - node.type.help_page
   module:
     - text
-    - vimeo_embed_field
 id: node.help_page.default
 targetEntityType: node
 bundle: help_page
@@ -62,14 +60,6 @@ content:
     weight: 1
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_vimeo:
-    type: vimeo
-    weight: 26
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_weight:
     type: number

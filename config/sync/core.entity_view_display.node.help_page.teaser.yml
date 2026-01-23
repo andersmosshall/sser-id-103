@@ -10,14 +10,12 @@ dependencies:
     - field.field.node.help_page.field_module_enabled
     - field.field.node.help_page.field_system_id
     - field.field.node.help_page.field_target_group
-    - field.field.node.help_page.field_vimeo
     - field.field.node.help_page.field_weight
     - node.type.help_page
   module:
     - options
     - text
     - user
-    - vimeo_embed_field
 id: node.help_page.teaser
 targetEntityType: node
 bundle: help_page
@@ -52,23 +50,6 @@ content:
       link: false
     third_party_settings: {  }
     weight: 1
-    region: content
-  field_vimeo:
-    type: vimeo
-    label: hidden
-    settings:
-      vimeo_size: responsive
-      vimeo_width: '640'
-      vimeo_height: '480'
-      vimeo_color_value: 0093cb
-      vimeo_autoplay: 0
-      vimeo_loop: 0
-      vimeo_title: 0
-      vimeo_byline: 0
-      vimeo_portrait: 0
-      vimeo_color: 0
-    third_party_settings: {  }
-    weight: 0
     region: content
 hidden:
   field_context: true

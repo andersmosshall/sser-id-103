@@ -1,6 +1,6 @@
-name: 'Simple School Reports Schema Support'
+name: 'Simple School Reports Api Support'
 type: module
-description: 'Simple School Reports Schema Support'
+description: 'Simple School Reports Api Support'
 package: Simple School Reports
 core_version_requirement: ^10 || ^11
 dependencies:
