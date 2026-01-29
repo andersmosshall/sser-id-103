@@ -216,10 +216,16 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
       '#required' => TRUE,
     ];
 
-    $form['disclaimer'] = [
+    $form['disclaimer_1'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' => $this->t('NOTE: Students that has registered absence during any part of the lesson will be set as valid absence from the lesson.'),
+    ];
+
+    $form['disclaimer_2'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('NOTE: Students that has excused due to adapted studies during any part of the lesson will be set as valid absence from the lesson.'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -443,6 +449,10 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
       $from_date = new \DateTime();
       $from_date->setTimestamp($calendar_event->get('from')->value);
       $duration = abs(floor(($calendar_event->get('to')->value - $calendar_event->get('from')->value) / 60));
+
+      $to_date = new \DateTime();
+      $to_date->setTimestamp($calendar_event->get('to')->value);
+
       $title .= ' ' . $from_date->format('Y-m-d H:i') . ' (' . $duration . ' min)';
 
       $node = \Drupal::entityTypeManager()->getStorage('node')->create([
@@ -487,6 +497,24 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
             }
             $attendance_type = 'valid_absence';
             break;
+          }
+        }
+
+        // Check for adapted studies.
+        /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
+        $school_week_service = \Drupal::service('simple_school_reports_entities.school_week_service');
+        $school_week = $school_week_service->getSchoolWeek($student_target_id, $from_date);
+        if ($school_week_service->isAdaptedStudies($school_week)) {
+          $school_day_info = $school_week->getSchoolDayInfo($from_date);
+          if ($school_day_info['length'] === 0) {
+            $attendance_type = 'valid_absence';
+          }
+          else {
+            $school_day_from = $school_day_info['from'] ?? 0;
+            $school_day_to = $school_day_info['to'] ?? 0;
+            if ($school_day_to <= $from_date->getTimestamp() || $school_day_from >= $to_date->getTimestamp()) {
+              $attendance_type = 'valid_absence';
+            }
           }
         }
 

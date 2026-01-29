@@ -72,7 +72,7 @@ content:
     weight: 18
     region: content
     settings:
-      form_mode: default
+      form_mode: adapted_studies
       override_labels: false
       label_singular: ''
       label_plural: ''

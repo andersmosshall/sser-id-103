@@ -156,6 +156,8 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
     }
 
     $per_day_data = $this->attendanceAnalyseService->getAttendanceStatistics($uid, $from_time_object, $to_time_object)['per_day'];
+    $show_footnote_1 = FALSE;
+    $show_footnote_2 = FALSE;
 
     $headers = [
       'week' => $this->t('Week'),
@@ -246,7 +248,8 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
 
           $lesson_type = $lesson['type'] ?? '?';
           if ($lesson_type !== 'reported' && $lesson_type !== 'not_reported') {
-            continue;
+            // TEMP!!!!!!!!
+//            continue;
           }
 
           $name = $lesson['subject'] ?? 'n/a';
@@ -332,13 +335,26 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
               '#markup' => $name,
             ],
           ];
+
+          if ($lesson_type === 'not_reported') {
+            $day_lessons[$lesson_key]['wrapper']['stat']['value']['#markup'] .= '<sup>2</sup>';
+            $show_footnote_2 = TRUE;
+          }
         }
       }
 
 
+      $has_adapted_studies = !empty($data['adapted_studies']);
+
       $rows[$row_key][$day]['data']['day_label'] = [
-        '#markup' => '<div><strong>' . $current_day->format('j/n') . '</strong></div>',
+        '#markup' => '<div><strong>' . $current_day->format('j/n') . '</strong>',
       ];
+
+      if ($has_adapted_studies) {
+        $rows[$row_key][$day]['data']['day_label']['#markup'] .= '<sup>1</sup>';
+        $show_footnote_1 = TRUE;
+      }
+      $rows[$row_key][$day]['data']['day_label']['#markup'] .= '</div>';
 
       $rows[$row_key][$day]['data']['day_stats'] = [
         '#markup' => '<div class="' . $day_stat_classes . '">' . $day_stat_value . '</div>',
@@ -385,6 +401,15 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
         'class' => ['stats-day-table'],
       ],
     ];
+
+    $build['stat_wrapper']['table']['#suffix'] = '';
+    if ($show_footnote_1) {
+      $build['stat_wrapper']['table']['#suffix'] .= '<div><sup>1</sup><em>' . $this->t('Student has adapted studies') . '</em></div>';
+    }
+
+    if ($show_footnote_2) {
+      $build['stat_wrapper']['table']['#suffix'] .= '<div><sup>2</sup><em>' . $this->t('There are unreported lessons, attendance statistics may be incomplete') . '</em></div>';
+    }
 
     if ($not_current_grade) {
       $grade_display = SchoolGradeHelper::getSchoolGradesMapAll()[$user_grade_from] ?? '?';

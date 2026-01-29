@@ -98,7 +98,7 @@ $settings['ssr_max_grade_student_group_size'] = 32;
 
 $settings['ssr_max_written_reviews_subject_list'] = 18;
 
-$settings['ssr_toolbar_color'] = '#3a5ebd';
+$settings['ssr_toolbar_color'] = '#3a5ebd'; // '#308531';
 
 $settings['ssr_bug_report_email'] = 'anders@mosshall.se';
 $settings['ssr_no_reply_email'] = 'no-reply@simpleschoolreports.se';
@@ -106,3 +106,8 @@ $settings['ssr_no_reply_email'] = 'no-reply@simpleschoolreports.se';
 $settings['ssr_allowed_super_admins'] = 1;
 
 $settings['ssr_suspicious_mail_count'] = 10000;
+
+
+if (file_exists($app_root . '/' . $site_path . '/settings.local-overrides.php')) {
+  include $app_root . '/' . $site_path . '/settings.local-overrides.php';
+}

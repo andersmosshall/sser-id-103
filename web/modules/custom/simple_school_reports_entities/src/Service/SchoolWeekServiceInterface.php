@@ -86,4 +86,11 @@ interface SchoolWeekServiceInterface {
    */
   public function getDeviationViewsDisplay(): string;
 
+  /**
+   * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
+   *
+   * @return bool
+   */
+  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool;
+
 }

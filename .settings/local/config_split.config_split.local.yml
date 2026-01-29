@@ -6,6 +6,9 @@ id: local
 label: local
 description: ''
 weight: 0
+stackable: false
+no_patching: false
+storage: null
 folder: ''
 module:
   simple_school_reports_core_fklass: 0
@@ -44,7 +47,5 @@ module:
   simple_school_reports_user_import_random: 10
   # ENDOF OF SSR LOCAL MODULES
 theme: {  }
-blacklist: {  }
-graylist: {  }
-graylist_dependents: true
-graylist_skip_equal: false
+complete_list: {  }
+partial_list: {  }
