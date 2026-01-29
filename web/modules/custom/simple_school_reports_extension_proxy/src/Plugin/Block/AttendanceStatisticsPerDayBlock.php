@@ -248,8 +248,7 @@ class AttendanceStatisticsPerDayBlock extends BlockBase implements ContainerFact
 
           $lesson_type = $lesson['type'] ?? '?';
           if ($lesson_type !== 'reported' && $lesson_type !== 'not_reported') {
-            // TEMP!!!!!!!!
-//            continue;
+            continue;
           }
 
           $name = $lesson['subject'] ?? 'n/a';
