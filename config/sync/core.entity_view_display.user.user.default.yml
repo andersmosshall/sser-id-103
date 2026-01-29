@@ -33,10 +33,29 @@ dependencies:
     - field.field.user.user.field_telephone_number
   module:
     - entity_reference_revisions
+    - field_group
     - options
     - simple_school_reports_core
     - text
     - user
+third_party_settings:
+  field_group:
+    group_adapted_studies:
+      children:
+        - field_adapted_studies
+      label: 'Anpassad studiegång'
+      parent_name: ''
+      region: content
+      weight: 20
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
 id: user.user.default
 targetEntityType: user
 bundle: user
@@ -56,10 +75,10 @@ content:
     type: entity_reference_entity_view
     label: above
     settings:
-      view_mode: default
+      view_mode: adapted_studies
       link: false
     third_party_settings: {  }
-    weight: 20
+    weight: 21
     region: content
   field_address:
     type: entity_reference_revisions_entity_view
@@ -75,7 +94,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 23
+    weight: 24
     region: content
   field_allow_login:
     type: boolean
@@ -129,7 +148,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 22
+    weight: 23
     region: content
   field_first_name:
     type: string
@@ -191,7 +210,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 21
+    weight: 22
     region: content
   field_programme:
     type: entity_reference_label
@@ -199,7 +218,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 25
+    weight: 26
     region: content
   field_protected_personal_data:
     type: list_default
@@ -235,7 +254,7 @@ content:
   masquerade:
     settings: {  }
     third_party_settings: {  }
-    weight: 24
+    weight: 25
     region: content
   roles:
     settings: {  }

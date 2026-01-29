@@ -1,0 +1,87 @@
+uuid: 1bec2789-1701-4577-aee0-90e487d07861
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.school_week.adapted_studies
+  module:
+    - simple_school_reports_entities
+id: school_week.school_week.adapted_studies
+targetEntityType: school_week
+bundle: school_week
+mode: adapted_studies
+content:
+  table:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  valid_from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  valid_to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  calculate_from_schema: true
+  created: true
+  deviation: true
+  from_1: true
+  from_2: true
+  from_3: true
+  from_4: true
+  from_5: true
+  from_6: true
+  from_7: true
+  identifier: true
+  label: true
+  length_1: true
+  length_2: true
+  length_3: true
+  length_4: true
+  length_5: true
+  length_6: true
+  length_7: true
+  school_week_type: true
+  to_1: true
+  to_2: true
+  to_3: true
+  to_4: true
+  to_5: true
+  to_6: true
+  to_7: true
+  uid: true

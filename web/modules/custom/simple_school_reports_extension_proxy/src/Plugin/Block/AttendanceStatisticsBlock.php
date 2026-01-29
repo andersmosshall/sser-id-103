@@ -59,6 +59,11 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
   protected $userMetaDataService;
 
   /**
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * @param array $configuration
    * @param $plugin_id
    * @param $plugin_definition
@@ -72,12 +77,14 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
     RouteMatchInterface $route_match,
     RequestStack $request_stack,
     UserMetaDataServiceInterface $user_meta_data_service,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->moduleHandler = $module_handler;
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->userMetaDataService = $user_meta_data_service;
+    $this->entityTypeManager = $entity_type_manager;
     if ($module_handler->moduleExists('simple_school_reports_attendance_analyse')) {
       $this->attendanceAnalyseService = \Drupal::service('simple_school_reports_attendance_analyse.attendance_analyse_service');
     }
@@ -95,6 +102,7 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('current_route_match'),
       $container->get('request_stack'),
       $container->get('simple_school_reports_core.user_meta_data'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -125,11 +133,15 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
     $from_time_object = (new \DateTime())->setTimestamp($from);
     $to_time_object = (new \DateTime())->setTimestamp($to);
 
-    $school_week = $this->attendanceAnalyseService->getSchoolWeek($user->id(), $from_time_object);
+    $now = new \DateTime();
+    $school_week_date = min($to_time_object, $now);
+    $school_week = $this->attendanceAnalyseService->getSchoolWeek($user->id(), $school_week_date);
     if (!$school_week) {
       $cache->applyTo($build);
       return $build;
     }
+
+    $is_adapted_studies = $this->attendanceAnalyseService->isAdaptedStudies($school_week);
 
     $user_grade_from = $this->userMetaDataService->getUserGrade($uid, $from_time_object);
     $user_grade_to = $this->userMetaDataService->getUserGrade($uid, $to_time_object);
@@ -248,13 +260,16 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
 
     $build['school_week_info_wrapper']['school_week_info'] = [
       '#type' => 'details',
-      '#title' => $this->t('School week'),
+      '#title' => $is_adapted_studies ? $this->t('School week') . ' (' . $this->t('Adapted studies') . ')' : $this->t('School week'),
       '#open' => FALSE,
       '#attributes' => [
         'class' => ['stats-details', 'school-week-info'],
       ],
-      'value' => $school_week->toTable(TRUE),
     ];
+
+    $school_week_view_builder = $this->entityTypeManager->getViewBuilder('school_week');
+    $view_mode = $is_adapted_studies ? 'adapted_studies' : 'full';
+    $build['school_week_info_wrapper']['school_week_info']['value'] = $school_week_view_builder->view($school_week, $view_mode);
 
     $build['#attached']['library'][] = 'simple_school_reports_core/details_toggle';
     $build['#attached']['library'][] = 'simple_school_reports_extension_proxy/attendance_statistics_block';

@@ -674,6 +674,22 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     if (!$this->get('school_week_type')->value) {
       $this->set('school_week_type', 'default');
     }
+
+    if ($this->get('valid_from')->isEmpty()) {
+      $this->set('valid_from', $this->get('created')->value);
+    }
+  }
+
+  public function label() {
+    $label = parent::label();
+
+    if ((!$this->get('valid_from')->isEmpty() || !$this->get('valid_to')->isEmpty()) && $label) {
+      $valid_from = $this->get('valid_from')->value ? (new \DateTime())->setTimestamp($this->get('valid_from')->value)->format('Y-m-d') : '';
+      $valid_to = $this->get('valid_to')->value ? (new \DateTime())->setTimestamp($this->get('valid_to')->value)->format('Y-m-d') : '';
+
+      return $label . ' (' . $valid_from . ' - ' . $valid_to . ')';
+    }
+    return $label;
   }
 
   /**
@@ -793,6 +809,16 @@ class SchoolWeek extends ContentEntityBase implements SchoolWeekInterface {
     $fields['identifier'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Identifier'))
       ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['valid_from'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Valid from'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['valid_to'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Valid to'))
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

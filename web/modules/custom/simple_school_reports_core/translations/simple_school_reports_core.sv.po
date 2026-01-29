@@ -690,6 +690,12 @@ msgstr "Anpassad studiegång"
 msgid "Adapted studies (@date)"
 msgstr "Anpassad studiegång (@date)"
 
+msgid "Student has adapted studies"
+msgstr "Elev har anpassad studiegång"
+
+msgid "There are unreported lessons, attendance statistics may be incomplete"
+msgstr "Det finns ej rapporterade lektioner, närvarostatistiken kan vara missvisande"
+
 msgid "Grade will be set later"
 msgstr "Betyg anges senare"
 
@@ -2972,7 +2978,10 @@ msgid "No lessons to fast report"
 msgstr "Inga lektioner att snabbrapportera"
 
 msgid "NOTE: Students that has registered absence during any part of the lesson will be set as valid absence from the lesson."
-msgstr "OBS: Elever som har registrerad dagsfrånvaro under någon del av lektionen kommer att anges som giltig frånvaro från lektionen."
+msgstr "OBS: Elever som har registrerad dagsfrånvaro under någon del av lektionen kommer att anges som giltig frånvaro från hela lektionen."
+
+msgid "NOTE: Students that has excused due to adapted studies during any part of the lesson will be set as valid absence from the lesson."
+msgstr "OBS: Elever som inte förväntas närvara under någon del av lektionen pga anpassad studiegång kommer att anges som giltig frånvaro från hela lektionen."
 
 msgid "Cancel lesson"
 msgstr "Ställ in lektion"
@@ -4057,11 +4066,11 @@ msgstr "Välj lista med elever att förhandsgranska betyg för."
 msgid "Decision"
 msgstr "Beslut"
 
-msgid ""
-msgstr ""
+msgid "Valid from"
+msgstr "Giltig från"
 
-msgid ""
-msgstr ""
+msgid "Valid to"
+msgstr "Giltig till"
 
 msgid ""
 msgstr ""
