@@ -45,16 +45,27 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
 
     $map = [];
     $reverse_map = [];
+    $preload_ids = [];
     // Map school weeks to users.
-    $results = $this->connection->select('user__field_adapted_studies', 'as')
+    $query = $this->connection->select('user__field_adapted_studies', 'as');
+    $query->innerJoin('school_week', 'sw', 'as.field_adapted_studies_target_id = sw.id');
+    $results = $query->fields('as', ['entity_id', 'field_adapted_studies_target_id'])
       ->fields('as', ['entity_id', 'field_adapted_studies_target_id'])
+      ->fields('sw', ['valid_from', 'valid_to'])
+      ->orderBy('sw.valid_from', 'DESC')
       ->execute();
+
+    $default_valid_to = \time() + 100 * 365 * 24 * 60 * 60;
     foreach ($results as $result) {
-      $map['u:' . $result->entity_id] = $result->field_adapted_studies_target_id;
+      $valid_from = $result->valid_from ?? 1234;
+      $valid_to = $result->valid_to ?? $default_valid_to;
+
+      $map['u:' . $result->entity_id][$valid_from . ':' . $valid_to] = $result->field_adapted_studies_target_id;
       $reverse_map[$result->field_adapted_studies_target_id] = [
         'type' => 'user',
         'id' => $result->entity_id,
       ];
+      $preload_ids[] = $result->field_adapted_studies_target_id;
     }
 
     // Map school weeks to classes.
@@ -70,6 +81,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
         'type' => 'class',
         'id' => $result->id,
       ];
+      $preload_ids[] = $result->school_week;
     }
 
     // Map school weeks to grades.
@@ -80,6 +92,7 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
         'type' => 'grade',
         'id' => $grade,
       ];
+      $preload_ids[] = $school_week_id;
     }
 
     // Map school weeks to student_schema.
@@ -97,17 +110,31 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
         'type' => 'student_schema',
         'id' => $result->identifier,
       ];
+      $preload_ids[] = $result->id;
     }
 
-    if (empty($map)) {
+    if (empty($preload_ids)) {
       return [];
     }
 
-    foreach ($map as $key => $id) {
-      $map[$key] = $this->entityTypeManager->getStorage('school_week')->load($id);
-      if (!$map[$key]) {
-        unset($map[$key]);
-        unset($reverse_map[$id]);
+    $this->entityTypeManager->getStorage('school_week')->loadMultiple($preload_ids);
+
+    foreach ($map as $key => $value) {
+      if (is_array($value)) {
+        foreach ($value as $u_key => $u_value) {
+          $map[$key][$u_key] = $this->entityTypeManager->getStorage('school_week')->load($u_value);
+          if (!$map[$key][$u_key]) {
+            unset($map[$key][$u_key]);
+            unset($reverse_map[$u_value]);
+          }
+        }
+      }
+      else {
+        $map[$key] = $this->entityTypeManager->getStorage('school_week')->load($value);
+        if (!$map[$key]) {
+          unset($map[$key]);
+          unset($reverse_map[$value]);
+        }
       }
     }
 
@@ -139,10 +166,22 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
       $parent_school_week = $school_week_map['g:' . $grade];
     }
 
-    if (!$only_root_school_weeks && isset($school_week_map['u:' . $uid])) {
-      $school_week = $school_week_map['u:' . $uid];
-      if ($parent_school_week) {
-        $school_week->setParentSchoolWeek($parent_school_week);
+    if (!$only_root_school_weeks && !empty($school_week_map['u:' . $uid])) {
+      // Fallback to parent school week.
+      $school_week = $parent_school_week;
+
+      // Find active school week.
+      $target_time = $date ? $date->getTimestamp() : \time();
+      foreach ($school_week_map['u:' . $uid] as $key => $school_week_candidate) {
+        [$valid_from, $valid_to] = explode(':', $key);
+
+        if ($valid_from <= $target_time && $valid_to >= $target_time) {
+          $school_week = $school_week_candidate;
+          if ($parent_school_week) {
+            $school_week->setParentSchoolWeek($parent_school_week);
+          }
+          break;
+        }
       }
     }
     else {
@@ -488,6 +527,20 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
     $this->displayCount++;
 
     return 'list_' . (($this->displayCount % 15) + 1);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool {
+    $to_check = $school_week;
+    if ($school_week->isStudentSchema()) {
+      $to_check = $school_week->getParentSchoolWeek();
+    }
+    if (!$to_check) {
+      return FALSE;
+    }
+    return $this->getSchoolWeekReference($to_check->id())['type'] === 'user';
   }
 
 }

@@ -19,6 +19,13 @@ interface AttendanceAnalyseServiceInterface {
   public function getSchoolWeek(string $uid, ?\DateTime $date = NULL): ?SchoolWeekInterface;
 
   /**
+   * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
+   *
+   * @return bool
+   */
+  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool;
+
+  /**
    * @param string $uid
    *   The user id to analyse.
    * @param \DateTime $from

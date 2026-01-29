@@ -197,15 +197,14 @@ class CourseAttendanceReportFormAlter {
           }
         }
 
+        /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
+        $school_week_service = \Drupal::service('simple_school_reports_entities.school_week_service');
 
         // Check for adapted studies.
         foreach ($course_students as $student_id => $student_data) {
-          $student = $student_data['user'];
-          /** @var \Drupal\simple_school_reports_entities\SchoolWeekInterface|null $school_week */
-          $school_week = $student->get('field_adapted_studies')->entity;
-          if ($school_week) {
-            $start_date = (new \DateTime())->setTimestamp($start_time);
-
+          $start_date = (new \DateTime())->setTimestamp($start_time);
+          $school_week = $school_week_service->getSchoolWeek($student_id, $start_date);
+          if ($school_week_service->isAdaptedStudies($school_week)) {
             $school_day_info = $school_week->getSchoolDayInfo($start_date);
 
             if ($school_day_info['length'] === 0) {
@@ -254,7 +253,7 @@ class CourseAttendanceReportFormAlter {
     /** @var \Drupal\simple_school_reports_schema_support\Service\SchemaSupportServiceInterface $schema_support_service */
     $schema_support_service = \Drupal::service('simple_school_reports_schema_support.schema_support');
 
-    $suggested_calendar_event_id =  \Drupal::request()->query->get('calendar_event_id');
+    $suggested_calendar_event_id =  \Drupal::request()->query->get('calendar_event');
     if ($suggested_calendar_event_id) {
       /** @var \Drupal\simple_school_reports_entities\CalendarEventInterface $suggested_calendar_event */
       $suggested_calendar_event = \Drupal::entityTypeManager()->getStorage('ssr_calendar_event')->load($suggested_calendar_event_id);

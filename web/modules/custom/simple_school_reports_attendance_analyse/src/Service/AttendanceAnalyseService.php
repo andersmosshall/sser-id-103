@@ -43,26 +43,17 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
   }
 
   /**
-   * @param \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week
-   *
-   * @return bool
+   * {@inheritdoc}
    */
-  protected function isAdaptedStudies(SchoolWeekInterface $school_week): bool {
-    $to_check = $school_week;
-    if ($school_week->isStudentSchema()) {
-      $to_check = $school_week->getParentSchoolWeek();
-    }
-    if (!$to_check) {
-      return FALSE;
-    }
-    return $this->schoolWeekService->getSchoolWeekReference($to_check->id())['type'] === 'user';
+  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL): ?SchoolWeekInterface {
+    return $this->schoolWeekService->getSchoolWeek($uid, $date);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSchoolWeek(string $uid, ?\DateTime $date = NULL): ?SchoolWeekInterface {
-    return $this->schoolWeekService->getSchoolWeek($uid, $date);
+  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool {
+    return $this->schoolWeekService->isAdaptedStudies($school_week);
   }
 
   /**
@@ -458,8 +449,17 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       $data[$uid]['adapted_studies'] = $this->isAdaptedStudies($school_week);
 
       $lessons_data = [];
+      $adapted_studies_per_day = [];
+      $school_day_period_per_day = [];
 
       foreach ($days as $day_string => $day) {
+        $school_week = $this->getSchoolWeek($uid, $day);
+
+        $adapted_studies_per_day[$day_string] = $this->isAdaptedStudies($school_week);
+        if (!$data[$uid]['adapted_studies'] && $adapted_studies_per_day[$day_string]) {
+          $data[$uid]['adapted_studies'] = TRUE;
+        }
+
         $include_day_base_lessons = TRUE;
         if ($school_week->isStudentSchema()) {
           $include_day_base_lessons = FALSE;
@@ -468,6 +468,9 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
           }
         }
         $school_day_info = $school_week->getSchoolDayInfo($day, $include_day_base_lessons);
+
+        $school_day_period_per_day[$day_string]['from'] = $school_day_info['from'];
+        $school_day_period_per_day[$day_string]['to'] = $school_day_info['to'];
 
         $student_course_lessons = !empty($course_lessons[$uid][$day_string]) ? $course_lessons[$uid][$day_string] : [];
         $student_not_reported_lessons = [];
@@ -484,10 +487,15 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
       foreach ($lessons_data as $day_string => $lessons) {
         if (empty($data[$uid]['per_day'][$day_string])) {
           $data[$uid]['per_day'][$day_string] = $this->getAttendanceStatisticsDefault(TRUE);
+          if (!empty($adapted_studies_per_day[$day_string])) {
+            $data[$uid]['per_day'][$day_string]['adapted_studies'] = TRUE;
+          }
         }
 
         $day_object = $days[$day_string];
         $day_index = $day_object->format('N');
+
+        $day_has_adapted_studies = $adapted_studies_per_day[$day_string] ?? FALSE;
 
         // Calculate statistics.
         $absence = array_merge($absence_day_data[$uid][$day_string] ?? [], $absence_day_data[$uid]['multi'] ?? []);
@@ -504,6 +512,17 @@ class AttendanceAnalyseService implements AttendanceAnalyseServiceInterface {
           $leave_absence = &$lesson['leave_absence'];
           $valid_absence = &$lesson['valid_absence'];
           $invalid_absence = &$lesson['invalid_absence'];
+
+          // Skip lesson outside of adapted studies if not reported or full valid absence.
+          if ($day_has_adapted_studies && ($lesson['type'] === 'not_reported' || $valid_absence >= $length)) {
+            $school_day_from = $school_day_period_per_day[$day_string]['from'];
+            $school_day_to = $school_day_period_per_day[$day_string]['to'];
+
+            // Ignore the lesson if it is fully outside of adapted studies school day.
+            if ($lesson_from >= $school_day_to || $lesson_to <= $school_day_from) {
+              continue;
+            }
+          }
 
           foreach ($absence as $absence_day) {
             $absence_from = $absence_day['from'];

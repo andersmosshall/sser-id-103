@@ -1,0 +1,11 @@
+uuid: 994a30f9-69b5-4ffe-a43e-ad2d2cb8853e
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_entities
+id: school_week.adapted_studies
+label: 'Adapted studies'
+description: null
+targetEntityType: school_week
+cache: true

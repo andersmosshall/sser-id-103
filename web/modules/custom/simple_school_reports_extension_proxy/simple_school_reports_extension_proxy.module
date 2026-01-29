@@ -1377,8 +1377,17 @@ function simple_school_reports_extension_proxy_school_week_view(array &$build, \
 
     if ($reference['type'] === 'user') {
       // Get the school week with parent set.
-      $school_week = $school_week_service->getSchoolWeek($reference['id']);
+      $default_school_week = $school_week_service->getSchoolWeek($reference['id']);
+      $school_week_parent = $default_school_week?->getParentSchoolWeek() ?? $default_school_week;
+
+      if ($school_week_parent) {
+        $school_week->setParentSchoolWeek($school_week_parent);
+      }
     }
+
+    $cache = new \Drupal\Core\Cache\CacheableMetadata();
+    $cache->addCacheableDependency($school_week);
+    $cache->addCacheTags(['school_week_deviation_list']);
 
     $build['table'] = [
       '#type' => 'container',

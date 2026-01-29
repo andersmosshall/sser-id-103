@@ -469,3 +469,55 @@ function simple_school_reports_entities_update_11001() {
       ->installFieldStorageDefinition($field_name, 'ssr_student_leave_application', 'simple_school_reports_entities', $storage_definition);
   }
 }
+
+/**
+ * Add valid from/to fields to school week.
+ */
+function simple_school_reports_entities_update_11002() {
+  $fields = [];
+
+  $fields['valid_from'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Valid from'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $fields['valid_to'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Valid to'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  foreach ($fields as $field_name => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field_name, 'school_week', 'simple_school_reports_entities', $storage_definition);
+  }
+}
+
+/**
+ * Auto-populate valid_from on school weeks.
+ */
+function simple_school_reports_entities_update_11003() {
+  // Populate valid_from for adapted studies school weeks.
+  $results = \Drupal::database()->select('user__field_adapted_studies', 'as')
+    ->fields('as', ['entity_id', 'field_adapted_studies_target_id'])
+    ->execute();
+
+  $ids = [];
+  foreach ($results as $result) {
+    if ($result->field_adapted_studies_target_id) {
+      $ids[] = $result->field_adapted_studies_target_id;
+    }
+  }
+
+  if (!empty($ids)) {
+    $school_week_storage = \Drupal::entityTypeManager()->getStorage('school_week');
+    $school_weeks = $school_week_storage->loadMultiple($ids);
+    /** @var \Drupal\simple_school_reports_entities\SchoolWeekInterface $school_week */
+    foreach ($school_weeks as $school_week) {
+      if (!$school_week->get('valid_from')->isEmpty()) {
+        continue;
+      }
+      $school_week->set('valid_from', $school_week->get('created')->value);
+      $school_week->save();
+    }
+  }
+}
