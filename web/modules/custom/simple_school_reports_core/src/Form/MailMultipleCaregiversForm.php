@@ -12,6 +12,7 @@ use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
+use Drupal\simple_school_reports_core\Traits\MultiValueElementTrait;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Provides a confirmation form for cancelling multiple user accounts.
  */
 class MailMultipleCaregiversForm extends ConfirmFormBase {
+
+  use MultiValueElementTrait;
 
   /**
    * The temp store factory.
@@ -238,9 +241,31 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
         '#title' => $this->t('Extra recipients'),
         '#open' => FALSE,
       ];
+
+      $form['extra_recipients_wrapper']['extra_user_recipients'] = $this->buildMultiValueElement(
+        $form_state,
+        ['title' => $this->t('Users'), 'description' => $this->t('Add extra recipients if they are users in Simple School Reports.')],
+        'extra_user_recipients',
+        [],
+        fn(array $container, int $delta, ?array $item): array => [
+          'target_id' => [
+            '#type' => 'entity_autocomplete',
+            '#target_type' => 'user',
+            '#default_value' => $item['target_id'] ?? NULL,
+            '#selection_handler' => 'default',
+            '#selection_settings' => [
+              'include_anonymous' => FALSE,
+              'filter' => [
+                'role' => ['teacher', 'administrator'],
+              ],
+            ],
+          ],
+        ],
+      );
+
       $form['extra_recipients_wrapper']['extra_recipients'] = [
         '#type' => 'textarea',
-        '#title' => $this->t('Extra recipients'),
+        '#title' => $this->t('Email addresses'),
         '#description' => $this->t('Add extra recipients to the mail, one per row. Remember to not expose school related information to unauthorized recipients.'),
         '#default_value' => '',
       ];
@@ -361,6 +386,28 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
                 $batch['operations'][] = [[EmailService::class, 'batchSendMail'], [$email, $subject, $message, $replace_context, $form_state->getValue('attachments'), $options]];
                 $send_to[] = $email;
               }
+            }
+          }
+        }
+      }
+
+
+      $user_storage = $this->entityTypeManager->getStorage('user');
+      $extra_user_recipients = $form_state->getValue('extra_user_recipients');
+      if (is_array($extra_user_recipients) && !empty($extra_user_recipients['items'])) {
+        foreach ($extra_user_recipients['items'] as $extra_user_recipient_value) {
+          if (!empty($extra_user_recipient_value['value']['target_id'])) {
+            $target_id = $extra_user_recipient_value['value']['target_id'];
+            /** @var \Drupal\user\UserInterface|null $extra_user_recipient */
+            $extra_user_recipient = $user_storage->load($target_id);
+            $email = $extra_user_recipient ? $this->emailService->getUserEmail($extra_user_recipient) : NULL;
+            if ($email) {
+              $replace_context = [];
+              $options = [
+                'maillog_mail_type' => SsrMaillogInterface::MAILLOG_TYPE_OTHER,
+              ];
+              $batch['operations'][] = [[EmailService::class, 'batchSendMail'], [$email, $subject, $message, $replace_context, $form_state->getValue('attachments'), $options]];
+              $send_to[] = $email;
             }
           }
         }
