@@ -2,6 +2,7 @@
 
 namespace Drupal\simple_school_reports_core\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\EmailService;
@@ -23,10 +24,13 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
 
   protected UserMetaDataServiceInterface $userMetaDataService;
 
+  protected TimeInterface $time;
+
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->emailService = $container->get('simple_school_reports_core.email_service');
     $instance->userMetaDataService = $container->get('simple_school_reports_core.user_meta_data');
+    $instance->time = $container->get('datetime.time');
     return $instance;
   }
 
@@ -128,6 +132,7 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
+    $form_state->set('has_absence_node', FALSE);
     $accounts = $form_state->getValue('accounts', []);
 
     if (count($accounts) !== 1) {
@@ -151,9 +156,32 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
       $limit_from = $from_date->getTimestamp();
       $limit_to = $to_date->getTimestamp();
 
-      $absence_nids = AbsenceDayHandler::getAbsenceNodesFromPeriod([$uid], $limit_from, $limit_to, TRUE);
-      if (!empty($absence_nids)) {
-        $form_state->setError($form, $this->t('There are already absence registrations that partly or completely includes selected absence period.'));
+      if ($from_date->format('Y-m-d') === $to_date->format('Y-m-d')) {
+        /** @var \Drupal\node\NodeInterface[] $absence_nodes */
+        $absence_nodes = AbsenceDayHandler::getAbsenceNodesFromPeriod([$uid], $limit_from, $limit_to, FALSE);
+        $has_absence_node = FALSE;
+        $changed_limit = $this->time->getRequestTime() - 300;
+        foreach ($absence_nodes as $absence_node) {
+          if (
+            $absence_node->get('field_absence_from')->value === (string) $limit_from &&
+            $absence_node->get('field_absence_to')->value === (string) $limit_to &&
+            $absence_node->getChangedTime() > $changed_limit &&
+            $absence_node->getOwnerId() === $this->currentUser()->id()
+          ) {
+            $has_absence_node = TRUE;
+            $form_state->set('has_absence_node', TRUE);
+          }
+        }
+
+        if (!$has_absence_node && !empty($absence_nodes)) {
+          $form_state->setError($form, $this->t('There are already absence registrations that partly or completely includes selected absence period.'));
+        }
+      }
+      else {
+        $absence_nids = AbsenceDayHandler::getAbsenceNodesFromPeriod([$uid], $limit_from, $limit_to, TRUE);
+        if (!empty($absence_nids)) {
+          $form_state->setError($form, $this->t('There are already absence registrations that partly or completely includes selected absence period.'));
+        }
       }
     }
 
@@ -163,6 +191,13 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->get('has_absence_node')) {
+      $this->messenger()->addStatus($this->t('Absence registered'));
+      $this->resetPostCheckFlag();
+      return;
+    }
+
+
     parent::submitForm($form, $form_state);
 
     if (!$form_state->getValue('confirm')) {
