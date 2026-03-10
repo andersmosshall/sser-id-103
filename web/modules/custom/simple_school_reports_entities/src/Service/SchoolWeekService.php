@@ -532,7 +532,10 @@ class SchoolWeekService implements SchoolWeekServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool {
+  public function isAdaptedStudies(?SchoolWeekInterface $school_week): bool {
+    if (!$school_week) {
+      return FALSE;
+    }
     $to_check = $school_week;
     if ($school_week->isStudentSchema()) {
       $to_check = $school_week->getParentSchoolWeek();

@@ -204,7 +204,7 @@ class CourseAttendanceReportFormAlter {
         foreach ($course_students as $student_id => $student_data) {
           $start_date = (new \DateTime())->setTimestamp($start_time);
           $school_week = $school_week_service->getSchoolWeek($student_id, $start_date);
-          if ($school_week_service->isAdaptedStudies($school_week)) {
+          if ($school_week && $school_week_service->isAdaptedStudies($school_week)) {
             $school_day_info = $school_week->getSchoolDayInfo($start_date);
 
             if ($school_day_info['length'] === 0) {

@@ -91,6 +91,6 @@ interface SchoolWeekServiceInterface {
    *
    * @return bool
    */
-  public function isAdaptedStudies(SchoolWeekInterface $school_week): bool;
+  public function isAdaptedStudies(?SchoolWeekInterface $school_week): bool;
 
 }
