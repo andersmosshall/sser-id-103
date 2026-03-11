@@ -14,6 +14,7 @@ use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
+use Drupal\simple_school_reports_core\Traits\PreventDoublePostTrait;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Provides a confirmation form for bug report.
  */
 class BugReportForm extends ConfirmFormBase {
+
+  use PreventDoublePostTrait;
 
   /**
    * @var \Drupal\simple_school_reports_core\Service\EmailServiceInterface
@@ -121,10 +124,21 @@ class BugReportForm extends ConfirmFormBase {
     return $form;
   }
 
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    if ($this->skipValidation($form_state)) {
+      return;
+    }
+    parent::validateForm($form, $form_state);
+  }
+
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     if (!$form_state->getValue('confirm')) {
       $this->logger('confirm_form')->error('Confirm issue!');
       $this->messenger()->addError($this->t('Something went wrong. Try again.'));
@@ -151,7 +165,7 @@ class BugReportForm extends ConfirmFormBase {
 
       $context = [];
       if (EmailService::batchSendMail($ssr_bug_report_email, $this->t('Bug report from @name', ['@name' => Settings::get('ssr_school_name', '?')]), $message, [], [], [], $context)) {
-        $this->messenger()->addStatus($this->t('Thank you for your bug report. Together we make Simple School Reports better.'));
+        $this->registerSubmit($form_state, $this->t('Thank you for your bug report. Together we make Simple School Reports better.'));
         return;
       };
     }

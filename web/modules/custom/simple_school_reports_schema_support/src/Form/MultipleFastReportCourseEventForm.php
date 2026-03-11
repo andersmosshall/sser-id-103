@@ -504,7 +504,7 @@ class MultipleFastReportCourseEventForm extends ConfirmFormBase {
         /** @var \Drupal\simple_school_reports_entities\Service\SchoolWeekServiceInterface $school_week_service */
         $school_week_service = \Drupal::service('simple_school_reports_entities.school_week_service');
         $school_week = $school_week_service->getSchoolWeek($student_target_id, $from_date);
-        if ($school_week_service->isAdaptedStudies($school_week)) {
+        if ($school_week && $school_week_service->isAdaptedStudies($school_week)) {
           $school_day_info = $school_week->getSchoolDayInfo($from_date);
           if ($school_day_info['length'] === 0) {
             $attendance_type = 'valid_absence';

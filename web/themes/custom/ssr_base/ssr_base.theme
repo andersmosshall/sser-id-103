@@ -76,4 +76,13 @@ function ssr_base_preprocess_table(&$variables) {
     $variables['attributes']['class'][] = 'request-log-table';
   }
 
+  if (str_contains($message, 'ssr-compressed-log--')) {
+    $message = explode('ssr-compressed-log--', $message)[1];
+    /** @var \Drupal\simple_school_reports_logging\Service\RequestLogServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_logging.request_log');
+    $message = $service->decompressRequestLogMessage($message);
+    $variables['rows'][5]['cells'][1]['content'] = $message;
+    $variables['attributes']['class'][] = 'compressed-log-table';
+  }
+
 }

@@ -130,7 +130,7 @@ class PostCheckEventSubscriber implements EventSubscriberInterface {
         ->accessCheck(FALSE)
         ->condition('type', 'day_absence')
         ->condition('field_student', $uid)
-        ->condition('changed', $this->time->getRequestTime() - 5, '>')
+        ->condition('changed', $this->time->getRequestTime() - 20, '>')
         ->range(0, 1)
         ->execute();
 
