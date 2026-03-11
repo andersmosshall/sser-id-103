@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
+use Drupal\simple_school_reports_core\Traits\PreventDoublePostTrait;
 use Drupal\user\UserInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Provides a confirmation form for cancelling multiple user accounts.
  */
 class RegisterMultipleAbsenceForm extends ConfirmFormBase {
+
+  use PreventDoublePostTrait;
 
   /**
    * The temp store factory.
@@ -278,6 +281,9 @@ class RegisterMultipleAbsenceForm extends ConfirmFormBase {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    if ($this->skipValidation($form_state)) {
+      return;
+    }
 
     $this->resolveFromToDate($from_date, $to_date, $form_state);
     if (!$from_date) {
@@ -326,6 +332,10 @@ class RegisterMultipleAbsenceForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     $current_user_id = $this->currentUser()->id();
 
     // Clear out the accounts from the temp store.
@@ -407,7 +417,7 @@ class RegisterMultipleAbsenceForm extends ConfirmFormBase {
 
         batch_set($batch);
         $this->logger('register_absence_form')->info('Submit batch @operations', ['@operations' => json_encode($batch['operations'])]);
-        $this->messenger()->addStatus($this->t('Absence registered'));
+        $this->registerSubmit($form_state, $this->t('Absence registered'));
       }
       else {
         $this->logger('register_absence_form')->error('Missing accounts in submit');

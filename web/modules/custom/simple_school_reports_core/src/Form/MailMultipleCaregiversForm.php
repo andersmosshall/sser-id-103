@@ -13,6 +13,7 @@ use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
 use Drupal\simple_school_reports_core\Traits\MultiValueElementTrait;
+use Drupal\simple_school_reports_core\Traits\PreventDoublePostTrait;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class MailMultipleCaregiversForm extends ConfirmFormBase {
 
   use MultiValueElementTrait;
+  use PreventDoublePostTrait;
 
   /**
    * The temp store factory.
@@ -280,6 +282,10 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    if ($this->skipValidation($form_state)) {
+      return;
+    }
+
     parent::validateForm($form, $form_state);
 
     if ($form_state->getTriggeringElement()['#name'] === 'attachments_remove_button') {
@@ -324,6 +330,10 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     if (!$form_state->getValue('confirm')) {
       $this->logger('confirm_form')->error('Confirm issue!');
       $this->messenger()->addError($this->t('Something went wrong. Try again.'));
@@ -332,6 +342,7 @@ class MailMultipleCaregiversForm extends ConfirmFormBase {
     }
 
     if ($form_state->getValue('confirm') && ($subject = $form_state->getValue('subject')) && ($message = $form_state->getValue('message'))) {
+      $this->registerSubmit($form_state);
 
       // Initialize batch (to set title).
       $batch = [

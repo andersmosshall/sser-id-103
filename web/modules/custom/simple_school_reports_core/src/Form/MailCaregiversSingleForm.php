@@ -3,10 +3,7 @@
 namespace Drupal\simple_school_reports_core\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\simple_school_reports_core\AbsenceDayHandler;
-use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

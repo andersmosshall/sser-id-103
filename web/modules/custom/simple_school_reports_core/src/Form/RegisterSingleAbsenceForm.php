@@ -130,6 +130,9 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    if ($this->skipValidation($form_state)) {
+      return;
+    }
     parent::validateForm($form, $form_state);
 
     $form_state->set('has_absence_node', FALSE);
@@ -191,6 +194,10 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     if ($form_state->get('has_absence_node')) {
       $this->messenger()->addStatus($this->t('Absence registered'));
       $this->resetPostCheckFlag();

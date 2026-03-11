@@ -14,6 +14,7 @@ use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_core\Service\MessageTemplateServiceInterface;
 use Drupal\simple_school_reports_core\Service\ReplaceTokenServiceInterface;
+use Drupal\simple_school_reports_core\Traits\PreventDoublePostTrait;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,6 +24,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Provides a confirmation form for mail multiple users.
  */
 class MailMultipleUsersForm extends ConfirmFormBase {
+
+  use PreventDoublePostTrait;
 
   /**
    * The temp store factory.
@@ -198,6 +201,10 @@ class MailMultipleUsersForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     if (!$form_state->getValue('confirm')) {
       $this->logger('confirm_form')->error('Confirm issue!');
       $this->messenger()->addError($this->t('Something went wrong. Try again.'));
@@ -206,7 +213,7 @@ class MailMultipleUsersForm extends ConfirmFormBase {
     }
 
     if ($form_state->getValue('confirm') && ($subject = $form_state->getValue('subject')) && ($message = $form_state->getValue('message'))) {
-
+      $this->registerSubmit($form_state);
       // Initialize batch (to set title).
       $batch = [
         'title' => $this->t('Sending mails'),
