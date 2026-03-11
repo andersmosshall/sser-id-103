@@ -169,7 +169,7 @@ msgid "No mail has been sent."
 msgstr "Inget meddelande har skickats."
 
 msgid "There are already absence registrations that partly or completely includes selected absence period."
-msgstr "Det finns reda frånvaroregistreringar som helt eller delvis överlappar vald frånvaroperiod."
+msgstr "Det finns redan frånvaroregistreringar som helt eller delvis överlappar vald frånvaroperiod."
 
 msgid "Sending mails"
 msgstr "Skicka meddelanden"
@@ -4072,11 +4072,11 @@ msgstr "Giltig från"
 msgid "Valid to"
 msgstr "Giltig till"
 
-msgid ""
-msgstr ""
+msgid "Email addresses"
+msgstr "E-postadresser"
 
-msgid ""
-msgstr ""
+msgid "Add extra recipients if they are users in Simple School Reports."
+msgstr "Lägg till extra mottagare om de är användare i Simple School Reports."
 
 msgid ""
 msgstr ""

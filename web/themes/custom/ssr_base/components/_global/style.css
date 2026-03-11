@@ -252,7 +252,8 @@ td.views-field-absence-matrix-info-6 {
   filter: grayscale(1);
 }
 
-.request-log-table tr:nth-child(6) td:nth-child(2) {
+.request-log-table tr:nth-child(6) td:nth-child(2),
+.compressed-log-table tr:nth-child(6) td:nth-child(2) {
   white-space: pre-line;
 }
 

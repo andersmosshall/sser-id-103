@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
+use Drupal\simple_school_reports_core\Traits\PreventDoublePostTrait;
 use Drupal\simple_school_reports_entities\StudentLeaveApplicationInterface;
 use Drupal\simple_school_reports_leave_application\Service\LeaveApplicationServiceInterface;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Provides a confirmation form to handle student leave application.
  */
 class CreateStudentLeaveApplicationForm extends ConfirmFormBase {
+
+  use PreventDoublePostTrait;
 
   protected ?AccountInterface $student = NULL;
 
@@ -279,6 +282,9 @@ class CreateStudentLeaveApplicationForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    if ($this->skipValidation($form_state)) {
+      return;
+    }
     parent::validateForm($form, $form_state);
     $application = $this->createApplication($form_state);
     $errors = $application->validateApplication();
@@ -317,6 +323,10 @@ class CreateStudentLeaveApplicationForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->earlyReturnSubmit($form_state)) {
+      return;
+    }
+
     if (!$form_state->getValue('confirm')) {
       $this->messenger()->addError($this->t('Something went wrong. Try again.'));
       $form_state->setRebuild(TRUE);
@@ -325,7 +335,7 @@ class CreateStudentLeaveApplicationForm extends ConfirmFormBase {
 
     try {
       $application = $this->createApplication($form_state, TRUE);
-      $this->messenger()->addStatus($this->t('@label created.', ['@label' => $application->label()]));
+      $this->registerSubmit($form_state, $this->t('@label created.', ['@label' => $application->label()]));
 
       // Notify the mentors or the expected users.
       $mail_map = [];

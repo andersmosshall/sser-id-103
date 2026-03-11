@@ -252,9 +252,9 @@ function clean_up_old_maillog_items() {
     return;
   }
 
-  // Clean up maillog items older than 3 months.
+  // Clean up maillog items older than 13 months.
   $time_limit = new \DateTime();
-  $time_limit->sub(new \DateInterval('P3M'));
+  $time_limit->sub(new \DateInterval('P13M'));
 
   $maillog_storage = \Drupal::entityTypeManager()
     ->getStorage('ssr_maillog');
