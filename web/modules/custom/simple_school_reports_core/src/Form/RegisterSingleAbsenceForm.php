@@ -195,6 +195,7 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($this->earlyReturnSubmit($form_state)) {
+      $this->resetPostCheckFlag();
       return;
     }
 
@@ -203,7 +204,6 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
       $this->resetPostCheckFlag();
       return;
     }
-
 
     parent::submitForm($form, $form_state);
 
