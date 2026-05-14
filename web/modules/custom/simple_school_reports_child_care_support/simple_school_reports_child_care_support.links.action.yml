@@ -1,0 +1,47 @@
+ssr_child_care.type_add:
+  title: 'Add child care type'
+  route_name: entity.ssr_child_care_type.add_form
+  appears_on:
+    - entity.ssr_child_care_type.collection
+
+ssr_child_care.add_page:
+  title: 'Add child care'
+  route_name: entity.ssr_child_care.add_page
+  appears_on:
+    - entity.ssr_child_care.collection
+
+ssr_child_care_placement.add_form:
+  title: 'Add child care placement'
+  route_name: entity.ssr_child_care_placement.add_form
+  appears_on:
+    - entity.ssr_child_care_placement.collection
+
+ssr_child_care_needs.add_form:
+  title: 'Add child care needs'
+  route_name: entity.ssr_child_care_needs.add_form
+  appears_on:
+    - entity.ssr_child_care_needs.collection
+
+ssr_child_care_schema.add_form:
+  title: 'Add child care schema'
+  route_name: entity.ssr_child_care_schema.add_form
+  appears_on:
+    - entity.ssr_child_care_schema.collection
+
+ssr_child_care_schema_week.add_form:
+  title: 'Add child care schema week'
+  route_name: entity.ssr_child_care_schema_week.add_form
+  appears_on:
+    - entity.ssr_child_care_schema_week.collection
+
+ssr_cc_deviation.add_form:
+  title: 'Add child care schema deviation'
+  route_name: entity.ssr_cc_deviation.add_form
+  appears_on:
+    - entity.ssr_cc_deviation.collection
+
+ssr_cc_deviation_student.add_form:
+  title: 'Add child care schema deviation student'
+  route_name: entity.ssr_cc_deviation_student.add_form
+  appears_on:
+    - entity.ssr_cc_deviation_student.collection

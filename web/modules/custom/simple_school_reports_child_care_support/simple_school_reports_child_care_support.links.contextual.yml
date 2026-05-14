@@ -1,0 +1,65 @@
+entity.ssr_child_care.edit_form:
+  route_name: entity.ssr_child_care.edit_form
+  group: ssr_child_care
+  title: 'Edit'
+
+entity.ssr_child_care.delete_form:
+  route_name: entity.ssr_child_care.delete_form
+  group: ssr_child_care
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_child_care_placement.edit_form:
+  route_name: entity.ssr_child_care_placement.edit_form
+  group: ssr_child_care_placement
+  title: 'Edit'
+
+entity.ssr_child_care_placement.delete_form:
+  route_name: entity.ssr_child_care_placement.delete_form
+  group: ssr_child_care_placement
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_child_care_needs.edit_form:
+  route_name: entity.ssr_child_care_needs.edit_form
+  group: ssr_child_care_needs
+  title: 'Edit'
+
+entity.ssr_child_care_needs.delete_form:
+  route_name: entity.ssr_child_care_needs.delete_form
+  group: ssr_child_care_needs
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_child_care_schema.edit_form:
+  route_name: entity.ssr_child_care_schema.edit_form
+  group: ssr_child_care_schema
+  title: 'Edit'
+
+entity.ssr_child_care_schema.delete_form:
+  route_name: entity.ssr_child_care_schema.delete_form
+  group: ssr_child_care_schema
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_cc_deviation.edit_form:
+  route_name: entity.ssr_cc_deviation.edit_form
+  group: ssr_cc_deviation
+  title: 'Edit'
+
+entity.ssr_cc_deviation.delete_form:
+  route_name: entity.ssr_cc_deviation.delete_form
+  group: ssr_cc_deviation
+  title: 'Delete'
+  weight: 10
+
+entity.ssr_cc_deviation_student.edit_form:
+  route_name: entity.ssr_cc_deviation_student.edit_form
+  group: ssr_cc_deviation_student
+  title: 'Edit'
+
+entity.ssr_cc_deviation_student.delete_form:
+  route_name: entity.ssr_cc_deviation_student.delete_form
+  group: ssr_cc_deviation_student
+  title: 'Delete'
+  weight: 10

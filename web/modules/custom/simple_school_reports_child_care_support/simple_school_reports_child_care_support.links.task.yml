@@ -1,0 +1,147 @@
+entity.ssr_child_care.view:
+  title: 'View'
+  route_name: entity.ssr_child_care.canonical
+  base_route: entity.ssr_child_care.canonical
+entity.ssr_child_care.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care.edit_form
+  base_route: entity.ssr_child_care.canonical
+entity.ssr_child_care.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care.delete_form
+  base_route: entity.ssr_child_care.canonical
+  weight: 10
+entity.ssr_child_care.collection:
+  title: 'Child cares'
+  route_name: entity.ssr_child_care.collection
+  base_route: system.admin_content
+  weight: 10
+entity.ssr_child_care_type.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_type.edit_form
+  base_route: entity.ssr_child_care_type.edit_form
+entity.ssr_child_care_type.collection:
+  title: 'List'
+  route_name: entity.ssr_child_care_type.collection
+  base_route: entity.ssr_child_care_type.collection
+
+entity.ssr_child_care_placement.settings:
+  title: 'Settings'
+  route_name: entity.ssr_child_care_placement.settings
+  base_route: entity.ssr_child_care_placement.settings
+entity.ssr_child_care_placement.view:
+  title: 'View'
+  route_name: entity.ssr_child_care_placement.canonical
+  base_route: entity.ssr_child_care_placement.canonical
+entity.ssr_child_care_placement.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_placement.edit_form
+  base_route: entity.ssr_child_care_placement.canonical
+entity.ssr_child_care_placement.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care_placement.delete_form
+  base_route: entity.ssr_child_care_placement.canonical
+  weight: 10
+entity.ssr_child_care_placement.collection:
+  title: 'Child care placements'
+  route_name: entity.ssr_child_care_placement.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_child_care_needs.settings:
+  title: 'Settings'
+  route_name: entity.ssr_child_care_needs.settings
+  base_route: entity.ssr_child_care_needs.settings
+entity.ssr_child_care_needs.view:
+  title: 'View'
+  route_name: entity.ssr_child_care_needs.canonical
+  base_route: entity.ssr_child_care_needs.canonical
+entity.ssr_child_care_needs.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_needs.edit_form
+  base_route: entity.ssr_child_care_needs.canonical
+entity.ssr_child_care_needs.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care_needs.delete_form
+  base_route: entity.ssr_child_care_needs.canonical
+  weight: 10
+entity.ssr_child_care_needs.collection:
+  title: 'Child care needss'
+  route_name: entity.ssr_child_care_needs.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_child_care_schema.settings:
+  title: 'Settings'
+  route_name: entity.ssr_child_care_schema.settings
+  base_route: entity.ssr_child_care_schema.settings
+entity.ssr_child_care_schema.view:
+  title: 'View'
+  route_name: entity.ssr_child_care_schema.canonical
+  base_route: entity.ssr_child_care_schema.canonical
+entity.ssr_child_care_schema.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_schema.edit_form
+  base_route: entity.ssr_child_care_schema.canonical
+entity.ssr_child_care_schema.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care_schema.delete_form
+  base_route: entity.ssr_child_care_schema.canonical
+  weight: 10
+entity.ssr_child_care_schema.collection:
+  title: 'Child care schemas'
+  route_name: entity.ssr_child_care_schema.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_child_care_schema_week.collection:
+  title: 'Child care schema weeks'
+  route_name: entity.ssr_child_care_schema_week.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_cc_deviation.settings:
+  title: 'Settings'
+  route_name: entity.ssr_cc_deviation.settings
+  base_route: entity.ssr_cc_deviation.settings
+entity.ssr_cc_deviation.view:
+  title: 'View'
+  route_name: entity.ssr_cc_deviation.canonical
+  base_route: entity.ssr_cc_deviation.canonical
+entity.ssr_cc_deviation.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_cc_deviation.edit_form
+  base_route: entity.ssr_cc_deviation.canonical
+entity.ssr_cc_deviation.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_cc_deviation.delete_form
+  base_route: entity.ssr_cc_deviation.canonical
+  weight: 10
+entity.ssr_cc_deviation.collection:
+  title: 'Child care schema deviations'
+  route_name: entity.ssr_cc_deviation.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.ssr_cc_deviation_student.settings:
+  title: 'Settings'
+  route_name: entity.ssr_cc_deviation_student.settings
+  base_route: entity.ssr_cc_deviation_student.settings
+entity.ssr_cc_deviation_student.view:
+  title: 'View'
+  route_name: entity.ssr_cc_deviation_student.canonical
+  base_route: entity.ssr_cc_deviation_student.canonical
+entity.ssr_cc_deviation_student.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_cc_deviation_student.edit_form
+  base_route: entity.ssr_cc_deviation_student.canonical
+entity.ssr_cc_deviation_student.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_cc_deviation_student.delete_form
+  base_route: entity.ssr_cc_deviation_student.canonical
+  weight: 10
+entity.ssr_cc_deviation_student.collection:
+  title: 'Child care schema deviation students'
+  route_name: entity.ssr_cc_deviation_student.collection
+  base_route: system.admin_content
+  weight: 10

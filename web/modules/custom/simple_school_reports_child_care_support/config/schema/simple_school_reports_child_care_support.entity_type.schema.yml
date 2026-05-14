@@ -1,0 +1,12 @@
+simple_school_reports_child_care_support.ssr_child_care_type.*:
+  type: config_entity
+  label: 'Child care type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
