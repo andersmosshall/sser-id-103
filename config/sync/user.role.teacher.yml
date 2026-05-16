@@ -12,6 +12,7 @@ dependencies:
     - node.type.list_template
     - node.type.written_reviews
     - node.type.written_reviews_subject_state
+    - taxonomy.vocabulary.child_care_deviation_type
     - taxonomy.vocabulary.school_week_deviation_type
     - taxonomy.vocabulary.special_diet
   module:
@@ -27,7 +28,7 @@ dependencies:
     - taxonomy
     - views_custom_permissions
 id: teacher
-label: Lärare
+label: Lärare/Pedagog
 weight: 4
 is_admin: null
 permissions:
@@ -42,6 +43,7 @@ permissions:
   - 'create school_week_deviation'
   - 'create ssr_assessment_group'
   - 'create ssr_schema_entry'
+  - 'create terms in child_care_deviation_type'
   - 'create terms in school_week_deviation_type'
   - 'create terms in special_diet'
   - 'create users'

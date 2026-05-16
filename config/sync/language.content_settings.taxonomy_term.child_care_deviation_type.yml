@@ -1,0 +1,11 @@
+uuid: f641c109-1668-488e-be89-8183dcc8bb19
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.child_care_deviation_type
+id: taxonomy_term.child_care_deviation_type
+target_entity_type_id: taxonomy_term
+target_bundle: child_care_deviation_type
+default_langcode: site_default
+language_alterable: false

@@ -22,6 +22,7 @@ dependencies:
     - node.type.written_reviews
     - node.type.written_reviews_round
     - node.type.written_reviews_subject_state
+    - taxonomy.vocabulary.child_care_deviation_type
     - taxonomy.vocabulary.extra_adaptations
     - taxonomy.vocabulary.iup_standard_goal
     - taxonomy.vocabulary.iup_standard_phrase
@@ -80,6 +81,7 @@ permissions:
   - 'create ssr_schema_entry'
   - 'create ssr_school_class'
   - 'create student_development_interview content'
+  - 'create terms in child_care_deviation_type'
   - 'create terms in extra_adaptations'
   - 'create terms in iup_standard_goal'
   - 'create terms in iup_standard_phrase'
