@@ -98,86 +98,34 @@ class ChildCare extends ContentEntityBase implements ChildCareInterface {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['label'] = BaseFieldDefinition::create('string')
-      ->setTranslatable(TRUE)
       ->setLabel(t('Label'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => -5,
-      ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'string',
-        'weight' => -5,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
+      ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
-      ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'boolean',
-        'label' => 'above',
-        'weight' => 0,
-        'settings' => [
-          'format' => 'enabled-disabled',
-        ],
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Author'))
+      ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'author',
-        'weight' => 15,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Authored on'))
-      ->setTranslatable(TRUE)
-      ->setDescription(t('The time that the child care was created.'))
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20,
-      ])
+      ->setLabel(t('Created'))
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 20,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setTranslatable(TRUE)
-      ->setDescription(t('The time that the child care was last edited.'));
+      ->setDescription(t('The time that the mail count was last edited.'));
 
     return $fields;
   }

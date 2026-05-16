@@ -72,23 +72,13 @@ class ChildCareSchemaWeek extends ContentEntityBase implements ChildCareSchemaWe
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Authored on'))
-      ->setDescription(t('The time that the child care schema week was created.'))
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20,
-      ])
+      ->setLabel(t('Created'))
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 20,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the child care schema week was last edited.'));
+      ->setDescription(t('The time that the mail count was last edited.'));
 
     return $fields;
   }
