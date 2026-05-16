@@ -12,7 +12,7 @@ class SchoolTypeHelper {
 //      'FS' => 'Förskola',
       'FKLASS' => 'Förskoleklass',
       'FTH' => 'Fritidshem',
-//      'OPPFTH' => 'Öppen fritidsverksamhet',
+      'OPPFTH' => 'Öppen fritidsverksamhet',
       'GR' => 'Grundskola',
 //      'GRS' => 'Grundsärskola',
 //      'TR' => 'Träningsskolan',
