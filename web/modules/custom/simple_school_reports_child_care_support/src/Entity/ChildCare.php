@@ -110,7 +110,8 @@ class ChildCare extends ContentEntityBase implements ChildCareInterface {
       ->setLabel(t('Short name'))
       ->setTranslatable(TRUE)
       ->setRequired(TRUE)
-      ->setSetting('max_length', 255)
+      ->setDescription(t('Short label, recommended 3 characters.'))
+      ->setSetting('max_length', 5)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

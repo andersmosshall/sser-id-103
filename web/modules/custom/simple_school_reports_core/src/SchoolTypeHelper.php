@@ -11,7 +11,7 @@ class SchoolTypeHelper {
     $school_types = [
 //      'FS' => 'Förskola',
       'FKLASS' => 'Förskoleklass',
-//      'FTH' => 'Fritidshem',
+      'FTH' => 'Fritidshem',
 //      'OPPFTH' => 'Öppen fritidsverksamhet',
       'GR' => 'Grundskola',
 //      'GRS' => 'Grundsärskola',

@@ -1876,6 +1876,9 @@ msgstr "Skoldagens sluttid"
 msgid "Deviation type"
 msgstr "Avvikelsetyp"
 
+msgid "School grades"
+msgstr "Årskurser"
+
 msgid "The school grades that this school week deviation applies to."
 msgstr "Årskurser som denna avvikelse för skolvecka gäller för."
 
@@ -3673,7 +3676,7 @@ msgstr "Överordnad organisation"
 msgid "Short label"
 msgstr "Kort namn"
 
-msgid "Short label, recomended 3 characters."
+msgid "Short label, recommended 3 characters."
 msgstr "Kort namn, rekommenderas 3 tecken."
 
 msgid "Export documents"
