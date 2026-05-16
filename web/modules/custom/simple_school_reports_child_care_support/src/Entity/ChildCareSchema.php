@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Form\DeleteMultipleForm;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaAccessControlHandler;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaInterface;
@@ -94,6 +95,19 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       ->setLabel(t('Label'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('From'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['weeks'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Reoccurring weeks'))
+      ->setSetting('target_type', 'ssr_child_care_schema_week')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

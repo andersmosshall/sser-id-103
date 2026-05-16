@@ -97,6 +97,35 @@ class ChildCareSchemaDeviationStudent extends ContentEntityBase implements Child
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['student'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Student'))
+      ->setSetting('target_type', 'user')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from_date'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Deviation from'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to_date'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Deviation to'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from'] = BaseFieldDefinition::create('time')
+      ->setLabel(t('School day start'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to'] = BaseFieldDefinition::create('time')
+      ->setLabel(t('School day end'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)

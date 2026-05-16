@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Form\DeleteMultipleForm;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\simple_school_reports_child_care_support\ChildCareNeedsAccessControlHandler;
 use Drupal\simple_school_reports_child_care_support\ChildCareNeedsInterface;
@@ -94,6 +95,26 @@ class ChildCareNeeds extends ContentEntityBase implements ChildCareNeedsInterfac
       ->setLabel(t('Label'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['student'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Student'))
+      ->setSetting('target_type', 'user')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('From'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['weeks'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Reoccurring weeks'))
+      ->setSetting('target_type', 'ssr_child_care_schema_week')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

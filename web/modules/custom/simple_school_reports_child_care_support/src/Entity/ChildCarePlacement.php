@@ -97,6 +97,31 @@ class ChildCarePlacement extends ContentEntityBase implements ChildCarePlacement
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['from'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('From'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('To'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['student'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Student'))
+      ->setSetting('target_type', 'user')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['child_care'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Child care group'))
+      ->setSetting('target_type', 'ssr_child_care')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)

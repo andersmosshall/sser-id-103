@@ -22,6 +22,10 @@ final class SSROrganizationAccessControlHandler extends EntityAccessControlHandl
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
+    if ($account->hasPermission('super user permissions')) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
     return match($operation) {
       'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_organization'),
       'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_organization'),

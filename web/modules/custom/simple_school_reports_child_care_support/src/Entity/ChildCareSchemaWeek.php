@@ -71,6 +71,30 @@ class ChildCareSchemaWeek extends ContentEntityBase implements ChildCareSchemaWe
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $day_map = [
+      1 => t('Monday'),
+      2 => t('Tuesday'),
+      3 => t('Wednesday'),
+      4 => t('Thursday'),
+      5 => t('Friday'),
+      6 => t('Saturday'),
+      7 => t('Sunday'),
+    ];
+    for ($day_index = 1; $day_index <= 7; $day_index++) {
+
+      $day_label = $day_map[$day_index];
+
+      $fields['from_' . $day_index] = BaseFieldDefinition::create('time')
+        ->setLabel(t('From'))
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayConfigurable('view', TRUE);
+
+      $fields['to_' . $day_index] = BaseFieldDefinition::create('time')
+        ->setLabel(t('To'))
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayConfigurable('view', TRUE);
+    }
+
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDisplayConfigurable('form', TRUE)

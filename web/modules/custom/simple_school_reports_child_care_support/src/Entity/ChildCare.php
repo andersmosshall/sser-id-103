@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Form\DeleteMultipleForm;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\simple_school_reports_child_care_support\ChildCareAccessControlHandler;
 use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
@@ -99,8 +100,42 @@ class ChildCare extends ContentEntityBase implements ChildCareInterface {
 
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Label'))
+      ->setTranslatable(TRUE)
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['short_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Short name'))
+      ->setTranslatable(TRUE)
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['teachers'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Teachers/educators'))
+      ->setSetting('target_type', 'user')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setSetting('handler_settings', [
+        'filter' => [
+          'type' => 'role',
+          'role' => [
+            'teacher' => 'teacher',
+            'administrator' => 'administrator',
+            'principle' => 'principle',
+          ],
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['schema'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Offering schema'))
+      ->setSetting('target_type', 'ssr_child_care_schema')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

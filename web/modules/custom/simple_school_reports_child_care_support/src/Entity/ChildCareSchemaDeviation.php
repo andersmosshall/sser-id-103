@@ -97,6 +97,45 @@ class ChildCareSchemaDeviation extends ContentEntityBase implements ChildCareSch
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['child_care'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
+      ->setLabel(t('Child care group'))
+      ->setSetting('target_type', 'ssr_child_care')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from_date'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Deviation from'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to_date'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Deviation to'))
+      ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['from'] = BaseFieldDefinition::create('time')
+      ->setLabel(t('School day start'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to'] = BaseFieldDefinition::create('time')
+      ->setLabel(t('School day end'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['deviation_type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Deviation type'))
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler_settings', [
+        'target_bundles' => ['child_care_deviation_type' => 'child_care_deviation_type'],
+        'auto_create' => TRUE,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)
