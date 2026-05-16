@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Form\DeleteMultipleForm;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekAccessControlHandler;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekInterface;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekListBuilder;
 use Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaWeekForm;
@@ -35,6 +36,7 @@ use Drupal\views\EntityViewsData;
   handlers: [
     'list_builder' => ChildCareSchemaWeekListBuilder::class,
     'views_data' => EntityViewsData::class,
+    'access' => ChildCareSchemaWeekAccessControlHandler::class,
     'form' => [
       'add' => ChildCareSchemaWeekForm::class,
       'edit' => ChildCareSchemaWeekForm::class,
