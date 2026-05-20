@@ -2,6 +2,8 @@ uuid: c8e61720-7bb1-4aea-be13-cb015b21f2df
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.term
   module:
     - taxonomy
 id: term
@@ -12,7 +14,6 @@ selection_criteria:
   f16cb585-b9c5-4792-a87a-4179637ffcc8:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: f16cb585-b9c5-4792-a87a-4179637ffcc8
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

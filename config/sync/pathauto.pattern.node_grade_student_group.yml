@@ -2,6 +2,8 @@ uuid: 2895ea4e-fc6c-41d0-a2f1-ecd9621cc5d3
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.grade_student_group
   module:
     - node
 id: node_grade_student_group
@@ -12,7 +14,6 @@ selection_criteria:
   02d70fa1-09e5-4ce3-9408-8cc62f5207d7:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 02d70fa1-09e5-4ce3-9408-8cc62f5207d7
     context_mapping:
       node: node
     bundles:

@@ -2,6 +2,8 @@ uuid: ac5401aa-bcc5-467b-84e7-3bbc5381fda3
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.course
   module:
     - node
 id: node_course
@@ -12,7 +14,6 @@ selection_criteria:
   9a1b6470-b16b-4984-8185-5264aa47b98f:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 9a1b6470-b16b-4984-8185-5264aa47b98f
     context_mapping:
       node: node
     bundles:

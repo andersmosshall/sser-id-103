@@ -2,6 +2,8 @@ uuid: 3251c92a-2d16-4b8b-8274-e4bea6a81931
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.list_template
   module:
     - node
 id: node_list_template
@@ -12,7 +14,6 @@ selection_criteria:
   f40886a1-9862-4620-bdf3-837effca74c1:
     id: 'entity_bundle:node'
     negate: false
-    uuid: f40886a1-9862-4620-bdf3-837effca74c1
     context_mapping:
       node: node
     bundles:

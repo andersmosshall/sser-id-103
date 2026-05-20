@@ -2,6 +2,9 @@ uuid: d9fe3d85-dc27-45c9-be25-abf38962dd47
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.iup_standard_phrase
+    - taxonomy.vocabulary.written_reviews_standard_phrase
   module:
     - taxonomy
 id: standard_phrases
@@ -12,7 +15,6 @@ selection_criteria:
   b36656b8-c15f-43df-96f5-9dd26a803d65:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: b36656b8-c15f-43df-96f5-9dd26a803d65
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

@@ -2,6 +2,8 @@ uuid: 0d0b5e0d-5138-4ff2-827f-d7b5867bb356
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.grade_round
   module:
     - node
 id: node_grade_round
@@ -12,7 +14,6 @@ selection_criteria:
   b2f9315b-5efc-490a-8d7d-7648c3b79fd2:
     id: 'entity_bundle:node'
     negate: false
-    uuid: b2f9315b-5efc-490a-8d7d-7648c3b79fd2
     context_mapping:
       node: node
     bundles:

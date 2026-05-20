@@ -2,6 +2,9 @@ uuid: 6e9a1e3a-9ea9-4f90-889a-d429bd793166
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.af_grade_system
+    - taxonomy.vocabulary.geg_grade_system
   module:
     - taxonomy
 id: grade
@@ -12,7 +15,6 @@ selection_criteria:
   64d25a70-56a7-4ad5-80bb-1659902442ee:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: 64d25a70-56a7-4ad5-80bb-1659902442ee
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:
