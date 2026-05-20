@@ -2,6 +2,8 @@ uuid: d43985c2-5016-4493-b7c7-fb50db64daef
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.course_attendance_report
   module:
     - node
 id: node_course_attendance_report
@@ -12,7 +14,6 @@ selection_criteria:
   774d2185-423b-4560-b264-545b4ee447e9:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 774d2185-423b-4560-b264-545b4ee447e9
     context_mapping:
       node: node
     bundles:

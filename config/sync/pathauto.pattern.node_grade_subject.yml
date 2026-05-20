@@ -2,6 +2,8 @@ uuid: d69d6a62-cb91-4969-b0d5-e826ac574f4c
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.grade_subject
   module:
     - node
 id: node_grade_subject
@@ -12,7 +14,6 @@ selection_criteria:
   aabf6c2b-b421-40a8-b93d-96a71a573c1d:
     id: 'entity_bundle:node'
     negate: false
-    uuid: aabf6c2b-b421-40a8-b93d-96a71a573c1d
     context_mapping:
       node: node
     bundles:
