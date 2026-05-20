@@ -2,6 +2,8 @@ uuid: d76241b3-ac9e-45b8-a968-20286e968120
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.iup_goal
   module:
     - node
 id: node_iup_goal
@@ -12,7 +14,6 @@ selection_criteria:
   eb7ae8f4-1b73-44de-9724-e9839cc99fb9:
     id: 'entity_bundle:node'
     negate: false
-    uuid: eb7ae8f4-1b73-44de-9724-e9839cc99fb9
     context_mapping:
       node: node
     bundles:

@@ -2,6 +2,8 @@ uuid: 2c59f824-2566-4a9c-8a3a-78f2729e9542
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.day_absence
   module:
     - node
 id: node_day_abscence
@@ -12,7 +14,6 @@ selection_criteria:
   d0740a09-90d9-4dca-b4f7-e5799daf3335:
     id: 'entity_bundle:node'
     negate: false
-    uuid: d0740a09-90d9-4dca-b4f7-e5799daf3335
     context_mapping:
       node: node
     bundles:

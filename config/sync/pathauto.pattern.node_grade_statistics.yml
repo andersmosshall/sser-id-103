@@ -2,6 +2,8 @@ uuid: 76561592-cc6f-414b-bb39-3ed3bb37e5ee
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.grade_statistics
   module:
     - node
 id: node_grade_statistics
@@ -12,7 +14,6 @@ selection_criteria:
   3f51c1c2-6f0c-4ad2-943f-98b5c08ed858:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 3f51c1c2-6f0c-4ad2-943f-98b5c08ed858
     context_mapping:
       node: node
     bundles:
