@@ -20,6 +20,13 @@ use Drupal\time_field\Time;
 use Drupal\views\Views;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekInterface;
 
+function ssr_use_child_care(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_core_fth');
+}
+
+
 function simple_school_reports_child_care_support_schema_types(): array {
   return [
     ChildCareSchemaInterface::SCHEMA_TYPE_CHILD_CARE => t('Child care'),
@@ -85,10 +92,7 @@ function simple_school_reports_child_care_support_ssr_child_care_view(array &$bu
     /** @var \Drupal\user\UserInterface[] $students */
     $students = !empty($student_ids) ? \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($student_ids) : [];
     foreach ($students as $student) {
-      // TODO: Enable correct link.
-//      $link = Link::createFromRoute($student->label(), 'simple_school_reports_child_care_support.user.child_care_schema', ['user' => $student->id()]);
-      $link = Link::createFromRoute($student->label(), 'entity.user.canonical', ['user' => $student->id()]);
-
+      $link = Link::createFromRoute($student->label(), 'simple_school_reports_child_care_support.student_child_care', ['user' => $student->id()]);
       $links[] = '<div class="field__item">' . $link->toString() . '</div>';
     }
 

@@ -65,6 +65,46 @@ class ChildCareService implements ChildCareServiceInterface {
   /**
    * {@inheritdoc}
    */
+  public function getChildCareGroups(string|int $student_id, \DateTime $date = new \DateTime()): array {
+    $cid = 'student_groups' . ':' . $date->format('Y-m-d');
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid][$student_id] ?? [];
+    }
+
+    $data = [];
+
+    $timestamp = $date->getTimestamp();
+
+    $query = $this->connection->select('ssr_child_care_placement', 'p');
+    $query->condition('p.from', $timestamp, '<=');
+    $or_condition = $query->orConditionGroup();
+    $or_condition->condition('p.to', $timestamp, '>=');
+    $or_condition->isNull('p.to');
+    $query->condition($or_condition);
+    $query->orderBy('p.created', 'ASC');
+    $query->fields('p', ['student', 'child_care']);
+    $results = $query->execute();
+
+    foreach ($results as $result) {
+      $student = $result->student;
+      $child_care = $result->child_care;
+
+      if (!$student || !$child_care) {
+        continue;
+      }
+      if (!isset($data[$student])) {
+        $data[$student] = [];
+      }
+      $data[$student][] = $child_care;
+    }
+
+    $this->lookup[$cid] = $data;
+    return $this->lookup[$cid][$student_id] ?? [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function addChildCarePlacement(int|string $student_id, int|string $child_care_id) {
     /** @var \Drupal\user\UserInterface|null $student */
     $student = $this->entityTypeManager->getStorage('user')->load($student_id);

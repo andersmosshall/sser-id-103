@@ -37,3 +37,15 @@ entity.ssr_cc_deviation_student.settings:
     _title: 'Child care schema deviation student'
   requirements:
     _permission: 'administer ssr_cc_deviation_student'
+
+simple_school_reports_child_care_support.student_child_care:
+  path: '/user/{user}/child-care'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::build'
+    _title_callback: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::accessStudentChildCare'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

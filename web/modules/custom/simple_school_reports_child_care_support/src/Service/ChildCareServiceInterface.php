@@ -29,6 +29,14 @@ interface ChildCareServiceInterface {
 
   /**
    * @param string|int $student_id
+   *
+   * @return array<string|int>
+   *   Array of child care ids.
+   */
+  public function getChildCareGroups(string|int $student_id, \DateTime $date = new \DateTime()): array;
+
+  /**
+   * @param string|int $student_id
    * @param string|int $child_care_id
    *
    * @return mixed

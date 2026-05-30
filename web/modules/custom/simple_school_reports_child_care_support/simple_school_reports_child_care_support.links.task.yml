@@ -139,3 +139,9 @@ entity.ssr_cc_deviation_student.collection:
   route_name: entity.ssr_cc_deviation_student.collection
   base_route: system.admin_content
   weight: 10
+
+simple_school_reports_child_care_support.student_child_care:
+  title: 'Child care'
+  route_name: simple_school_reports_child_care_support.student_child_care
+  base_route: entity.user.canonical
+  weight: 26
