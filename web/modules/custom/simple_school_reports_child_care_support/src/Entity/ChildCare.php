@@ -133,13 +133,6 @@ class ChildCare extends ContentEntityBase implements ChildCareInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['schema'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Offering schema'))
-      ->setSetting('target_type', 'ssr_child_care_schema')
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Active'))
       ->setDefaultValue(TRUE)

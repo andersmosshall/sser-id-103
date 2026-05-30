@@ -1,0 +1,65 @@
+uuid: 59d6bd9b-c1e2-41cb-a101-b6a07fe53dc9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_cc_deviation_student.ssr_cc_deviation_student.field_comment
+  module:
+    - simple_school_reports_child_care_support
+    - time_field
+id: ssr_cc_deviation_student.ssr_cc_deviation_student.default
+targetEntityType: ssr_cc_deviation_student
+bundle: ssr_cc_deviation_student
+mode: default
+content:
+  field_comment:
+    type: string_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_date:
+    type: datetime_timestamp
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  student:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  to:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_date:
+    type: datetime_timestamp
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  status: true
+  uid: true

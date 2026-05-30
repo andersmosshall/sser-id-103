@@ -23,18 +23,6 @@ delete ssr_child_care_placement:
 create ssr_child_care_placement:
   title: 'Create child care placement'
 
-administer ssr_child_care_needs:
-  title: 'Administer child care needss'
-  restrict access: true
-view ssr_child_care_needs:
-  title: 'View child care needs'
-edit ssr_child_care_needs:
-  title: 'Edit child care needs'
-delete ssr_child_care_needs:
-  title: 'Delete child care needs'
-create ssr_child_care_needs:
-  title: 'Create child care needs'
-
 administer ssr_child_care_schema:
   title: 'Administer child care schemas'
   restrict access: true

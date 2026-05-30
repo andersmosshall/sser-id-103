@@ -81,6 +81,53 @@ class ChildCareSchemaDeviation extends ContentEntityBase implements ChildCareSch
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    $from = $this->get('from_date')->value;
+    $to = $this->get('to_date')->value;
+
+    if (!$from || !$to) {
+      throw new \InvalidArgumentException('Both from and to dates must be set.');
+    }
+
+    if ($from > $to) {
+      throw new \InvalidArgumentException('From date must be before to date.');
+    }
+
+    $time_from = $this->get('from')->value;
+    $time_to = $this->get('to')->value;
+
+    if ($time_from === NULL && $time_to === NULL) {
+      return;
+    }
+
+    if ($time_from === NULL || $time_to === NULL) {
+      throw new \InvalidArgumentException('Both from and to times must be set.');
+    }
+
+    if ($time_from > $time_to) {
+      throw new \InvalidArgumentException('From time must be before to time.');
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isFuture(): bool {
+    $from = $this->get('from_date')->value;
+    if (!$from) {
+      return FALSE;
+    }
+
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+
+    $threshold = new \DateTime();
+    $threshold->setTime(0, 0, 0);
+
+    $future_min_limit = $service->getSettings()['future_min_limit'];
+    $threshold->add(new \DateInterval('P' . $future_min_limit . 'D'));
+
+    return $from > $threshold->getTimestamp();
   }
 
   /**

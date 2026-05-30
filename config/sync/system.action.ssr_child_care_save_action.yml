@@ -1,0 +1,13 @@
+uuid: fc787901-303a-4a88-a3ca-c036638a0e00
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: 8ikt-VbLAdccB-l79V1ieYDAh4uV5DXP1k-UpsxTwu4
+id: ssr_child_care_save_action
+label: 'Save child cares'
+type: ssr_child_care
+plugin: 'entity:save_action:ssr_child_care'
+configuration: {  }

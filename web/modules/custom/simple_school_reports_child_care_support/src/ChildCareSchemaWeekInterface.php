@@ -12,4 +12,6 @@ use Drupal\Core\Entity\EntityChangedInterface;
  */
 interface ChildCareSchemaWeekInterface extends ContentEntityInterface, EntityChangedInterface {
 
+  public function getParentSchema(): ?ChildCareSchemaInterface;
+
 }

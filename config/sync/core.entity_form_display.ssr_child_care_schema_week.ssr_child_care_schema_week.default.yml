@@ -1,0 +1,248 @@
+uuid: 4167febe-38fa-48be-902c-73239efd3097
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_group
+    - simple_school_reports_child_care_support
+    - time_field
+third_party_settings:
+  field_group:
+    group_mandag:
+      children:
+        - from_1
+        - to_1
+      label: Måndagar
+      region: content
+      parent_name: ''
+      weight: 14
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-1
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_tisdag:
+      children:
+        - from_2
+        - to_2
+      label: Tisdagar
+      region: content
+      parent_name: ''
+      weight: 15
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-2
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_onsdag:
+      children:
+        - from_3
+        - to_3
+      label: Onsdagar
+      region: content
+      parent_name: ''
+      weight: 16
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-3
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_torsdag:
+      children:
+        - from_4
+        - to_4
+      label: Torsdagar
+      region: content
+      parent_name: ''
+      weight: 17
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-4
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_fredag:
+      children:
+        - from_5
+        - to_5
+      label: Fredagar
+      region: content
+      parent_name: ''
+      weight: 18
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-5
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_lordag:
+      children:
+        - from_6
+        - to_6
+      label: Lördagar
+      region: content
+      parent_name: ''
+      weight: 19
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-6
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_sondag:
+      children:
+        - from_7
+        - to_7
+      label: Söndagar
+      region: content
+      parent_name: ''
+      weight: 20
+      format_type: details
+      format_settings:
+        classes: school-week-day-wrapper-7
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+id: ssr_child_care_schema_week.ssr_child_care_schema_week.default
+targetEntityType: ssr_child_care_schema_week
+bundle: ssr_child_care_schema_week
+mode: default
+content:
+  from_1:
+    type: time_widget
+    weight: 0
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_2:
+    type: time_widget
+    weight: 2
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_3:
+    type: time_widget
+    weight: 4
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_4:
+    type: time_widget
+    weight: 6
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_5:
+    type: time_widget
+    weight: 8
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_6:
+    type: time_widget
+    weight: 10
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  from_7:
+    type: time_widget
+    weight: 12
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_1:
+    type: time_widget
+    weight: 1
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_2:
+    type: time_widget
+    weight: 3
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_3:
+    type: time_widget
+    weight: 5
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_4:
+    type: time_widget
+    weight: 7
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_5:
+    type: time_widget
+    weight: 9
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_6:
+    type: time_widget
+    weight: 11
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+  to_7:
+    type: time_widget
+    weight: 13
+    region: content
+    settings:
+      enabled: false
+      step: 5
+    third_party_settings: {  }
+hidden:
+  created: true

@@ -22,22 +22,16 @@ entity.ssr_child_care_placement.collection:
   route_name: entity.ssr_child_care_placement.collection
   parent: system.admin_content
 
-entity.ssr_child_care_needs.settings:
-  title: 'Child care needs'
-  description: 'Configure a Child care needs entity type.'
-  route_name:  entity.ssr_child_care_needs.settings
-  parent: system.admin_structure
-
-entity.ssr_child_care_needs.collection:
-  title: 'Child care needss'
-  description: 'List of child care needss.'
-  route_name: entity.ssr_child_care_needs.collection
-  parent: system.admin_content
-
 entity.ssr_child_care_schema.settings:
   title: 'Child care schema'
   description: 'Configure a Child care schema entity type.'
   route_name:  entity.ssr_child_care_schema.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_schema_week.settings:
+  title: 'Child care schema week'
+  description: 'Configure a Child care schema week entity type.'
+  route_name:  entity.ssr_child_care_schema_week.settings
   parent: system.admin_structure
 
 entity.ssr_child_care_schema.collection:

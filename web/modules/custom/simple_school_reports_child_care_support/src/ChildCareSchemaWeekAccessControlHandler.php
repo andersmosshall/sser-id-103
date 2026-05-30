@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\simple_school_reports_child_care_support;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -24,14 +25,38 @@ final class ChildCareSchemaWeekAccessControlHandler extends EntityAccessControlH
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
-    return AccessResult::neutral();
+    /** @var \Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekInterface $entity */
+    if ($account->hasPermission($this->entityType->getAdminPermission())) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
+    $child_care_schema = $entity->getParentSchema();
+    if (!$child_care_schema) {
+      return AccessResult::forbidden()->addCacheableDependency($entity);
+    }
+
+    return $child_care_schema->access($operation, $account, TRUE)->addCacheableDependency($entity);
   }
 
   /**
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
-    return AccessResult::neutral();
+    $cache = new CacheableMetadata();
+    $cache->setCacheContexts(['route']);
+
+    $student = \Drupal::routeMatch()->getParameter('user');
+    $child_care = \Drupal::routeMatch()->getParameter('ssr_child_care');
+
+    /** @var \Drupal\Core\Entity\ContentEntityInterface|null $parent */
+    $parent = $student ?? $child_care;
+
+    if (!$parent) {
+      return AccessResult::forbidden()->addCacheableDependency($cache);
+    }
+
+    $cache->addCacheableDependency($parent);
+    return $parent->access('update', $account, TRUE)->addCacheableDependency($cache);
   }
 
   /**

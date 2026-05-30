@@ -67,21 +67,7 @@ use Drupal\views\EntityViewsData;
   ],
   field_ui_base_route: 'entity.ssr_cc_deviation_student.settings',
 )]
-class ChildCareSchemaDeviationStudent extends ContentEntityBase implements ChildCareSchemaDeviationStudentInterface {
-
-  use EntityChangedTrait;
-  use EntityOwnerTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function preSave(EntityStorageInterface $storage): void {
-    parent::preSave($storage);
-    if (!$this->getOwnerId()) {
-      // If no owner has been set explicitly, make the anonymous user the owner.
-      $this->setOwnerId(0);
-    }
-  }
+class ChildCareSchemaDeviationStudent extends ChildCareSchemaDeviation implements ChildCareSchemaDeviationStudentInterface {
 
   /**
    * {@inheritdoc}
@@ -89,13 +75,8 @@ class ChildCareSchemaDeviationStudent extends ContentEntityBase implements Child
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
 
     $fields = parent::baseFieldDefinitions($entity_type);
-
-    $fields['label'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Label'))
-      ->setRequired(TRUE)
-      ->setSetting('max_length', 255)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    unset($fields['child_care']);
+    unset($fields['deviation_type']);
 
     $fields['student'] = BaseFieldDefinition::create('entity_reference')
       ->setRequired(TRUE)
@@ -103,51 +84,6 @@ class ChildCareSchemaDeviationStudent extends ContentEntityBase implements Child
       ->setSetting('target_type', 'user')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
-
-    $fields['from_date'] = BaseFieldDefinition::create('timestamp')
-      ->setLabel(t('Deviation from'))
-      ->setRequired(TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['to_date'] = BaseFieldDefinition::create('timestamp')
-      ->setLabel(t('Deviation to'))
-      ->setRequired(TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['from'] = BaseFieldDefinition::create('time')
-      ->setLabel(t('School day start'))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['to'] = BaseFieldDefinition::create('time')
-      ->setLabel(t('School day end'))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Active'))
-      ->setDefaultValue(TRUE)
-      ->setSetting('on_label', 'Enabled')
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Created by'))
-      ->setSetting('target_type', 'user')
-      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the mail count was last edited.'));
 
     return $fields;
   }

@@ -48,29 +48,6 @@ entity.ssr_child_care_placement.collection:
   base_route: system.admin_content
   weight: 10
 
-entity.ssr_child_care_needs.settings:
-  title: 'Settings'
-  route_name: entity.ssr_child_care_needs.settings
-  base_route: entity.ssr_child_care_needs.settings
-entity.ssr_child_care_needs.view:
-  title: 'View'
-  route_name: entity.ssr_child_care_needs.canonical
-  base_route: entity.ssr_child_care_needs.canonical
-entity.ssr_child_care_needs.edit_form:
-  title: 'Edit'
-  route_name: entity.ssr_child_care_needs.edit_form
-  base_route: entity.ssr_child_care_needs.canonical
-entity.ssr_child_care_needs.delete_form:
-  title: 'Delete'
-  route_name: entity.ssr_child_care_needs.delete_form
-  base_route: entity.ssr_child_care_needs.canonical
-  weight: 10
-entity.ssr_child_care_needs.collection:
-  title: 'Child care needss'
-  route_name: entity.ssr_child_care_needs.collection
-  base_route: system.admin_content
-  weight: 10
-
 entity.ssr_child_care_schema.settings:
   title: 'Settings'
   route_name: entity.ssr_child_care_schema.settings
@@ -94,6 +71,23 @@ entity.ssr_child_care_schema.collection:
   base_route: system.admin_content
   weight: 10
 
+entity.ssr_child_care_schema_week.settings:
+  title: 'Settings'
+  route_name: entity.ssr_child_care_schema_week.settings
+  base_route: entity.ssr_child_care_schema_week.settings
+entity.ssr_child_care_schema_week.view:
+  title: 'View'
+  route_name: entity.ssr_child_care_schema_week.canonical
+  base_route: entity.ssr_child_care_schema_week.canonical
+entity.ssr_child_care_schema_week.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_schema_week.edit_form
+  base_route: entity.ssr_child_care_schema_week.canonical
+entity.ssr_child_care_schema_week.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care_schema_week.delete_form
+  base_route: entity.ssr_child_care_schema_week.canonical
+  weight: 10
 entity.ssr_child_care_schema_week.collection:
   title: 'Child care schema weeks'
   route_name: entity.ssr_child_care_schema_week.collection

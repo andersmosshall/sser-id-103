@@ -8,6 +8,127 @@ declare(strict_types=1);
  */
 
 use Drupal\Core\Render\Element;
+use Drupal\simple_school_reports_child_care_support\ChildCareSchemaInterface;
+use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Link;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaForm;
+use Drupal\time_field\Time;
+use Drupal\views\Views;
+use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekInterface;
+
+function simple_school_reports_child_care_support_schema_types(): array {
+  return [
+    ChildCareSchemaInterface::SCHEMA_TYPE_CHILD_CARE => t('Child care'),
+    ChildCareSchemaInterface::SCHEMA_TYPE_STUDENT => t('Student'),
+  ];
+}
+
+function simple_school_reports_child_care_support_after_school_care_types(): array {
+  return [
+    ChildCareInterface::AFTER_SCHOOL_CARE_TYPE => t('After school care'),
+    ChildCareInterface::AFTER_SCHOOL_CARE_TYPE_OPEN => t('Open after school care'),
+  ];
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function simple_school_reports_child_care_support_entity_extra_field_info() {
+  $fields['ssr_child_care']['fth']['display']['placements'] = [
+    'label' => t('Placements'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care']['fth']['display']['schema'] = [
+    'label' => t('Schema'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care']['fth']['display']['deviations'] = [
+    'label' => t('Schema deviations'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care_schema']['ssr_child_care_schema']['display']['week_tables'] = [
+    'label' => t('Week tables'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_child_care_support_ssr_child_care_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $build['placements'] = [];
+  $build['schema'] = [];
+  $build['deviations'] = [];
+  $cache = new CacheableMetadata();
+  if ($display->getComponent('placements')) {
+    $links = [];
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $student_ids = $child_care_service->getChildCareStudentIds($entity->id());
+    /** @var \Drupal\user\UserInterface[] $students */
+    $students = !empty($student_ids) ? \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($student_ids) : [];
+    foreach ($students as $student) {
+      // TODO: Enable correct link.
+//      $link = Link::createFromRoute($student->label(), 'simple_school_reports_child_care_support.user.child_care_schema', ['user' => $student->id()]);
+      $link = Link::createFromRoute($student->label(), 'entity.user.canonical', ['user' => $student->id()]);
+
+      $links[] = '<div class="field__item">' . $link->toString() . '</div>';
+    }
+
+    if(!empty($links)) {
+      $build['placements'] = [
+        '#markup' => '<div class="field field--label-above field-placements"><div class="field__label">' . t('Placements') . '</div>' . implode('', $links) . '</div>',
+      ];
+    }
+  }
+
+  if ($display->getComponent('schema')) {
+    $available_schema_view = Views::getView('child_care_available_schema');
+    $available_schema_view->setDisplay('list');
+    $available_schema_view->preExecute();
+    $available_schema_view->execute();
+    $available_schema_view->element['#cache']['contexts'][] = 'route';
+    $available_schema_view->element['#cache']['contexts'][] = 'user';
+    $available_schema_view_build = $available_schema_view->buildRenderable('list', [$entity->id()]);
+    $build['schema']['label'] = [
+      '#markup' => '<div class="field field--label-above field-schema"><div class="field__label">' . t('Schema') . '</div>',
+    ];
+    $build['schema']['view'] = $available_schema_view_build;
+  }
+
+  if ($display->getComponent('deviations')) {
+    $cache->addCacheTags(['ssr_cc_deviation_list']);
+    $deviations_view = Views::getView('child_care_schema_deviations');
+    $deviations_view->setDisplay('list');
+    $deviations_view->preExecute();
+    $deviations_view->execute();
+    $deviations_view->element['#cache']['contexts'][] = 'route';
+    $deviations_view->element['#cache']['contexts'][] = 'user';
+    $deviations_view = $deviations_view->buildRenderable('list', [$entity->id()]);
+    $build['deviations']['label'] = [
+      '#markup' => '<div class="field field--label-above field-deviations"><div class="field__label">' . t('Schema deviations') . '</div>',
+    ];
+    $build['deviations']['view'] = $deviations_view;
+  }
+  $cache->applyTo($build);
+}
 
 /**
  * Implements hook_theme().
@@ -18,6 +139,7 @@ function simple_school_reports_child_care_support_theme(): array {
     'ssr_child_care_placement' => ['render element' => 'elements'],
     'ssr_child_care_needs' => ['render element' => 'elements'],
     'ssr_child_care_schema' => ['render element' => 'elements'],
+    'ssr_child_care_schema_week' => ['render element' => 'elements'],
     'ssr_cc_deviation' => ['render element' => 'elements'],
     'ssr_cc_deviation_student' => ['render element' => 'elements'],
   ];
@@ -59,25 +181,6 @@ function template_preprocess_ssr_child_care_placement(array &$variables): void {
   }
 }
 
-
-/**
- * Prepares variables for child care needs templates.
- *
- * Default template: ssr-child-care-needs.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the child care needs information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_ssr_child_care_needs(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
-}
-
 /**
  * Prepares variables for child care schema templates.
  *
@@ -90,6 +193,24 @@ function template_preprocess_ssr_child_care_needs(array &$variables): void {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_ssr_child_care_schema(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care schema week templates.
+ *
+ * Default template: ssr-child-care-schema-week.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care schema week information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_schema_week(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
@@ -129,5 +250,14 @@ function template_preprocess_ssr_cc_deviation_student(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_child_care_support_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
+  if ($entity_form['#entity_type'] == 'ssr_child_care_schema_week') {
+    ChildCareSchemaForm::alterFieldCopy($entity_form, $form_state);
   }
 }

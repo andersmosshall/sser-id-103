@@ -1,0 +1,13 @@
+uuid: 6e24f1c0-18f2-413f-8163-cd3316f71427
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: W1gtQd7Kecmsl2h9qio1EY_vuPrgaewhz-A_gIMyirI
+id: ssr_child_care_schema_week_delete_action
+label: 'Delete child care schema weeks'
+type: ssr_child_care_schema_week
+plugin: 'entity:delete_action:ssr_child_care_schema_week'
+configuration: {  }

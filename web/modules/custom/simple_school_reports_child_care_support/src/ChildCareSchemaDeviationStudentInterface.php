@@ -12,5 +12,8 @@ use Drupal\user\EntityOwnerInterface;
  * Provides an interface defining a child care schema deviation student entity type.
  */
 interface ChildCareSchemaDeviationStudentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
-
+  /**
+   * @return bool
+   */
+  public function isFuture(): bool;
 }

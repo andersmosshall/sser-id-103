@@ -13,4 +13,9 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface ChildCareSchemaDeviationInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  /**
+   * @return bool
+   */
+  public function isFuture(): bool;
+
 }

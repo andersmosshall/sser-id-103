@@ -22,14 +22,29 @@ final class ChildCareSchemaDeviationAccessControlHandler extends EntityAccessCon
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
+    /** @var \Drupal\simple_school_reports_child_care_support\ChildCareSchemaDeviationInterface $entity */
     if ($account->hasPermission($this->entityType->getAdminPermission())) {
       return AccessResult::allowed()->cachePerPermissions();
     }
 
+    /** @var \Drupal\Core\Entity\EntityInterface | null $parent */
+    $parent = $entity->get('child_care')->entity;
+    $parent_view = $parent ? $parent->access('view', $account, TRUE) : AccessResult::forbidden();
+    $update_parent = $parent ? $parent->access('update', $account, TRUE) : AccessResult::forbidden();
+
+    $is_future = AccessResult::allowedIf($entity->isFuture())->addCacheableDependency($entity);
+    // Recalculate in 12 hours if not allowed.
+    if ($is_future->isAllowed()) {
+      $is_future->setCacheMaxAge(12 * 60 * 60);
+    }
+
     return match($operation) {
-      'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_cc_deviation'),
-      'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_cc_deviation'),
-      'delete' => AccessResult::allowedIfHasPermission($account, 'delete ssr_cc_deviation'),
+      'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_cc_deviation')
+        ->orIf($parent_view),
+      'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_cc_deviation')
+        ->orIf($update_parent->andIf($is_future)),
+      'delete' => AccessResult::allowedIfHasPermission($account, 'delete ssr_cc_deviation')
+        ->orIf($update_parent->andIf($is_future)),
       default => AccessResult::neutral(),
     };
   }

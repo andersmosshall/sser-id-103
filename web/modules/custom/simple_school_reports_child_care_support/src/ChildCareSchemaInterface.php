@@ -13,4 +13,13 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface ChildCareSchemaInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  const SCHEMA_TYPE_CHILD_CARE = 'child_care';
+  const SCHEMA_TYPE_STUDENT = 'student';
+
+  public function isFuture(): bool;
+
+  public function isActive(): bool;
+
+  public function isEditable(): bool;
+
 }

@@ -1,0 +1,13 @@
+uuid: 41da38fa-f06c-4581-9965-9b925b6b0404
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: hUeE8pIaMMa86mUq-_UK4eIbbrh10xGFJBA9IfdKAVA
+id: ssr_child_care_placement_save_action
+label: 'Save child care placements'
+type: ssr_child_care_placement
+plugin: 'entity:save_action:ssr_child_care_placement'
+configuration: {  }

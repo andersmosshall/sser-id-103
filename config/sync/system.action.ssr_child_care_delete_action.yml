@@ -1,0 +1,13 @@
+uuid: f00f8c02-fc5c-40a0-a5e7-6a1351f76b49
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: OmAy2xj_8R27Ifc7zKPZwtjdEEM7Yy1qhg4XIKNxFRw
+id: ssr_child_care_delete_action
+label: 'Delete child cares'
+type: ssr_child_care
+plugin: 'entity:delete_action:ssr_child_care'
+configuration: {  }

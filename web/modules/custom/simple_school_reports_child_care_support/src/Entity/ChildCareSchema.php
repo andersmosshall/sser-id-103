@@ -82,6 +82,95 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       // If no owner has been set explicitly, make the anonymous user the owner.
       $this->setOwnerId(0);
     }
+
+    if (!$this->get('child_care')->isEmpty()) {
+      $this->set('student', NULL);
+      $this->set('type', self::SCHEMA_TYPE_CHILD_CARE);
+      $this->set('label', 'Grundschema - fritidshem');
+    }
+    if (!$this->get('student')->isEmpty()) {
+      $this->set('child_care', NULL);
+      $this->set('type', self::SCHEMA_TYPE_STUDENT);
+      $this->set('label', 'Grundschema - omsorgsbehov');
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    $tags = parent::getCacheTagsToInvalidate();
+    if (!$this->get('child_care')->isEmpty()) {
+      $tags[] = 'child_care_schema_list:child_care:' . $this->get('child_care')->target_id;
+    }
+    if (!$this->get('student')->isEmpty()) {
+      $tags[] = 'child_care_schema_list:student:' . $this->get('student')->target_id;
+    }
+    return $tags;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isFuture(): bool {
+    $from = $this->get('from')->value;
+    if (!$from) {
+      return FALSE;
+    }
+
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+
+    $threshold = new \DateTime();
+    $threshold->setTime(0, 0, 0);
+
+    $future_min_limit = $service->getSettings()['future_min_limit'];
+    $threshold->add(new \DateInterval('P' . $future_min_limit . 'D'));
+
+    return $from > $threshold->getTimestamp();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isActive(): bool {
+    if ($this->isFuture()) {
+      return FALSE;
+    }
+    if ($this->isNew()) {
+      return FALSE;
+    }
+
+    $child_care_id = $this->get('child_care')->target_id;
+    $student_id = $this->get('student')->target_id;
+    if (!$child_care_id && !$student_id) {
+      return FALSE;
+    }
+
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface $service */
+    $service = \Drupal::service('simple_school_reports_child_care_support.child_care_schema');
+
+    if ($child_care_id) {
+      $active_schema_id = $service->getActiveChildCareSchema($child_care_id, new \DateTime());
+    } else {
+      $active_schema_id = NULL;
+    }
+    return $active_schema_id == $this->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEditable(): bool {
+    if ($this->isNew()) {
+      return TRUE;
+    }
+
+    if ($this->isFuture()) {
+      return TRUE;
+    }
+
+    return $this->isActive();
   }
 
   /**
@@ -98,9 +187,34 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    // Only one of child_care or student can be set.
+    $fields['child_care'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Child care group'))
+      ->setSetting('target_type', 'ssr_child_care')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+    $fields['student'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Student'))
+      ->setSetting('target_type', 'user')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['type'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Schema type'))
+      ->setRequired(TRUE)
+      ->setSetting('allowed_values_function', 'simple_school_reports_child_care_support_schema_types')
+      ->setDefaultValue('default')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['from'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('From'))
       ->setRequired(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['to'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('To'))
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

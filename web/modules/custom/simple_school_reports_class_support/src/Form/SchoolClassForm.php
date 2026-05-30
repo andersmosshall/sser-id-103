@@ -32,6 +32,13 @@ final class SchoolClassForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element['#name'] === 'ief-school_week-form-add') {
+      return;
+    }
+
+
     /** @var \Drupal\simple_school_reports_class_support\SchoolClassInterface $class */
     $class = parent::validateForm($form, $form_state);
 

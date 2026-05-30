@@ -12,5 +12,7 @@ use Drupal\user\EntityOwnerInterface;
  * Provides an interface defining a child care entity type.
  */
 interface ChildCareInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
+  const AFTER_SCHOOL_CARE_TYPE = 'fth';
+  const AFTER_SCHOOL_CARE_TYPE_OPEN = 'oppfth';
 
 }

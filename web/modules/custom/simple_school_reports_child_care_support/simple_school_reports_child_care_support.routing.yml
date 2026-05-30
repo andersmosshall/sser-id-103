@@ -6,14 +6,6 @@ entity.ssr_child_care_placement.settings:
   requirements:
     _permission: 'administer ssr_child_care_placement'
 
-entity.ssr_child_care_needs.settings:
-  path: 'admin/structure/ssr-child-care-needs'
-  defaults:
-    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareNeedsSettingsForm'
-    _title: 'Child care needs'
-  requirements:
-    _permission: 'administer ssr_child_care_needs'
-
 entity.ssr_child_care_schema.settings:
   path: 'admin/structure/ssr-child-care-schema'
   defaults:
@@ -21,6 +13,14 @@ entity.ssr_child_care_schema.settings:
     _title: 'Child care schema'
   requirements:
     _permission: 'administer ssr_child_care_schema'
+
+entity.ssr_child_care_schema_week.settings:
+  path: 'admin/structure/ssr-child-care-schema-week'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaWeekSettingsForm'
+    _title: 'Child care schema week'
+  requirements:
+    _permission: 'administer ssr_child_care_schema_week'
 
 entity.ssr_cc_deviation.settings:
   path: 'admin/structure/ssr-cc-deviation'

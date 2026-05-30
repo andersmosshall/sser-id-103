@@ -1,0 +1,97 @@
+uuid: 00868b18-d91a-4b6c-90df-75fb5513e2d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ssr_cc_deviation_student.ssr_cc_deviation_student.field_comment
+  module:
+    - simple_school_reports_child_care_support
+    - time_field
+id: ssr_cc_deviation_student.ssr_cc_deviation_student.default
+targetEntityType: ssr_cc_deviation_student
+bundle: ssr_cc_deviation_student
+mode: default
+content:
+  field_comment:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  from:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  from_date:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  to:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  to_date:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  uid:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  label: true
+  status: true

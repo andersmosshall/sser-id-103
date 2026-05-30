@@ -1,0 +1,8 @@
+services:
+  simple_school_reports_child_care_support.child_care:
+    class: Drupal\simple_school_reports_child_care_support\Service\ChildCareService
+    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state']
+
+  simple_school_reports_child_care_support.child_care_schema:
+    class: Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaService
+    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state']
