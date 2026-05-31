@@ -178,7 +178,7 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, bool $skip_cancel = FALSE) {
     $from = $this->currentRequest->query->get('from');
     $to = $this->currentRequest->query->get('to');
 
@@ -217,8 +217,27 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       '#options' => $options,
     ];
 
+    $form['actions_2'] = ['#type' => 'actions'];
+    $form['actions_2']['submit_previous'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Previous week'),
+      '#button_type' => 'secondary',
+      '#pervious_week' => TRUE
+    ];
+    $form['actions_2']['submit_next'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Next week'),
+      '#button_type' => 'secondary',
+      '#next_week' => TRUE
+    ];
+
     $form = parent::buildForm($form, $form_state);
     unset($form['#title']);
+
+    if ($skip_cancel) {
+      unset($form['actions']['cancel']);
+    }
+
     return $form;
   }
 
