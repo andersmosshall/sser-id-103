@@ -24,11 +24,8 @@ class ChildCareService implements ChildCareServiceInterface {
     protected StateInterface $state,
   ) {}
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getChildCarePlacementIds(string|int $child_care_id, \DateTime $date = new \DateTime()): array {
-    $cid = 'placement_ids:' . $child_care_id . ':' . $date->format('Y-m-d');
+  protected function getPlacements(\DateTimeInterface $date = new \DateTime()): array {
+    $cid = 'placements:' . $date->format('Y-m-d');
     if (array_key_exists($cid, $this->lookup)) {
       return $this->lookup[$cid];
     }
@@ -36,19 +33,18 @@ class ChildCareService implements ChildCareServiceInterface {
     $timestamp = $date->getTimestamp();
 
     $query = $this->connection->select('ssr_child_care_placement', 'p');
-    $query->condition('p.child_care', $child_care_id);
     $query->condition('p.from', $timestamp, '<=');
     $or_condition = $query->orConditionGroup();
     $or_condition->condition('p.to', $timestamp, '>=');
     $or_condition->isNull('p.to');
     $query->condition($or_condition);
     $query->orderBy('p.created', 'ASC');
-    $query->fields('p', ['student', 'id']);
+    $query->fields('p', ['child_care', 'student', 'id']);
     $results = $query->execute();
 
     $placements = [];
     foreach ($results as $result) {
-      $placements[$result->student] = $result->id;
+      $placements[$result->child_care][$result->student] = $result->id;
     }
 
     $this->lookup[$cid] = $placements;
@@ -58,14 +54,33 @@ class ChildCareService implements ChildCareServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getChildCareStudentIds(string|int $child_care_id, \DateTime $date = new \DateTime()): array {
+  public function getChildCarePlacementIds(string|int $child_care_id, \DateTimeInterface $date = new \DateTime()): array {
+    $placements = $this->getPlacements($date);
+    return $placements[$child_care_id] ?? [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getChildCareStudentIds(string|int $child_care_id, \DateTimeInterface $date = new \DateTime()): array {
     return array_keys($this->getChildCarePlacementIds($child_care_id, $date));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getChildCareGroups(string|int $student_id, \DateTime $date = new \DateTime()): array {
+  public function getChildCareStudentIdsMultiple(array $child_care_ids, \DateTimeInterface $date = new \DateTime()): array {
+    $ids = [];
+    foreach ($child_care_ids as $child_care_id) {
+      $ids = array_merge($ids, $this->getChildCareStudentIds($child_care_id, $date));
+    }
+    return array_unique($ids);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getChildCareGroups(string|int $student_id, \DateTimeInterface $date = new \DateTime()): array {
     $cid = 'student_groups' . ':' . $date->format('Y-m-d');
     if (array_key_exists($cid, $this->lookup)) {
       return $this->lookup[$cid][$student_id] ?? [];
@@ -76,6 +91,7 @@ class ChildCareService implements ChildCareServiceInterface {
     $timestamp = $date->getTimestamp();
 
     $query = $this->connection->select('ssr_child_care_placement', 'p');
+    $query->innerJoin('ssr_child_care', 'c', 'c.id = p.child_care');
     $query->condition('p.from', $timestamp, '<=');
     $or_condition = $query->orConditionGroup();
     $or_condition->condition('p.to', $timestamp, '>=');
@@ -150,6 +166,11 @@ class ChildCareService implements ChildCareServiceInterface {
    * {@inheritdoc}
    */
   public function getSettings(): array {
+    $cid = 'settings';
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
     $state = $this->state->get('simple_school_reports_child_care_support.settings', []);
 
     // Add defaults.
@@ -157,7 +178,7 @@ class ChildCareService implements ChildCareServiceInterface {
       'future_min_limit' => 3,
       'future_max_limit' => 365,
     ];
-
+    $this->lookup[$cid] = $state;
     return $state;
 
   }
@@ -185,6 +206,7 @@ class ChildCareService implements ChildCareServiceInterface {
 
 
     $this->state->set('simple_school_reports_child_care_support.settings', $settings);
+    unset($this->lookup['settings']);
   }
 
 }

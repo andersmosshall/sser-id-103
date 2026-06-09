@@ -94,6 +94,13 @@ class ChildCare extends ContentEntityBase implements ChildCareInterface {
   /**
    * {@inheritdoc}
    */
+  public function getShortLabel(): string {
+    return $this->get('short_name')->value ?? '-';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
 
     $fields = parent::baseFieldDefinitions($entity_type);

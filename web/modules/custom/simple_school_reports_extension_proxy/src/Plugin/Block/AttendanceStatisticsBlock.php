@@ -174,7 +174,7 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
     $rows['attendance']['data'] = [
       'type' => $this->t('Attendance') . ($not_current_grade ? '*' : ''),
       'proportion' => $data['total'] ? round(($data['attended'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['attended']),
+      'time' => TimeToStringUtils::formatTimeLength($data['attended']),
     ];
 
     $valid_absence_time = $data['valid_absence'] + $data['leave_absence'] + $data['reported_absence'];

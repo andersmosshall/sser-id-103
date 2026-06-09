@@ -1,0 +1,16 @@
+child_care_overview:
+  version: VERSION
+  css:
+    theme:
+      css/child_care_overview.css: { }
+
+child_care_graph:
+  version: VERSION
+  js:
+    js/child_care_graph.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - simple_school_reports_core/chartjs

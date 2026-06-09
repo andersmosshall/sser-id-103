@@ -9,26 +9,18 @@ simple_school_reports_core_fth.fth:
 simple_school_reports_core_fth.overview_month:
   path: '/fth/overview/month'
   defaults:
-    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareController::overviewMonth'
+    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareMonthOverviewController::build'
     _title: 'Overview - month'
   requirements:
-    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareController::accessOverview'
-  options:
-    parameters:
-      ssr_child_care:
-        type: 'entity:ssr_child_care'
+    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareMonthOverviewController::accessMonthOverview'
 
 simple_school_reports_core_fth.overview_day:
   path: '/fth/overview/day'
   defaults:
-    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareController::overviewDay'
+    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareDayOverviewController::build'
     _title: 'Overview - day'
   requirements:
-    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareController::accessOverview'
-  options:
-    parameters:
-      ssr_child_care:
-        type: 'entity:ssr_child_care'
+    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareDayOverviewController::accessDayOverview'
 
 simple_school_reports_core_fth.add_child_care_schema:
   path: '/fth/groups/{ssr_child_care}/add-schema'

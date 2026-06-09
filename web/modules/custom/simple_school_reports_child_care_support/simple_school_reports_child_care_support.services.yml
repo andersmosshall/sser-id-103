@@ -5,4 +5,4 @@ services:
 
   simple_school_reports_child_care_support.child_care_schema:
     class: Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaService
-    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state']
+    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state', '@simple_school_reports_child_care_support.child_care', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_entities.school_week_service']

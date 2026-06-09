@@ -127,7 +127,7 @@ class ChildCareSchemaDeviation extends ContentEntityBase implements ChildCareSch
     $future_min_limit = $service->getSettings()['future_min_limit'];
     $threshold->add(new \DateInterval('P' . $future_min_limit . 'D'));
 
-    return $from > $threshold->getTimestamp();
+    return $from >= $threshold->getTimestamp();
   }
 
   /**

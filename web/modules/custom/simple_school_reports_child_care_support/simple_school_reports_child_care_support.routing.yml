@@ -49,3 +49,39 @@ simple_school_reports_child_care_support.student_child_care:
     parameters:
       user:
         type: 'entity:user'
+
+simple_school_reports_child_care_support.add_student_schema:
+  path: '/user/{user}/child-care/add-schema'
+  defaults:
+    _entity_form: ssr_child_care_schema.add
+    _title: 'Add child care schema'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::accessStudentChildCare'
+    _entity_access: user.caregiver_access
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_child_care_support.add_student_schema_deviation:
+  path: '/user/{user}/child-care/add-deviation/{date}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\AddStudentSchemaDeviationForm'
+    _title: 'Add deviation'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\AddStudentSchemaDeviationForm::access'
+    _entity_access: user.caregiver_access
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+      date:
+        type: 'string'
+
+simple_school_reports_child_care_support.child_care_settings:
+  path: 'admin/structure/child-care-settings'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm'
+    _title: 'Child care settings settings'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm::access'

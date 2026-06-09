@@ -13,6 +13,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
+use Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface;
 use Drupal\simple_school_reports_core\AbsenceDayHandler;
 use Drupal\simple_school_reports_core\Service\EmailService;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
@@ -31,12 +32,15 @@ class AddSchemaDeviationsForm extends ConfirmFormBase implements TrustedCallback
    */
   protected EntityTypeManagerInterface $entityTypeManager;
 
+  protected ChildCareServiceInterface $childCareService;
+
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->childCareService = $container->get('simple_school_reports_child_care_support.child_care');
     return $instance;
   }
 
@@ -97,9 +101,20 @@ class AddSchemaDeviationsForm extends ConfirmFormBase implements TrustedCallback
     ];
 
     if (!$this->currentUser()->hasPermission('administer ssr_child_care')) {
-      $today = (new \DateTime())->format('Y-m-d');
-      $form['from_date']['#min'] = $today;
-      $form['to_date']['#min'] = $today;
+      $min_limit = $this->childCareService->getSettings()['future_min_limit'];
+      $date_max = $this->childCareService->getSettings()['future_max_limit'];
+
+      $min_limit_date = new \DateTime();
+      $min_limit_date->add(new \DateInterval('P' . $min_limit . 'D'));
+
+      $date_max_date = new \DateTime();
+      $date_max_date->add(new \DateInterval('P' . $date_max . 'D'));
+
+      $form['from_date']['#min'] = $min_limit_date->format('Y-m-d');
+      $form['from_date']['#max'] = $date_max_date->format('Y-m-d');
+
+      $form['to_date']['#min'] = $min_limit_date->format('Y-m-d');
+      $form['to_date']['#max'] = $date_max_date->format('Y-m-d');
     }
 
     $form['day_off'] = [
@@ -292,25 +307,18 @@ class AddSchemaDeviationsForm extends ConfirmFormBase implements TrustedCallback
     ];
 
     // Do a date walk between from and to date.
-    $current_date = $from_date_object;
-    $current_date_object = clone $current_date;
+    $current_from_date = clone $from_date_object;
+    $current_from_date->setTime(0, 0, 0);
 
-    while ($current_date_object <= $to_date_object) {
-      $current_from_date = clone $current_date_object;
-      $current_from_date->setTime(0, 0, 0);
+    $current_to_date = clone $to_date_object;
+    $current_to_date->setTime(23, 59, 59);
 
-      $current_to_date = clone $current_date_object;
-      $current_to_date->setTime(23, 59, 59);
+    foreach ($child_care_ids as $child_care_id) {
+      $batch['operations'][] = [[$this, 'addSchemaDeviation'], [$child_care_id, $current_from_date->getTimestamp(), $current_to_date->getTimestamp(), $time_from, $time_to, $child_care_comment]];
+    }
 
-      foreach ($child_care_ids as $child_care_id) {
-        $batch['operations'][] = [[$this, 'addSchemaDeviation'], [$child_care_id, $current_from_date->getTimestamp(), $current_to_date->getTimestamp(), $time_from, $time_to, $child_care_comment]];
-      }
-
-      foreach ($student_ids as $student_id) {
-        $batch['operations'][] = [[$this, 'addSchemaDeviationStudent'], [$student_id, $current_from_date->getTimestamp(), $current_to_date->getTimestamp(), $time_from, $time_to, $student_comment]];
-      }
-
-      $current_date_object->modify('+1 day');
+    foreach ($student_ids as $student_id) {
+      $batch['operations'][] = [[$this, 'addSchemaDeviationStudent'], [$student_id, $current_from_date->getTimestamp(), $current_to_date->getTimestamp(), $time_from, $time_to, $student_comment]];
     }
 
     if (!empty($batch['operations'])) {
@@ -345,7 +353,7 @@ class AddSchemaDeviationsForm extends ConfirmFormBase implements TrustedCallback
 
   public function addSchemaDeviationStudent(int $student_id, int $from_date, int $to_date, ?int $from, ?int $to,  ?string $comment, array &$context) {
     /** @var \Drupal\user\UserInterface $student */
-    $student = $this->entityTypeManager->getStorage('ssr_child_care')->load($student_id);
+    $student = $this->entityTypeManager->getStorage('user')->load($student_id);
     if (!$student) {
       return;
     }

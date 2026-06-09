@@ -9,6 +9,14 @@ targetEntityType: ssr_child_care_schema
 bundle: ssr_child_care_schema
 mode: default
 content:
+  child_care:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
   from:
     type: timestamp
     label: above
@@ -26,6 +34,14 @@ content:
         granularity: 2
         refresh: 60
         description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
     third_party_settings: {  }
     weight: 0
     region: content
@@ -47,7 +63,7 @@ content:
         refresh: 60
         description: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
   weeks:
     type: entity_reference_label
@@ -55,14 +71,12 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 4
     region: content
 hidden:
-  child_care: true
   created: true
   label: true
   status: true
-  student: true
   type: true
   uid: true
   week_tables: true

@@ -26,6 +26,14 @@ final class ChildCareAccessControlHandler extends EntityAccessControlHandler {
       return AccessResult::allowed()->cachePerPermissions();
     }
 
+    if ($operation === 'check_in_out') {
+      if ($account->hasPermission('administer simple school reports settings')) {
+        return AccessResult::allowed()->cachePerPermissions();
+      }
+      $teachers = array_column($entity->get('teachers')->getValue(), 'target_id');
+      return AccessResult::allowedIf(in_array($account->id(), $teachers))->addCacheableDependency($entity)->cachePerUser();
+    }
+
     return match($operation) {
       'view' => AccessResult::allowedIfHasPermission($account, 'view ssr_child_care'),
       'update' => AccessResult::allowedIfHasPermission($account, 'edit ssr_child_care'),

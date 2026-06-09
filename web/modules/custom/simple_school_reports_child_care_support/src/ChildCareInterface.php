@@ -15,4 +15,6 @@ interface ChildCareInterface extends ContentEntityInterface, EntityOwnerInterfac
   const AFTER_SCHOOL_CARE_TYPE = 'fth';
   const AFTER_SCHOOL_CARE_TYPE_OPEN = 'oppfth';
 
+  public function getShortLabel(): string;
+
 }

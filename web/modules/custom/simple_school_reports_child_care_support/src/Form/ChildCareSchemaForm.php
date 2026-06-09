@@ -6,6 +6,8 @@ namespace Drupal\simple_school_reports_child_care_support\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -13,12 +15,22 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 final class ChildCareSchemaForm extends ContentEntityForm {
 
+  protected ChildCareServiceInterface $childCareService;
+
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->childCareService = $container->get('simple_school_reports_child_care_support.child_care');
+    return $instance;
+  }
+
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\simple_school_reports_child_care_support\ChildCareInterface $entity */
     $entity = $this->getEntity();
+
+    $is_student = FALSE;
 
     if ($entity->isNew()) {
       /** @var \Drupal\user\UserInterface $student */
@@ -28,6 +40,7 @@ final class ChildCareSchemaForm extends ContentEntityForm {
           throw new AccessDeniedHttpException();
         }
         $entity->set('student', $student);
+        $is_student = TRUE;
       }
 
       /** @var \Drupal\simple_school_reports_child_care_support\ChildCareInterface $child_care */
@@ -42,6 +55,31 @@ final class ChildCareSchemaForm extends ContentEntityForm {
 
     $form = parent::buildForm($form, $form_state);
     self::alterFieldCopy($form, $form_state);
+
+    if ($entity->isNew()) {
+      if ($is_student) {
+        $min_limit = $this->childCareService->getSettings()['future_min_limit'];
+        $date_max = $this->childCareService->getSettings()['future_max_limit'];
+
+        $min_limit_date = new \DateTime();
+        $min_limit_date->add(new \DateInterval('P' . $min_limit . 'D'));
+
+        $date_max_date = new \DateTime();
+        $date_max_date->add(new \DateInterval('P' . $date_max . 'D'));
+
+        $form['from']['widget'][0]['value']['#min'] = $min_limit_date->format('Y-m-d');
+        $form['from']['widget'][0]['value']['#max'] = $date_max_date->format('Y-m-d');
+
+        $form['to']['widget'][0]['value']['#min'] = $min_limit_date->format('Y-m-d');
+        $form['to']['widget'][0]['value']['#max'] = $date_max_date->format('Y-m-d');
+      }
+    }
+    else {
+      // Disable from date.
+      $form['from']['widget'][0]['value']['#disabled'] = TRUE;
+    }
+
+
     return $form;
   }
 

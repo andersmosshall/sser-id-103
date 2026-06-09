@@ -69,3 +69,9 @@ entity.ssr_cc_deviation_student.collection:
   description: 'List of child care schema deviation students.'
   route_name: entity.ssr_cc_deviation_student.collection
   parent: system.admin_content
+
+simple_school_reports_child_care_support.child_care_settings:
+  title: 'Child care settings'
+  parent: simple_school_reports_core.config
+  description: 'Administer child care settings'
+  route_name: simple_school_reports_child_care_support.child_care_settings

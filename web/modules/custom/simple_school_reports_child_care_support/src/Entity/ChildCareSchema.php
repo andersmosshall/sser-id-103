@@ -93,6 +93,15 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       $this->set('type', self::SCHEMA_TYPE_STUDENT);
       $this->set('label', 'Grundschema - omsorgsbehov');
     }
+
+    // Make sure to comes after from.
+    if (!$this->get('to')->isEmpty()) {
+      $from = $this->get('from')->value;
+      $to = $this->get('to')->value;
+      if ($from > $to) {
+        $this->set('to', $from + 24*60*60 - 1);
+      }
+    }
   }
 
   /**
@@ -127,7 +136,7 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
     $future_min_limit = $service->getSettings()['future_min_limit'];
     $threshold->add(new \DateInterval('P' . $future_min_limit . 'D'));
 
-    return $from > $threshold->getTimestamp();
+    return $from >= $threshold->getTimestamp();
   }
 
   /**
@@ -219,6 +228,7 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['weeks'] = BaseFieldDefinition::create('entity_reference')
+      ->setRequired(TRUE)
       ->setLabel(t('Reoccurring weeks'))
       ->setSetting('target_type', 'ssr_child_care_schema_week')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)

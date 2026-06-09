@@ -16,9 +16,9 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Link;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaForm;
-use Drupal\time_field\Time;
 use Drupal\views\Views;
-use Drupal\simple_school_reports_child_care_support\ChildCareSchemaWeekInterface;
+use Drupal\user\UserInterface;
+use Drupal\Core\Url;
 
 function ssr_use_child_care(): bool {
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
@@ -115,6 +115,9 @@ function simple_school_reports_child_care_support_ssr_child_care_view(array &$bu
       '#markup' => '<div class="field field--label-above field-schema"><div class="field__label">' . t('Schema') . '</div>',
     ];
     $build['schema']['view'] = $available_schema_view_build;
+    $build['schema']['closure'] = [
+      '#markup' => '</div>',
+    ];
   }
 
   if ($display->getComponent('deviations')) {
@@ -130,6 +133,9 @@ function simple_school_reports_child_care_support_ssr_child_care_view(array &$bu
       '#markup' => '<div class="field field--label-above field-deviations"><div class="field__label">' . t('Schema deviations') . '</div>',
     ];
     $build['deviations']['view'] = $deviations_view;
+    $build['deviations']['closure'] = [
+      '#markup' => '</div>',
+    ];
   }
   $cache->applyTo($build);
 }
@@ -263,5 +269,47 @@ function template_preprocess_ssr_cc_deviation_student(array &$variables): void {
 function simple_school_reports_child_care_support_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
   if ($entity_form['#entity_type'] == 'ssr_child_care_schema_week') {
     ChildCareSchemaForm::alterFieldCopy($entity_form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_child_care_support_ssr_local_actions_alter(array &$local_actions, CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'simple_school_reports_child_care_support.student_child_care') {
+    $user = $context['current_request']->get('user');
+    if ($user instanceof UserInterface) {
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = $user->access('caregiver_access', NULL, TRUE);
+      $cache->addCacheableDependency($access);
+      $local_actions['ssr_add_schema'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Add schema'),
+          'url' => Url::fromRoute('simple_school_reports_child_care_support.add_student_schema', ['user' => $user->id()], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_child_care_support_views_data_alter(array &$data) {
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to child_care_day_overview.
+    $data['users_field_data']['child_care_day_overview'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['child_care_day_overview']['title'] = t('Child care overview');
+    $data['users_field_data']['child_care_day_overview']['help'] = t('Show child care overview.');
+    $data['users_field_data']['child_care_day_overview']['field'] = [
+      'id' => 'child_care_day_overview',
+    ];
   }
 }

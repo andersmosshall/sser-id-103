@@ -17,15 +17,23 @@ interface ChildCareServiceInterface {
    * @return array
    *   Array of placement ids, keyed by student id.
    */
-  public function getChildCarePlacementIds(string|int $child_care_id, \DateTime $date = new \DateTime()): array;
+  public function getChildCarePlacementIds(string|int $child_care_id, \DateTimeInterface $date = new \DateTime()): array;
 
   /**
    * @param string|int $child_care_id
-   * @param \DateTime $date
+   * @param \DateTimeInterface $date
    *
    * @return array
    */
-  public function getChildCareStudentIds(string|int $child_care_id, \DateTime $date = new \DateTime()): array;
+  public function getChildCareStudentIds(string|int $child_care_id, \DateTimeInterface $date = new \DateTime()): array;
+
+  /**
+   * @param array $child_care_ids
+   * @param \DateTimeInterface $date
+   *
+   * @return array
+   */
+  public function getChildCareStudentIdsMultiple(array $child_care_ids, \DateTimeInterface $date = new \DateTime()): array;
 
   /**
    * @param string|int $student_id
@@ -33,7 +41,7 @@ interface ChildCareServiceInterface {
    * @return array<string|int>
    *   Array of child care ids.
    */
-  public function getChildCareGroups(string|int $student_id, \DateTime $date = new \DateTime()): array;
+  public function getChildCareGroups(string|int $student_id, \DateTimeInterface $date = new \DateTime()): array;
 
   /**
    * @param string|int $student_id

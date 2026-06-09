@@ -12,6 +12,7 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides a confirmation form for adding date range to url.
@@ -197,8 +198,19 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       }
     }
 
+    if ($to - $from > 8 * 24 * 60 * 60) {
+      throw new AccessDeniedHttpException('The date range is too long.');
+    }
+
     $options = [];
-    if ($this->currentRouteMatch->getRouteName() === 'simple_school_reports_schema.student_schema') {
+
+    // Three weeks back routs.
+    $restricted = [
+      'simple_school_reports_core.student_schema',
+      'simple_school_reports_child_care_support.student_child_care',
+    ];
+    $route_name = $this->currentRouteMatch->getRouteName();
+    if (in_array($route_name, $restricted)) {
       $max_from = new \DateTime();
       $max_from->setTime(0, 0, 0);
       // Subtract 3 weeks.
@@ -209,27 +221,43 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
       $options = $this->getWeekOptions();
     }
 
+    $default_value = 'mts:' . $default_value;
     $form['from_date'] = [
       '#type' => 'select',
       '#title' => $this->t('Select week'),
-      '#default_value' => 'mts:' . $default_value,
+      '#default_value' => $default_value,
       '#required' => TRUE,
       '#options' => $options,
     ];
 
-    $form['actions_2'] = ['#type' => 'actions'];
-    $form['actions_2']['submit_previous'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Previous week'),
-      '#button_type' => 'secondary',
-      '#pervious_week' => TRUE
-    ];
-    $form['actions_2']['submit_next'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Next week'),
-      '#button_type' => 'secondary',
-      '#next_week' => TRUE
-    ];
+    $options_keys = array_keys($options);
+    $default_value_key = array_search($default_value, $options_keys);
+
+    if ($default_value_key !== FALSE) {
+      $form['fast_track'] = ['#type' => 'actions'];
+
+      $previous = $options_keys[$default_value_key - 1] ?? NULL;
+      if ($previous) {
+        $form['fast_track']['submit_previous'] = [
+          '#type' => 'submit',
+          '#value' => $this->t('Previous week'),
+          '#button_type' => 'secondary',
+          '#attributes' => ['class' => ['button--small']],
+          '#week' => $previous,
+        ];
+      }
+
+      $next = $options_keys[$default_value_key + 1] ?? NULL;
+      if ($next) {
+        $form['fast_track']['submit_next'] = [
+          '#type' => 'submit',
+          '#value' => $this->t('Next week'),
+          '#button_type' => 'secondary',
+          '#attributes' => ['class' => ['button--small']],
+          '#week' => $next,
+        ];
+      }
+    }
 
     $form = parent::buildForm($form, $form_state);
     unset($form['#title']);
@@ -253,9 +281,17 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
     }
 
     if ($form_state->getValue('confirm')) {
-      /** @var DrupalDateTime $from_date */
-      $from_date = (new DrupalDateTime())->setTimestamp($this->getTimestampFromOptionValue($form_state->getValue('from_date')));
-      $from_date = $this->getFirstDayOfWeek($from_date);
+      $triggering_element = $form_state->getTriggeringElement();
+      if ($triggering_element && $triggering_element['#week'] ?? FALSE) {
+        $from_date = (new DrupalDateTime())->setTimestamp($this->getTimestampFromOptionValue($triggering_element['#week']));
+      }
+      else {
+        /** @var DrupalDateTime $from_date */
+        $from_date = (new DrupalDateTime())->setTimestamp($this->getTimestampFromOptionValue($form_state->getValue('from_date')));
+        $from_date = $this->getFirstDayOfWeek($from_date);
+      }
+
+
       $to_date = $this->getLastDayOfWeek($from_date);
 
       if (!$from_date || !$to_date) {
