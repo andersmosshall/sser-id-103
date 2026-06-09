@@ -220,12 +220,20 @@ class GradeSubjectFormAlter {
         $default_exclude_student = TRUE;
         $default_exclude_reason = 'is_default';
         $local_exclude_reason_options = [
-          'is_default' => $data['default_note'],
+          'use_default' => $data['default_note'],
           'pending' => $exclude_reason_options['pending'],
           'n_a' => $exclude_reason_options['n_a'],
           'adapted_studies' => $exclude_reason_options['adapted_studies'],
         ];
 
+      }
+      else if ($data['has_default']) {
+        $local_exclude_reason_options = [
+          'use_default' => $data['default_note'],
+          'pending' => $exclude_reason_options['pending'],
+          'n_a' => $exclude_reason_options['n_a'],
+          'adapted_studies' => $exclude_reason_options['adapted_studies'],
+        ];
       }
 
       $form['grade_registration'][$student_uid]['student']['grade_registration']['grade_info']['exclude_' . $student_uid] = [
@@ -505,6 +513,7 @@ class GradeSubjectFormAlter {
             'user' => $student,
             'paragraph' => NULL,
             'is_default' => FALSE,
+            'has_default' => FALSE,
             'comment' => $default_comment,
             'grade' => NULL,
           ];
@@ -521,6 +530,7 @@ class GradeSubjectFormAlter {
             $user_id = $paragraph->get('field_student')->target_id;
             $grading_students[$user_id]['paragraph'] = $paragraph;
             $grading_students[$user_id]['is_default'] = FALSE;
+            $grading_students[$user_id]['has_default'] = FALSE;
 
             unset($student_no_set_uids[$user_id]);
           }
@@ -532,15 +542,29 @@ class GradeSubjectFormAlter {
           /** @var \Drupal\simple_school_reports_extension_proxy\Service\GradeSupportServiceInterface $grade_support_service */
           $grade_support_service = \Drupal::service('simple_school_reports_extension_proxy.grade_support');
 
-          $default_grade_data = $grade_support_service->getDefaultGradeRoundData($default_grade_round_nid, $subject->id(), $grade_system, $student_no_set_uids);
-          foreach ($default_grade_data as $user_id => $data) {
+          $relevant_student_uids = array_keys($grading_students);
 
-            if (isset($grade_options[$data['grade']])) {
+          $default_grade_data = $grade_support_service->getDefaultGradeRoundData($default_grade_round_nid, $subject->id(), $grade_system, $relevant_student_uids);
+          foreach ($default_grade_data as $user_id => $data) {
+            // Just in case.
+            if (!isset($grading_students[$user_id])) {
+              continue;
+            }
+
+            if (!isset($grade_options[$data['grade']])) {
+              continue;
+            }
+
+            if (isset($student_no_set_uids[$user_id])) {
               $grading_students[$user_id]['grade'] = $data['grade'];
               $grading_students[$user_id]['comment'] = $data['comment'];
               $grading_students[$user_id]['is_default'] = TRUE;
-              $grading_students[$user_id]['default_note'] = t('Use grade @grade from @term', ['@grade' => $grade_options[$data['grade']], '@term' => $data['term_info']]);
             }
+            else {
+              $grading_students[$user_id]['has_default'] = TRUE;
+            }
+
+            $grading_students[$user_id]['default_note'] = t('Use grade @grade from @term', ['@grade' => $grade_options[$data['grade']], '@term' => $data['term_info']]);
           }
         }
       }
@@ -661,9 +685,19 @@ class GradeSubjectFormAlter {
         $subject_grade_node->set('field_state', $form_state->getValue('state', 'started'));
         $students = $done_init ? [] : self::getGradingStudents($form_state);
         foreach ($students as $student_uid => $data) {
-          if (!empty($data['paragraph']) && $data['is_default'] === FALSE) {
+          $exclude_reason = $values['exclude_reason_' . $student_uid] ?? NULL;
+
+          $use_default = ($data['is_default'] === TRUE || $data['has_default'] === TRUE) && $exclude_reason === 'use_default';
+
+          if (!empty($data['paragraph'])) {
+            // Let go of paragraphs if default has been chosen. (The paragraph will be deleted later)
+            if ($use_default) {
+              continue;
+            }
+
             /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
             $paragraph = $data['paragraph'];
+
             // Do not change for removed students.
             if (empty($data['user'])) {
               $grade_paragraphs[] = $paragraph;
@@ -672,7 +706,7 @@ class GradeSubjectFormAlter {
           }
           else {
             // Skip default data that has not been overridden.
-            if ($data['is_default'] === TRUE && !empty($values['exclude_' . $student_uid]) && $values['exclude_reason_' . $student_uid] === 'is_default') {
+            if ($use_default) {
               continue;
             }
 
@@ -707,7 +741,7 @@ class GradeSubjectFormAlter {
             $paragraph->set('field_final_grade', NULL);
             $paragraph->set('field_trial', NULL);
 
-            $paragraph->set('field_exclude_reason', $values['exclude_reason_' . $student_uid]);
+            $paragraph->set('field_exclude_reason', $exclude_reason);
           }
           else {
             $paragraph->set('field_exclude_reason', NULL);
