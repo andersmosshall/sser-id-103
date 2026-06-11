@@ -16,6 +16,7 @@ module:
   simple_school_reports_core_gy: 0
   simple_school_reports_core_fth: 0
   simple_school_reports_core_oppfth: 0
+  simple_school_reports_fth_child_care_check_in: 10
   simple_school_reports_absence_make_up: 10
   simple_school_reports_grade_registration: 10
   simple_school_reports_grading_gy: 10

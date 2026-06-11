@@ -158,6 +158,7 @@ function simple_school_reports_child_care_support_theme(): array {
     'ssr_child_care_schema_week' => ['render element' => 'elements'],
     'ssr_cc_deviation' => ['render element' => 'elements'],
     'ssr_cc_deviation_student' => ['render element' => 'elements'],
+    'ssr_child_care_check_in' => ['render element' => 'elements'],
   ];
 }
 
@@ -263,6 +264,24 @@ function template_preprocess_ssr_cc_deviation(array &$variables): void {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_ssr_cc_deviation_student(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care check in templates.
+ *
+ * Default template: ssr-child-care-check-in.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care check in information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_check_in(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];

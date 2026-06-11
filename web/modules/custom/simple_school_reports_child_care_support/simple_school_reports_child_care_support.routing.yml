@@ -85,3 +85,11 @@ simple_school_reports_child_care_support.child_care_settings:
     _title: 'Child care settings'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm::access'
+
+entity.ssr_child_care_check_in.settings:
+  path: 'admin/structure/ssr-child-care-check-in'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInSettingsForm'
+    _title: 'Child care check in'
+  requirements:
+    _permission: 'administer ssr_child_care_check_in'

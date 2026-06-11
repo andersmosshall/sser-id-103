@@ -62,3 +62,15 @@ delete ssr_cc_deviation_student:
   title: 'Delete child care schema deviation student'
 create ssr_cc_deviation_student:
   title: 'Create child care schema deviation student'
+
+administer ssr_child_care_check_in:
+  title: 'Administer child care check ins'
+  restrict access: true
+view ssr_child_care_check_in:
+  title: 'View child care check in'
+edit ssr_child_care_check_in:
+  title: 'Edit child care check in'
+delete ssr_child_care_check_in:
+  title: 'Delete child care check in'
+create ssr_child_care_check_in:
+  title: 'Create child care check in'

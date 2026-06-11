@@ -75,3 +75,15 @@ simple_school_reports_child_care_support.child_care_settings:
   parent: simple_school_reports_core.config
   description: 'Administer child care settings'
   route_name: simple_school_reports_child_care_support.child_care_settings
+
+entity.ssr_child_care_check_in.settings:
+  title: 'Child care check in'
+  description: 'Configure a Child care check in entity type.'
+  route_name:  entity.ssr_child_care_check_in.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_check_in.collection:
+  title: 'Child care check ins'
+  description: 'List of child care check ins.'
+  route_name: entity.ssr_child_care_check_in.collection
+  parent: system.admin_content

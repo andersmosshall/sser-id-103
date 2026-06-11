@@ -63,3 +63,14 @@ entity.ssr_cc_deviation_student.delete_form:
   group: ssr_cc_deviation_student
   title: 'Delete'
   weight: 10
+
+entity.ssr_child_care_check_in.edit_form:
+  route_name: entity.ssr_child_care_check_in.edit_form
+  group: ssr_child_care_check_in
+  title: 'Edit'
+
+entity.ssr_child_care_check_in.delete_form:
+  route_name: entity.ssr_child_care_check_in.delete_form
+  group: ssr_child_care_check_in
+  title: 'Delete'
+  weight: 10

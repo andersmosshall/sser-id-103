@@ -145,3 +145,26 @@ simple_school_reports_child_care_support.student_child_care:
   route_name: simple_school_reports_child_care_support.student_child_care
   base_route: entity.user.canonical
   weight: 26
+
+entity.ssr_child_care_check_in.settings:
+  title: 'Settings'
+  route_name: entity.ssr_child_care_check_in.settings
+  base_route: entity.ssr_child_care_check_in.settings
+entity.ssr_child_care_check_in.view:
+  title: 'View'
+  route_name: entity.ssr_child_care_check_in.canonical
+  base_route: entity.ssr_child_care_check_in.canonical
+entity.ssr_child_care_check_in.edit_form:
+  title: 'Edit'
+  route_name: entity.ssr_child_care_check_in.edit_form
+  base_route: entity.ssr_child_care_check_in.canonical
+entity.ssr_child_care_check_in.delete_form:
+  title: 'Delete'
+  route_name: entity.ssr_child_care_check_in.delete_form
+  base_route: entity.ssr_child_care_check_in.canonical
+  weight: 10
+entity.ssr_child_care_check_in.collection:
+  title: 'Child care check ins'
+  route_name: entity.ssr_child_care_check_in.collection
+  base_route: system.admin_content
+  weight: 10

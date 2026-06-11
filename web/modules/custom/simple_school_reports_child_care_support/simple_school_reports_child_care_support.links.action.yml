@@ -40,3 +40,9 @@ ssr_cc_deviation_student.add_form:
   appears_on:
     - entity.ssr_cc_deviation_student.collection
 
+
+ssr_child_care_check_in.add_form:
+  title: 'Add child care check in'
+  route_name: entity.ssr_child_care_check_in.add_form
+  appears_on:
+    - entity.ssr_child_care_check_in.collection
