@@ -114,13 +114,13 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
     }
 
     $day_map = [
-      1 => t('Monday'),
-      2 => t('Tuesday'),
-      3 => t('Wednesday'),
-      4 => t('Thursday'),
-      5 => t('Friday'),
-      6 => t('Saturday'),
-      7 => t('Sunday'),
+      1 => $this->t('Monday'),
+      2 => $this->t('Tuesday'),
+      3 => $this->t('Wednesday'),
+      4 => $this->t('Thursday'),
+      5 => $this->t('Friday'),
+      6 => $this->t('Saturday'),
+      7 => $this->t('Sunday'),
     ];
 
     // Do a date walk day by day.
@@ -128,7 +128,7 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
     $current_date->setTime(0, 0, 0);
 
     while ($current_date <= $to_date) {
-      $day_index = $current_date->format('N');
+      $day_index = (int) $current_date->format('N');
       $day_label = $day_map[$day_index];
 
       $build[$day_index] = [
@@ -217,6 +217,9 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
         ];
       }
     }
+
+    $build['#empty'] = !$deviation_id && ($build['segments']['#empty'] ?? FALSE) === TRUE;
+
     return $build;
   }
 

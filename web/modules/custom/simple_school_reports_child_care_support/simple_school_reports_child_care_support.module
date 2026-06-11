@@ -91,8 +91,14 @@ function simple_school_reports_child_care_support_ssr_child_care_view(array &$bu
     $student_ids = $child_care_service->getChildCareStudentIds($entity->id());
     /** @var \Drupal\user\UserInterface[] $students */
     $students = !empty($student_ids) ? \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($student_ids) : [];
+
+    // Custom sort students by display name.
+    usort($students, function (UserInterface $a, UserInterface $b) {
+      return strnatcasecmp($a->getDisplayName(), $b->getDisplayName());
+    });
+
     foreach ($students as $student) {
-      $link = Link::createFromRoute($student->label(), 'simple_school_reports_child_care_support.student_child_care', ['user' => $student->id()]);
+      $link = Link::createFromRoute($student->getDisplayName(), 'simple_school_reports_child_care_support.student_child_care', ['user' => $student->id()]);
       $links[] = '<div class="field__item">' . $link->toString() . '</div>';
     }
 

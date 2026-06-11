@@ -175,7 +175,7 @@ class AddSchemaDeviationsForm extends ConfirmFormBase implements TrustedCallback
       '#description' => $this->t('Select what child care groups to add schema deviations for.'),
       '#options' => $child_care_options,
       '#default_value' => $child_care_default_values,
-      '#filter_placeholder' => $this->t('Type to search for course child care group'),
+      '#filter_placeholder' => $this->t('Type to search for child care group'),
     ];
 
 //    $form['child_care_wrapper'] ['child_care_comment'] = [

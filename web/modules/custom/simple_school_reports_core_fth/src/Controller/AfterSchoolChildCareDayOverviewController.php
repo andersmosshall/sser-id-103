@@ -47,7 +47,11 @@ class AfterSchoolChildCareDayOverviewController extends SsrCachedPageControllerB
       ],
     ];
 
-    $build['#attached']['library'][] = 'simple_school_reports_child_care_support/child_care_overview';
+    $build['heading'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h2',
+      '#value' => '',
+    ];
 
     $build['graph_target'] = [
       '#type' => 'container',
@@ -66,8 +70,25 @@ class AfterSchoolChildCareDayOverviewController extends SsrCachedPageControllerB
     $date = $date_string ? new \DateTime($date_string) : NULL;
 
     if (!$date) {
+      unset($build['heading']);
+      unset($build['graph_target']);
       return $build;
     }
+
+    $build['#attached']['library'][] = 'simple_school_reports_child_care_support/child_care_overview';
+
+    $day_map = [
+      1 => t('Monday'),
+      2 => t('Tuesday'),
+      3 => t('Wednesday'),
+      4 => t('Thursday'),
+      5 => t('Friday'),
+      6 => t('Saturday'),
+      7 => t('Sunday'),
+    ];
+    $day = $date->format('N');
+
+    $build['heading']['#value'] = mb_ucfirst($day_map[$day]) . ' ' . $date->format('j/n - Y');
 
     $groups = $this->currentRequest->query->get('groups');
     if (is_string($groups) && $groups !== '') {

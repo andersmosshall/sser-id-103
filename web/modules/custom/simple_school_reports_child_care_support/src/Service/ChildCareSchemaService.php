@@ -771,7 +771,8 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
         $offers = 0;
       }
 
-      if ($needs === 0) {
+      if ($needs === 0 || $offers === $needs) {
+        $offers_alt = 0;
         foreach ($offer_segments as $child_care_id => $segment) {
           if ($segment['from'] > $timestamp || $segment['to'] <= $timestamp) {
             continue;
@@ -779,8 +780,9 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
           if (!$segment) {
             continue;
           }
-          $offers++;
+          $offers_alt++;
         }
+        $offers = max($offers_alt, $offers);
       }
 
       if ($needs > 0 || $offers > 0) {
