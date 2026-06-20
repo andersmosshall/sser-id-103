@@ -3,11 +3,14 @@
 namespace Drupal\simple_school_reports_child_care_support\Service;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_school_reports_child_care_support\ChildCarePlacementInterface;
@@ -138,8 +141,7 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
     $cached = $this->cache->get($cid);
     if ($cached && is_array($cached->data)) {
       $this->lookup[$cid] = $cached->data;
-      // TEMP!!!!!!!
-      //      return $this->lookup[$cid];
+      return $this->lookup[$cid];
     }
     $data = [];
 
@@ -251,12 +253,13 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
           'schema_id' => $schema_id,
         ];
       }
-
-      $schema_data[$schema_data_key]['weeks'][$result->delta] = [
-        'from' => $from + $result->{$week_from_field},
-        'to' => $from + $result->{$week_to_field},
-        'schema_id' => $schema_id,
-      ];
+      else {
+        $schema_data[$schema_data_key]['weeks'][$result->delta] = [
+          'from' => $from + $result->{$week_from_field},
+          'to' => $from + $result->{$week_to_field},
+          'schema_id' => $schema_id,
+        ];
+      }
     }
 
     // Order all schema weeks by delta and reset to 0 indexed array.
@@ -603,12 +606,14 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
     }
 
     // Preload child care entities.
-    if (!empty($child_care_ids)) {
-      $this->entityTypeManager->getStorage('ssr_child_care')->loadMultiple($child_care_ids);
+    if (!empty($restricted_child_care_ids)) {
+      $this->entityTypeManager->getStorage('ssr_child_care')
+        ->loadMultiple($restricted_child_care_ids);
     }
-
-    // TODO: Check in/out "logs".
-
+    elseif (!empty($needs['child_care_ids'])) {
+      $this->entityTypeManager->getStorage('ssr_child_care')
+        ->loadMultiple($needs['child_care_ids']);
+    }
 
     foreach ($segments as $key => $segment) {
       $build['segments'][$key] = [
@@ -622,7 +627,8 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
       if ($segment['type'] === ChildCareSchemaServiceInterface::SCHEMA_SEGMENT_TYPE_SCHOOL_CHILD_CARE) {
         $child_care_ids = $segment['child_care_ids'] ?? [];
         /** @var \Drupal\simple_school_reports_child_care_support\ChildCareInterface[] $child_care_entities */
-        $child_care_entities = !empty($child_care_ids) ? $this->entityTypeManager->getStorage('ssr_child_care')->loadMultiple($child_care_ids) : [];
+        $child_care_entities = !empty($child_care_ids) ? $this->entityTypeManager->getStorage('ssr_child_care')
+          ->loadMultiple($child_care_ids) : [];
         $offer_names = [];
         foreach ($child_care_entities as $child_care_entity) {
           $offer_names[] = $child_care_entity->getShortLabel();
@@ -653,6 +659,11 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#value' => $from->format('H:i') . ' - ' . $to->format('H:i'),
+        '#attributes' => [
+          'data-from' => $segment['from'],
+          'data-to' => $segment['to'],
+          'data-child-care-id' => Json::encode($child_care_ids ?? []),
+        ]
       ];
       if ($segment['type'] !== ChildCareSchemaServiceInterface::SCHEMA_SEGMENT_TYPE_SCHOOL_CHILD_CARE) {
         $build['segments'][$key]['time']['#attributes']['class'][] = 'child-care-segment--strike-through';
@@ -677,7 +688,8 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
     }
     $build['comment_group'] = [];
 
-    $deviation = $this->entityTypeManager->getStorage('ssr_cc_deviation_student')->load($deviation_id);
+    $deviation = $this->entityTypeManager->getStorage('ssr_cc_deviation_student')
+      ->load($deviation_id);
 
     $comment = $deviation->get('field_comment')->value;
     if ($comment) {
@@ -685,10 +697,10 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
       $format = 'plain_text_ck';
       $comment = check_markup($comment, $format);
 
-      $build['comment_group']['comment_label'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'strong',
-        '#value' => t('Comment'),
+      $build['comment_group'] = [
+        '#type' => 'details',
+        '#open' => FALSE,
+        '#title' => t('Comment'),
       ];
       $build['comment_group']['comment'] = [
         '#markup' => $comment,
@@ -696,7 +708,7 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
     }
   }
 
-  public function getDayOverview(array $student_ids, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL): array {
+  public function getDayOverview(array $student_ids, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL, array $check_ins = []): array {
     [$from, $to] = $this->getFromTo($date);
 
     $timestamp = $from;
@@ -743,12 +755,16 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
       $offer_segments[$child_care_id] = $offer;
     }
 
+    $include_check_in = !empty($check_ins);
+    $student_checked_in = $check_ins;
+
     $lowest_ts = $min_limit->getTimestamp();
     $highest_ts = $max_limit->getTimestamp();
 
     while ($timestamp <= $to) {
       $needs = 0;
       $offers = 0;
+      $checked_in = 0;
 
       foreach ($student_segments as $segments) {
         $segment = array_find($segments, function($segment) use ($timestamp) {
@@ -785,7 +801,18 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
         $offers = max($offers_alt, $offers);
       }
 
-      if ($needs > 0 || $offers > 0) {
+      if ($include_check_in) {
+        foreach ($student_checked_in as $check_in_data) {
+          $has_checked_in = array_find($check_in_data, function($item) use ($timestamp) {
+            return $item['from'] <= $timestamp && ($item['to'] ?? PHP_INT_MAX) > $timestamp;
+          });
+          if ($has_checked_in) {
+            $checked_in++;
+          }
+        }
+      }
+
+      if ($needs > 0 || $offers > 0 || $checked_in > 0) {
         if ($timestamp < $lowest_ts) {
           $lowest_ts = $timestamp;
         }
@@ -794,12 +821,16 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
         }
       }
 
-      $data[] = [
+      $data_item = [
         'needs' => $needs,
         'offers' => $offers,
         'from' => $timestamp,
         'to' => $timestamp + $step - 1,
       ];
+      if ($include_check_in) {
+        $data_item['checkedIn'] = $checked_in;
+      }
+      $data[] = $data_item;
       $timestamp += $step;
     }
 
@@ -808,4 +839,81 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
     });
     return array_values($data);
   }
+
+  public function getStudentDayBoundaries(int|string $student_id, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL): ?array {
+    $cid = 'sdb:' . $student_id . ':' . $date->format('Y-m-d');
+    if (is_array($restricted_child_care_ids) && !empty($restricted_child_care_ids)) {
+      $cid .= ':' . implode(',', $restricted_child_care_ids);
+    }
+
+    if (array_key_exists($cid, $this->lookup)) {
+      return $this->lookup[$cid];
+    }
+
+    $segments = $this->getStudentChildCareSchemaSegments($student_id, $date, $restricted_child_care_ids);
+
+    $lowest_from = NULL;
+    $highest_to = NULL;
+
+    foreach ($segments as $segment) {
+      $type = $segment['type'];
+
+      if ($type !== self::SCHEMA_SEGMENT_TYPE_SCHOOL_DAY && $type !== self::SCHEMA_SEGMENT_TYPE_SCHOOL_CHILD_CARE) {
+        continue;
+      }
+
+      if ($type === self::SCHEMA_SEGMENT_TYPE_SCHOOL_CHILD_CARE && $segment['from'] < ($lowest_from ?? PHP_INT_MAX)) {
+        $lowest_from = $segment['from'];
+      }
+      if ($segment['to'] > ($highest_to ?? PHP_INT_MIN)) {
+        $highest_to = $segment['to'];
+      }
+    }
+
+    $day_boundaries = $lowest_from !== NULL && $highest_to !== NULL && $lowest_from < ($highest_to - 10 * 60)
+      ? [
+        'from' => $lowest_from,
+        'to' => $highest_to,
+      ]
+      : NULL;
+
+     $this->lookup[$cid] = $day_boundaries;
+    return $day_boundaries;
+
+  }
+
+  public function getCacheableMetadata(?\DateTimeInterface $date, array $options = []): CacheableMetadata {
+    $cache = new CacheableMetadata();
+
+    if (!$date) {
+      $cache->setCacheMaxAge(0);
+      return $cache;
+    }
+
+    $cache->addCacheTags([
+      'school_week_list',
+      'node_list:day_absence',
+      'school_week_deviation_list',
+      'ssr_school_week_per_grade',
+      'ssr_child_care_list',
+      'ssr_child_care_placement_list',
+      'ssr_child_care_schema_list',
+      'ssr_cc_deviation_list',
+      'ssr_cc_deviation_student_list',
+    ]);
+    $cache->addCacheContexts([
+      'route',
+      'url.query_args:from',
+      'url.query_args:to',
+      'url.query_args:date',
+      'url.query_args:groups',
+    ]);
+
+
+    // TEMP!!!!
+    $cache->setCacheMaxAge(0);
+
+    return $cache;
+  }
+
 }

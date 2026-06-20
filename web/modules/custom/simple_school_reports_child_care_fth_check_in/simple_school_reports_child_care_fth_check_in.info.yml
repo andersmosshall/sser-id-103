@@ -5,5 +5,5 @@ core_version_requirement: ^10 || ^11
 package: 'Simple School Reports'
 version: 11.0.0
 dependencies:
-  - simple_school_reports_core:simple_school_reports_core_fth
+  - simple_school_reports_core_fth:simple_school_reports_core_fth
   - simple_school_reports_child_care_support:simple_school_reports_child_care_support

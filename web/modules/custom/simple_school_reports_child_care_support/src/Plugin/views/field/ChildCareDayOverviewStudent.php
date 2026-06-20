@@ -9,7 +9,9 @@ namespace Drupal\simple_school_reports_child_care_support\Plugin\views\field;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_child_care_support\ChildCareSchemaInterface;
 use Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface;
+use Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,11 +28,14 @@ class ChildCareDayOverviewStudent extends FieldPluginBase {
 
   protected ChildCareSchemaServiceInterface $childCareSchemaService;
 
+  protected ChildCareServiceInterface $childCareService;
+
   protected Request $request;
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->childCareSchemaService = $container->get('simple_school_reports_child_care_support.child_care_schema');
+    $instance->childCareService = $container->get('simple_school_reports_child_care_support.child_care');
     $instance->request = $container->get('request_stack')->getCurrentRequest();
     return $instance;
   }
@@ -46,41 +51,19 @@ class ChildCareDayOverviewStudent extends FieldPluginBase {
    * @{inheritdoc}
    */
   public function render(ResultRow $values) {
-    $cache = new CacheableMetadata();
-    $cache->addCacheTags([
-      'school_week_list',
-      'node_list:day_absence',
-      'school_week_deviation_list',
-      'ssr_school_week_per_grade',
-      'ssr_child_care_list',
-      'ssr_child_care_placement_list',
-      'ssr_child_care_schema_list',
-      'ssr_cc_deviation_list',
-      'ssr_cc_deviation_student_list',
-    ]);
-    $cache->addCacheContexts(['url.query_args:date', 'url.query_args:groups', 'route']);
     $uid = $values->uid ?? 0;
     $build = [];
 
-    $date = $this->request->query->get('date');
-    try {
-      $date_object = new \DateTime($date);
-    }
-    catch (\Exception $e) {
+    $date = $this->childCareService->getDateFromRequest();
+    $groups = $this->childCareService->getChildCareIdsFromRequest();
+    $cache = $this->childCareSchemaService->getCacheableMetadata($date);
+
+    if (!$date || empty($groups)) {
       $cache->applyTo($build);
       return $build;
     }
 
-    $groups = $this->request->query->get('groups');
-    if (is_string($groups) && $groups !== '') {
-      $groups = explode(',', $groups);
-    }
-    if (empty($groups)) {
-      $cache->applyTo($build);
-      return $build;
-    }
-
-    $build['value'] = $this->childCareSchemaService->buildStudentDayOverview($uid, $date_object, $groups);
+    $build['value'] = $this->childCareSchemaService->buildStudentDayOverview($uid, $date, $groups);
 
     $cache->applyTo($build);
     return $build;

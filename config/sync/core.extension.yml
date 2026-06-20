@@ -55,7 +55,6 @@ module:
   rest: 0
   restui: 0
   serialization: 0
-  simple_school_reports_child_care_support: 0
   simple_school_reports_class_support: 0
   simple_school_reports_core: 0
   simple_school_reports_dnp_support: 0
@@ -81,6 +80,7 @@ module:
   views_load_more: 0
   views_ui: 0
   pathauto: 1
+  simple_school_reports_child_care_support: 5
   simple_school_reports_extension_proxy: 5
   simple_school_reports_maillog: 6
   password_policy: 10

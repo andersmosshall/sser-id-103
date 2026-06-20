@@ -1,0 +1,123 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Provides a child care check in module.
+ */
+
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\user\UserInterface;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function simple_school_reports_child_care_fth_check_in_entity_operation_alter(array &$operations, \Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity instanceof UserInterface) {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($entity->hasRole('student') && $route_name === 'simple_school_reports_child_care_fth_check_in.fth_check_in') {
+      $operations = [];
+
+      $today = (new \DateTime())->format('Y-m-d');
+      $request = \Drupal::request();
+      $date_string = $request->query->get('date');
+      try {
+        $date = $date_string ? new \DateTime($date_string) : NULL;
+      }
+      catch (\Exception $e) {
+        $date = NULL;
+      }
+
+      $groups = $request->query->get('groups');
+      if (is_string($groups) && $groups !== '') {
+        $groups = explode(',', $groups);
+      }
+      if (!is_array($groups)) {
+        return;
+      }
+
+      /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface $child_care_check_in_service */
+      $child_care_check_in_service = \Drupal::service('simple_school_reports_child_care_support.child_care_check_in');
+
+      $cache = new CacheableMetadata();
+      $cache->addCacheContexts(['user', 'route', 'current_day']);
+      $cache->addCacheTags([
+        'ssr_child_care_check_in_list:' . $date_string,
+        'ssr_child_care_placement_list'
+      ]);
+
+      $destination = \Drupal::destination()->getAsArray()['destination'];
+      $weight = 100;
+
+      $child_care_storage = \Drupal::entityTypeManager()->getStorage('ssr_child_care');
+      /** @var \Drupal\simple_school_reports_child_care_support\ChildCareInterface[] $child_care_entities */
+      $child_care_entities = $child_care_storage->loadMultiple($groups);
+
+      $all_check_ins = [];
+      $all_check_outs = [];
+      foreach ($child_care_entities as $child_care) {
+        $child_care_id = $child_care->id();
+
+        $allow_check_out = $child_care_check_in_service->allowStudentCheckOut($entity->id(), $date, [$child_care_id]);
+        if ($allow_check_out) {
+          $all_check_outs[] = $child_care_id;
+          $weight++;
+          $operations['check_out_'  . $child_care_id] = [
+            'title' => t('Check out @name', ['@name' => $child_care->getShortLabel()]),
+            'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_out_student', ['user' => $entity->id(), 'date' => $date_string],['query' => [
+              'groups' => $child_care_id,
+              'destination' => $destination,
+            ]]),
+            'weight' => $weight,
+          ];
+
+          $cache->applyTo($operations['check_out_'  . $child_care_id]);
+        }
+
+        $allow_check_in = $child_care_check_in_service->allowStudentCheckIn($entity->id(), $date, [$child_care_id]);
+        if ($allow_check_in) {
+          $all_check_ins[] = $child_care_id;
+          $weight++;
+          $operations['check_in_'  . $child_care_id] = [
+            'title' => t('Check in @name', ['@name' => $child_care->getShortLabel()]),
+            'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_in_student', ['user' => $entity->id(), 'date' => $date_string], ['query' => [
+              'groups' => $child_care_id,
+              'destination' => $destination,
+            ]]),
+            'weight' => $weight,
+          ];
+          $cache->applyTo($operations['check_in_'  . $child_care_id]);
+        }
+      }
+
+      if (count($all_check_outs) > 1) {
+        $weight++;
+        $operations['check_out_all'] = [
+          'title' => t('Check out @name', ['@name' => t('all')]),
+          'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_out_student', ['user' => $entity->id(), 'date' => $date_string], ['query' => [
+            'groups' => implode(',', $all_check_ins),
+            'destination' => $destination,
+          ]]),
+          'weight' => $weight,
+        ];
+        $cache->applyTo($operations['check_out_all']);
+      }
+
+      if (count($all_check_ins) > 1) {
+        $weight++;
+        $operations['check_in_all'] = [
+          'title' => t('Check in @name', ['@name' => t('all')]),
+          'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_in_student', ['user' => $entity->id(), 'date' => $date_string], ['query' => [
+            'groups' => implode(',', $all_check_ins),
+            'destination' => $destination,
+          ]]),
+          'weight' => $weight,
+        ];
+        $cache->applyTo($operations['check_in_all']);
+      }
+    }
+  }
+}

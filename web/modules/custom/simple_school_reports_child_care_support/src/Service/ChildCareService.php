@@ -8,6 +8,8 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_child_care_support\ChildCarePlacementInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ChildCareService
@@ -22,6 +24,7 @@ class ChildCareService implements ChildCareServiceInterface {
     protected CacheBackendInterface $cache,
     protected TimeInterface $time,
     protected StateInterface $state,
+    protected RequestStack $requestStack
   ) {}
 
   protected function getPlacements(\DateTimeInterface $date = new \DateTime()): array {
@@ -207,6 +210,44 @@ class ChildCareService implements ChildCareServiceInterface {
 
     $this->state->set('simple_school_reports_child_care_support.settings', $settings);
     unset($this->lookup['settings']);
+  }
+
+  public function getStudentIdsFromRequest(): array {
+    $date = $this->getDateFromRequest();
+    $groups = $this->getChildCareIdsFromRequest();
+
+    if (!$date || empty($groups)) {
+      return [];
+    }
+
+    return $this->getChildCareStudentIdsMultiple($groups, $date);
+  }
+
+  public function getChildCareIdsFromRequest(): array {
+    $request = $this->requestStack->getCurrentRequest();
+    $groups = $request->query->get('groups');
+    if (is_string($groups) && $groups !== '') {
+      $groups = explode(',', $groups);
+    }
+    if (is_array($groups)) {
+      return $groups;
+    }
+    return [];
+  }
+
+  public function getDateFromRequest(): ?\DateTimeInterface {
+    $request = $this->requestStack->getCurrentRequest();
+    $date_string = $request->query->get('date');
+    $date = NULL;
+    if (is_string($date_string) && $date_string !== '') {
+      try {
+        $date = new \DateTime($date_string);
+      }
+      catch (\Exception $e) {
+        $date = NULL;
+      }
+    }
+    return $date;
   }
 
 }

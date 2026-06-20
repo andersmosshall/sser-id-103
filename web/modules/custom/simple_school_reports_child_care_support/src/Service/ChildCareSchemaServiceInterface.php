@@ -2,7 +2,7 @@
 
 namespace Drupal\simple_school_reports_child_care_support\Service;
 
-use Drupal\simple_school_reports_child_care_support\ChildCarePlacementInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Provides an interface defining ChildCareSchemaService.
@@ -15,8 +15,6 @@ interface ChildCareSchemaServiceInterface {
   const SCHEMA_SEGMENT_TYPE_SCHOOL_DAY = 4;
   const SCHEMA_SEGMENT_TYPE_SCHOOL_NO_OFFER = 5;
   const SCHEMA_SEGMENT_TYPE_SCHOOL_CHILD_CARE = 6;
-
-
 
   /**
    * Get child care schema ids in order.
@@ -38,7 +36,7 @@ interface ChildCareSchemaServiceInterface {
    * @param string|int $student_id
    * @param \DateTimeInterface $date
    *
-   * @return array
+   * @return array|null
    *   Assosiative array with the following keys:
    *    - from: timestamp
    *    - to: timestamp
@@ -53,7 +51,7 @@ interface ChildCareSchemaServiceInterface {
    * @param string|int $student_id
    * @param \DateTimeInterface $date
    *
-   * @return array
+   * @return array|null
    *   Assosiative array with the following keys:
    *    - from: timestamp
    *    - to: timestamp
@@ -79,7 +77,7 @@ interface ChildCareSchemaServiceInterface {
    * @param \DateTimeInterface $date
    *
    * @return array
-   *   An render array
+   *   A render array
    */
   public function buildStudentDayOverview(string|int $student_id, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL): array;
 
@@ -94,9 +92,38 @@ interface ChildCareSchemaServiceInterface {
    *    - to: timestamp
    *    - needs: int
    *    - offers: int
+   *    - check_in?: int
    *
    * NOTE: The segements are equally distributed. (15 minutues).
    */
-  public function getDayOverview(array $student_ids, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL): array;
+  public function getDayOverview(array $student_ids, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL, array $check_ins = []): array;
+
+  /**
+   * Day boundaries for when student has it expected first check in and last check out.
+   *
+   * NOTE: School day start does not count as an expected check in (as school lessons has its own attendance system).
+   * NOTE: School day end is counted as an expected check out it is occurs last in the day.
+   *
+   * @param string|int $student_id
+   * @param \DateTimeInterface $date
+   * @param array|null $restricted_child_care_ids
+   *
+   * @return array|null
+   *   Assosiative array with the following keys:
+   *    - from: timestamp
+   *    - to: timestamp
+   */
+  public function getStudentDayBoundaries(string|int $student_id, \DateTimeInterface $date = new \DateTime(), ?array $restricted_child_care_ids = NULL): ?array;
+
+  /**
+   * Get cacheable metadata to apply to child care schema related controllers, etc
+   * with check-in data.
+   *
+   * @param \DateTimeInterface $date
+   * @param array $options
+   *
+   * @return \Drupal\Core\Cache\CacheableMetadata
+   */
+  public function getCacheableMetadata(?\DateTimeInterface $date, array $options = []): CacheableMetadata;
 
 }

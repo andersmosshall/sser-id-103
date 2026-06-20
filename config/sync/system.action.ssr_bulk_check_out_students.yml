@@ -1,0 +1,12 @@
+uuid: 9ddc4599-0ac6-494f-a24c-b5b0b90e66a7
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+    - simple_school_reports_child_care_support
+id: ssr_bulk_check_out_students
+label: 'Check out students from after school care'
+type: user
+plugin: ssr_bulk_check_out_students
+configuration: {  }

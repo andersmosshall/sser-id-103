@@ -46,27 +46,9 @@ function simple_school_reports_core_fth_ssr_local_actions_alter(array &$local_ac
 function simple_school_reports_core_fth_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
   if ($view->id() === 'child_care_day_overview_students') {
     $request = \Drupal::request();
-
-    $date_string = $request->query->get('date');
-    try {
-      $date = $date_string ? new \DateTime($date_string) : NULL;
-    }
-    catch (\Exception $e) {
-      $date = NULL;
-    }
-
-    $groups = $request->query->get('groups');
-    if (is_string($groups) && $groups !== '') {
-      $groups = explode(',', $groups);
-    }
-
-    if (!$date || !is_array($groups)) {
-      return;
-    }
-
     /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
     $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
-    $uids = $child_care_service->getChildCareStudentIdsMultiple($groups, $date);
+    $uids = $child_care_service->getStudentIdsFromRequest($request);
 
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {

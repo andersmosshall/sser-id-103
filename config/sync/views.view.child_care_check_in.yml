@@ -1,4 +1,4 @@
-uuid: 3add09a3-87e7-4008-a72e-32a58b0093b9
+uuid: 6abd0dfc-2f26-4525-a0c7-4282adbe5868
 langcode: sv
 status: true
 dependencies:
@@ -11,8 +11,8 @@ dependencies:
     - options
     - simple_school_reports_child_care_support
     - user
-id: child_care_day_overview_students
-label: 'Child care day overview'
+id: child_care_check_in
+label: 'Child care check in overview'
 module: views
 description: ''
 tag: ''
@@ -27,6 +27,64 @@ display:
     display_options:
       title: Barn
       fields:
+        user_bulk_form:
+          id: user_bulk_form
+          table: users
+          field: user_bulk_form
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          plugin_id: user_bulk_form
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+            destination: 0
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          action_title: Åtgärd
+          include_exclude: include
+          selected_actions:
+            - ssr_bulk_check_in_students
+            - ssr_bulk_check_out_students
+            - simple_school_reports_core_mail_caregivers_action
+            - ssr_mail_students
         uid:
           id: uid
           table: users_field_data
@@ -359,6 +417,109 @@ display:
           entity_type: user
           entity_field: uid
           plugin_id: child_care_day_overview
+          label: Tider
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+            destination: 0
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+        child_care_check_in_overview:
+          id: child_care_check_in_overview
+          table: users_field_data
+          field: child_care_check_in_overview
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: child_care_check_in_overview
+          label: Incheckad
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+            destination: 0
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+        operations:
+          id: operations
+          table: users
+          field: operations
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          plugin_id: entity_operations
           label: ''
           exclude: false
           alter:
@@ -401,6 +562,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          destination: false
       pager:
         type: full
         options:
@@ -557,10 +719,23 @@ display:
           row_class: ''
           default_row_class: true
           columns:
+            uid: uid
             field_first_name: field_first_name
             field_last_name: field_last_name
+            field_class: field_class
+            field_grade: field_grade
+            child_care_day_overview: child_care_day_overview
+            child_care_check_in_overview: child_care_check_in_overview
+            operations: operations
           default: '-1'
           info:
+            uid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             field_first_name:
               sortable: false
               default_sort_order: asc
@@ -572,6 +747,39 @@ display:
               sortable: false
               default_sort_order: asc
               align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_class:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_grade:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            child_care_day_overview:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            child_care_check_in_overview:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
+              align: views-align-right
               separator: ''
               empty_column: false
               responsive: ''
@@ -598,7 +806,7 @@ display:
       footer: {  }
       display_extenders: {  }
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -618,7 +826,7 @@ display:
       display_description: ''
       display_extenders: {  }
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'

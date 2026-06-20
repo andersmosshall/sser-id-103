@@ -14,3 +14,17 @@ child_care_graph:
     - core/drupal
     - core/drupalSettings
     - simple_school_reports_core/chartjs
+
+child_care_check_in_overview:
+  version: VERSION
+  css:
+    theme:
+      css/child_care_check_in_overview.css: { }
+  js:
+    js/child_care_check_in_overview.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+    - simple_school_reports_core/chartjs

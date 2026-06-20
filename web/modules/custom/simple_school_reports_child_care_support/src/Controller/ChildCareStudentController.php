@@ -3,11 +3,13 @@
 namespace Drupal\simple_school_reports_child_care_support\Controller;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface;
 use Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface;
 use Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface;
 use Drupal\simple_school_reports_core\Controller\SsrCachedPageControllerBase;
@@ -29,12 +31,15 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
 
   protected ChildCareSchemaServiceInterface $childCareSchemaService;
 
+  protected ChildCareCheckInServiceInterface $childCareCheckInService;
+
   protected Request $currentRequest;
 
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->childCareService = $container->get('simple_school_reports_child_care_support.child_care');
     $instance->childCareSchemaService = $container->get('simple_school_reports_child_care_support.child_care_schema');
+    $instance->childCareCheckInService = $container->get('simple_school_reports_child_care_support.child_care_check_in');
     $instance->currentRequest = $container->get('request_stack')->getCurrentRequest();
     $instance->entityTypeManager = $container->get('entity_type.manager');
     return $instance;
@@ -60,15 +65,48 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
     $child_care_entities = !empty($placement_ids) ? $this->entityTypeManager->getStorage('ssr_child_care')->loadMultiple($placement_ids) : [];
     $child_care_names = [];
     foreach ($child_care_entities as $child_care_entity) {
-      $child_care_names[] = $child_care_entity->label() . ' (' . $child_care_entity->getShortLabel() . ')';
+      $child_care_names[$child_care_entity->id()] = $child_care_entity->label() . ' (' . $child_care_entity->getShortLabel() . ')';
     }
     sort($child_care_names);
-    foreach ($child_care_names as $key => $child_care_name) {
-      $build['active_placements'][$key] = [
+    foreach ($child_care_names as $child_care_id => $child_care_name) {
+      $build['active_placements'][$child_care_id] = [
+        '#type' => 'container',
+      ];
+
+      $build['active_placements'][$child_care_id]['name'] = [
         '#type' => 'html_tag',
-        '#tag' => 'div',
+        '#tag' => 'span',
         '#value' => $child_care_name,
       ];
+
+      if (ssr_use_child_care_check_in()) {
+        $suffix = NULL;
+        $check_in = $this->childCareCheckInService->getLatestCheckIn($user->id(), $child_care_id);
+        if ($check_in) {
+          if ($check_in['to']) {
+            $to = new \DateTime();
+            $to->setTimestamp($check_in['to']);
+            $suffix = $this->t('Checked out @time', [
+              '@time' => $to->format('H:i'),
+            ]);
+          }
+          elseif ($check_in['from']) {
+            $from = new \DateTime();
+            $from->setTimestamp($check_in['from']);
+            $suffix = $this->t('Checked in @time', [
+              '@time' => $from->format('H:i'),
+            ]);
+          }
+        }
+
+        if ($suffix) {
+          $build['active_placements'][$child_care_id]['suffix'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '(' . $suffix . ')',
+          ];
+        }
+      }
     }
 
     $build['divider_placements'] = ['#markup' => '<hr>'];
@@ -164,7 +202,6 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
     $needs = $this->childCareSchemaService->getChildCareStudentNeed($user->id(), $date) ?? [];
     $deviation_id = $needs['deviation_id'] ?? NULL;
     $schema_id = $needs['schema_id'] ?? NULL;
-    $child_care_ids = $needs['child_care_ids'] ?? [];
 
     if ($deviation_id || $schema_id) {
       $from = $needs['from'] ?? NULL;
@@ -218,31 +255,19 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
       }
     }
 
+    if (ssr_use_child_care_check_in()) {
+      $build['check_in'] = $this->childCareCheckInService->buildStudentCheckIns($user->id(), $date);
+    }
+
     $build['#empty'] = !$deviation_id && ($build['segments']['#empty'] ?? FALSE) === TRUE;
 
     return $build;
   }
 
   public function getCacheableMetadata(): CacheableMetadata {
-    $cache = parent::getCacheableMetadata();
-
-    $cache->addCacheTags([
-      'school_week_list',
-      'node_list:day_absence',
-      'school_week_deviation_list',
-      'ssr_school_week_per_grade',
-      'ssr_child_care_list',
-      'ssr_child_care_placement_list',
-      'ssr_child_care_schema_list',
-      'ssr_cc_deviation_list',
-      'ssr_cc_deviation_student_list',
-    ]);
-    $cache->addCacheContexts(['url.query_args:from', 'url.query_args:to']);
-
-    // TEMP!!
-    $cache->setCacheMaxAge(0);
-
-    return $cache;
+    $cache = $this->childCareCheckInService->getCacheableMetadata(new \DateTime());
+    $cache->setCacheMaxAge(Cache::PERMANENT);
+    return $cache->addCacheableDependency(parent::getCacheableMetadata());
   }
 
   public function pageId(): string {

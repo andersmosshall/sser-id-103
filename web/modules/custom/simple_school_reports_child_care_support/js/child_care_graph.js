@@ -9,28 +9,56 @@
           return;
         }
 
+        const includeCheckIn = !!$(this).data('include-check-in');
+
         const processedData = {
           labels: data.map(item => item.label),
-          datasets: [
-            {
-              label: Drupal.t('Child care needs'),
-              data: data.map(item => item.needs),
-              fill: false,
-              borderColor: 'rgba(0, 60, 197, 0.75)',
-              tension: 0.1,
-            },
-            {
-              label: Drupal.t('Child care offers'),
-              data: data.map(item => item.offers),
-              fill: false,
-              borderColor: 'rgb(108 108 108)',
-              tension: 0.1,
-              pointStyle: 'cross',
-            },
-          ],
+          datasets: [],
         };
+        if (includeCheckIn) {
 
-        const maxValues = [Math.max(...data.map(item => item.needs)), Math.max(...data.map(item => item.offers)), 1];
+          const nowTs = Math.floor(Date.now() / 1000) + 15 * 60 + 1;
+
+          processedData.datasets.push({
+            label: Drupal.t('Checked in'),
+            data: data.map(item => {
+              const checkedInTs = item.from ?? null;
+              if (checkedInTs === null) {
+                return null;
+              }
+              if (checkedInTs > nowTs) {
+                return null;
+              }
+
+              return item.checkedIn;
+            }),
+            fill: false,
+            borderColor: 'rgb(100 223 0)',
+            backgroundColor: 'rgb(100 223 0)',
+            tension: 0.1,
+            pointStyle: 'cross',
+          });
+        }
+
+        processedData.datasets.push({
+          label: Drupal.t('Child care needs'),
+            data: data.map(item => item.needs),
+          fill: false,
+          borderColor: 'rgba(0, 60, 197, 0.75)',
+          backgroundColor: 'rgba(0, 60, 197, 0.75)',
+          tension: 0.1,
+        });
+        processedData.datasets.push({
+          label: Drupal.t('Child care offers'),
+            data: data.map(item => item.offers),
+          fill: false,
+          borderColor: 'rgb(108 108 108)',
+          backgroundColor: 'rgb(108 108 108)',
+          tension: 0.1,
+          pointStyle: 'cross',
+        });
+
+        const maxValues = [Math.max(...data.map(item => item.needs)), Math.max(...data.map(item => item.offers)), Math.max(...data.map(item => item.checkedIn ?? 0)), 1];
         const chartId = 'child-care-overview-graph';
         const ctx = document.getElementById(chartId).getContext('2d');
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
  * Provides a child care module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Render\Element;
 use Drupal\simple_school_reports_child_care_support\ChildCareSchemaInterface;
 use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
@@ -24,6 +25,12 @@ function ssr_use_child_care(): bool {
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
   $module_handler = \Drupal::service('module_handler');
   return $module_handler->moduleExists('simple_school_reports_core_fth');
+}
+
+function ssr_use_child_care_check_in(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_child_care_fth_check_in');
 }
 
 
@@ -324,6 +331,34 @@ function simple_school_reports_child_care_support_ssr_local_actions_alter(array 
 }
 
 /**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_child_care_support_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'child_care_check_in') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface $child_care_check_in_service */
+    $child_care_check_in_service = \Drupal::service('simple_school_reports_child_care_support.child_care_check_in');
+    $uids = $child_care_check_in_service->getStudentIdsFromRequest();
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/**
  * Implements hook_views_data_alter().
  */
 function simple_school_reports_child_care_support_views_data_alter(array &$data) {
@@ -336,5 +371,57 @@ function simple_school_reports_child_care_support_views_data_alter(array &$data)
     $data['users_field_data']['child_care_day_overview']['field'] = [
       'id' => 'child_care_day_overview',
     ];
+  }
+
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to child_care_check_in_overview.
+    $data['users_field_data']['child_care_check_in_overview'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['child_care_check_in_overview']['title'] = t('Child care check in overview');
+    $data['users_field_data']['child_care_check_in_overview']['help'] = t('Show child care check in overview.');
+    $data['users_field_data']['child_care_check_in_overview']['field'] = [
+      'id' => 'child_care_check_in_overview',
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_child_care_support_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'child_care_check_in') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface $child_care_check_in_service */
+    $child_care_check_in_service = \Drupal::service('simple_school_reports_child_care_support.child_care_check_in');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_check_in_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+
+  if ($view->id() === 'child_care_day_overview_students') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface $child_care_schema_service */
+    $child_care_schema_service = \Drupal::service('simple_school_reports_child_care_support.child_care_schema');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_schema_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+
+  if ($view->id() === 'child_care_available_schema') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface $child_care_schema_service */
+    $child_care_schema_service = \Drupal::service('simple_school_reports_child_care_support.child_care_schema');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_schema_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
   }
 }

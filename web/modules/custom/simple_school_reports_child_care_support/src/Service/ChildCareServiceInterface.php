@@ -3,6 +3,7 @@
 namespace Drupal\simple_school_reports_child_care_support\Service;
 
 use Drupal\simple_school_reports_child_care_support\ChildCarePlacementInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides an interface defining ChildCareService.
@@ -69,4 +70,13 @@ interface ChildCareServiceInterface {
    * @return mixed
    */
   public function setSettings(array $settings);
+
+  /**
+   * @return Array<string|int>
+   */
+  public function getStudentIdsFromRequest(): array;
+
+  public function getChildCareIdsFromRequest(): array;
+
+  public function getDateFromRequest(): ?\DateTimeInterface;
 }

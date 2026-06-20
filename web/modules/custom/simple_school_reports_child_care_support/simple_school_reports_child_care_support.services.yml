@@ -1,8 +1,12 @@
 services:
   simple_school_reports_child_care_support.child_care:
     class: Drupal\simple_school_reports_child_care_support\Service\ChildCareService
-    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state']
+    arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state', '@request_stack']
 
   simple_school_reports_child_care_support.child_care_schema:
     class: Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaService
     arguments: ['@database', '@entity_type.manager', '@cache.default', '@datetime.time', '@state', '@simple_school_reports_child_care_support.child_care', '@simple_school_reports_core.user_meta_data', '@simple_school_reports_entities.school_week_service']
+
+  simple_school_reports_child_care_support.child_care_check_in:
+    class: Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInService
+    arguments: [ '@database', '@entity_type.manager', '@datetime.time', '@simple_school_reports_child_care_support.child_care', '@simple_school_reports_child_care_support.child_care_schema', '@current_user', '@request_stack' ]

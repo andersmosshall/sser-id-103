@@ -55,10 +55,7 @@ class AfterSchoolChildCareMonthOverviewController extends SsrCachedPageControlle
     ];
     $build['overview_filter']['week_form'] = $this->formBuilder()->getForm(AfterSchoolChildCareMonthOverviewFilterForm::class, TRUE);
 
-    $groups = $this->currentRequest->query->get('groups');
-    if (is_string($groups) && $groups !== '') {
-      $groups = explode(',', $groups);
-    }
+    $groups = $this->childCareService->getChildCareIdsFromRequest();
     if (empty($groups)) {
       return $build;
     }
@@ -238,25 +235,7 @@ class AfterSchoolChildCareMonthOverviewController extends SsrCachedPageControlle
   }
 
   public function getCacheableMetadata(): CacheableMetadata {
-    $cache = parent::getCacheableMetadata();
-
-    $cache->addCacheTags([
-      'school_week_list',
-      'node_list:day_absence',
-      'school_week_deviation_list',
-      'ssr_school_week_per_grade',
-      'ssr_child_care_list',
-      'ssr_child_care_placement_list',
-      'ssr_child_care_schema_list',
-      'ssr_cc_deviation_list',
-      'ssr_cc_deviation_student_list',
-    ]);
-    $cache->addCacheContexts(['url.query_args:date', 'url.query_args:groups', 'user']);
-
-    // TEMP!!
-    $cache->setCacheMaxAge(0);
-
-    return $cache;
+    return $this->childCareSchemaService->getCacheableMetadata(new \DateTime());
   }
 
   public function pageId(): string {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\simple_school_reports_child_care_support\Entity;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
@@ -94,6 +95,26 @@ class ChildCareCheckIn extends ContentEntityBase implements ChildCareCheckInInte
       $label .= ' ' . $student->getDisplayName() . ' ' . $from_date->format('Y-m-d');
     }
     $this->set('label', $label);
+  }
+
+  public function getCacheTagsToInvalidate() {
+    $tags = [];
+
+    $from = $this->get('from')->value;
+    if ($from) {
+      $from_date = new \DateTime();
+      $from_date->setTimestamp((int) $from);
+      $tags[] = 'child_care_check_in_list:' . $from_date->format('Y-m-d');
+    }
+
+    $to = $this->get('to')->value;
+    if ($to) {
+      $to_date = new \DateTime();
+      $to_date->setTimestamp((int) $to);
+      $tags[] = 'child_care_check_in_list:' . $to_date->format('Y-m-d');
+    }
+
+    return Cache::mergeTags($tags, parent::getCacheTagsToInvalidate());
   }
 
   /**
