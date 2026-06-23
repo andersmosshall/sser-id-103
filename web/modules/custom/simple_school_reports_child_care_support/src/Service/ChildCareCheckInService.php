@@ -350,9 +350,6 @@ class ChildCareCheckInService implements ChildCareCheckInServiceInterface {
       'url.query_args:include_unscheduled',
     ]);
 
-    // TEMP!!!!
-    $cache->setCacheMaxAge(0);
-
     if ($today->format('Y-m-d') === $date->format('Y-m-d')) {
       $cache->setCacheMaxAge(0);
     }

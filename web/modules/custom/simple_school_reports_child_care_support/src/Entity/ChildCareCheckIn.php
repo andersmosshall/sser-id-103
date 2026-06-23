@@ -104,14 +104,14 @@ class ChildCareCheckIn extends ContentEntityBase implements ChildCareCheckInInte
     if ($from) {
       $from_date = new \DateTime();
       $from_date->setTimestamp((int) $from);
-      $tags[] = 'child_care_check_in_list:' . $from_date->format('Y-m-d');
+      $tags[] = 'ssr_child_care_check_in_list:' . $from_date->format('Y-m-d');
     }
 
     $to = $this->get('to')->value;
     if ($to) {
       $to_date = new \DateTime();
       $to_date->setTimestamp((int) $to);
-      $tags[] = 'child_care_check_in_list:' . $to_date->format('Y-m-d');
+      $tags[] = 'ssr_child_care_check_in_list:' . $to_date->format('Y-m-d');
     }
 
     return Cache::mergeTags($tags, parent::getCacheTagsToInvalidate());

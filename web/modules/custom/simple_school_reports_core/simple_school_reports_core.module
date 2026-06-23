@@ -48,11 +48,6 @@ function simple_school_reports_core_gender_options() : array {
  * Implements hook_form_alter().
  */
 function simple_school_reports_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-  $cache = new CacheableMetadata();
-  $cache->setCacheMaxAge(0);
-  $cache->applyTo($form);
-
   // Skip revision forms.
   if (!empty($form['revision'])) {
     $form['revision']['#access'] = FALSE;

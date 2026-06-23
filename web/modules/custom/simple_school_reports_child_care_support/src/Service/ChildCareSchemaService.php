@@ -909,10 +909,6 @@ class ChildCareSchemaService implements ChildCareSchemaServiceInterface {
       'url.query_args:groups',
     ]);
 
-
-    // TEMP!!!!
-    $cache->setCacheMaxAge(0);
-
     return $cache;
   }
 
