@@ -210,7 +210,7 @@ class AfterSchoolChildCareDayCheckInOverviewFilterForm extends ConfirmFormBase {
     $default_include_unscheduled = !!$this->currentRequest->query->get('include_unscheduled', FALSE);
     $form['fields']['include_unscheduled'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Include unscheduled'),
+      '#title' => $this->t('Include unscheduled students'),
       '#default_value' => $default_include_unscheduled,
       // Only visible if filter is all or not_checked_in.
       '#states' => [

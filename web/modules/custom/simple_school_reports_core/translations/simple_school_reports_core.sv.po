@@ -4279,14 +4279,62 @@ msgstr "Barnomsorgsbehov"
 msgid "Child care offers"
 msgstr "Erbjuden barnomsorg"
 
-msgid ""
-msgstr ""
+msgid "Checked in @time @group"
+msgstr "Incheckad @time @group"
 
-msgid ""
-msgstr ""
+msgid "Checked out @time @group"
+msgstr "Utcheckad @time @group"
 
-msgid ""
-msgstr ""
+msgid "Check out is overdue! (Expected @time)"
+msgstr "Utcheckning är försenad! (Förväntad @time)"
+
+msgid "Check in is overdue! (Expected @time)"
+msgstr "Incheckning är försenad! (Förväntad @time)"
+
+msgid "After school child care - check in"
+msgstr "Fritidshem - incheckning"
+
+msgid "At least one check out is overdue!"
+msgstr "Minst en utcheckning är försenad!"
+
+msgid "At least one check in is overdue!"
+msgstr "Minst en incheckning är försenad!"
+
+msgid "Check out students"
+msgstr "Checka ut elever"
+
+msgid "Check in students"
+msgstr "Checka in elever"
+
+msgid "Check out student"
+msgstr "Checka ut elev"
+
+msgid "Check in student"
+msgstr "Checka in elev"
+
+msgid "all"
+msgstr "alla"
+
+msgid "Check in @name"
+msgstr "Checka in @name"
+
+msgid "Check out @name"
+msgstr "Checka ut @name"
+
+msgid "Check in and out students for after school child care"
+msgstr "Checka in och ut elever på fritidshem"
+
+msgid "After school child care check in"
+msgstr "Fritidshem incheckning"
+
+msgid "Include unscheduled students"
+msgstr "Inkludera ej schemalagda elever"
+
+msgid "Checked in"
+msgstr "Incheckade"
+
+msgid "Checked out"
+msgstr "Utcheckade"
 
 msgid ""
 msgstr ""

@@ -38,7 +38,7 @@ simple_school_reports_child_care_fth_check_in.check_in_students:
   path: '/fth/check-in-multiple'
   defaults:
     _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm'
-    _title: 'Check out student'
+    _title: 'Check in students'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm::access'
   options:
@@ -50,7 +50,7 @@ simple_school_reports_child_care_fth_check_in.check_out_students:
   path: '/fth/check-out-multiple'
   defaults:
     _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm'
-    _title: 'Check out student'
+    _title: 'Check out students'
   requirements:
     _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm::access'
   options:
