@@ -165,7 +165,7 @@ class AfterSchoolChildCareMonthOverviewFilterForm extends ConfirmFormBase {
     }
     sort($default_values);
 
-    if ($groups != $default_values) {
+    if ($groups != $default_values && !empty($default_values)) {
       $query_group_defaults = $default_values;
       $groups = NULL;
     }
@@ -182,7 +182,7 @@ class AfterSchoolChildCareMonthOverviewFilterForm extends ConfirmFormBase {
       $query = [
         'from' => $from_date->getTimestamp(),
         'to' => $to_date->getTimestamp(),
-        'groups' => implode(',', $query_group_defaults),
+        'groups' => implode(',', $query_group_defaults) ?: '-1',
       ];
       if ($this->currentRequest->query->get('destination')) {
         $query['destination'] = $this->currentRequest->query->get('destination');

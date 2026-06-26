@@ -2,6 +2,7 @@
 
 namespace Drupal\simple_school_reports_core\Form;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
@@ -265,6 +266,10 @@ class WeekNumberToUrlRangeForm extends ConfirmFormBase {
     if ($skip_cancel) {
       unset($form['actions']['cancel']);
     }
+
+    $cache = new CacheableMetadata();
+    $cache->addCacheContexts(['user']);
+    $cache->applyTo($form);
 
     return $form;
   }

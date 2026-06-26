@@ -885,6 +885,9 @@ msgstr "Alla valda ämnen"
 msgid "Eligibility"
 msgstr "Gymnasiebehörighet"
 
+msgid "Assessment basis missing"
+msgstr "Underlag saknas"
+
 msgid "Not pass"
 msgstr "Inte godkänd"
 
@@ -4105,6 +4108,9 @@ msgstr "Avvikelse från"
 msgid "Add schema deviations"
 msgstr "Lägg till schemaavvikelser"
 
+msgid "Add schema deviation"
+msgstr "Lägg till schemaavvikelse"
+
 msgid "Overview - month"
 msgstr "Översikt - månad"
 
@@ -4335,6 +4341,108 @@ msgstr "Incheckade"
 
 msgid "Checked out"
 msgstr "Utcheckade"
+
+msgid "Revert the current check out"
+msgstr "Ångra nuvarande utcheckning"
+
+msgid "Update the current check out"
+msgstr "Uppdatera nuvarande utcheckning"
+
+msgid "Keep the current check out @to"
+msgstr "Behåll nuvarande utcheckning @to"
+
+msgid "Already checked out, what do you want to do?"
+msgstr "Redan utcheckad, vad vill du göra?"
+
+msgid "Revert the current check in"
+msgstr "Ångra nuvarande incheckning"
+
+msgid "Update the current check in"
+msgstr "Uppdatera nuvarande incheckning"
+
+msgid "Keep the current check in @from"
+msgstr "Behåll nuvarande incheckning @from"
+
+msgid "Already checked in, what do you want to do?"
+msgstr "Redan incheckad, vad vill du göra?"
+
+msgid "Students checked out."
+msgstr "Elever checkades ut."
+
+msgid "Students checked in."
+msgstr "Elever checkades in."
+
+msgid "Comment on student schema deviations"
+msgstr "Kommentar på elevers schemaavvikelser"
+
+msgid "Reoccurring weeks"
+msgstr "Rullande schema"
+
+msgid "Create @type_singular"
+msgstr "Skapa @type_singular"
+
+msgid "Update @type_singular"
+msgstr "Uppdatera @type_singular"
+
+msgid "Delete this @type_singular from the system."
+msgstr "Ta bort denna @type_singular från systemet."
+
+msgid "Add schema deviation for @name - @date"
+msgstr "Lägg till schemaavvikelse för @name - @date"
+
+msgid "You are not allowed change time but you can add a comment."
+msgstr "Du får inte ändra tid men du kan lägga till en kommentar."
+
+msgid "To time must be after from time."
+msgstr "Till-tid måste vara efter från-tid."
+
+msgid "Time to must be set."
+msgstr "Till-tid måste anges."
+
+msgid "Time from must be set."
+msgstr "Från-tid måste anges."
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
 
 msgid ""
 msgstr ""

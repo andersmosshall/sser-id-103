@@ -115,7 +115,7 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Week'),
     ];
-    $build['week_form_wrapper']['week_form'] = $this->formBuilder()->getForm(WeekNumberToUrlRangeForm::class, TRUE);
+    $build['week_form_wrapper']['form'] = $this->formBuilder()->getForm(WeekNumberToUrlRangeForm::class, TRUE);
 
     $from = $this->currentRequest->query->get('from');
     $to = $this->currentRequest->query->get('to');
@@ -132,6 +132,16 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
 
     $build['divider'] = ['#markup' => '<hr>'];
 
+    return $build;
+  }
+
+  public function rootContent(): array {
+    $user = $this->routeMatch->getParameter('user');
+    if (!$user instanceof UserInterface) {
+      return [];
+    }
+
+    $build = [];
     $available_schema_view = Views::getView('child_care_available_schema');
     $available_schema_view->setDisplay('student_list');
     $available_schema_view->preExecute();
@@ -238,6 +248,7 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
           '#title' => $this->t('Change'),
           '#attributes' => ['class' => ['button', 'button--small', 'button--primary', 'button--change-child-care-day']],
           '#url' => $url,
+          '#access' => $url->access(),
         ];
       }
     }
@@ -287,7 +298,11 @@ class ChildCareStudentController extends SsrCachedPageControllerBase {
       return AccessResult::forbidden()->addCacheableDependency(parent::access());
     }
 
-    if (!$user->hasRole('student') || !$user->access('caregiver_access', $account)) {
+    if (!$user->hasRole('student')) {
+      return AccessResult::forbidden()->addCacheableDependency(parent::access())->addCacheableDependency($user);
+    }
+
+    if (!$user->access('caregiver_access', $account) && $user->id() != $account->id()) {
       return AccessResult::forbidden()->addCacheableDependency(parent::access())->addCacheableDependency($user);
     }
 

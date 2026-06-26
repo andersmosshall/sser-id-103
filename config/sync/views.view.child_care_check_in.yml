@@ -600,7 +600,7 @@ display:
         options:
           perm: 'school staff permissions'
       cache:
-        type: none
+        type: tag
         options: {  }
       empty:
         area_text_custom:

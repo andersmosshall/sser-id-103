@@ -134,7 +134,12 @@ class ChildCareCheckInStudentsForm extends ConfirmFormBase implements TrustedCal
       '#value' => $date->format('Y-m-d H:i:s'),
     ];
 
-    $default_from = (new \DateTime())->format('H:i');
+    $now = new \DateTime();
+
+    $is_today = $date->format('Y-m-d') === ($now)->format('Y-m-d');
+    $default_from = ($now)->format('H:i');
+    $max_from = $is_today ? $now->format('H:i') : '23:59';
+
 
     /** @var \Drupal\user\UserInterface[] $students */
     $students = [];
@@ -235,6 +240,10 @@ class ChildCareCheckInStudentsForm extends ConfirmFormBase implements TrustedCal
           '#type' => 'time',
           '#title' => $this->t('Check in time'),
           '#default_value' => $from,
+          '#attributes' => [
+            'min' => '00:00',
+            'max' => $max_from,
+          ],
           '#required' => TRUE,
         ];
         if ($checked_in) {

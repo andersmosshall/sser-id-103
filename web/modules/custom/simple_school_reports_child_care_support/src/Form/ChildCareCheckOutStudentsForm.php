@@ -134,7 +134,10 @@ class ChildCareCheckOutStudentsForm extends ConfirmFormBase implements TrustedCa
       '#value' => $date->format('Y-m-d H:i:s'),
     ];
 
-    $default_to = (new \DateTime())->format('H:i');
+    $now = new \DateTime();
+    $is_today = $date->format('Y-m-d') === ($now)->format('Y-m-d');
+    $default_to = ($now)->format('H:i');
+    $max_to = $is_today ? $now->format('H:i') : '23:59';
 
     /** @var \Drupal\user\UserInterface[] $students */
     $students = [];
@@ -252,6 +255,8 @@ class ChildCareCheckOutStudentsForm extends ConfirmFormBase implements TrustedCa
           '#type' => 'time',
           '#title' => $this->t('Check out time'),
           '#default_value' => $to,
+          '#min' => '00:00',
+          '#max' => $max_to,
           '#required' => TRUE,
         ];
         if ($checked_in['to']) {

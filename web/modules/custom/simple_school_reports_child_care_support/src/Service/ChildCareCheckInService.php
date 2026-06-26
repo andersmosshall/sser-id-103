@@ -254,7 +254,7 @@ class ChildCareCheckInService implements ChildCareCheckInServiceInterface {
       $this->lookup[$cid] = FALSE;
       return FALSE;
     }
-    $this->lookup[$cid] = $child_care->access('check-in', $account);
+    $this->lookup[$cid] = $child_care->access('check_in_out', $account);
     return $this->lookup[$cid];
   }
 

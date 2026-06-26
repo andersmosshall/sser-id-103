@@ -110,10 +110,10 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
   public function getCacheTagsToInvalidate() {
     $tags = parent::getCacheTagsToInvalidate();
     if (!$this->get('child_care')->isEmpty()) {
-      $tags[] = 'child_care_schema_list:child_care:' . $this->get('child_care')->target_id;
+      $tags[] = 'ssr_child_care_schema_list:child_care:' . $this->get('child_care')->target_id;
     }
     if (!$this->get('student')->isEmpty()) {
-      $tags[] = 'child_care_schema_list:student:' . $this->get('student')->target_id;
+      $tags[] = 'ssr_child_care_schema_list:student:' . $this->get('student')->target_id;
     }
     return $tags;
   }
@@ -175,11 +175,7 @@ class ChildCareSchema extends ContentEntityBase implements ChildCareSchemaInterf
       return TRUE;
     }
 
-    if ($this->isFuture()) {
-      return TRUE;
-    }
-
-    return $this->isActive();
+    return $this->isFuture();
   }
 
   /**

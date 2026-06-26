@@ -20,6 +20,7 @@ dependencies:
     - file
     - filter
     - node
+    - simple_school_reports_child_care_support
     - simple_school_reports_core
     - simple_school_reports_entities
     - simple_school_reports_examinations_support
@@ -52,11 +53,13 @@ permissions:
   - 'delete own files'
   - 'delete school week'
   - 'delete school_week_deviation'
+  - 'delete ssr_child_care_schema'
   - 'delete ssr_schema_entry'
   - 'edit any written_reviews content'
   - 'edit any written_reviews_subject_state content'
   - 'edit school week'
   - 'edit school_week_deviation'
+  - 'edit ssr_child_care_schema'
   - 'edit ssr_schema_entry'
   - 'mail caregivers'
   - 'register absence'
@@ -66,6 +69,10 @@ permissions:
   - 'use text format wordsupported_format'
   - 'view school week'
   - 'view ssr_assessment_group'
+  - 'view ssr_child_care'
+  - 'view ssr_child_care_check_in'
+  - 'view ssr_child_care_placement'
+  - 'view ssr_child_care_schema'
   - 'view ssr_grade_reg_round'
   - 'view ssr_schema_entry'
   - 'view ssr_student_leave_application'

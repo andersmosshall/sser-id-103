@@ -98,7 +98,7 @@ function simple_school_reports_child_care_fth_check_in_entity_operation_alter(ar
         $operations['check_out_all'] = [
           'title' => t('Check out @name', ['@name' => t('all')]),
           'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_out_student', ['user' => $entity->id(), 'date' => $date_string], ['query' => [
-            'groups' => implode(',', $all_check_ins),
+            'groups' => implode(',', $all_check_ins) ?: '-1',
             'destination' => $destination,
           ]]),
           'weight' => $weight,
@@ -111,7 +111,7 @@ function simple_school_reports_child_care_fth_check_in_entity_operation_alter(ar
         $operations['check_in_all'] = [
           'title' => t('Check in @name', ['@name' => t('all')]),
           'url' => Url::fromRoute('simple_school_reports_child_care_fth_check_in.check_in_student', ['user' => $entity->id(), 'date' => $date_string], ['query' => [
-            'groups' => implode(',', $all_check_ins),
+            'groups' => implode(',', $all_check_ins) ?: '-1',
             'destination' => $destination,
           ]]),
           'weight' => $weight,

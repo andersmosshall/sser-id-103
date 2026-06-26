@@ -27,6 +27,10 @@ final class ChildCareSchemaDeviationAccessControlHandler extends EntityAccessCon
       return AccessResult::allowed()->cachePerPermissions();
     }
 
+    if ($account->hasPermission('administer simple school reports settings')) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
     /** @var \Drupal\Core\Entity\EntityInterface | null $parent */
     $parent = $entity->get('child_care')->entity;
     $parent_view = $parent ? $parent->access('view', $account, TRUE) : AccessResult::forbidden();

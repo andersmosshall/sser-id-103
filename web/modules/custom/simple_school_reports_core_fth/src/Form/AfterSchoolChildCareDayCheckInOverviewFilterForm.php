@@ -151,7 +151,7 @@ class AfterSchoolChildCareDayCheckInOverviewFilterForm extends ConfirmFormBase {
     }
     sort($default_values);
 
-    if ($groups != $default_values) {
+    if ($groups != $default_values && !empty($default_values)) {
       $query_group_defaults = $default_values;
       $groups = NULL;
     }
@@ -161,7 +161,7 @@ class AfterSchoolChildCareDayCheckInOverviewFilterForm extends ConfirmFormBase {
 
       $query = [
         'date' => $date?->format('Y-m-d') ?? $now,
-        'groups' => implode(',', $query_group_defaults),
+        'groups' => implode(',', $query_group_defaults) ?: '-1',
       ];
       if ($this->currentRequest->query->get('destination')) {
         $query['destination'] = $this->currentRequest->query->get('destination');

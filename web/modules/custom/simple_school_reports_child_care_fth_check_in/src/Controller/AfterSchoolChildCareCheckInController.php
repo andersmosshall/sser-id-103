@@ -69,7 +69,7 @@ class AfterSchoolChildCareCheckInController extends SsrCachedPageControllerBase 
       '#type' => 'fieldset',
       '#title' => $this->t('Filter'),
     ];
-    $build['overview_filter']['week_form'] = $this->formBuilder()->getForm(AfterSchoolChildCareDayCheckInOverviewFilterForm::class, TRUE);
+    $build['overview_filter']['form'] = $this->formBuilder()->getForm(AfterSchoolChildCareDayCheckInOverviewFilterForm::class, TRUE);
 
     $date = $this->childCareService->getDateFromRequest();
 
@@ -152,7 +152,7 @@ class AfterSchoolChildCareCheckInController extends SsrCachedPageControllerBase 
         '#attributes' => [
           'class' => ['child-care-global-check-in-message'],
           'style' => 'display: none;',
-          'data-display-threshold' => $check_in_warning_threshold + 600,
+          'data-display-threshold' => $check_in_warning_threshold + 600 + 1,
         ],
       ];
       $build['message_check_in']['message'] = [
@@ -169,7 +169,7 @@ class AfterSchoolChildCareCheckInController extends SsrCachedPageControllerBase 
         '#attributes' => [
           'class' => ['child-care-global-check-in-message'],
           'style' => 'display: none;',
-          'data-display-threshold' => $check_out_warning_threshold + 600,
+          'data-display-threshold' => $check_out_warning_threshold + 600 + 1,
         ],
       ];
       $build['message_check_out']['message'] = [
@@ -180,6 +180,11 @@ class AfterSchoolChildCareCheckInController extends SsrCachedPageControllerBase 
       ];
     }
 
+    return $build;
+  }
+
+  public function rootContent(): array {
+    $build = [];
     $students_view = Views::getView('child_care_check_in');
     $students_view->setDisplay('list');
     $students_view->preExecute();

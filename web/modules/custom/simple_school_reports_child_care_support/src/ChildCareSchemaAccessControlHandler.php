@@ -30,18 +30,39 @@ final class ChildCareSchemaAccessControlHandler extends EntityAccessControlHandl
       return AccessResult::allowed()->cachePerPermissions();
     }
 
+    if ($account->hasPermission('administer simple school reports settings')) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
     $cache_tags = [];
     $student_id = $entity->get('student')->target_id;
     if ( $student_id) {
-      $cache_tags[] = 'child_care_schema_list:student:' . $student_id;
+      $cache_tags[] = 'ssr_child_care_schema_list:student:' . $student_id;
     }
     $child_care_id = $entity->get('child_care')->target_id;
     if ( $child_care_id) {
-      $cache_tags[] = 'child_care_schema_list:child_care:' . $child_care_id;
+      $cache_tags[] = 'ssr_child_care_schema_list:child_care:' . $child_care_id;
     }
 
     /** @var \Drupal\Core\Entity\ContentEntityInterface $parent */
     $parent = NULL;
+
+    if (!$entity->get('student')->isEmpty()) {
+      /** @var \Drupal\user\UserInterface|null $student */
+      $student = $entity->get('student')->entity;
+      if ($student) {
+        $parent = $student;
+      }
+    }
+
+    if (!$entity->get('child_care')->isEmpty()) {
+      /** @var \Drupal\simple_school_reports_child_care_support\ChildCareInterface|null $child_care */
+      $child_care = $entity->get('child_care')->entity;
+      if ($child_care) {
+        $parent = $child_care;
+      }
+    }
+
 
     if ($operation === 'view') {
       $access = AccessResult::allowedIfHasPermission($account, 'view ssr_child_care_schema');

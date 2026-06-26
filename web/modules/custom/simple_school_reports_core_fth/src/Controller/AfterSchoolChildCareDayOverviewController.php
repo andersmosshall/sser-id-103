@@ -64,7 +64,7 @@ class AfterSchoolChildCareDayOverviewController extends SsrCachedPageControllerB
       '#type' => 'fieldset',
       '#title' => $this->t('Filter'),
     ];
-    $build['overview_filter']['week_form'] = $this->formBuilder()->getForm(AfterSchoolChildCareDayOverviewFilterForm::class, TRUE);
+    $build['overview_filter']['form'] = $this->formBuilder()->getForm(AfterSchoolChildCareDayOverviewFilterForm::class, TRUE);
 
     $date = $this->childCareService->getDateFromRequest();
 
@@ -114,13 +114,17 @@ class AfterSchoolChildCareDayOverviewController extends SsrCachedPageControllerB
       ],
     ];
 
+    return $build;
+  }
+
+  public function rootContent(): array {
+    $build = [];
     $students_view = Views::getView('child_care_day_overview_students');
     $students_view->setDisplay('list');
     $students_view->preExecute();
     $students_view->execute();
     $students_view_build = $students_view->buildRenderable('list');
     $build['students_view'] = $students_view_build;
-
     return $build;
   }
 

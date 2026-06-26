@@ -20,7 +20,7 @@
 
   Drupal.behaviors.ChildCareCheckInOverview = {
     attach: function (context, settings) {
-      $(once('child-care-day-overview-container--messages-processed', '.child-care-day-overview-container', context)).each(function () {
+      $(once('child-care-day-overview-container--messages-processed', 'body', context)).each(function () {
         const wrapper = $(this);
         displayMessages(wrapper);
         // Rerun every minute.

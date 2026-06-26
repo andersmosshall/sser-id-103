@@ -35,6 +35,9 @@ final class ChildCareSchemaWeekAccessControlHandler extends EntityAccessControlH
       return AccessResult::forbidden()->addCacheableDependency($entity);
     }
 
+    if ($operation === 'delete') {
+      $operation = 'update';
+    }
     return $child_care_schema->access($operation, $account, TRUE)->addCacheableDependency($entity);
   }
 

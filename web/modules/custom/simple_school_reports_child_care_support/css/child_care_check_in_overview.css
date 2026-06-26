@@ -1,20 +1,20 @@
-.child-care-day-overview-container .child-care-check-in-message .messages-list,
+.view-child-care-check-in .child-care-check-in-message .messages-list,
 .child-care-day-overview-container .child-care-global-check-in-message .messages-list {
   margin: 0;
 }
 
-.child-care-day-overview-container .child-care-check-in-message .messages-list__item,
+.view-child-care-check-in .child-care-check-in-message .messages-list__item,
 .child-care-day-overview-container .child-care-global-check-in-message .messages-list__item {
   margin: 0;
   padding: 8px;
 }
 
-.child-care-day-overview-container .child-care-check-in-message .messages__header,
+.view-child-care-check-in .child-care-check-in-message .messages__header,
 .child-care-day-overview-container .child-care-global-check-in-message .messages__header {
   display: none;
 }
 
-.child-care-day-overview-container .child-care-check-in-message .messages__content,
+.view-child-care-check-in .child-care-check-in-message .messages__content,
 .child-care-day-overview-container .child-care-global-check-in-message .messages__content {
   margin: 0;
 }

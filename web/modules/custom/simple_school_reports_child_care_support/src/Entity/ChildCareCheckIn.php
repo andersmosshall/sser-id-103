@@ -97,7 +97,7 @@ class ChildCareCheckIn extends ContentEntityBase implements ChildCareCheckInInte
     $this->set('label', $label);
   }
 
-  public function getCacheTagsToInvalidate() {
+  protected function getListCacheTagsToInvalidate() {
     $tags = [];
 
     $from = $this->get('from')->value;
@@ -114,7 +114,7 @@ class ChildCareCheckIn extends ContentEntityBase implements ChildCareCheckInInte
       $tags[] = 'ssr_child_care_check_in_list:' . $to_date->format('Y-m-d');
     }
 
-    return Cache::mergeTags($tags, parent::getCacheTagsToInvalidate());
+    return Cache::mergeTags($tags, parent::getListCacheTagsToInvalidate());
   }
 
   /**

@@ -53,7 +53,7 @@ class AfterSchoolChildCareMonthOverviewController extends SsrCachedPageControlle
       '#type' => 'fieldset',
       '#title' => $this->t('Filter'),
     ];
-    $build['overview_filter']['week_form'] = $this->formBuilder()->getForm(AfterSchoolChildCareMonthOverviewFilterForm::class, TRUE);
+    $build['overview_filter']['form'] = $this->formBuilder()->getForm(AfterSchoolChildCareMonthOverviewFilterForm::class, TRUE);
 
     $groups = $this->childCareService->getChildCareIdsFromRequest();
     if (empty($groups)) {
@@ -204,7 +204,7 @@ class AfterSchoolChildCareMonthOverviewController extends SsrCachedPageControlle
           'class' => ['button', 'button--extrasmall', 'button--primary', 'button--overview-day'],
         ],
         '#title' => $this->t('Details'),
-        '#url' => Url::fromRoute('simple_school_reports_core_fth.overview_day', ['date' => $date->format('Y-m-d'), 'groups' => implode(',', $groups)], ['query' => $this->getDestinationArray()]),
+        '#url' => Url::fromRoute('simple_school_reports_core_fth.overview_day', ['date' => $date->format('Y-m-d'), 'groups' => implode(',', $groups)  ?: '-1'], ['query' => $this->getDestinationArray()]),
       ];
 
 
