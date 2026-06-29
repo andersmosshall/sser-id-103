@@ -1,0 +1,82 @@
+uuid: de936c6a-ef5d-4610-be29-897a0d9ee99a
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+id: ssr_child_care_schema.ssr_child_care_schema.default
+targetEntityType: ssr_child_care_schema
+bundle: ssr_child_care_schema
+mode: default
+content:
+  child_care:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: custom
+      custom_date_format: Y-m-d
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+        description: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  weeks:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  created: true
+  label: true
+  status: true
+  type: true
+  uid: true
+  week_tables: true

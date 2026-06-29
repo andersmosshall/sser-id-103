@@ -1,0 +1,69 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_core_fth_ssr_local_actions_alter(array &$local_actions, CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'entity.ssr_child_care.canonical') {
+    $child_care = $context['current_request']->get('ssr_child_care');
+    if ($child_care instanceof ChildCareInterface && $child_care->bundle() === 'fth') {
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = $child_care->access('update', NULL, TRUE);
+      $cache->addCacheableDependency($access);
+      $local_actions['ssr_add_schema'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Add availability (schema)'),
+          'url' => Url::fromRoute('simple_school_reports_core_fth.add_child_care_schema', ['ssr_child_care' => $child_care->id()], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+
+      $local_actions['ssr_add_deviations'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Add deviations'),
+          'url' => Url::fromRoute('simple_school_reports_core_fth.add_deviations', ['ssr_child_care' => $child_care->id()], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 20,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_core_fth_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'child_care_day_overview_students') {
+    $request = \Drupal::request();
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $uids = $child_care_service->getStudentIdsFromRequest($request);
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ use Drupal\simple_school_reports_attendance_analyse\Service\AttendanceAnalyseSer
 use Drupal\simple_school_reports_core\SchoolGradeHelper;
 use Drupal\simple_school_reports_core\Service\TermServiceInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
+use Drupal\simple_school_reports_core\Utilities\TimeToStringUtils;
 use Drupal\simple_school_reports_entities\SchoolWeekInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -173,46 +174,46 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
     $rows['attendance']['data'] = [
       'type' => $this->t('Attendance') . ($not_current_grade ? '*' : ''),
       'proportion' => $data['total'] ? round(($data['attended'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['attended']),
+      'time' => TimeToStringUtils::formatTimeLength($data['attended']),
     ];
 
     $valid_absence_time = $data['valid_absence'] + $data['leave_absence'] + $data['reported_absence'];
     $rows['valid_absence']['data'] = [
       'type' => $this->t('Valid absence'),
       'proportion' => $data['total'] ? round(($valid_absence_time / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($valid_absence_time),
+      'time' => TimeToStringUtils::formatTimeLength($valid_absence_time),
     ];
     $rows['reported']['data'] = [
       'type' => $this->t('Reported absence'),
       'proportion' => $data['total'] ? round(($data['reported_absence'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['reported_absence']),
+      'time' => TimeToStringUtils::formatTimeLength($data['reported_absence']),
     ];
     $rows['leave']['data'] = [
       'type' => $this->t('Leave absence'),
       'proportion' => $data['total'] ? round(($data['leave_absence'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['leave_absence']),
+      'time' => TimeToStringUtils::formatTimeLength($data['leave_absence']),
     ];
     $rows['valid_absence_course']['data'] = [
       'type' => $this->t('Valid absence from course'),
       'proportion' => $data['total'] ? round(($data['valid_absence'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['valid_absence']),
+      'time' => TimeToStringUtils::formatTimeLength($data['valid_absence']),
     ];
 
     $rows['invalid_absence']['data'] = [
       'type' => $this->t('Invalid absence'),
       'proportion' => $data['total'] ? round(($data['invalid_absence'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['invalid_absence']),
+      'time' => TimeToStringUtils::formatTimeLength($data['invalid_absence']),
     ];
     $rows['invalid_absence_course']['data'] = [
       'type' => $this->t('Invalid absence from course'),
       'proportion' => $data['total'] ? round(($data['invalid_absence'] / $data['total']) * 100, 1) . ' %' : '-',
-      'time' => $this->getTimeString($data['invalid_absence']),
+      'time' => TimeToStringUtils::formatTimeLength($data['invalid_absence']),
     ];
 
     $rows['total']['data'] = [
       'type' => $this->t('Total school time'),
       'proportion' => '-',
-      'time' => $this->getTimeString($data['total']),
+      'time' => TimeToStringUtils::formatTimeLength($data['total']),
     ];
     $rows['total']['class'] = ['stats-total'];
 
@@ -277,28 +278,6 @@ class AttendanceStatisticsBlock extends BlockBase implements ContainerFactoryPlu
 
     $cache->applyTo($build);
     return $build;
-  }
-
-  protected function getTimeString(int $length): string {
-
-    if ($length === 0) {
-      return '-';
-    }
-
-    $hours = floor($length / 3600);
-    $min = round(($length % 3600) / 60);
-
-    if ($hours < 10) {
-      $hours = '0' . $hours;
-    }
-    else {
-      $hours = number_format($hours, 0, ',', ' ');
-    }
-    if ($min < 10) {
-      $min = '0' . $min;
-    }
-
-    return $hours . ':' . $min;
   }
 
   public function getCacheTags() {

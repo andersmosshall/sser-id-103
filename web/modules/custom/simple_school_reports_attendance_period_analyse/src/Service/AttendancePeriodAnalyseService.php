@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\simple_school_reports_attendance_analyse\Service\AttendanceAnalyseServiceInterface;
 use Drupal\simple_school_reports_core\Service\UserMetaDataServiceInterface;
+use Drupal\simple_school_reports_core\Utilities\TimeToStringUtils;
 
 /**
  *
@@ -161,7 +162,7 @@ class AttendancePeriodAnalyseService implements AttendancePeriodAnalyseServiceIn
 
       $is_adapted = $student_stats['adapted_studies'] ?? FALSE;
 
-      $formatted_total = $this->getTimeString($student_stats['total']);
+      $formatted_total = TimeToStringUtils::formatTimeLength($student_stats['total']);
 
       if ($is_adapted) {
         /** @var \Drupal\user\UserInterface $user */
@@ -213,28 +214,6 @@ class AttendancePeriodAnalyseService implements AttendancePeriodAnalyseServiceIn
     $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);
     $this->lookup[$cid] = $data;
     return $data;
-  }
-
-  protected function getTimeString(int $length): string {
-
-    if ($length === 0) {
-      return '-';
-    }
-
-    $hours = floor($length / 3600);
-    $min = round(($length % 3600) / 60);
-
-    if ($hours < 10) {
-      $hours = '0' . $hours;
-    }
-    else {
-      $hours = number_format($hours, 0, ',', ' ');
-    }
-    if ($min < 10) {
-      $min = '0' . $min;
-    }
-
-    return $hours . ':' . $min;
   }
 
 }

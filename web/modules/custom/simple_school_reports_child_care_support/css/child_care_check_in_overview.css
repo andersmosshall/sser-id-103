@@ -1,0 +1,20 @@
+.view-child-care-check-in .child-care-check-in-message .messages-list,
+.child-care-day-overview-container .child-care-global-check-in-message .messages-list {
+  margin: 0;
+}
+
+.view-child-care-check-in .child-care-check-in-message .messages-list__item,
+.child-care-day-overview-container .child-care-global-check-in-message .messages-list__item {
+  margin: 0;
+  padding: 8px;
+}
+
+.view-child-care-check-in .child-care-check-in-message .messages__header,
+.child-care-day-overview-container .child-care-global-check-in-message .messages__header {
+  display: none;
+}
+
+.view-child-care-check-in .child-care-check-in-message .messages__content,
+.child-care-day-overview-container .child-care-global-check-in-message .messages__content {
+  margin: 0;
+}

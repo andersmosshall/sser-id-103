@@ -1,0 +1,25 @@
+uuid: a5d10bec-4b91-452a-b885-0e5cbb30e6ef
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_encrypt
+    - simple_school_reports_child_care_support
+third_party_settings:
+  field_encrypt:
+    encrypt: true
+    properties:
+      value: value
+id: ssr_cc_deviation_student.field_comment
+field_name: field_comment
+entity_type: ssr_cc_deviation_student
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,253 @@
+uuid: 3e1cef74-54b4-4b76-a2ca-180428437a0b
+langcode: sv
+status: true
+dependencies:
+  module:
+    - field_group
+    - simple_school_reports_child_care_support
+    - time_field
+third_party_settings:
+  field_group:
+    group_mandagar:
+      children:
+        - from_1
+        - to_1
+      label: Måndagar
+      parent_name: ''
+      region: content
+      weight: 14
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_tisdagar:
+      children:
+        - from_2
+        - to_2
+      label: Tisdagar
+      parent_name: ''
+      region: content
+      weight: 15
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_onsdagar:
+      children:
+        - from_3
+        - to_3
+      label: Onsdagar
+      parent_name: ''
+      region: content
+      weight: 16
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_torsdagar:
+      children:
+        - from_5
+        - to_5
+      label: Torsdagar
+      parent_name: ''
+      region: content
+      weight: 18
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_fredagar:
+      children:
+        - from_4
+        - to_4
+      label: Fredagar
+      parent_name: ''
+      region: content
+      weight: 17
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_lordagar:
+      children:
+        - from_6
+        - to_6
+      label: Lördagar
+      parent_name: ''
+      region: content
+      weight: 19
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+    group_sondagar:
+      children:
+        - from_7
+        - to_7
+      label: Söndagar
+      parent_name: ''
+      region: content
+      weight: 20
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: false
+id: ssr_child_care_schema_week.ssr_child_care_schema_week.default
+targetEntityType: ssr_child_care_schema_week
+bundle: ssr_child_care_schema_week
+mode: default
+content:
+  days_overview:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  from_1:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  from_2:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  from_3:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  from_4:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  from_5:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  from_6:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  from_7:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  to_1:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  to_2:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  to_3:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  to_4:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  to_5:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  to_6:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  to_7:
+    type: time_formatter
+    label: above
+    settings:
+      time_format: 'H:i'
+    third_party_settings: {  }
+    weight: 13
+    region: content
+hidden:
+  created: true

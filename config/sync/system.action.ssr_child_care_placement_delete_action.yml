@@ -1,0 +1,13 @@
+uuid: cb546786-1180-4d87-8bfa-d3a51ce0bf4f
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: LdI45h-CcbOyf_F3vmtvc0evjLX4UZyF_dtvjHT4oBw
+id: ssr_child_care_placement_delete_action
+label: 'Delete child care placements'
+type: ssr_child_care_placement
+plugin: 'entity:delete_action:ssr_child_care_placement'
+configuration: {  }

@@ -1,0 +1,6 @@
+simple_school_reports_child_care_fth_check_in.fth_check_in:
+  title: 'After school child care check in'
+  description: 'Check in and out students for after school child care'
+  parent: simple_school_reports_core_fth.fth
+  route_name: simple_school_reports_child_care_fth_check_in.fth_check_in
+  weight: 5

@@ -1,0 +1,24 @@
+uuid: fc2ad390-7278-4521-820d-252482e1c164
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+id: after_school_child_care
+label: 'After school child care'
+type: 'canonical_entities:ssr_child_care'
+pattern: '/fth/groups/[ssr_child_care:id]'
+selection_criteria:
+  0beafe05-4fd9-41ef-bbf0-df0c034118ed:
+    id: 'entity_bundle:ssr_child_care'
+    negate: false
+    uuid: 0beafe05-4fd9-41ef-bbf0-df0c034118ed
+    context_mapping:
+      ssr_child_care: ssr_child_care
+    bundles:
+      fth: fth
+selection_logic: and
+weight: -10
+relationships:
+  'ssr_child_care:langcode:language':
+    label: Language

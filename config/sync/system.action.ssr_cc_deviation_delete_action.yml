@@ -1,0 +1,13 @@
+uuid: f927b653-fca7-497e-b464-35fa2dcc611b
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: 3QpvhUvEsDGKQ9vcEOLqA7iCsw3tim9cwTFucWY_PeA
+id: ssr_cc_deviation_delete_action
+label: 'Delete child care schema deviations'
+type: ssr_cc_deviation
+plugin: 'entity:delete_action:ssr_cc_deviation'
+configuration: {  }

@@ -1,0 +1,59 @@
+simple_school_reports_core_fth.fth:
+  path: '/fth'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'After school care'
+  requirements:
+    _permission: 'school staff permissions'
+
+simple_school_reports_core_fth.overview_month:
+  path: '/fth/overview/month'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareMonthOverviewController::build'
+    _title: 'Overview - month'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareMonthOverviewController::accessMonthOverview'
+
+simple_school_reports_core_fth.overview_day:
+  path: '/fth/overview/day'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareDayOverviewController::build'
+    _title: 'Overview - day'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_core_fth\Controller\AfterSchoolChildCareDayOverviewController::accessDayOverview'
+
+simple_school_reports_core_fth.add_child_care_schema:
+  path: '/fth/groups/{ssr_child_care}/add-schema'
+  defaults:
+    _entity_form: ssr_child_care_schema.add
+    _title: 'Add availability (schema)'
+  requirements:
+    _entity_access: ssr_child_care.update
+  options:
+    parameters:
+      ssr_child_care:
+        type: 'entity:ssr_child_care'
+
+simple_school_reports_core_fth.add_deviations:
+  path: '/fth/groups/{ssr_child_care}/add-deviations'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_fth\Form\AddSchemaDeviationsForm'
+    _title: 'Add deviations'
+  requirements:
+    _entity_access: ssr_child_care.update
+  options:
+    parameters:
+      ssr_child_care:
+        type: 'entity:ssr_child_care'
+
+simple_school_reports_core_fth.overview.add_deviations:
+  path: '/fth/overview/add-deviations'
+  defaults:
+    _form: '\Drupal\simple_school_reports_core_fth\Form\AddSchemaDeviationsForm'
+    _title: 'Add deviations'
+  requirements:
+    _permission: 'administer simple school reports settings'
+  options:
+    parameters:
+      ssr_child_care:
+        type: 'entity:ssr_child_care'

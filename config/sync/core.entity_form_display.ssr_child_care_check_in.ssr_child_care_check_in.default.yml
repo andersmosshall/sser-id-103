@@ -1,0 +1,51 @@
+uuid: 93077549-8f01-438a-abfc-3c481c0c838a
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+    - simple_school_reports_core
+id: ssr_child_care_check_in.ssr_child_care_check_in.default
+targetEntityType: ssr_child_care_check_in
+bundle: ssr_child_care_check_in
+mode: default
+content:
+  child_care:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  from:
+    type: ssr_date_time_timestamp
+    weight: 0
+    region: content
+    settings:
+      seconds_value: 0
+    third_party_settings: {  }
+  student:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  to:
+    type: ssr_date_time_timestamp
+    weight: 1
+    region: content
+    settings:
+      seconds_value: '59'
+    third_party_settings: {  }
+hidden:
+  created: true
+  label: true
+  status: true
+  uid: true

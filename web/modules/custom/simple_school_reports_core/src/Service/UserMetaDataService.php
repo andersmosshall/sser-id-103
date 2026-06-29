@@ -511,7 +511,7 @@ class UserMetaDataService implements UserMetaDataServiceInterface {
 
   public function getUserGrade(string $uid, ?\DateTime $date = NULL): ?int {
     $grade_diff = $this->getUserRelativeGrade($date);
-    $cid = 'ssr_user_grade_' . $uid . ':' . $grade_diff;
+    $cid = 'ssr_user_grade:' . $grade_diff;
 
     $grades_map = [];
     if (isset($this->calculatedData[$cid])) {

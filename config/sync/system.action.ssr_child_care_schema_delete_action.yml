@@ -1,0 +1,13 @@
+uuid: dd41f9fe-fdf2-4e0a-9078-c7dc6e97705d
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: vbBBH8OuRjtC-EiRkF0FW1yDn74LbTe23e7WpitmQJc
+id: ssr_child_care_schema_delete_action
+label: 'Delete child care schemas'
+type: ssr_child_care_schema
+plugin: 'entity:delete_action:ssr_child_care_schema'
+configuration: {  }

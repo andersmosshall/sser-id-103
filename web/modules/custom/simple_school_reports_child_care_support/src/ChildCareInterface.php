@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\simple_school_reports_child_care_support;
+
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\user\EntityOwnerInterface;
+
+/**
+ * Provides an interface defining a child care entity type.
+ */
+interface ChildCareInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
+  const AFTER_SCHOOL_CARE_TYPE = 'fth';
+  const AFTER_SCHOOL_CARE_TYPE_OPEN = 'oppfth';
+
+  public function getShortLabel(): string;
+
+}

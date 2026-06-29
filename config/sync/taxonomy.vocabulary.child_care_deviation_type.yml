@@ -1,0 +1,9 @@
+uuid: 7df1db84-b5e5-46d2-8668-331cfc846ae0
+langcode: en
+status: true
+dependencies: {  }
+name: 'Child care deviation type'
+vid: child_care_deviation_type
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,19 @@
+simple_school_reports_core_fth.fth:
+  title: 'After school care'
+  description: 'After school care related actions.'
+  parent: simple_school_reports_core.actions
+  route_name: simple_school_reports_core_fth.fth
+
+simple_school_reports_core_fth.overview:
+  title: 'After school care overview'
+  description: 'Show overview of after school care per month or day.'
+  parent: simple_school_reports_core_fth.fth
+  route_name: simple_school_reports_core_fth.overview_month
+  weight: 10
+
+simple_school_reports_core_fth.group_list:
+  title: 'After school care groups'
+  description: 'List and administer after school care groups.'
+  parent: simple_school_reports_core_fth.fth
+  route_name: view.fth_groups.list
+  weight: 20

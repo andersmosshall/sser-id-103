@@ -885,6 +885,9 @@ msgstr "Alla valda ämnen"
 msgid "Eligibility"
 msgstr "Gymnasiebehörighet"
 
+msgid "Assessment basis missing"
+msgstr "Underlag saknas"
+
 msgid "Not pass"
 msgstr "Inte godkänd"
 
@@ -1875,6 +1878,9 @@ msgstr "Skoldagens sluttid"
 
 msgid "Deviation type"
 msgstr "Avvikelsetyp"
+
+msgid "School grades"
+msgstr "Årskurser"
 
 msgid "The school grades that this school week deviation applies to."
 msgstr "Årskurser som denna avvikelse för skolvecka gäller för."
@@ -3673,7 +3679,7 @@ msgstr "Överordnad organisation"
 msgid "Short label"
 msgstr "Kort namn"
 
-msgid "Short label, recomended 3 characters."
+msgid "Short label, recommended 3 characters."
 msgstr "Kort namn, rekommenderas 3 tecken."
 
 msgid "Export documents"
@@ -4077,6 +4083,372 @@ msgstr "E-postadresser"
 
 msgid "Add extra recipients if they are users in Simple School Reports."
 msgstr "Lägg till extra mottagare om de är användare i Simple School Reports."
+
+msgid "Select students to add schema deviations for."
+msgstr "Välj elever att lägga till schemaavvikelser för."
+
+msgid "Type to search for child care group"
+msgstr "Skriv för att söka efter barnomsorgsgrupp"
+
+msgid "Select what child care groups to add schema deviations for."
+msgstr "Välj vilka barnomsorgsgrupper som schemaavvikelser ska läggas till för."
+
+msgid "Child care groups"
+msgstr "Barnomsorgsgrupper"
+
+msgid "Day off"
+msgstr "Ledig dag"
+
+msgid "Deviation to"
+msgstr "Avvikelse till"
+
+msgid "Deviation from"
+msgstr "Avvikelse från"
+
+msgid "Add schema deviations"
+msgstr "Lägg till schemaavvikelser"
+
+msgid "Add schema deviation"
+msgstr "Lägg till schemaavvikelse"
+
+msgid "Overview - month"
+msgstr "Översikt - månad"
+
+msgid "A too long date range was selected. Please choose a shorter span."
+msgstr "Ett för långt datumintervall valdes. Vänligen välj ett kortare tidsspann."
+
+msgid "Overview - day"
+msgstr "Översikt - dag"
+
+msgid "Add deviations"
+msgstr "Lägg till avvikelser"
+
+msgid "Add availability (schema)"
+msgstr "Lägg till tillgänglighet (schema)"
+
+msgid "All groups"
+msgstr "Alla grupper"
+
+msgid "After school care"
+msgstr "Fritidshem"
+
+msgid "Day overview"
+msgstr "Dagsöversikt"
+
+msgid "Month overview"
+msgstr "Månadsöversikt"
+
+msgid "List and administer after school care groups."
+msgstr "Lista och administrera fritidshemsgrupper."
+
+msgid "After school care groups"
+msgstr "Fritidshemsgrupper"
+
+msgid "Show overview of after school care per month or day."
+msgstr "Visa översikt över fritidshem per månad eller dag."
+
+msgid "After school care overview"
+msgstr "Översikt för fritidshem"
+
+msgid "After school care related actions."
+msgstr "Åtgärder relaterade till fritidshem."
+
+msgid "Add after school child care group"
+msgstr "Lägg till fritidshemsgrupp"
+
+msgid "Child care schema deviation student"
+msgstr "Schemaavvikelse för barnomsorg, elev"
+
+msgid "Child care schema deviation"
+msgstr "Schemaavvikelse för barnomsorg"
+
+msgid "Child care schema week"
+msgstr "Schemavecka för barnomsorg"
+
+msgid "Child care schema"
+msgstr "Barnomsorgsschema"
+
+msgid "Child care placement"
+msgstr "Barnomsorgsplacering"
+
+msgid "Add child care schema"
+msgstr "Lägg till barnomsorgsschema"
+
+msgid "Add deviation"
+msgstr "Lägg till avvikelse"
+
+msgid "Child care settings"
+msgstr "Inställningar för barnomsorg"
+
+msgid "Child care"
+msgstr "Barnomsorg"
+
+msgid "Administer child care settings"
+msgstr "Administrera inställningar för barnomsorg"
+
+msgid "Add child care schema deviation student"
+msgstr "Lägg till schemaavvikelse för barnomsorg, elev"
+
+msgid "Add child care schema deviation"
+msgstr "Lägg till schemaavvikelse för barnomsorg"
+
+msgid "Add child care schema week"
+msgstr "Lägg till schemavecka för barnomsorg"
+
+msgid "Add child care placement"
+msgstr "Lägg till barnomsorgsplacering"
+
+msgid "Add child care"
+msgstr "Lägg till barnomsorg"
+
+msgid "The child care schema week %label has been updated."
+msgstr "Schemaveckan för barnomsorg %label har uppdaterats."
+
+msgid "New child care schema week %label has been created."
+msgstr "Ny schemavecka för barnomsorg %label har skapats."
+
+msgid "The child care placement %label has been updated."
+msgstr "Barnomsorgsplaceringen %label har uppdaterats."
+
+msgid "New child care placement %label has been created."
+msgstr "Ny barnomsorgsplacering %label har skapats."
+
+msgid "The child care %label has been updated."
+msgstr "Barnomsorgen %label har uppdaterats."
+
+msgid "New child care %label has been created."
+msgstr "Ny barnomsorg %label har skapats."
+
+msgid "Child care group"
+msgstr "Barnomsorgsgrupp"
+
+msgid "Teachers/educators"
+msgstr "Lärare/pedagoger"
+
+msgid "Short label, recommended 3 characters."
+msgstr "Kort namn, rekommenderat 3 tecken."
+
+msgid "Short name"
+msgstr "Kort namn"
+
+msgid "Week tables"
+msgstr "Veckotabeller"
+
+msgid "Schema deviations"
+msgstr "Schemaavvikelser"
+
+msgid "Schema"
+msgstr "Schema"
+
+msgid "Placements"
+msgstr "Placeringar"
+
+msgid "Open after school care"
+msgstr "Öppen fritidsverksamhet"
+
+msgid "Changed by @name"
+msgstr "Ändrad av @name"
+
+msgid "Active placements"
+msgstr "Aktiva placeringar"
+
+msgid "Minimum number of days ahead a new child care schema entry can be created or updated."
+msgstr "Minsta antal dagar i förväg som en ny post i barnomsorgsschemat kan skapas eller uppdateras."
+
+msgid "Minimum days ahead"
+msgstr "Minsta antal dagar i förväg"
+
+msgid "Maximum number of days ahead a new child care schema entry can be created or updated."
+msgstr "Högsta antal dagar i förväg som en ny post i barnomsorgsschemat kan skapas eller uppdateras."
+
+msgid "Maximum days ahead"
+msgstr "Högsta antal dagar i förväg"
+
+msgid "Previous week"
+msgstr "Föregående vecka"
+
+msgid "Next week"
+msgstr "Nästa vecka"
+
+msgid "Add schema"
+msgstr "Lägg till schema"
+
+msgid "child care schema week"
+msgstr "vecka för barnomsorg"
+
+msgid "No available child care"
+msgstr "Ingen tillgänglig barnomsorg"
+
+msgid "Child care needs"
+msgstr "Barnomsorgsbehov"
+
+msgid "Child care offers"
+msgstr "Erbjuden barnomsorg"
+
+msgid "Checked in @time @group"
+msgstr "Incheckad @time @group"
+
+msgid "Checked out @time @group"
+msgstr "Utcheckad @time @group"
+
+msgid "Check out is overdue! (Expected @time)"
+msgstr "Utcheckning är försenad! (Förväntad @time)"
+
+msgid "Check in is overdue! (Expected @time)"
+msgstr "Incheckning är försenad! (Förväntad @time)"
+
+msgid "After school child care - check in"
+msgstr "Fritidshem - incheckning"
+
+msgid "At least one check out is overdue!"
+msgstr "Minst en utcheckning är försenad!"
+
+msgid "At least one check in is overdue!"
+msgstr "Minst en incheckning är försenad!"
+
+msgid "Check out students"
+msgstr "Checka ut elever"
+
+msgid "Check in students"
+msgstr "Checka in elever"
+
+msgid "Check out student"
+msgstr "Checka ut elev"
+
+msgid "Check in student"
+msgstr "Checka in elev"
+
+msgid "all"
+msgstr "alla"
+
+msgid "Check in @name"
+msgstr "Checka in @name"
+
+msgid "Check out @name"
+msgstr "Checka ut @name"
+
+msgid "Check in and out students for after school child care"
+msgstr "Checka in och ut elever på fritidshem"
+
+msgid "After school child care check in"
+msgstr "Fritidshem incheckning"
+
+msgid "Include unscheduled students"
+msgstr "Inkludera ej schemalagda elever"
+
+msgid "Checked in"
+msgstr "Incheckade"
+
+msgid "Checked out"
+msgstr "Utcheckade"
+
+msgid "Revert the current check out"
+msgstr "Ångra nuvarande utcheckning"
+
+msgid "Update the current check out"
+msgstr "Uppdatera nuvarande utcheckning"
+
+msgid "Keep the current check out @to"
+msgstr "Behåll nuvarande utcheckning @to"
+
+msgid "Already checked out, what do you want to do?"
+msgstr "Redan utcheckad, vad vill du göra?"
+
+msgid "Revert the current check in"
+msgstr "Ångra nuvarande incheckning"
+
+msgid "Update the current check in"
+msgstr "Uppdatera nuvarande incheckning"
+
+msgid "Keep the current check in @from"
+msgstr "Behåll nuvarande incheckning @from"
+
+msgid "Already checked in, what do you want to do?"
+msgstr "Redan incheckad, vad vill du göra?"
+
+msgid "Students checked out."
+msgstr "Elever checkades ut."
+
+msgid "Students checked in."
+msgstr "Elever checkades in."
+
+msgid "Comment on student schema deviations"
+msgstr "Kommentar på elevers schemaavvikelser"
+
+msgid "Reoccurring weeks"
+msgstr "Rullande schema"
+
+msgid "Create @type_singular"
+msgstr "Skapa @type_singular"
+
+msgid "Update @type_singular"
+msgstr "Uppdatera @type_singular"
+
+msgid "Delete this @type_singular from the system."
+msgstr "Ta bort denna @type_singular från systemet."
+
+msgid "Add schema deviation for @name - @date"
+msgstr "Lägg till schemaavvikelse för @name - @date"
+
+msgid "You are not allowed change time but you can add a comment."
+msgstr "Du får inte ändra tid men du kan lägga till en kommentar."
+
+msgid "To time must be after from time."
+msgstr "Till-tid måste vara efter från-tid."
+
+msgid "Time to must be set."
+msgstr "Till-tid måste anges."
+
+msgid "Time from must be set."
+msgstr "Från-tid måste anges."
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
 
 msgid ""
 msgstr ""
