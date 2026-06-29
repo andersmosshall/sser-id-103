@@ -218,7 +218,7 @@ class GradeSubjectFormAlter {
       }
       else if ($data['is_default']) {
         $default_exclude_student = TRUE;
-        $default_exclude_reason = 'is_default';
+        $default_exclude_reason = 'use_default';
         $local_exclude_reason_options = [
           'use_default' => $data['default_note'],
           'pending' => $exclude_reason_options['pending'],
@@ -227,7 +227,8 @@ class GradeSubjectFormAlter {
         ];
 
       }
-      else if ($data['has_default']) {
+
+      if ($data['has_default']) {
         $local_exclude_reason_options = [
           'use_default' => $data['default_note'],
           'pending' => $exclude_reason_options['pending'],
@@ -538,7 +539,7 @@ class GradeSubjectFormAlter {
       }
 
       if ($default_grade_round_nid = $subject_grade_node->get('field_default_grade_round')->target_id) {
-        if (!empty($student_no_set_uids) && $grade_system) {
+        if ($grade_system) {
           /** @var \Drupal\simple_school_reports_extension_proxy\Service\GradeSupportServiceInterface $grade_support_service */
           $grade_support_service = \Drupal::service('simple_school_reports_extension_proxy.grade_support');
 
