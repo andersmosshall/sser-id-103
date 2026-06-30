@@ -79,7 +79,7 @@ simple_school_reports_child_care_support.add_student_schema_deviation:
         type: 'string'
 
 simple_school_reports_child_care_support.child_care_settings:
-  path: 'admin/structure/child-care-settings'
+  path: '/admin/child-care-settings'
   defaults:
     _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm'
     _title: 'Child care settings'

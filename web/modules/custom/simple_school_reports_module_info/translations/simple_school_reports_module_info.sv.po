@@ -78,6 +78,12 @@ msgstr "Simple school report kärna för grundskolan"
 msgid "Simple school report core for upper secondary school"
 msgstr "Simple school report kärna för gymnasieskolan"
 
+msgid "Simple school report core for after school child care"
+msgstr "Simple school report kärna för fritidshem"
+
+msgid "Check in and out from after school child care"
+msgstr "Cheka in och ut från fritidshem"
+
 msgid "Review grade registration"
 msgstr "Betygsregistrering - omdömen"
 
