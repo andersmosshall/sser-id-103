@@ -69,6 +69,7 @@
           type: 'line',
           data: processedData,
           options: {
+            aspectRatio: 2.2/1,
             scales: {
               yAxes: {
                 beginAtZero: true,
