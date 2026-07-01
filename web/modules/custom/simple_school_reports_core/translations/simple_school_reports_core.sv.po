@@ -4402,8 +4402,8 @@ msgstr "Till-tid måste anges."
 msgid "Time from must be set."
 msgstr "Från-tid måste anges."
 
-msgid ""
-msgstr ""
+msgid "Not checked in"
+msgstr "Ej incheckade"
 
 msgid ""
 msgstr ""

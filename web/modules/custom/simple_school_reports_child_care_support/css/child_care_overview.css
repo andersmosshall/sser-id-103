@@ -28,7 +28,8 @@
 }
 
 .child-care-month-overview-container .child-care-coverage-stats.child-care-coverage-stats--warning {
-  background: #f9ab35;
+  /*background: #f9ab35;*/
+  background: #2cc036bf;
 }
 
 .child-care-month-overview-container .child-care-coverage-stats.child-care-coverage-stats--danger {

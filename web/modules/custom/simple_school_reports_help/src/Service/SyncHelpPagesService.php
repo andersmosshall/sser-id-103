@@ -570,6 +570,11 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'context' => ['ssr_child_care', '/fth', '/fth/groups', 'simple_school_reports_child_care_support.add_student_schema', 'simple_school_reports_child_care_support.add_student_schema_deviation'],
         'module' => ['simple_school_reports_core_fth'],
       ],
+
+
+
+
+
       [
         'title' => 'Översikt för fritidshem',
         'roles' => ['administrator', 'teacher'],
@@ -578,6 +583,10 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'context' => ['ssr_child_care', '/fth', '/fth/groups', 'simple_school_reports_core_fth.overview_month', 'simple_school_reports_core_fth.overview_day'],
         'module' => ['simple_school_reports_core_fth'],
       ],
+
+
+
+
       [
         'title' => 'Behov av barnomsorg',
         'roles' => ['administrator', 'teacher', 'caregiver'],
@@ -586,6 +595,11 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'context' => ['simple_school_reports_child_care_support.student_child_care', '/fth', '/fth/groups', 'simple_school_reports_core_fth.add_child_care_schema', 'simple_school_reports_child_care_support.add_student_schema_deviatio'],
         'module' => ['simple_school_reports_core_fth'],
       ],
+
+
+
+
+
       [
         'title' => 'Administration av barnomsorg',
         'roles' => ['administrator'],

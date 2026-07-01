@@ -30,6 +30,10 @@ final class ChildCareSchemaWeekAccessControlHandler extends EntityAccessControlH
       return AccessResult::allowed()->cachePerPermissions();
     }
 
+    if ($entity->isNew() || $operation === 'create') {
+      return $this->checkCreateAccess($account, [], $entity->bundle());
+    }
+
     $child_care_schema = $entity->getParentSchema();
     if (!$child_care_schema) {
       return AccessResult::forbidden()->addCacheableDependency($entity);

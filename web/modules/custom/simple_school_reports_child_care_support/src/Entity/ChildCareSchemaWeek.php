@@ -147,6 +147,10 @@ class ChildCareSchemaWeek extends ContentEntityBase implements ChildCareSchemaWe
    * {@inheritdoc}
    */
   public function getParentSchema(): ?ChildCareSchemaInterface {
+    if ($this->isNew()) {
+      return NULL;
+    }
+
     if ($this->parentSchema === FALSE) {
       $this->parentSchema = NULL;
       $schemas = $this->entityTypeManager()->getStorage('ssr_child_care_schema')->loadByProperties(['weeks' => $this->id()]);
