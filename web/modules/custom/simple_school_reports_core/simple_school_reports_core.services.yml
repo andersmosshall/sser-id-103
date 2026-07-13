@@ -96,3 +96,12 @@ services:
     tags:
       - { name: event_subscriber }
     arguments: [ '@entity_type.manager', '@state', '@logger.factory' ]
+
+  simple_school_reports_core.general_hooks:
+    class: Drupal\simple_school_reports_core\Hook\GeneralHooks
+    arguments: [ '@current_user','@datetime.time' ]
+
+  simple_school_reports_core.autologout_profile:
+    class: Drupal\simple_school_reports_core\EventSubscriber\AutologoutProfileSubscriber
+    tags:
+      - { name: event_subscriber }

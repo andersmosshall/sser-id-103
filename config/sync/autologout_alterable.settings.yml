@@ -4,6 +4,7 @@ langcode: sv
 enabled: true
 session_timeout: 2700
 max_session_timeout: 172800
+max_session_length: 604800
 ignore_user_activity: false
 use_individual_logout_threshold: false
 use_infinite_session_for_privileged: false
