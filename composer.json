@@ -41,6 +41,7 @@
         "drupal/paragraphs": "^1.12",
         "drupal/password_strength": "^2.0@beta",
         "drupal/pathauto": "^1.8",
+        "drupal/pwa": "^2.1@beta",
         "drupal/real_aes": "^2.3",
         "drupal/restui": "^1.22",
         "drupal/symfony_mailer": "^1.0@alpha",
