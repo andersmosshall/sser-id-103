@@ -51,6 +51,9 @@ module:
   path: 0
   path_alias: 0
   phpass: 0
+  pwa: 0
+  pwa_a2hs: 0
+  pwa_service_worker: 0
   real_aes: 0
   rest: 0
   restui: 0
@@ -64,6 +67,7 @@ module:
   simple_school_reports_logging: 0
   simple_school_reports_module_info: 0
   simple_school_reports_post_check: 0
+  simple_school_reports_pwa_support: 0
   simple_school_reports_user_import_support: 0
   symfony_mailer: 0
   system: 0

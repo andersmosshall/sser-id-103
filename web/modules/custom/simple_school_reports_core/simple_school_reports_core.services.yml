@@ -4,6 +4,12 @@ services:
     tags:
       - { name: cache.context }
 
+  cache_context.user_agent:
+    class: Drupal\simple_school_reports_core\Cache\Contexts\UserAgentCacheContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: cache.context }
+
   simple_school_reports_core.term_service:
     class: Drupal\simple_school_reports_core\Service\TermService
     arguments: ['@entity_type.manager']

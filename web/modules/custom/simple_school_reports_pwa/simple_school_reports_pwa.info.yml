@@ -1,0 +1,9 @@
+name: 'Simple School Reports PWA'
+type: module
+description: 'Simple School Reports PWA'
+package: 'Simple School Reports Mini'
+core_version_requirement: ^10 || ^11
+version: 11.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_pwa_support:simple_school_reports_pwa_support

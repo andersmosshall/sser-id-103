@@ -4405,8 +4405,8 @@ msgstr "Från-tid måste anges."
 msgid "Not checked in"
 msgstr "Ej incheckade"
 
-msgid ""
-msgstr ""
+msgid "Install app"
+msgstr "Installera app"
 
 msgid ""
 msgstr ""

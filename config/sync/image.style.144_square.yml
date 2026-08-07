@@ -1,0 +1,15 @@
+uuid: 3bb34481-b4f4-4407-b51a-d72842f57bb6
+langcode: en
+status: true
+dependencies: {  }
+name: 144_square
+label: 144_square
+effects:
+  d83b8cd0-d0b4-487e-9abd-3330a735e17e:
+    uuid: d83b8cd0-d0b4-487e-9abd-3330a735e17e
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 144
+      height: 144
+      anchor: center-center

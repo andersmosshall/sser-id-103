@@ -1,0 +1,23 @@
+_core:
+  default_config_hash: bBsKNU9uuzzS7zaKZhHpof7W8sOAuKBZJDF5Eh76BTs
+langcode: en
+name: 'Simple School Reports'
+short_name: SSR
+app_id: ssr.loc
+description: ''
+start_url: /
+scope: /
+lang: ''
+dir: auto
+orientation: any
+categories:
+  - education
+theme_color: '#ffffff'
+background_color: '#ffffff'
+display: minimal-ui
+cross_origin: false
+image_fid: 0
+image_small_fid: null
+image_very_small_fid: null
+manifest_path_mode: listed_only
+manifest_paths: "/\r\n/user/login\r\n/start\r\n/start/*"

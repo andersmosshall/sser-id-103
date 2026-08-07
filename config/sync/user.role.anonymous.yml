@@ -1,11 +1,14 @@
 uuid: 000360d0-b92d-4f49-83a0-29770f72326b
 langcode: sv
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - pwa
 _core:
   default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
 id: anonymous
 label: 'Anonymous user'
 weight: 0
 is_admin: false
-permissions: {  }
+permissions:
+  - 'access pwa'

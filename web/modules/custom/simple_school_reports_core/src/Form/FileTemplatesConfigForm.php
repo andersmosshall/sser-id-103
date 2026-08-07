@@ -92,6 +92,7 @@ class FileTemplatesConfigForm extends FormBase {
       'doc_logo_center' => 'logos',
       'doc_logo_right' => 'logos',
       'logo_header' => 'logos',
+      'logo_shortcut' => 'logos',
     ];
 
     $form['file_templates']['logos'] = [
@@ -115,7 +116,7 @@ class FileTemplatesConfigForm extends FormBase {
 
     foreach ($templates as $type => $file) {
       $category = $categories_map[$type] ?? 'other';
-      $file_types = ['jpeg'];
+      $file_types = ['jpeg', 'png'];
       if ($category === 'generated_documents') {
         $file_types = ['docx', 'xlsx'];
       }

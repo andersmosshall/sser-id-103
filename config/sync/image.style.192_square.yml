@@ -1,0 +1,15 @@
+uuid: 98788857-26c8-4ed0-bb77-858438b3d501
+langcode: en
+status: true
+dependencies: {  }
+name: 192_square
+label: 192_square
+effects:
+  273fa4b1-ba55-4c53-b499-c746dc921c12:
+    uuid: 273fa4b1-ba55-4c53-b499-c746dc921c12
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 192
+      height: 192
+      anchor: center-center
