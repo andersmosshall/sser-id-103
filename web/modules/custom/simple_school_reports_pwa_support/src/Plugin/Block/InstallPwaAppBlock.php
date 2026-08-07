@@ -79,7 +79,7 @@ class InstallPwaAppBlock extends BlockBase implements ContainerFactoryPluginInte
         $block = $this->blockManager->createInstance($block_id);
         if ($block instanceof BlockBase) {
           $block->setConfiguration([
-            'button_text' => 'Install app',
+            'button_text' => $this->t('Install app'),
             'intro_text' => [
               'value' => '',
               'format' => 'plain_text',
