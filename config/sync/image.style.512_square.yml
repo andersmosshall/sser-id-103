@@ -1,0 +1,15 @@
+uuid: 759be64f-254f-4898-a669-a70d17194cb3
+langcode: en
+status: true
+dependencies: {  }
+name: 512_square
+label: 512_square
+effects:
+  f569e511-91e1-4ac7-9caf-bed3990bb84a:
+    uuid: f569e511-91e1-4ac7-9caf-bed3990bb84a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 512
+      height: 512
+      anchor: center-center

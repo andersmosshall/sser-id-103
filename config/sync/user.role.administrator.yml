@@ -22,6 +22,7 @@ dependencies:
     - node.type.written_reviews
     - node.type.written_reviews_round
     - node.type.written_reviews_subject_state
+    - taxonomy.vocabulary.child_care_deviation_type
     - taxonomy.vocabulary.extra_adaptations
     - taxonomy.vocabulary.iup_standard_goal
     - taxonomy.vocabulary.iup_standard_phrase
@@ -34,6 +35,7 @@ dependencies:
     - file
     - filter
     - node
+    - simple_school_reports_child_care_support
     - simple_school_reports_class_support
     - simple_school_reports_core
     - simple_school_reports_dnp_support
@@ -74,12 +76,14 @@ permissions:
   - 'create school week'
   - 'create school_week_deviation'
   - 'create ssr_assessment_group'
+  - 'create ssr_child_care'
   - 'create ssr_grade_reg_course'
   - 'create ssr_grade_reg_round'
   - 'create ssr_organization'
   - 'create ssr_schema_entry'
   - 'create ssr_school_class'
   - 'create student_development_interview content'
+  - 'create terms in child_care_deviation_type'
   - 'create terms in extra_adaptations'
   - 'create terms in iup_standard_goal'
   - 'create terms in iup_standard_phrase'
@@ -123,6 +127,8 @@ permissions:
   - 'delete school week'
   - 'delete school_week_deviation'
   - 'delete ssr_assessment_group'
+  - 'delete ssr_child_care'
+  - 'delete ssr_child_care_schema'
   - 'delete ssr_grade'
   - 'delete ssr_grade_reg_course'
   - 'delete ssr_grade_reg_round'
@@ -163,6 +169,8 @@ permissions:
   - 'edit own student_development_interview content'
   - 'edit school week'
   - 'edit school_week_deviation'
+  - 'edit ssr_child_care'
+  - 'edit ssr_child_care_schema'
   - 'edit ssr_grade_reg_course'
   - 'edit ssr_grade_reg_round'
   - 'edit ssr_grade_snapshot_period'
@@ -188,6 +196,10 @@ permissions:
   - 'view protected personal data'
   - 'view school week'
   - 'view ssr_assessment_group'
+  - 'view ssr_child_care'
+  - 'view ssr_child_care_check_in'
+  - 'view ssr_child_care_placement'
+  - 'view ssr_child_care_schema'
   - 'view ssr_grade_reg_round'
   - 'view ssr_module_info price'
   - 'view ssr_organization'

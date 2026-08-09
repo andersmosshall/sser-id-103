@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -23,6 +24,7 @@ abstract class SsrCachedPageControllerBase extends ControllerBase implements Tru
    */
   public function __construct(
     protected RouteMatchInterface $routeMatch,
+    protected RendererInterface $renderer,
   ) {}
 
   /**
@@ -31,6 +33,7 @@ abstract class SsrCachedPageControllerBase extends ControllerBase implements Tru
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_route_match'),
+      $container->get('renderer'),
     );
   }
 
@@ -56,7 +59,10 @@ abstract class SsrCachedPageControllerBase extends ControllerBase implements Tru
   public function build(): array {
     $raw_parameters_json = Json::encode($this->routeMatch->getRawParameters()->getIterator());
 
-    $build = [
+    $build = [];
+
+    $build['page_wrapper'] = [
+      '#weight' => -100,
       '#cache' => [
         'keys' => [
           'ssr_cached_page',
@@ -66,8 +72,14 @@ abstract class SsrCachedPageControllerBase extends ControllerBase implements Tru
       ],
       '#pre_render' => [[$this, 'prePrender']],
     ];
+
+    $build['root_build_wrapper'] = [
+      '#weight' => 100,
+    ];
+    $build['root_build_wrapper']['root_build'] = $this->rootContent();
+
     $cache = $this->getCacheableMetadata();
-    $cache->applyTo($build);
+    $cache->applyTo($build['page_wrapper']);
     return $build;
   }
 
@@ -80,6 +92,15 @@ abstract class SsrCachedPageControllerBase extends ControllerBase implements Tru
     $params = $this->routeMatch->getParameters();
     $build['page'] = $this->buildPageContent(...$params);
     return $build;
+  }
+
+  /**
+   * @param array $build
+   *
+   * @return array
+   */
+  public function rootContent(): array {
+    return [];
   }
 
   /**

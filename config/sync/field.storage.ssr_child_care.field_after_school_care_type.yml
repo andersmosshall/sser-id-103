@@ -1,0 +1,21 @@
+uuid: 81119073-a90c-49bc-9863-55c4eff08dce
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - simple_school_reports_child_care_support
+id: ssr_child_care.field_after_school_care_type
+field_name: field_after_school_care_type
+entity_type: ssr_child_care
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: simple_school_reports_child_care_support_after_school_care_types
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

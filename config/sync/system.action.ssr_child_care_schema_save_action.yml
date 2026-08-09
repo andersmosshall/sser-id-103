@@ -1,0 +1,13 @@
+uuid: 84be4072-e768-43dd-ba14-4f03e88444bf
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: Ir3S_AvFWmm1CEIMrJMvrKXYjueT3qV6DLPjDooaahw
+id: ssr_child_care_schema_save_action
+label: 'Save child care schemas'
+type: ssr_child_care_schema
+plugin: 'entity:save_action:ssr_child_care_schema'
+configuration: {  }

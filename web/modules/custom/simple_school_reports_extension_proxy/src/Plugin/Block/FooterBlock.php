@@ -4,6 +4,7 @@ namespace Drupal\simple_school_reports_extension_proxy\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\BlockManagerInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -67,7 +68,8 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
     AccountProxyInterface $current_user,
     CurrentPathStack $current_path,
     RouteMatchInterface $route_match,
-    SSRVersionServiceInterface $ssr_version_service
+    SSRVersionServiceInterface $ssr_version_service,
+    protected BlockManagerInterface $blockManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->moduleHandler = $module_handler;
@@ -90,6 +92,7 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $container->get('path.current'),
       $container->get('current_route_match'),
       $container->get('simple_school_reports_core.ssr_version'),
+      $container->get('plugin.manager.block'),
     );
   }
 
@@ -102,10 +105,14 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
     $bug_report_link = NULL;
     $help_link = NULL;
+    $pwa_app_block = NULL;
+
+    $use_bug_report_link = $this->useBugReportLink();
+    $use_help_link = $this->useHelpLink();
 
     $destination = $this->currentPath->getPath();
-    if ($this->moduleHandler->moduleExists('simple_school_reports_help') && $this->routeMatch->getRouteName() !== 'simple_school_reports_help.help_page') {
-      if ($this->currentUser->hasPermission('send bug report')) {
+    if ($use_bug_report_link || $use_help_link) {
+      if ($use_bug_report_link) {
         $bug_report_link = Url::fromRoute('simple_school_reports_help.bug_report', [] ,['query' => ['destination' => $destination]])->toString();
       }
 
@@ -149,22 +156,70 @@ class FooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $help_link = Url::fromRoute('simple_school_reports_help.help_page', [] ,['query' => ['destination' => $destination, 'contexts' => $contexts]])->toString();
     }
 
+    if ($this->usePwa()) {
+      $block_id = 'ssr_pwa_install';
+      try {
+        $block = $this->blockManager->createInstance($block_id);
+        if ($block instanceof BlockBase) {
+          $pwa_app_block = $block->build();
+        }
+      } catch (\Exception $e) {
+        // Ignore.
+      }
+    }
+
     $build = [
       '#theme' => 'ssr_footer',
       '#bug_report_link' => $bug_report_link,
       '#help_link' => $help_link,
-      '#ssr_version' => $this->ssrVersionService->getSsrVersion(),
+      '#ssr_version' => $this->useSsrVersion() ? $this->ssrVersionService->getSsrVersion() : NULL,
+      '#pwa_app_block' => $pwa_app_block,
     ];
 
     $cache->applyTo($build);
     return $build;
   }
 
-  public function blockAccess(AccountInterface $account) {
-    if ($account->isAnonymous()) {
-      return AccessResult::forbidden()->cachePerPermissions();
+  protected function useBugReportLink(): bool {
+    if ($this->currentUser->isAnonymous()) {
+      return FALSE;
     }
-    return AccessResult::allowed()->cachePerPermissions();
+    return $this->moduleHandler->moduleExists('simple_school_reports_help') && $this->routeMatch->getRouteName() !== 'simple_school_reports_help.help_page' && $this->currentUser->hasPermission('send bug report');
+  }
+
+  protected function useHelpLink(): bool {
+    if ($this->currentUser->isAnonymous()) {
+      return FALSE;
+    }
+    return $this->moduleHandler->moduleExists('simple_school_reports_help') && $this->routeMatch->getRouteName() !== 'simple_school_reports_help.help_page';
+  }
+
+  protected function useSsrVersion(): bool {
+    if ($this->currentUser->isAnonymous()) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+  protected function usePwa(): bool {
+    if ($this->routeMatch->getRouteName() !== 'user.login') {
+      return FALSE;
+    }
+    return $this->moduleHandler->moduleExists('simple_school_reports_pwa');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeTags(['user_agent:ios', 'route', 'user:permissions'], parent::getCacheContexts());
+  }
+
+  public function blockAccess(AccountInterface $account) {
+    if ($this->useBugReportLink() || $this->useHelpLink() || $this->useSsrVersion() || $this->usePwa()) {
+      return AccessResult::allowed()->addCacheContexts($this->getCacheContexts());
+    }
+    return AccessResult::allowed()->addCacheContexts($this->getCacheContexts());
   }
 
 }

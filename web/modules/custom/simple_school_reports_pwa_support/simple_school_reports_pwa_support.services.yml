@@ -1,0 +1,10 @@
+services:
+  simple_school_reports_pwa_support.general_hooks:
+    class: Drupal\simple_school_reports_pwa_support\Hook\GeneralHooks
+    arguments: [ '@current_user', '@datetime.time', '@current_route_match', '@module_handler', '@request_stack', '@simple_school_reports_core.file_template_service' ]
+
+  simple_school_reports_pwa_support.login_redirect:
+    class: Drupal\simple_school_reports_pwa_support\EventSubscriber\ManifestRequestSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments: [ '@current_route_match', '@module_handler' ]

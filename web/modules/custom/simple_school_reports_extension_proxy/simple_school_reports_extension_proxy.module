@@ -1085,6 +1085,7 @@ function simple_school_reports_extension_proxy_theme() {
         'help_link' => NULL,
         'bug_report_link' => NULL,
         'ssr_version' => NULL,
+        'pwa_app_block' => NULL,
       ],
     ],
   ];

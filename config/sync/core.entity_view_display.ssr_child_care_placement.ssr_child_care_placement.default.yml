@@ -1,0 +1,70 @@
+uuid: b33f68bf-2535-4184-93e9-9fe59d996e8d
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+id: ssr_child_care_placement.ssr_child_care_placement.default
+targetEntityType: ssr_child_care_placement
+bundle: ssr_child_care_placement
+mode: default
+content:
+  child_care:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  from:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  student:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  to:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  label: true
+  status: true
+  uid: true

@@ -116,6 +116,16 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
     ];
 
     $map[] = [
+      'module' => 'simple_school_reports_core_fth',
+      'label' => 'Simple school report kärna för fritidshem',
+      'required_modules' => [],
+      'recommended_modules' => ['simple_school_reports_caregiver_login', 'simple_school_reports_child_care_fth_check_in'],
+      'price' => '[[CORE_PRICE]]',
+      'annual_fee' => '[[CORE_BIG_ANNUAL_FEE]]',
+      'description' => '<p>Simple school reports kärna för fritidshem innefattar möjlighet att skapa fritidshemsgrupper. Till dessa kan man lägga till tillgängliga tider och avvikelser (schema) och på motsvarande sätt kan man på elever lägga till behov av barnomsorg, t.ex. fritidshem. Om man har modul för föräldrainloggning kan föräldrar själva lägga till behov av barnomsorg. Man kan också se en överblick på månads- eller dags-nivå för behov och tillgängliga tider.</p>',
+    ];
+
+    $map[] = [
       'module' => 'simple_school_reports_absence_matrix',
       'label' => 'Frånvaromatris',
       'required_modules' => [],
@@ -375,6 +385,16 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'description' => '<p>Denna modul, SSR-schema, skapar en lätthanterlig lista över lektioner som lärare förväntas rapportera utifrån schema som skapats på kurserna i Simple School Reports. Om man har modulen närvaroanalys listas lektionerna tydligt i analysen och man kan även se vilka lektioner i vilka ämnen som inte har närvarorapporterats.</p>',
     ];
 
+    $map[] = [
+      'module' => 'simple_school_reports_child_care_fth_check_in',
+      'label' => 'Cheka in och ut från fritidshem',
+      'required_modules' => ['simple_school_reports_core_fth'],
+      'recommended_modules' => [],
+      'price' => '[[MODULE_PRICE]]',
+      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'description' => '<p>Denna modul, Cheka in och ut från fritidshem, skapar möjlighet för fritidshemspersonal att checka in och ut elever från fritidshem. Man ser tydligt om elever är sena så att lämpliga åtgärder kan vidtas.</p>',
+    ];
+
     $event = new GetHelpPagesEvent();
     $this->dispatcher->dispatch($event, GetHelpPagesEvent::EVENT_NAME);
 
@@ -487,6 +507,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'simple_school_reports_core' => $this->t('Simple school report core'),
       'simple_school_reports_core_gr' => $this->t('Simple school report core for elementary school'),
       'simple_school_reports_core_gy' => $this->t('Simple school report core for upper secondary school'),
+      'simple_school_reports_core_fth' => $this->t('Simple school report core for after school child care'),
 
       // Ordinary modules.
       'simple_school_reports_absence_make_up' => $this->t('Make up time'),
@@ -508,6 +529,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'simple_school_reports_class' => $this->t('Classes'),
       'simple_school_reports_examinations' => $this->t('Examination lists'),
       'simple_school_reports_schema_ssr' => $this->t('SSR schema'),
+      'simple_school_reports_child_care_fth_check_in' => $this->t('Check in and out from after school child care'),
 
       // Mini modules.
       'simple_school_reports_extens_grade_export' => $this->t('Extens export (MGBETYG)'),

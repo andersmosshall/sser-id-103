@@ -553,6 +553,47 @@ class SyncHelpPagesService implements SyncHelpPagesServiceInterface, EventSubscr
         'context' => ['node:course', 'view.courses.my_courses', 'view.courses.all_courses', 'view.calendar_events_courses.my_courses', 'view.calendar_events_courses.all_courses'],
         'module' => ['simple_school_reports_schema_ssr'],
       ],
+      // SSR-child care
+      [
+        'title' => 'Lägg till och hantera fritidshemsgrupper',
+        'roles' => ['administrator', 'teacher'],
+        'body' => 'Denna film går igenom hur man lägger till grupp för fritidshem, samt lägger till tillgängligt schema eller avvikelser för fritidshemsgruppen.',
+        'vimeo' => 'https://vimeo.com/1206225043',
+        'context' => ['ssr_child_care', '/fth', '/fth/groups', 'simple_school_reports_child_care_support.add_student_schema', 'simple_school_reports_child_care_support.add_student_schema_deviation'],
+        'module' => ['simple_school_reports_core_fth'],
+      ],
+      [
+        'title' => 'Översikt för fritidshem',
+        'roles' => ['administrator', 'teacher'],
+        'body' => 'Denna film går igenom översiktssidorna för fritidshem.',
+        'vimeo' => 'https://vimeo.com/1206224993',
+        'context' => ['ssr_child_care', '/fth', '/fth/groups', 'simple_school_reports_core_fth.overview_month', 'simple_school_reports_core_fth.overview_day'],
+        'module' => ['simple_school_reports_core_fth'],
+      ],
+      [
+        'title' => 'Behov av barnomsorg',
+        'roles' => ['administrator', 'teacher', 'caregiver'],
+        'body' => 'Denna film går igenom hur man lägger till tider för barnomsorgsbehov, t.ex. fritidshem.',
+        'vimeo' => 'https://vimeo.com/1206224991',
+        'context' => ['simple_school_reports_child_care_support.student_child_care', '/fth', '/fth/groups', 'simple_school_reports_core_fth.add_child_care_schema', 'simple_school_reports_child_care_support.add_student_schema_deviatio'],
+        'module' => ['simple_school_reports_core_fth'],
+      ],
+      [
+        'title' => 'Administration av barnomsorg',
+        'roles' => ['administrator'],
+        'body' => 'Denna film går igenom inställningar för barnomsorg, t.ex. fritidshem.',
+        'vimeo' => 'https://vimeo.com/1206224994',
+        'context' => ['/admin/child-care-settings'],
+        'module' => ['simple_school_reports_core_fth'],
+      ],
+      [
+        'title' => 'In- och utcheckning fritidshem',
+        'roles' => ['administrator', 'teacher'],
+        'body' => 'Denna film går igenom hur du som fritidspedagog checkar in och ut elever från fritidshem.',
+        'vimeo' => 'https://vimeo.com/1206224992',
+        'context' => ['/admin/child-care-settings'],
+        'module' => ['simple_school_reports_child_care_fth_check_in'],
+      ],
     ];
 
     $formatted_map = [];

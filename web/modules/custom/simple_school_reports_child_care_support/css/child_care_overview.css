@@ -1,0 +1,45 @@
+.child-care-day {
+  margin-bottom: 1rem;
+}
+
+.child-care-day .button.button--change-child-care-day {
+  margin: 0 0 0.5rem 0;
+}
+
+.child-care-segment .child-care-segment--strike-through {
+  text-decoration: line-through;
+}
+
+.child-care-month-overview-container table td {
+  vertical-align: top;
+}
+
+.child-care-month-overview-container .child-care-coverage-stats {
+  font-size: 0.75rem;
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 75%;
+  text-wrap: nowrap;
+  background: #e3e3e3;
+}
+
+.child-care-month-overview-container .child-care-coverage-stats.child-care-coverage-stats--ok {
+  background: #2cc036bf;
+}
+
+.child-care-month-overview-container .child-care-coverage-stats.child-care-coverage-stats--warning {
+  /*background: #f9ab35;*/
+  background: #2cc036bf;
+}
+
+.child-care-month-overview-container .child-care-coverage-stats.child-care-coverage-stats--danger {
+  background: #d72222bf
+}
+
+.child-care-month-overview-container table {
+  table-layout: fixed;
+}
+
+.child-care-month-overview-container .button.button--overview-day {
+  margin: 0.5rem 0 0 0;
+}

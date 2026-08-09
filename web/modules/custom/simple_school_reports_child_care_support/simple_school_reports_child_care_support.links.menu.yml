@@ -1,0 +1,89 @@
+entity.ssr_child_care_type.collection:
+  title: 'Child care types'
+  description: 'Manage and CRUD actions on Child care type.'
+  parent: system.admin_structure
+  route_name: entity.ssr_child_care_type.collection
+
+entity.ssr_child_care.collection:
+  title: 'Child cares'
+  description: 'List of child cares.'
+  route_name: entity.ssr_child_care.collection
+  parent: system.admin_content
+
+entity.ssr_child_care_placement.settings:
+  title: 'Child care placement'
+  description: 'Configure a Child care placement entity type.'
+  route_name:  entity.ssr_child_care_placement.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_placement.collection:
+  title: 'Child care placements'
+  description: 'List of child care placements.'
+  route_name: entity.ssr_child_care_placement.collection
+  parent: system.admin_content
+
+entity.ssr_child_care_schema.settings:
+  title: 'Child care schema'
+  description: 'Configure a Child care schema entity type.'
+  route_name:  entity.ssr_child_care_schema.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_schema_week.settings:
+  title: 'Child care schema week'
+  description: 'Configure a Child care schema week entity type.'
+  route_name:  entity.ssr_child_care_schema_week.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_schema.collection:
+  title: 'Child care schemas'
+  description: 'List of child care schemas.'
+  route_name: entity.ssr_child_care_schema.collection
+  parent: system.admin_content
+
+entity.ssr_child_care_schema_week.collection:
+  title: 'Child care schema weeks'
+  description: 'List of child care schema weeks.'
+  route_name: entity.ssr_child_care_schema_week.collection
+  parent: system.admin_content
+
+entity.ssr_cc_deviation.settings:
+  title: 'Child care schema deviation'
+  description: 'Configure a Child care schema deviation entity type.'
+  route_name:  entity.ssr_cc_deviation.settings
+  parent: system.admin_structure
+
+entity.ssr_cc_deviation.collection:
+  title: 'Child care schema deviations'
+  description: 'List of child care schema deviations.'
+  route_name: entity.ssr_cc_deviation.collection
+  parent: system.admin_content
+
+entity.ssr_cc_deviation_student.settings:
+  title: 'Child care schema deviation student'
+  description: 'Configure a Child care schema deviation student entity type.'
+  route_name:  entity.ssr_cc_deviation_student.settings
+  parent: system.admin_structure
+
+entity.ssr_cc_deviation_student.collection:
+  title: 'Child care schema deviation students'
+  description: 'List of child care schema deviation students.'
+  route_name: entity.ssr_cc_deviation_student.collection
+  parent: system.admin_content
+
+simple_school_reports_child_care_support.child_care_settings:
+  title: 'Child care settings'
+  parent: simple_school_reports_core.config
+  description: 'Administer child care settings'
+  route_name: simple_school_reports_child_care_support.child_care_settings
+
+entity.ssr_child_care_check_in.settings:
+  title: 'Child care check in'
+  description: 'Configure a Child care check in entity type.'
+  route_name:  entity.ssr_child_care_check_in.settings
+  parent: system.admin_structure
+
+entity.ssr_child_care_check_in.collection:
+  title: 'Child care check ins'
+  description: 'List of child care check ins.'
+  route_name: entity.ssr_child_care_check_in.collection
+  parent: system.admin_content
