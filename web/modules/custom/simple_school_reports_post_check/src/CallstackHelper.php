@@ -52,7 +52,7 @@ class CallstackHelper {
       }
 
       /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
-      $session = \Drupal::service('session')->get('ssr_post_check');
+      $session = \Drupal::service('session');
 
       $callstack = $session->get('ssr_callstack') ?? [];
       $callstack[] = $file . '->' . $fname . ':' . $line . PHP_EOL . json_encode($data) . PHP_EOL . '-------------------------';

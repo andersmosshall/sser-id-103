@@ -76,6 +76,14 @@ class RequestLogService implements RequestLogServiceInterface, EventSubscriberIn
         return;
       }
 
+      if (str_starts_with($uri, '/service-worker-data')) {
+        return;
+      }
+
+      if (str_starts_with($uri, '/pwa')) {
+        return;
+      }
+
       $entries = $this->tempStore->get('ssr_request_entries') ?? [];
 
       if (empty($entries)) {
