@@ -47,6 +47,7 @@ class ViewsFormAlter {
       ],
       'ssr_export_users' => [
         'simple_school_reports_pmo_export',
+        'simple_school_reports_prorenata_export',
         'simple_school_reports_skolon_export',
       ],
       'extension_proxy_consent_reminders' => [
