@@ -331,7 +331,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>Elev-/användarexport för inläsning till PMO.</p>',
     ];
 
@@ -341,7 +341,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>Elev-/användarexport för inläsning till PRORENATA.</p>',
     ];
 
@@ -351,7 +351,7 @@ class ModuleInfoService implements ModuleInfoServiceInterface, EventSubscriberIn
       'required_modules' => [],
       'recommended_modules' => [],
       'price' => '[[MINI_MODULE_PRICE]]',
-      'annual_fee' => '[[MODULE_ANNUAL_FEE]]',
+      'annual_fee' => '[[MINI_MODULE_ANNUAL_FEE]]',
       'description' => '<p>Elev-/användarexport för inläsning till SKOLON.</p>',
     ];
 
