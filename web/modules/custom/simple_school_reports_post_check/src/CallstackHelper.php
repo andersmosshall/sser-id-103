@@ -51,12 +51,12 @@ class CallstackHelper {
         return;
       }
 
-      /** @var \Drupal\Core\TempStore\PrivateTempStore $tempstore */
-      $tempstore = \Drupal::service('tempstore.private')->get('ssr_post_check');
+      /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
+      $session = \Drupal::service('session');
 
-      $callstack = $tempstore->get('ssr_callstack') ?? [];
+      $callstack = $session->get('ssr_callstack') ?? [];
       $callstack[] = $file . '->' . $fname . ':' . $line . PHP_EOL . json_encode($data) . PHP_EOL . '-------------------------';
-      $tempstore->set('ssr_callstack', $callstack);
+      $session->set('ssr_callstack', $callstack);
     }
     catch (\Exception $e) {
       // Do nothing.
