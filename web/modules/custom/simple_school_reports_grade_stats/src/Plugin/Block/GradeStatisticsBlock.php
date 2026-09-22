@@ -752,6 +752,9 @@ class GradeStatisticsBlock extends BlockBase implements ContainerFactoryPluginIn
             if ($data_key > 0) {
               $labels[$data_key] = (string) $this->t('Pass');
             }
+            elseif ($data_key === self::NO_GRADE_KEY) {
+              $labels[$data_key] = (string) $this->t('Assessment basis missing');
+            }
             else {
               $labels[$data_key] = (string) $this->t('Not pass');
             }

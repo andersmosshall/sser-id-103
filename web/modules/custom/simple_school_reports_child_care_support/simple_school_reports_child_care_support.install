@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Forum module.
+ */
+
+/**
+ * Install child care check in entity type.
+ */
+function simple_school_reports_child_care_support_update_11001() {
+  $database = \Drupal::database();
+
+  // Install ssr_child_care_check_in.
+  if(!$database->schema()->tableExists('ssr_child_care_check_in')) {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('ssr_child_care_check_in'));
+  }
+}
+

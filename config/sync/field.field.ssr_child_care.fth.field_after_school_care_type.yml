@@ -1,0 +1,23 @@
+uuid: 172ffc5b-bd61-4d2f-b90e-d2ab25a9df76
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ssr_child_care.field_after_school_care_type
+    - simple_school_reports_child_care_support.ssr_child_care_type.fth
+  module:
+    - options
+id: ssr_child_care.fth.field_after_school_care_type
+field_name: field_after_school_care_type
+entity_type: ssr_child_care
+bundle: fth
+label: Type
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: fth
+default_value_callback: ''
+settings: {  }
+field_type: list_string

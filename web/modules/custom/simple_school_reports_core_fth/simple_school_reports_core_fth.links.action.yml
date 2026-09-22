@@ -1,0 +1,8 @@
+simple_school_reports_core_fth.fth_group_create:
+  route_name: entity.ssr_child_care.add_form
+  title: 'Add after school child care group'
+  route_parameters:
+    ssr_child_care_type: 'fth'
+  appears_on:
+    - view.fth_groups.list
+

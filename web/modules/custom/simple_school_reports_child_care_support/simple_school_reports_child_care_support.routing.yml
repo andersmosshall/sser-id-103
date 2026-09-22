@@ -1,0 +1,95 @@
+entity.ssr_child_care_placement.settings:
+  path: 'admin/structure/ssr-child-care-placement'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCarePlacementSettingsForm'
+    _title: 'Child care placement'
+  requirements:
+    _permission: 'administer ssr_child_care_placement'
+
+entity.ssr_child_care_schema.settings:
+  path: 'admin/structure/ssr-child-care-schema'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaSettingsForm'
+    _title: 'Child care schema'
+  requirements:
+    _permission: 'administer ssr_child_care_schema'
+
+entity.ssr_child_care_schema_week.settings:
+  path: 'admin/structure/ssr-child-care-schema-week'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaWeekSettingsForm'
+    _title: 'Child care schema week'
+  requirements:
+    _permission: 'administer ssr_child_care_schema_week'
+
+entity.ssr_cc_deviation.settings:
+  path: 'admin/structure/ssr-cc-deviation'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaDeviationSettingsForm'
+    _title: 'Child care schema deviation'
+  requirements:
+    _permission: 'administer ssr_cc_deviation'
+
+entity.ssr_cc_deviation_student.settings:
+  path: 'admin/structure/ssr-cc-deviation-student'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaDeviationStudentSettingsForm'
+    _title: 'Child care schema deviation student'
+  requirements:
+    _permission: 'administer ssr_cc_deviation_student'
+
+simple_school_reports_child_care_support.student_child_care:
+  path: '/user/{user}/child-care'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::build'
+    _title_callback: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::accessStudentChildCare'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_child_care_support.add_student_schema:
+  path: '/user/{user}/child-care/add-schema'
+  defaults:
+    _entity_form: ssr_child_care_schema.add
+    _title: 'Add child care schema'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Controller\ChildCareStudentController::accessStudentChildCare'
+    _entity_access: user.caregiver_access
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+simple_school_reports_child_care_support.add_student_schema_deviation:
+  path: '/user/{user}/child-care/add-deviation/{date}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\AddStudentSchemaDeviationForm'
+    _title: 'Add deviation'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\AddStudentSchemaDeviationForm::access'
+    _entity_access: user.caregiver_access
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+      date:
+        type: 'string'
+
+simple_school_reports_child_care_support.child_care_settings:
+  path: '/admin/child-care-settings'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm'
+    _title: 'Child care settings'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareConfigForm::access'
+
+entity.ssr_child_care_check_in.settings:
+  path: 'admin/structure/ssr-child-care-check-in'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInSettingsForm'
+    _title: 'Child care check in'
+  requirements:
+    _permission: 'administer ssr_child_care_check_in'

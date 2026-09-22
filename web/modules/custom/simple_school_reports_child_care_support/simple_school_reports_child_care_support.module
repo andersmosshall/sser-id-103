@@ -1,0 +1,427 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Provides a child care module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Render\Element;
+use Drupal\simple_school_reports_child_care_support\ChildCareSchemaInterface;
+use Drupal\simple_school_reports_child_care_support\ChildCareInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Link;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_school_reports_child_care_support\Form\ChildCareSchemaForm;
+use Drupal\views\Views;
+use Drupal\user\UserInterface;
+use Drupal\Core\Url;
+
+function ssr_use_child_care(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_core_fth');
+}
+
+function ssr_use_child_care_check_in(): bool {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  return $module_handler->moduleExists('simple_school_reports_child_care_fth_check_in');
+}
+
+
+function simple_school_reports_child_care_support_schema_types(): array {
+  return [
+    ChildCareSchemaInterface::SCHEMA_TYPE_CHILD_CARE => t('Child care'),
+    ChildCareSchemaInterface::SCHEMA_TYPE_STUDENT => t('Student'),
+  ];
+}
+
+function simple_school_reports_child_care_support_after_school_care_types(): array {
+  return [
+    ChildCareInterface::AFTER_SCHOOL_CARE_TYPE => t('After school care'),
+    ChildCareInterface::AFTER_SCHOOL_CARE_TYPE_OPEN => t('Open after school care'),
+  ];
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function simple_school_reports_child_care_support_entity_extra_field_info() {
+  $fields['ssr_child_care']['fth']['display']['placements'] = [
+    'label' => t('Placements'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care']['fth']['display']['schema'] = [
+    'label' => t('Schema'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care']['fth']['display']['deviations'] = [
+    'label' => t('Schema deviations'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  $fields['ssr_child_care_schema']['ssr_child_care_schema']['display']['week_tables'] = [
+    'label' => t('Week tables'),
+    'description' => '',
+    'weight' => -10,
+    'visible' => FALSE,
+  ];
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function simple_school_reports_child_care_support_ssr_child_care_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $build['placements'] = [];
+  $build['schema'] = [];
+  $build['deviations'] = [];
+  $cache = new CacheableMetadata();
+  if ($display->getComponent('placements')) {
+    $links = [];
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $student_ids = $child_care_service->getChildCareStudentIds($entity->id());
+    /** @var \Drupal\user\UserInterface[] $students */
+    $students = !empty($student_ids) ? \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($student_ids) : [];
+
+    // Custom sort students by display name.
+    usort($students, function (UserInterface $a, UserInterface $b) {
+      return strnatcasecmp($a->getDisplayName(), $b->getDisplayName());
+    });
+
+    foreach ($students as $student) {
+      $link = Link::createFromRoute($student->getDisplayName(), 'simple_school_reports_child_care_support.student_child_care', ['user' => $student->id()]);
+      $links[] = '<div class="field__item">' . $link->toString() . '</div>';
+    }
+
+    if(!empty($links)) {
+      $build['placements'] = [
+        '#markup' => '<div class="field field--label-above field-placements"><div class="field__label">' . t('Placements') . '</div>' . implode('', $links) . '</div>',
+      ];
+    }
+  }
+
+  if ($display->getComponent('schema')) {
+    $available_schema_view = Views::getView('child_care_available_schema');
+    $available_schema_view->setDisplay('list');
+    $available_schema_view->preExecute();
+    $available_schema_view->execute();
+    $available_schema_view->element['#cache']['contexts'][] = 'route';
+    $available_schema_view->element['#cache']['contexts'][] = 'user';
+    $available_schema_view_build = $available_schema_view->buildRenderable('list', [$entity->id()]);
+    $build['schema']['label'] = [
+      '#markup' => '<div class="field field--label-above field-schema"><div class="field__label">' . t('Schema') . '</div>',
+    ];
+    $build['schema']['view'] = $available_schema_view_build;
+    $build['schema']['closure'] = [
+      '#markup' => '</div>',
+    ];
+  }
+
+  if ($display->getComponent('deviations')) {
+    $cache->addCacheTags(['ssr_cc_deviation_list']);
+    $deviations_view = Views::getView('child_care_schema_deviations');
+    $deviations_view->setDisplay('list');
+    $deviations_view->preExecute();
+    $deviations_view->execute();
+    $deviations_view->element['#cache']['contexts'][] = 'route';
+    $deviations_view->element['#cache']['contexts'][] = 'user';
+    $deviations_view = $deviations_view->buildRenderable('list', [$entity->id()]);
+    $build['deviations']['label'] = [
+      '#markup' => '<div class="field field--label-above field-deviations"><div class="field__label">' . t('Schema deviations') . '</div>',
+    ];
+    $build['deviations']['view'] = $deviations_view;
+    $build['deviations']['closure'] = [
+      '#markup' => '</div>',
+    ];
+  }
+  $cache->applyTo($build);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function simple_school_reports_child_care_support_theme(): array {
+  return [
+    'ssr_child_care' => ['render element' => 'elements'],
+    'ssr_child_care_placement' => ['render element' => 'elements'],
+    'ssr_child_care_needs' => ['render element' => 'elements'],
+    'ssr_child_care_schema' => ['render element' => 'elements'],
+    'ssr_child_care_schema_week' => ['render element' => 'elements'],
+    'ssr_cc_deviation' => ['render element' => 'elements'],
+    'ssr_cc_deviation_student' => ['render element' => 'elements'],
+    'ssr_child_care_check_in' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for child care templates.
+ *
+ * Default template: ssr-child-care.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care placement templates.
+ *
+ * Default template: ssr-child-care-placement.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care placement information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_placement(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care schema templates.
+ *
+ * Default template: ssr-child-care-schema.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care schema information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_schema(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care schema week templates.
+ *
+ * Default template: ssr-child-care-schema-week.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care schema week information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_schema_week(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care schema deviation templates.
+ *
+ * Default template: ssr-cc-deviation.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care schema deviation information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_cc_deviation(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care schema deviation student templates.
+ *
+ * Default template: ssr-cc-deviation-student.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care schema deviation student information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_cc_deviation_student(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for child care check in templates.
+ *
+ * Default template: ssr-child-care-check-in.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the child care check in information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_ssr_child_care_check_in(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function simple_school_reports_child_care_support_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
+  if ($entity_form['#entity_type'] == 'ssr_child_care_schema_week') {
+    ChildCareSchemaForm::alterFieldCopy($entity_form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_ssr_local_actions_alter().
+ */
+function simple_school_reports_child_care_support_ssr_local_actions_alter(array &$local_actions, CacheableMetadata $cache, array $context) {
+  if ($context['route_name'] === 'simple_school_reports_child_care_support.student_child_care') {
+    $user = $context['current_request']->get('user');
+    if ($user instanceof UserInterface) {
+      $destination = $context['current_request']->get('destination');
+      if (!$destination) {
+        $destination = $context['path.current']->getPath();
+      }
+      $access = $user->access('caregiver_access', NULL, TRUE);
+      $cache->addCacheableDependency($access);
+      $local_actions['ssr_add_schema'] = [
+        '#theme' => 'menu_local_action',
+        '#link' => [
+          'title' => t('Add schema'),
+          'url' => Url::fromRoute('simple_school_reports_child_care_support.add_student_schema', ['user' => $user->id()], ['query' => ['destination' => $destination]]),
+        ],
+        '#access' => $access,
+        '#weight' => 10,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function simple_school_reports_child_care_support_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() === 'child_care_check_in') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface $child_care_check_in_service */
+    $child_care_check_in_service = \Drupal::service('simple_school_reports_child_care_support.child_care_check_in');
+    $uids = $child_care_check_in_service->getStudentIdsFromRequest();
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Alter created from condition.
+        if (!empty($condition['field']) && $condition['field'] === 'users_field_data.uid' && array_key_exists('value', $condition)) {
+          if (!empty($uids)) {
+            $condition['operator'] = 'IN';
+            $condition['value'] = $uids;
+          }
+          else {
+            $condition['operator'] = '=';
+            $condition['value'] = '-1';
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function simple_school_reports_child_care_support_views_data_alter(array &$data) {
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to child_care_day_overview.
+    $data['users_field_data']['child_care_day_overview'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['child_care_day_overview']['title'] = t('Child care overview');
+    $data['users_field_data']['child_care_day_overview']['help'] = t('Show child care overview.');
+    $data['users_field_data']['child_care_day_overview']['field'] = [
+      'id' => 'child_care_day_overview',
+    ];
+  }
+
+  if (!empty($data['users_field_data']['uid'])) {
+    // Copy uid data to child_care_check_in_overview.
+    $data['users_field_data']['child_care_check_in_overview'] = $data['users_field_data']['uid'];
+    // Override title and override views field.
+    $data['users_field_data']['child_care_check_in_overview']['title'] = t('Child care check in overview');
+    $data['users_field_data']['child_care_check_in_overview']['help'] = t('Show child care check in overview.');
+    $data['users_field_data']['child_care_check_in_overview']['field'] = [
+      'id' => 'child_care_check_in_overview',
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function simple_school_reports_child_care_support_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'child_care_check_in') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareCheckInServiceInterface $child_care_check_in_service */
+    $child_care_check_in_service = \Drupal::service('simple_school_reports_child_care_support.child_care_check_in');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_check_in_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+
+  if ($view->id() === 'child_care_day_overview_students') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface $child_care_schema_service */
+    $child_care_schema_service = \Drupal::service('simple_school_reports_child_care_support.child_care_schema');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_schema_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+
+  if ($view->id() === 'child_care_available_schema') {
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareSchemaServiceInterface $child_care_schema_service */
+    $child_care_schema_service = \Drupal::service('simple_school_reports_child_care_support.child_care_schema');
+    /** @var \Drupal\simple_school_reports_child_care_support\Service\ChildCareServiceInterface $child_care_service */
+    $child_care_service = \Drupal::service('simple_school_reports_child_care_support.child_care');
+    $date = $child_care_service->getDateFromRequest();
+
+    $cache = $child_care_schema_service->getCacheableMetadata($date);
+    $cache->applyTo($view->element);
+    $view->element['#cache']['contexts'][] = 'user';
+  }
+}

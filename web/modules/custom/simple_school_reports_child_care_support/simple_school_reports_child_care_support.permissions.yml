@@ -1,0 +1,76 @@
+administer ssr_child_care types:
+  title: 'Administer child care types'
+  description: 'Maintain the types of ssr child care entity.'
+  restrict access: true
+view ssr_child_care:
+  title: 'View child care'
+edit ssr_child_care:
+  title: 'Edit child care'
+delete ssr_child_care:
+  title: 'Delete child care'
+create ssr_child_care:
+  title: 'Create child care'
+
+administer ssr_child_care_placement:
+  title: 'Administer child care placements'
+  restrict access: true
+view ssr_child_care_placement:
+  title: 'View child care placement'
+edit ssr_child_care_placement:
+  title: 'Edit child care placement'
+delete ssr_child_care_placement:
+  title: 'Delete child care placement'
+create ssr_child_care_placement:
+  title: 'Create child care placement'
+
+administer ssr_child_care_schema:
+  title: 'Administer child care schemas'
+  restrict access: true
+view ssr_child_care_schema:
+  title: 'View child care schema'
+edit ssr_child_care_schema:
+  title: 'Edit child care schema'
+delete ssr_child_care_schema:
+  title: 'Delete child care schema'
+create ssr_child_care_schema:
+  title: 'Create child care schema'
+
+administer ssr_child_care_schema_week:
+  title: 'Administer child care schema weeks'
+  restrict access: true
+
+administer ssr_cc_deviation:
+  title: 'Administer child care schema deviations'
+  restrict access: true
+view ssr_cc_deviation:
+  title: 'View child care schema deviation'
+edit ssr_cc_deviation:
+  title: 'Edit child care schema deviation'
+delete ssr_cc_deviation:
+  title: 'Delete child care schema deviation'
+create ssr_cc_deviation:
+  title: 'Create child care schema deviation'
+
+administer ssr_cc_deviation_student:
+  title: 'Administer child care schema deviation students'
+  restrict access: true
+view ssr_cc_deviation_student:
+  title: 'View child care schema deviation student'
+edit ssr_cc_deviation_student:
+  title: 'Edit child care schema deviation student'
+delete ssr_cc_deviation_student:
+  title: 'Delete child care schema deviation student'
+create ssr_cc_deviation_student:
+  title: 'Create child care schema deviation student'
+
+administer ssr_child_care_check_in:
+  title: 'Administer child care check ins'
+  restrict access: true
+view ssr_child_care_check_in:
+  title: 'View child care check in'
+edit ssr_child_care_check_in:
+  title: 'Edit child care check in'
+delete ssr_child_care_check_in:
+  title: 'Delete child care check in'
+create ssr_child_care_check_in:
+  title: 'Create child care check in'

@@ -1,0 +1,13 @@
+uuid: 81f555c9-8337-47fa-8221-17230463ae6a
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: d7FxaFhzz0fEVHJCN9IzpYyG3vUOehQ-bM_bF84A6Yg
+id: ssr_cc_deviation_student_save_action
+label: 'Save child care schema deviation students'
+type: ssr_cc_deviation_student
+plugin: 'entity:save_action:ssr_cc_deviation_student'
+configuration: {  }

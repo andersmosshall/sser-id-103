@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+id: ssr_child_care_check_in_delete_action
+label: 'Delete child care check ins'
+type: ssr_child_care_check_in
+plugin: entity:delete_action:ssr_child_care_check_in
+configuration: {  }

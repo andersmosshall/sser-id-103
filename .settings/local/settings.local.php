@@ -106,6 +106,8 @@ $settings['ssr_allowed_super_admins'] = 1;
 
 $settings['ssr_suspicious_mail_count'] = 10000;
 
+$settings['ssr_env'] = 'dev';
+
 
 if (file_exists($app_root . '/' . $site_path . '/settings.local-overrides.php')) {
   include $app_root . '/' . $site_path . '/settings.local-overrides.php';

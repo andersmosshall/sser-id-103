@@ -158,5 +158,11 @@
     {% if ssr_version %}
       <div class="ssr-version-info">{{ 'Version'|t }} {{ ssr_version }}</div>
     {% endif %}
+
+    {% if pwa_app_block %}
+      <div class="ssr-pwa-app-block-wrapper">
+        {{ pwa_app_block }}
+      </div>
+    {% endif %}
   </div>
 </div>

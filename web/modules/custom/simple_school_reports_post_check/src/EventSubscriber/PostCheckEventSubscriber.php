@@ -8,17 +8,14 @@ use Drupal\Core\Link;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\TempStore\PrivateTempStore;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\Core\Url;
 use Drupal\simple_school_reports_core\Service\EmailServiceInterface;
 use Drupal\simple_school_reports_maillog\SsrMaillogInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -28,11 +25,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class PostCheckEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The temp store service.
-   */
-  protected PrivateTempStore $tempStore;
 
   /**
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -45,15 +37,15 @@ class PostCheckEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
   public function __construct(
-    PrivateTempStoreFactory $private_temp_store_factory,
+    protected SessionInterface $session,
     protected TimeInterface $time,
     LoggerChannelFactoryInterface $logger_channel_factory,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MessengerInterface $messenger,
     protected EmailServiceInterface $emailService,
     protected AccountInterface $currentUser,
+
   ) {
-    $this->tempStore = $private_temp_store_factory->get('ssr_post_check');
     $this->logger = $logger_channel_factory->get('ssr_post_check');
   }
 
@@ -75,8 +67,8 @@ class PostCheckEventSubscriber implements EventSubscriberInterface {
       if ($request->getMethod() === 'POST') {
         if ($this->isAbsenceDayRequest($request)) {
           if ($uid = $this->getUserParameter($request)) {
-            $this->tempStore->set('ssr_check_absence_day_user', $uid);
-            $this->tempStore->delete('ssr_callstack');
+            $this->session->set('ssr_check_absence_day_user', $uid);
+            $this->session->remove('ssr_callstack');
             \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCollectActive(TRUE);
             \Drupal\simple_school_reports_post_check\CallstackHelper::ssrCallstackAddEntry(__FILE__, __FUNCTION__, __LINE__, [
               'init' => TRUE,
@@ -89,10 +81,10 @@ class PostCheckEventSubscriber implements EventSubscriberInterface {
       }
 
       if ($request->getMethod() === 'GET') {
-        if ($uid = $this->tempStore->get('ssr_check_absence_day_user')) {
-          $this->tempStore->delete('ssr_check_absence_day_user');
+        if ($uid = $this->session->get('ssr_check_absence_day_user')) {
+          $this->session->remove('ssr_check_absence_day_user');
           $this->checkAbsenceDay($uid, $request->server->get('HTTP_USER_AGENT', 'No user agent'));
-          $this->tempStore->delete('ssr_callstack');
+          $this->session->remove('ssr_callstack');
         }
       }
     }
@@ -149,7 +141,7 @@ class PostCheckEventSubscriber implements EventSubscriberInterface {
             $message = 'Error occurred ' . date('Y-m-d H:i:s', $this->time->getRequestTime()) .' with absence post check at ' . Settings::get('ssr_school_name', '?') . ' check the log! User: ' . ($this->currentUser?->getDisplayName() ?? '?') . ' with roles ' . implode(', ', $this->currentUser?->getRoles(TRUE) ?? '?');
             $message .= PHP_EOL . PHP_EOL . 'User agent: ' . $user_agent;
 
-            $callstack = array_reverse($this->tempStore->get('ssr_callstack') ?? []);
+            $callstack = array_reverse($this->session->get('ssr_callstack') ?? []);
             if (!empty($callstack)) {
               $message .= PHP_EOL . PHP_EOL . 'Callstack:' . PHP_EOL . implode(PHP_EOL, $callstack);
             }

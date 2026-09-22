@@ -844,7 +844,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
 
     $search_replace_map['!gi!'] = '';
 
-    $search_replace_map['!gfp1!'] = 'Som betyg ska någon av beteckningarna A, B, C, D, E eller F användas. Betyg för godkända resultat betecknas med A, B, C, D eller E. Högsta betyg betecknas med A och lägsta betyg med E. Betyg för icke godkänt betyg betecknas med F. Om det saknas underlag för bedömning av en elevs kunskaper i ett ämne på grund av elevens frånvaro, ska betyg inte sättas i ämnet. Detta ska markeras med ett horisontellt streck i terminsbetyget.';
+    $search_replace_map['!gfp1!'] = 'Som betyg ska någon av beteckningarna A, B, C, D, E eller F användas. Betyg för godkända resultat betecknas med A, B, C, D eller E. Högsta betyg betecknas med A och lägsta betyg med E. Betyg för icke godkänt betyg betecknas med F. Om det saknas underlag för bedömning av en elevs kunskaper i ett ämne, ska betyg inte sättas i ämnet. Detta ska markeras med ett horisontellt streck i terminsbetyget.';
     $search_replace_map['!gfp2!'] = '* Ämnet har avslutats.';
     $search_replace_map['!gfp3!'] = '** Betyg har inte satts i ämnet på grund av anpassad studiegång.';
 
@@ -1041,7 +1041,7 @@ class GenerateGradeCatalogForm extends ConfirmFormBase {
     $search_replace_map['!r-datum!'] = '- ' . $references['document_date'];
     $search_replace_map['!itg!'] = 'Betyg ska sättas enligt skolförordningen (2011:185)';
     $search_replace_map['!sts!'] = '';
-    $search_replace_map['!gspec!'] = 'Lgr11. Betygsbeteckningarna som används är A, B, C, D, E eller F. (F, eleven har icke godkänt resultat för betyg), (-, Underlag för bedömning av elevens kunskaper saknas pga elevens frånvaro) Skollagen (2010:800) 10 kap 17-18 §. Siffran 2 anges i NO och SO för respektive ämne när eleven fått sammanfattande betyg för ämnesblocket eller i ämnesblocket när eleven fått betyg i de enskilda ämnena Skollagen (2010:800) 10 kap. 18 §, SkolFS (2011:123) 10 §. Siffran 2 anges även för svenska eller svenska som andraspråk samt i ämnena moderna språk (elevens val eller språkval), modersmål och teckenspråk när eleven inte läst dessa ämnen. SkolFS (2011:123) 10 §. Siffran 3 anges när ett ämne inte lästs på grund av anpassad studiegång enligt Skollagen (2010:800) 3 kap. 12 §. Anmärkningskolumnen används för rättelse av betyg (anges med siffran 4) och prövning (anges med siffran 5). Efter siffran används förkortning av ämnet.';
+    $search_replace_map['!gspec!'] = 'Lgr22. Betygsbeteckningarna som används är A, B, C, D, E eller F. (F, eleven har icke godkänt resultat för betyg), (-, Underlag för bedömning av elevens kunskaper i ämnet saknas) Skollagen (2010:800) 10 kap 17-18 §. Siffran 2 anges i NO och SO för respektive ämne när eleven fått sammanfattande betyg för ämnesblocket eller i ämnesblocket när eleven fått betyg i de enskilda ämnena Skollagen (2010:800) 10 kap. 18 §, SkolFS (2011:123) 10 §. Siffran 2 anges även för svenska eller svenska som andraspråk samt i ämnena moderna språk (elevens val eller språkval), modersmål och teckenspråk när eleven inte läst dessa ämnen. SkolFS (2011:123) 10 §. Siffran 3 anges när ett ämne inte lästs på grund av anpassad studiegång enligt Skollagen (2010:800) 3 kap. 12 §. Anmärkningskolumnen används för rättelse av betyg (anges med siffran 4) och prövning (anges med siffran 5). Efter siffran används förkortning av ämnet.';
 
     $search_replace_map['!huvudman!'] = $organizer?->label() ?? '';
     $search_replace_map['!skola!'] = $school?->label() ?? '';;

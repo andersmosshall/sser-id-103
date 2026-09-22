@@ -83,6 +83,7 @@ class FileTemplateService implements FileTemplateServiceInterface, EventSubscrib
       'doc_logo_center' => NULL,
       'doc_logo_right' => NULL,
       'logo_header' => NULL,
+      'logo_shortcut' => NULL,
       // New grade documents.
       'grade_document' => NULL,
       'sign_document' => NULL,

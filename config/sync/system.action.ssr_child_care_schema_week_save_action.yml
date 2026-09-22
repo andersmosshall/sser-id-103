@@ -1,0 +1,13 @@
+uuid: e2a6b256-7c5d-48fb-a20e-24660e4f1315
+langcode: sv
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+_core:
+  default_config_hash: L8CJ91Y7J5aCrqJjeLBqi7cZMjn7NRn_XlVRm54S5j0
+id: ssr_child_care_schema_week_save_action
+label: 'Save child care schema weeks'
+type: ssr_child_care_schema_week
+plugin: 'entity:save_action:ssr_child_care_schema_week'
+configuration: {  }

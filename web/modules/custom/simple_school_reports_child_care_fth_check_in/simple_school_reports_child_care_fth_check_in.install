@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * update functions for the simple_school_reports_child_care_fth_check_in module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function simple_school_reports_child_care_fth_check_in_install() {
+  module_set_weight('simple_school_reports_child_care_fth_check_in', 10);
+}

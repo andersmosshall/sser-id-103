@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - simple_school_reports_child_care_support
+id: ssr_child_care_delete_action
+label: 'Delete child cares'
+type: ssr_child_care
+plugin: entity:delete_action:ssr_child_care
+configuration: {  }

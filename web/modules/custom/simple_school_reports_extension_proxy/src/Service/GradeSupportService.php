@@ -66,6 +66,7 @@ class GradeSupportService implements GradeSupportServiceInterface {
     }
 
     $cid_parts = [];
+    $cid_parts[] = $grade_round_nid;
     $cid_parts[] = $subject_id;
     $cid_parts[] = $grade_system;
     $cid_parts[] = $local_student_ids;

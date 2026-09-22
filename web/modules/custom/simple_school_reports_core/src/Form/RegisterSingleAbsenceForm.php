@@ -125,8 +125,7 @@ class RegisterSingleAbsenceForm extends RegisterMultipleAbsenceForm {
   }
 
   protected function resetPostCheckFlag(): void {
-    $this->tempStoreFactory->get('ssr_post_check')->delete('ssr_check_absence_day_user');
-
+    $this->getSession()->remove('ssr_check_absence_day_user');
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {

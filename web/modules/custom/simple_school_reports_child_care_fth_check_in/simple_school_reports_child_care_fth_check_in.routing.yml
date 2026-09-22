@@ -1,0 +1,59 @@
+simple_school_reports_child_care_fth_check_in.fth_check_in:
+  path: '/fth/check-in'
+  defaults:
+    _controller: '\Drupal\simple_school_reports_child_care_fth_check_in\Controller\AfterSchoolChildCareCheckInController::build'
+    _title: 'After school child care - check in'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_fth_check_in\Controller\AfterSchoolChildCareCheckInController::accessCheckInOverview'
+
+simple_school_reports_child_care_fth_check_in.check_in_student:
+  path: '/fth/check-in/{date}/student/{user}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm'
+    _title: 'Check in student'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm::accessWithStudent'
+  options:
+    parameters:
+      date:
+        type: 'string'
+      user:
+        type: 'entity:user'
+
+simple_school_reports_child_care_fth_check_in.check_out_student:
+  path: '/fth/check-out/{date}/student/{user}'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm'
+    _title: 'Check out student'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm::accessWithStudent'
+  options:
+    parameters:
+      date:
+        type: 'string'
+      user:
+        type: 'entity:user'
+
+simple_school_reports_child_care_fth_check_in.check_in_students:
+  path: '/fth/check-in-multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm'
+    _title: 'Check in students'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckInStudentsForm::access'
+  options:
+    parameters:
+      date:
+        type: 'string'
+
+simple_school_reports_child_care_fth_check_in.check_out_students:
+  path: '/fth/check-out-multiple'
+  defaults:
+    _form: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm'
+    _title: 'Check out students'
+  requirements:
+    _custom_access: '\Drupal\simple_school_reports_child_care_support\Form\ChildCareCheckOutStudentsForm::access'
+  options:
+    parameters:
+      date:
+        type: 'string'

@@ -1,0 +1,9 @@
+name: Simple School Reports Core For Open After School Child Care
+type: module
+description: Simple School Reports Core For Open After School Child Care
+core_version_requirement: ^10 || ^11
+package: 'Simple School Reports'
+version: 11.0.0
+dependencies:
+  - simple_school_reports_core:simple_school_reports_core
+  - simple_school_reports_child_care_support:simple_school_reports_child_care_support
