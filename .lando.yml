@@ -3,7 +3,7 @@ recipe: drupal10
 
 config:
   webroot: web
-  php: '8.3'
+  php: '8.4'
   xdebug: false
 
 proxy:
