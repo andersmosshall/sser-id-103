@@ -150,6 +150,9 @@ print_step "Install Composer dependencies"
 # Consider adding flags like --no-dev --optimize-autoloader for production profiles
 "${COMPOSER_CMD[@]}" install
 
+print_step "Remove Drupal install file"
+rm web/core/install.php
+
 print_step "Clear Drupal cache (pre-deploy)"
 "${DRUSH_CMD[@]}" cr
 
