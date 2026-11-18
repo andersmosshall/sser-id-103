@@ -1,8 +1,8 @@
 diff --git a/includes/batch.inc b/includes/batch.inc
-index 3c80ee1d..2b0d8505 100644
+index 35ce0d1d..dab9a351 100644
 --- a/includes/batch.inc
 +++ b/includes/batch.inc
-@@ -235,6 +235,19 @@ function _batch_progress_page() {
+@@ -237,6 +237,19 @@ function _batch_progress_page(): array {
        ],
      ],
    ];
@@ -22,7 +22,7 @@ index 3c80ee1d..2b0d8505 100644
    return $build;
  }
  
-@@ -268,6 +281,9 @@ function _batch_process() {
+@@ -270,6 +283,9 @@ function _batch_process() {
      $current_set['start'] = microtime(TRUE);
    }
  
@@ -32,7 +32,7 @@ index 3c80ee1d..2b0d8505 100644
    $queue = _batch_queue($current_set);
  
    while (!$current_set['success']) {
-@@ -329,6 +345,12 @@ function _batch_process() {
+@@ -333,6 +349,13 @@ function _batch_process() {
        $current_set['elapsed'] = round((microtime(TRUE) - $current_set['start']) * 1000, 2);
        break;
      }
@@ -42,21 +42,22 @@ index 3c80ee1d..2b0d8505 100644
 +      $current_set['elapsed'] = round((microtime(TRUE) - $current_set['start']) * 1000, 2);
 +      break;
 +    }
++
    }
  
    if ($batch['progressive']) {
 diff --git a/misc/batch.js b/misc/batch.js
-index 2a055157..05efa7ef 100644
+index 9290c109..426fb51f 100644
 --- a/misc/batch.js
 +++ b/misc/batch.js
-@@ -36,7 +36,9 @@
-           errorCallback,
-         );
-         progressBar.setProgress(-1, batch.initMessage);
--        progressBar.startMonitoring(`${batch.uri}&op=do`, 10);
+@@ -41,6 +41,10 @@
+         const url = new URL(batch.uri, window.location.origin);
+         url.searchParams.set('op', 'do');
+         progressBar.startMonitoring(url.toString(), 10);
 +
 +        const delay = batch.opDelay || 10;
 +        progressBar.startMonitoring(`${batch.uri}&op=do`, delay);
++
          // Remove HTML from no-js progress bar.
          $progress.empty();
          // Append the JS progressbar element.
