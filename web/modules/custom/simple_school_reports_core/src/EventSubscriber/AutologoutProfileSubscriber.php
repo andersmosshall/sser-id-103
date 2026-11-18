@@ -28,7 +28,7 @@ class AutologoutProfileSubscriber implements EventSubscriberInterface {
    */
   public function onProfileAlter(AutologoutProfileAlterEvent $event) {
     $profile = $event->getAutologoutProfile();
-    if (!$profile->isExtendible()) {
+    if (!$profile->isExtendible() || !$profile->getLastActivity()) {
       return;
     }
 

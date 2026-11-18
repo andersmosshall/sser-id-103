@@ -5,7 +5,7 @@
     views_custom_permissions
     improved_multi_select
     field_encrypt
-2. Run chmod 777 web/sites/default && chmod 666 web/sites/default/*settings.php && chmod 666 web/sites/default/*services.yml && lando composer update --with-all-dependencies
+2. Run `chmod 777 web/sites/default && chmod 666 web/sites/default/*settings.php && chmod 666 web/sites/default/*services.yml && lando composer update --with-all-dependencies`
 3. Do git diff and check what has changed.
 4. Do git add . (no commit yet)
 5. Run lando drush updb -y
