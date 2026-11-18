@@ -3,7 +3,7 @@ recipe: drupal10
 
 config:
   webroot: web
-  php: '8.3'
+  php: '8.4'
   xdebug: false
 
 proxy:
@@ -12,7 +12,7 @@ proxy:
 
 services:
   appserver:
-    composer_version: '2.6.0'
+    composer_version: '2.9.8'
     config:
       php: .lando/php.ini
     overrides:

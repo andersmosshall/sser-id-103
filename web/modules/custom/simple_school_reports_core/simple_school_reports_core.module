@@ -1419,8 +1419,8 @@ function simple_school_reports_core_mail_alter(&$message) {
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
     $module_handler = \Drupal::service('module_handler');
 
-    // Do not block login mail for administrators even in demo mode.
-    $allowed_login = $login_user && $login_user?->hasPermission('administer simple school reports settings');
+    // Do not block login mail for school staff even in demo mode.
+    $allowed_login = $login_user && $login_user?->hasPermission('school staff permissions');
 
     if ($module_handler->moduleExists('simple_school_reports_demo') && !$allowed_login) {
       $message['send'] = FALSE;
